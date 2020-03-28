@@ -1,6 +1,5 @@
 // pqLayouts project  
 // Copyright 2020 Philippe Quesnel  
-// This file is part of pqLayouts.
 // 
 // pqLayouts is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,7 +16,11 @@
 
 
 #include "stdafx.h"
+#include "pqLayoutsHook.h"
 #include "resource.h"
+
+
+using namespace std;
 
 namespace
 {
@@ -25,10 +28,11 @@ namespace
 }
 
 
-INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) 
+{
 
-    switch (message) {
-
+    switch (message)
+    {
     case WM_INITDIALOG:
         SetWindowText(hDlg, windowTitle);
         return TRUE;
@@ -60,30 +64,32 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     // Check if there is already an instance running
     CreateMutex(0, 0, L"_PqLayouts Main_");
-    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+    if (GetLastError() == ERROR_ALREADY_EXISTS) 
+    {
         MessageBox(0, L"Oooppps", L"Ooops", MB_OK);
         return 0;
     }
 
     // Create our dialog
-    //Hinst = hInstance;
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc);
     ShowWindow(hDlg, nCmdShow);
 
-    //InstallHook();
+    HookKbdLL();
     //refreshIconState(hDlg);
     //SetTimer(hDlg, 1, 500, 0);
 
     MSG msg;
     int ret = 0;
-    while (ret = GetMessage(&msg, 0, 0, 0) > 0) {
-        if (!IsDialogMessage(hDlg, &msg)) {
+    while (ret = GetMessage(&msg, 0, 0, 0) > 0) 
+    {
+        if (!IsDialogMessage(hDlg, &msg)) 
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     }
 
-    //RemoveHook();
+    UnhookKbdLL();
     //refreshIconState(hDlg, true);
 
     return ret;
