@@ -16,14 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "util.h"
 
-#ifdef PQLAYOUTSHOOK_EXPORTS
-#define PQHOOK_API __declspec(dllexport)
-#else
-#define PQHOOK_API __declspec(dllimport)
-#endif
+//---------
+
+namespace Dbg
+{
+    namespace Out
+    {
+        void LastError(const char* func);
+        void KbdEVent(const KbdHookEvent& event, WPARAM wParam);
+
+    } // namespace Out 
+
+} // namespace Dbg
 
 
-PQHOOK_API bool HookKbdLL();
-
-PQHOOK_API bool UnhookKbdLL();
+//---------
