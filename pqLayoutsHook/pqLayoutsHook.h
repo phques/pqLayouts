@@ -7,6 +7,6 @@
 #endif
 
 
-PQHOOK_API void HookKbdLL();
+PQHOOK_API bool HookKbdLL();
 
-PQHOOK_API void UnhookKbdLL();
+PQHOOK_API bool UnhookKbdLL();

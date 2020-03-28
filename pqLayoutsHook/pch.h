@@ -11,5 +11,6 @@
 #include "framework.h"
 
 #include <sstream>
+#include <bitset>
 
 #endif //PCH_H
