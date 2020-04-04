@@ -20,8 +20,6 @@
 #include "util.h"
 #include "OutDbg.h"
 
-using namespace std;
-
 
 namespace
 {
@@ -41,10 +39,9 @@ namespace
         // should we process this?
         if (nCode == HC_ACTION)
         {
-            // get params
             KbdHookEvent event(lParam);
 
-            // dbg output info on event
+            // dbg output event info 
             Dbg::Out::KbdEVent(event, wParam);
         }
 
@@ -60,11 +57,10 @@ namespace
 bool HookKbdLL()
 {
     hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(0), 0);
+
     if (hKbdHook == NULL)
-    {
-        Dbg::Out::LastError("SetWindowsHookEx");
-        return false;
-    }
+        return Dbg::Out::LastError("SetWindowsHookEx");
+
     return true;
 }
 
@@ -74,11 +70,10 @@ bool UnhookKbdLL()
     if (hKbdHook == NULL)
         return false;
 
-    if (UnhookWindowsHookEx(hKbdHook))
-        return true;
+    if (!UnhookWindowsHookEx(hKbdHook))
+        return Dbg::Out::LastError("UnhookWindowsHookEx"); 
 
-    Dbg::Out::LastError("UnhookWindowsHookEx");
-    return false;
+    return true;
 }
 
 //------ ... exports] --------

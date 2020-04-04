@@ -24,7 +24,7 @@ namespace Dbg
 {
     namespace Out
     {
-        void LastError(const char* func);
+        bool LastError(const char* func);
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam);
 
     } // namespace Out 

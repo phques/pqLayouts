@@ -20,8 +20,7 @@
 #include "pqLayoutsHook.h"
 #include "resource.h"
 
-
-using namespace std;
+typedef const std::string& conststr;
 
 namespace
 {

@@ -42,13 +42,16 @@ namespace Dbg
 
 
         // outputdbg message for GetLastError()
-        void LastError(const char* func)
+        // returns false
+        bool LastError(const char* funcName)
         {
+            // show called funcName & error#
             ostringstream os;
-            os << func << " error: " << GetLastError() << endl;
+            os << funcName << " error: " << GetLastError() << endl;
             OutputDebugStringA(os.str().c_str());
 
 
+            // show error descr
             LPVOID lpMsgBuf;
             DWORD dw = GetLastError();
 
@@ -64,6 +67,8 @@ namespace Dbg
 
             OutputDebugString((LPCTSTR)lpMsgBuf);
             LocalFree(lpMsgBuf);
+
+            return false;
         }
 
     } // namespace Out 

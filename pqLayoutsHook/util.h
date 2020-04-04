@@ -16,60 +16,18 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "framework.h"
+//#include "framework.h"
 
 //--------
 
-// To access KBDLLHOOKSTRUCT.flags as individual values / flags
 
-/*  https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-kbdllhookstruct?redirectedfrom=MSDN
- 0  Specifies whether the key is an extended key, such as a function key or a key on the numeric keypad.
-    The value is 1 if the key is an extended key; otherwise, it is 0.
- 1  Specifies whether the event was injected from a process running at lower integrity level.
-    The value is 1 if that is the case; otherwise, it is 0.
-    Note that bit 4 is also set whenever bit 1 is set.
- 2-3 Reserved.
- 4  Specifies whether the event was injected.
-    The value is 1 if that is the case; otherwise, it is 0.
-    Note that bit 1 is not necessarily set when bit 4 is set.
- 5  The context code.
-    The value is 1 if the ALT key is pressed; otherwise, it is 0.
- 6  Reserved.
- 7  The transition state.
-    The value is 0 if the key is pressed and 1 if it is being released.
-*/
-#if 0
-struct KbdHookFlagsBits
-{
-    unsigned int extended : 1;
-    unsigned int injectedLow : 1;
-    unsigned int reserved : 2;
-    unsigned int injected : 1;
-    unsigned int contextCode : 1;    // 1= Alt down
-    unsigned int reserved2 : 1;
-    unsigned int up : 1;             // transitin state, 0-dn, 1=up
-};
-
-union KbdHookFlagsUnion
-{
-    KbdHookFlagsBits bits;
-    DWORD dword;
-    BYTE byte;
-};
-#endif // 0
-
-
-
-// class for easy access to KBDLLHOOKSTRUCT info
+// Easy access to KBDLLHOOKSTRUCT info
 class KbdHookEvent
 {
 public:
     // Init KbdHookEvent directly from the recvd LPARAM of LowLevelKeyboardProc
     // ## lParam is cast to a ptr, MUST be LPARAM of LowLevelKeyboardProc ##
-    KbdHookEvent(LPARAM lParam) : KbdHookEvent(*reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam)) 
-    {
-    }
-    KbdHookEvent(const KBDLLHOOKSTRUCT& info) : info(info)
+    KbdHookEvent(LPARAM lParam) : info(*reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam)) 
     {
     }
 

@@ -12,5 +12,6 @@
 
 #include <sstream>
 #include <bitset>
+#include <string>
 
 #endif //PCH_H
