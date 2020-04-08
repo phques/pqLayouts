@@ -24,22 +24,28 @@ namespace Dbg
 {
     namespace Out
     {
+
+        void DebugString(ostringstream& os)
+        {
+            OutputDebugStringA(os.str().c_str());
+        }
+
         // outputdbg KBDLLHOOK event
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam)
         {
             ostringstream os;
             os << hex
-                << '@' << event.info.time
+                << '@' << event.time
                 << " wparam: " << wParam
-                << " vkCode: " << event.info.vkCode
-                << " scanCode: " << event.info.scanCode
-                << (event.Up() ? " up " : " dn ")
-                << " flags: " << bitset<8>(event.info.flags)
-                << endl;
+                << " vkCode: " << event.vkCode
+                << " scanCode: " << event.scanCode
+                << (event.Up() ? " up" : " dn")
+                << (event.Extended() ? " EX" : " ex")
+                << " flags: " << bitset<8>(event.flags)
+                << dec << endl;
 
-            OutputDebugStringA(os.str().c_str());
+            DebugString(os);
         }
-
 
         // outputdbg message for GetLastError()
         // returns false
@@ -48,7 +54,7 @@ namespace Dbg
             // show called funcName & error#
             ostringstream os;
             os << funcName << " error: " << GetLastError() << endl;
-            OutputDebugStringA(os.str().c_str());
+            DebugString(os);
 
 
             // show error descr
@@ -70,6 +76,7 @@ namespace Dbg
 
             return false;
         }
+
 
     } // namespace Out 
 

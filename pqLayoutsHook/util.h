@@ -22,25 +22,24 @@
 
 
 // Easy access to KBDLLHOOKSTRUCT info
-class KbdHookEvent
+class KbdHookEvent : public KBDLLHOOKSTRUCT
 {
 public:
-    // Init KbdHookEvent directly from the recvd LPARAM of LowLevelKeyboardProc
-    // ## lParam is cast to a ptr, MUST be LPARAM of LowLevelKeyboardProc ##
-    KbdHookEvent(LPARAM lParam) : info(*reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam)) 
-    {
-    }
+    // Init KbdHookEvent from the recvd LPARAM of LowLevelKeyboardProc
+    // ## lParam is cast to KBDLLHOOKSTRUCT*, MUST be from LowLevelKeyboardProc ##
+    KbdHookEvent(LPARAM lParam);
 
-    inline bool Extended() const { return (info.flags & LLKHF_EXTENDED) != 0; }
-    inline bool Injected() const { return (info.flags & LLKHF_INJECTED) != 0; }
-    inline bool InjectedLow() const { return (info.flags & LLKHF_LOWER_IL_INJECTED) != 0; }
-    inline bool AltDown() const { return (info.flags & LLKHF_ALTDOWN) != 0; }
-    inline bool Up() const { return (info.flags & LLKHF_UP) != 0; }
-    inline bool Down() const { return (info.flags & LLKHF_UP) == 0; }
+    inline bool Extended() const { return (flags & LLKHF_EXTENDED) != 0; }
+    inline bool Injected() const { return (flags & LLKHF_INJECTED) != 0; }
+    inline bool InjectedLow() const { return (flags & LLKHF_LOWER_IL_INJECTED) != 0; }
+    inline bool AltDown() const { return (flags & LLKHF_ALTDOWN) != 0; }
+    inline bool Up() const { return (flags & LLKHF_UP) != 0; }
+    inline bool Down() const { return (flags & LLKHF_UP) == 0; }
 
 public:
-    const KBDLLHOOKSTRUCT& info;
+    //const KBDLLHOOKSTRUCT& info;
 };
+
 
 //--------
 

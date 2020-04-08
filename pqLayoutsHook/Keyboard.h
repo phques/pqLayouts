@@ -18,19 +18,30 @@
 
 #include "util.h"
 
-//---------
 
-namespace Dbg
+class Keyboard
 {
-    namespace Out
-    {
-        bool LastError(const char* func);
-        void KbdEVent(const KbdHookEvent&, WPARAM);
-        void DebugString(std::ostringstream&);
+public:
+    Keyboard();
 
-    } // namespace Out 
+    bool OnKeyEVent(KbdHookEvent&, bool down);
 
-} // namespace Dbg
+    size_t DownModifiers() const { return downModifiers.size(); }  // for dbg
 
+protected:
+    void KeyDown(DWORD vk, bool down);
 
-//---------
+    void ModifierDown(DWORD vk, bool down);
+    bool ModifierDown(DWORD vk) const { return downModifiers.find(vk) != downModifiers.end(); }
+
+    bool IsModifier(DWORD vk);
+    DWORD Mapping(DWORD vk);
+
+    void SendVk(DWORD vk, bool down);
+
+private:
+    // all VKs
+    std::unordered_set<DWORD> downModifiers;
+    std::unordered_set<DWORD> downKeys;
+    std::unordered_map<DWORD, DWORD> mappings;
+};

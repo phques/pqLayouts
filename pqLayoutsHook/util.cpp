@@ -1,4 +1,3 @@
-#pragma once
 // Copyright 2020 Philippe Quesnel  
 //
 // This file is part of pqLayouts.
@@ -16,21 +15,18 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "pch.h"
 #include "util.h"
 
-//---------
 
-namespace Dbg
+// Init KbdHookEvent from the recvd LPARAM of LowLevelKeyboardProc
+// ## lParam is cast to KBDLLHOOKSTRUCT*, MUST be from LowLevelKeyboardProc ##
+KbdHookEvent::KbdHookEvent(LPARAM lParam)
 {
-    namespace Out
-    {
-        bool LastError(const char* func);
-        void KbdEVent(const KbdHookEvent&, WPARAM);
-        void DebugString(std::ostringstream&);
-
-    } // namespace Out 
-
-} // namespace Dbg
-
-
-//---------
+    const KBDLLHOOKSTRUCT& info = *reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+    this->vkCode = info.vkCode;
+    this->scanCode = info.scanCode;
+    this->flags = info.flags;
+    this->time = info.time;
+    this->dwExtraInfo = info.dwExtraInfo;
+}

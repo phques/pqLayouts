@@ -19,11 +19,13 @@
 #include "pqLayoutsHook.h"
 #include "util.h"
 #include "OutDbg.h"
+#include "Keyboard.h"
 
 
 namespace
 {
     HHOOK hKbdHook = NULL;
+    Keyboard keyboard;
 }
 
 
@@ -36,6 +38,8 @@ namespace
         _In_ LPARAM lParam
         )
     {
+        bool skip = false;
+
         // should we process this?
         if (nCode == HC_ACTION)
         {
@@ -43,9 +47,24 @@ namespace
 
             // dbg output event info 
             Dbg::Out::KbdEVent(event, wParam);
+
+            //if (event.Down())
+            //    skip = keyboard.OnKeyDown(event);
+            //else
+            //    skip = keyboard.OnKeyUp(event);
+
+            // dbg
+            //if (event.Down())
+            //{
+            //    UINT scancode = MapVirtualKeyExA(event.vkCode, MAPVK_VK_TO_VSC_EX, NULL);
+            //}
+
         }
 
         // forward to next hook
+        if (skip)
+            return 1;  // do not send this message / event
+
         return CallNextHookEx(hKbdHook, nCode, wParam, lParam);
     }
 
