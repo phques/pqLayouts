@@ -17,78 +17,138 @@
 
 #include "pch.h"
 #include "Keyboard.h"
+#include "OutDbg.h"
 
+
+//----------
+
+
+std::unordered_set<DWORD> Keyboard::modifiers = {
+    VK_LSHIFT, VK_RSHIFT, VK_SHIFT,
+    VK_LCONTROL, VK_RCONTROL, VK_CONTROL,
+    VK_LMENU, VK_RMENU, VK_MENU,         // Alt !
+    VK_LWIN, VK_RWIN
+};
+
+
+std::unordered_set<DWORD> Keyboard::extended = {
+    VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN,
+    VK_HOME, VK_END, VK_PRIOR, VK_NEXT, 
+    VK_INSERT, VK_DELETE, VK_DIVIDE, VK_NUMLOCK,
+    VK_RCONTROL, VK_RMENU, VK_APPS, 
+    VK_PAUSE, VK_SNAPSHOT
+};
+
+//----------
 
 Keyboard::Keyboard()
 {
- 
+    memset(downModifiers, 0, sizeof(downModifiers));
+    memset(downKeys, 0, sizeof(downKeys));
+    memset(mappings, 0, sizeof(mappings));
+
+    // init mappings for one-to-one (0x00, 0xFF are not VKs)
+    for (DWORD i = 1; i < 0xFF; i++)
+    {
+        mappings[0][i] = mappings[1][i] = i;
+    }
 }
 
 bool Keyboard::IsModifier(DWORD vk)
 {
-    return
-        vk == VK_LSHIFT || vk == VK_RSHIFT || vk == VK_SHIFT ||
-        vk == VK_LCONTROL || vk == VK_RCONTROL || vk == VK_CONTROL ||
-        vk == VK_LMENU || vk == VK_RMENU || vk == VK_MENU ||         // Alt !
-        vk == VK_LWIN || vk == VK_RWIN;
+    return modifiers.find(vk) != modifiers.end();
+}
+
+bool Keyboard::IsExtended(DWORD vk)
+{
+    return extended.find(vk) != extended.end();
 }
 
 void Keyboard::ModifierDown(DWORD vk, bool down)
 {
-    if (down)
-        downModifiers.insert(vk);
-    else
-        downModifiers.erase(vk);
+    assert(vk < 0xFF);
+    downModifiers[vk] = (down ? vk : 0);
 }
 
 
+bool Keyboard::ModifierDown(DWORD vk) const
+{ 
+    assert(vk < 0xff); 
+    return (downModifiers[vk] == vk); 
+}
+
+bool Keyboard::ShiftDown() const
+{
+    return ModifierDown(VK_LSHIFT) || 
+        ModifierDown(VK_RSHIFT) || 
+        ModifierDown(VK_SHIFT);
+}
+
 void Keyboard::KeyDown(DWORD vk, bool down)
 {
-    if (down)
-        downKeys.insert(vk);
-    else
-        downKeys.erase(vk);
+    assert(vk < 0xFF);
+    downKeys[vk] = (down ? vk : 0);
+}
+
+bool Keyboard::KeyDown(DWORD vk) const
+{
+    assert(vk < 0xff); 
+    return (downKeys[vk] == vk);
 }
 
 DWORD Keyboard::Mapping(DWORD vk)
 {
-    auto foundit = mappings.find(vk);
-    if (foundit == mappings.end())
-        return vk;
+    assert(vk < 0xFF);
 
-    return foundit->second;
+    int shiftedIdx(ShiftDown() ? 1 : 0);
+    return mappings[shiftedIdx][vk];
 }
+
+//------
 
 
 // return true if we should skip / eat this virtual-key
-bool Keyboard::OnKeyEVent(KbdHookEvent& event, bool down)
+bool Keyboard::OnKeyEVent(KbdHookEvent& event)
 {
+    // dont touch if we injected it
+    if (event.Injected() && event.dwExtraInfo == injectedFromMe)
+    {
+        OutputDebugString(L"skip injected\n");
+        return false;
+    }
+
     DWORD vkout = Mapping(event.vkCode);
 
-    KeyDown(vkout, down);
-
     if (IsModifier(vkout))
-        ModifierDown(vkout, down);
+        ModifierDown(vkout, event.Down());
 
-    return false;
+    KeyDown(vkout, event.Down());
+
+    SendVk(vkout, event.Down());
+    
+    return true;
 }
 
 
 
 void Keyboard::SendVk(DWORD vk, bool down)
 {
-    //DWORD flags = 0;
-    //if (up) flags |= KEYEVENTF_KEYUP;
-    //if (isExtendedKey(code)) flags |= KEYEVENTF_EXTENDEDKEY;
+    // maybe pre compute this ?
+    //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
+    //## PrtScrn, Pause dot convert back to the same scancode as when we receive the event !?
+    UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
-    //INPUT input;
-    //input.type = INPUT_KEYBOARD;
-    //input.ki.wVk = code;
-    //input.ki.wScan = MapVirtualKey(code, 0);
-    //input.ki.dwFlags = flags;
-    //input.ki.time = 0;
-    //input.ki.dwExtraInfo = injectedFlag;
-    //SendInput(1, &input, sizeof(input));
+    INPUT input = { 0 };
+    input.type = INPUT_KEYBOARD;
+    input.ki.wVk = vk;
+    input.ki.wScan = scancode;
+    input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
+    input.ki.time = 0;
+    input.ki.dwExtraInfo = injectedFromMe;
+    if (IsExtended(vk))
+        input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+
+    SendInput(1, &input, sizeof(input));
 
     //##PQ from touchcursor##
     // Sleep(1) seems to be necessary for mapped Escape events sent to VirtualPC & recent VMware versions.
@@ -97,3 +157,20 @@ void Keyboard::SendVk(DWORD vk, bool down)
     // Dunno why:
     Sleep(1);
 }
+
+
+// dbg 
+void Keyboard::OutNbKeysDn()
+{
+    auto NotZero = [](DWORD vk) {return vk != 0; };
+    int nbmodsdn = std::count_if(&downModifiers[1], &downModifiers[0xFF], NotZero);
+    int nbkeysdn = std::count_if(&downKeys[1], &downKeys[0xFF], NotZero);
+
+    std::ostringstream os;
+    os << "keys dn " << nbkeysdn << " mods dn " << nbmodsdn << std::endl;
+    Dbg::Out::DebugString(os);
+}
+
+//-------
+
+

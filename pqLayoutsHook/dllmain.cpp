@@ -26,17 +26,21 @@ namespace
 {
     HHOOK hKbdHook = NULL;
     Keyboard keyboard;
+
 }
 
 
-namespace
+// put this in a class since we cannot debug this code,
+// so we'll use friend class KbdHook to access data for dbg output
+class KbdHook
 {
+public:
     // called for each KBDLLHOOK event
-    LRESULT CALLBACK LowLevelKeyboardProc(
+    static LRESULT CALLBACK LowLevelKeyboardProc(
         _In_ int    nCode,
         _In_ WPARAM wParam,
         _In_ LPARAM lParam
-        )
+    )
     {
         bool skip = false;
 
@@ -45,19 +49,11 @@ namespace
         {
             KbdHookEvent event(lParam);
 
-            // dbg output event info 
-            Dbg::Out::KbdEVent(event, wParam);
+            // dbg output
+            KbdProcDebugOut(event, wParam);
 
-            //if (event.Down())
-            //    skip = keyboard.OnKeyDown(event);
-            //else
-            //    skip = keyboard.OnKeyUp(event);
-
-            // dbg
-            //if (event.Down())
-            //{
-            //    UINT scancode = MapVirtualKeyExA(event.vkCode, MAPVK_VK_TO_VSC_EX, NULL);
-            //}
+            // process this key
+            skip = keyboard.OnKeyEVent(event);
 
         }
 
@@ -68,14 +64,31 @@ namespace
         return CallNextHookEx(hKbdHook, nCode, wParam, lParam);
     }
 
-}
+    // dbg output
+    static void KbdProcDebugOut(KbdHookEvent& event, const WPARAM& wParam)
+    {
+        Dbg::Out::KbdEVent(event, wParam);
+
+        keyboard.OutNbKeysDn();
+
+        //if (event.Down())
+        //{
+        //    UINT scancode = MapVirtualKeyExA(event.vkCode, MAPVK_VK_TO_VSC_EX, NULL);
+
+        //    std::ostringstream os;
+        //    os << std::hex << " scan " << scancode << std::endl;
+        //    Dbg::Out::DebugString(os);
+        //}
+    }
+
+};
 
 //------ [exports... --------
 
 // hook our low level kbd procedure
 bool HookKbdLL()
 {
-    hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(0), 0);
+    hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, KbdHook::LowLevelKeyboardProc, GetModuleHandle(0), 0);
 
     if (hKbdHook == NULL)
         return Dbg::Out::LastError("SetWindowsHookEx");
