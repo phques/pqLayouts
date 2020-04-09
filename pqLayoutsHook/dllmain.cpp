@@ -25,7 +25,7 @@
 namespace
 {
     HHOOK hKbdHook = NULL;
-    Keyboard keyboard;
+    Keyboard theKbd;
 
 }
 
@@ -42,7 +42,7 @@ public:
         _In_ LPARAM lParam
     )
     {
-        bool skip = false;
+        bool eat = false;
 
         // should we process this?
         if (nCode == HC_ACTION)
@@ -53,12 +53,12 @@ public:
             KbdProcDebugOut(event, wParam);
 
             // process this key
-            skip = keyboard.OnKeyEVent(event);
+            eat = theKbd.OnKeyEVent(event);
 
         }
 
         // forward to next hook
-        if (skip)
+        if (eat)
             return 1;  // do not send this message / event
 
         return CallNextHookEx(hKbdHook, nCode, wParam, lParam);
@@ -69,7 +69,7 @@ public:
     {
         Dbg::Out::KbdEVent(event, wParam);
 
-        keyboard.OutNbKeysDn();
+        theKbd.OutNbKeysDn();
 
         //if (event.Down())
         //{
@@ -107,6 +107,21 @@ bool UnhookKbdLL()
 
     return true;
 }
+
+
+PQHOOK_API bool AddMapping(const char* layer, UINT qwertyVk, UINT outputVk, bool shifted)
+{
+    // ignore layer at this point (only main)
+    if (qwertyVk >= 0xFF || outputVk >= 0xFF)
+    {
+        Printf("AddMapping, qwertyVk >= 0xFF || outputVk >= 0xFF\n");
+        return false;
+    }
+
+    theKbd.Mapping(qwertyVk, outputVk, shifted);
+    return true;
+}
+
 
 //------ ... exports] --------
 

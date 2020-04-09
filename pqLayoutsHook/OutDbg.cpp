@@ -24,27 +24,21 @@ namespace Dbg
 {
     namespace Out
     {
-
         void DebugString(ostringstream& os)
         {
             OutputDebugStringA(os.str().c_str());
         }
 
+        //----
+        
         // outputdbg KBDLLHOOK event
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam)
         {
-            ostringstream os;
-            os << hex
-                << '@' << event.time
-                << " wparam: " << wParam
-                << " vkCode: " << event.vkCode
-                << " scanCode: " << event.scanCode
-                << (event.Up() ? " up" : " dn")
-                << (event.Extended() ? " EX" : " ex")
-                << " flags: " << bitset<8>(event.flags)
-                << dec << endl;
-
-            DebugString(os);
+            Printf("@%0X wparam: %0X vkCode: %0X scanCode: %0X %s %s flags: %s\n",
+                event.time, wParam, event.vkCode, event.scanCode,
+                (event.Up() ? " up" : " dn"), 
+                (event.Extended() ? " EX" : " ex"),
+                bitset<8>(event.flags).to_string().c_str());
         }
 
         // outputdbg message for GetLastError()
@@ -52,9 +46,7 @@ namespace Dbg
         bool LastError(const char* funcName)
         {
             // show called funcName & error#
-            ostringstream os;
-            os << funcName << " error: " << GetLastError() << endl;
-            DebugString(os);
+            Printf(" error: %d\n", GetLastError());
 
 
             // show error descr
@@ -71,11 +63,13 @@ namespace Dbg
                 (LPTSTR)&lpMsgBuf,
                 0, NULL);
 
-            OutputDebugString((LPCTSTR)lpMsgBuf);
+            Printfw((LPCTSTR)lpMsgBuf); // does this work??
+
             LocalFree(lpMsgBuf);
 
             return false;
         }
+
 
 
     } // namespace Out 

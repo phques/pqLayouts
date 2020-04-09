@@ -28,6 +28,10 @@ class Keyboard
 public:
     Keyboard();
 
+    DWORD Mapping(DWORD vk);
+    bool Mapping(DWORD vkFrom, DWORD vkTo, bool shifted);
+
+
 protected:
     bool OnKeyEVent(KbdHookEvent&);
 
@@ -40,8 +44,6 @@ protected:
 
     static bool IsModifier(DWORD vk);
     static bool IsExtended(DWORD vk);
-
-    DWORD Mapping(DWORD vk);
 
     void SendVk(DWORD vk, bool down);
 

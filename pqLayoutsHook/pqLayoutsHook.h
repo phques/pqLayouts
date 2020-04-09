@@ -25,5 +25,6 @@
 
 
 PQHOOK_API bool HookKbdLL();
-
 PQHOOK_API bool UnhookKbdLL();
+
+PQHOOK_API bool AddMapping(const char* layer, UINT qwertyVk, UINT outputVk, bool shifted);

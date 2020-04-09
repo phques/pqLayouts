@@ -25,6 +25,33 @@ typedef const std::string& conststr;
 namespace
 {
     const wchar_t* const windowTitle = L"PQLayouts";
+
+    bool addMapping(char from, char to, bool shifted)
+    {
+        UINT qwertyVk = MapVirtualKeyA(from, MAPVK_VK_TO_CHAR);
+        UINT outputVk = MapVirtualKeyA(to, MAPVK_VK_TO_CHAR);
+
+        bool ret = AddMapping("main", qwertyVk, outputVk, shifted);
+        return ret;
+    }
+
+    void testMappings()
+    {
+        AddMapping("main", 'A', 'G', false);
+        AddMapping("main", 'S', 'I', false);
+        AddMapping("main", 'D', 'O', false);
+        AddMapping("main", 'F', VK_SPACE, false);
+
+        AddMapping("main", 'A', 'G', true);
+        AddMapping("main", 'S', 'I', true);
+        AddMapping("main", 'D', 'O', true);
+        AddMapping("main", 'F', VK_OEM_7, true); // want '"' .. but we map *VIRTUAL KEYS*, need to specify if needs Shift
+
+        AddMapping("main", VK_CAPITAL, VK_SHIFT, false);
+        AddMapping("main", VK_RETURN, VK_RSHIFT, false);
+        AddMapping("main", VK_CAPITAL, VK_SHIFT, true);
+        AddMapping("main", VK_RETURN, VK_RSHIFT, true);
+    }
 }
 
 
@@ -62,7 +89,8 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR commandLine, int nCmdShow) 
 {
 
-    // Check if there is already an instance running
+    // Check if there is already an instance running.
+    // mutex auto closed on exit
     CreateMutex(0, 0, L"_PqLayouts Main_");
     if (GetLastError() == ERROR_ALREADY_EXISTS) 
     {
@@ -73,6 +101,9 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     // Create our dialog
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc);
     ShowWindow(hDlg, nCmdShow);
+
+    //## dbg
+    testMappings();
 
     HookKbdLL();
     //refreshIconState(hDlg);
@@ -93,4 +124,14 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     //refreshIconState(hDlg, true);
 
     return ret;
+}
+
+
+// we build app in console subsystem so we can use printf & cie to debug !
+// compile with windows subsystem in Release
+// call WinMain
+int main(int argc, char* argv[])
+{
+    WinMain(GetModuleHandle(0), 0, NULL, SW_SHOW);
+    return 0;
 }

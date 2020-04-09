@@ -20,6 +20,7 @@
 #include "OutDbg.h"
 
 
+
 //----------
 
 
@@ -104,6 +105,20 @@ DWORD Keyboard::Mapping(DWORD vk)
     return mappings[shiftedIdx][vk];
 }
 
+bool Keyboard::Mapping(DWORD vkFrom, DWORD vkTo, bool shifted)
+{
+    if (vkFrom >= 0xFF || vkTo >= 0xFF)
+        return false;
+
+    // dbg
+    Printf("Add mapping from %02x, to %02x\n", vkFrom, vkTo);
+
+    int shiftedIdx(shifted ? 1 : 0);
+    mappings[shiftedIdx][vkFrom] = vkTo;
+    return true;
+}
+
+
 //------
 
 
@@ -113,7 +128,7 @@ bool Keyboard::OnKeyEVent(KbdHookEvent& event)
     // dont touch if we injected it
     if (event.Injected() && event.dwExtraInfo == injectedFromMe)
     {
-        OutputDebugString(L"skip injected\n");
+        Printf("skip injected\n");
         return false;
     }
 
@@ -135,12 +150,12 @@ void Keyboard::SendVk(DWORD vk, bool down)
 {
     // maybe pre compute this ?
     //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
-    //## PrtScrn, Pause dot convert back to the same scancode as when we receive the event !?
+    //## PrtScrn, Pause don't convert to the scancode that we received in the kbd hook event !?
     UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
     INPUT input = { 0 };
     input.type = INPUT_KEYBOARD;
-    input.ki.wVk = vk;
+    input.ki.wVk = static_cast<WORD>(vk);
     input.ki.wScan = scancode;
     input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
     input.ki.time = 0;
@@ -166,9 +181,7 @@ void Keyboard::OutNbKeysDn()
     int nbmodsdn = std::count_if(&downModifiers[1], &downModifiers[0xFF], NotZero);
     int nbkeysdn = std::count_if(&downKeys[1], &downKeys[0xFF], NotZero);
 
-    std::ostringstream os;
-    os << "keys dn " << nbkeysdn << " mods dn " << nbmodsdn << std::endl;
-    Dbg::Out::DebugString(os);
+    Printf("keys dn %d mods dn %d\n", nbkeysdn, nbmodsdn);
 }
 
 //-------

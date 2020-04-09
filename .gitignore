@@ -1,4 +1,6 @@
-Debug
+Debug/
+Release/
 *.user
 *.aps
 .vs
+*.bak

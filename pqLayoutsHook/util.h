@@ -43,3 +43,17 @@ public:
 
 //--------
 
+// debug only Printf (build app in console subsystem)
+
+#ifdef NDEBUG
+
+#define Printf (__noop)
+#define Printfw (__noop)
+
+#else
+
+#define Printf printf
+#define Printfw wprintf
+
+#endif
+
