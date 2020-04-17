@@ -42,10 +42,12 @@ protected:
     bool ModifierDown(DWORD vk) const;
     bool ShiftDown() const;
 
-    static bool IsModifier(DWORD vk);
-    static bool IsExtended(DWORD vk);
+    bool SelfInjected(const KbdHookEvent& event);
 
     void SendVk(DWORD vk, bool down);
+
+    static bool IsModifier(DWORD vk);
+    static bool IsExtended(DWORD vk);
 
     // dbg
     void OutNbKeysDn();

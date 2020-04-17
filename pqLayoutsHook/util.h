@@ -57,3 +57,4 @@ public:
 
 #endif
 
+typedef const std::string conststr;

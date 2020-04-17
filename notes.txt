@@ -1,0 +1,55 @@
+
++ with the keyboard low level hook and SendInput, we are working with KEYS (virtual keys, ie VK_xx),
+  not characters .. ie if we want to map (unshifted) key 'q' to '?',
+  we need to send shift-/ (?)
+
++ the VK_ values for a..z are A..Z, uppercase !
+ -> using VkKeyScanExA() seems to handle this correctly
+
+ -> NOTE, this also means doing a French layout is not easily possible !!
+  (again we don't output characters, but keys ..)
+   -> it would need to find the VK_xx code(s) from a french MS layout,
+   when we use our mappings, we need to have the correct MS layout active too
+
+   -> chars like 'à' that I type with a deakey + a, how to generate this ??
+      SendInput both ??
+      -> possibly use the US intl layout, it might have all required accented chars on altGr?
+         not really, needs dead keys
+	   -> use azerty ?
+	   -> build my own !!?
+
+   -> it seems like VkKeyScanExA w/o a kbdLayout parameter looks in all installed MS layouts !
+     -> for eg passing é while in a US layout, will correctly find / (which output é in CAFR layout)
+
+   -> not very clear behaviour .. if the CAFR layout is active VkKeyScanExA seems to actually fail !???
+      also à does not map correctly ? (kinda expected)
+      will need to try loading a kbd layout and pass it to VkKeyScanExA
+
+ 
++ -- scancode vs VK ----
+
+// with Windows layouts that use AltGr, right Alt actually outputs
+// LCtrl + RAlt .. but with a weird scancode for LCtrl, (0x21D instead of 0x1D)
+// ie we don't send exactly the same vk / scancode, it screws up and LCtrl up is never generated !!!
+
+@A20D0B   wparam: 104 vk: A2 scan: 21D  dn  ex flags: 00100000
+@A20D0B   wparam: 104 vk: A5 scan: 38  dn  EX flags: 00100001
+
++ Note also that apparently, contrary to what I would expect, 
+  a scancode does NOT identify a physical key, (I thought that was the definition of a scancode !!!)
+  -> both left and right Ctrl have the same scancode (right ones are flagged 'extended' though)
+  -> BUT they DO have different VKs !
+  -> also see nte above for AltGr's LCtrl
+
++ getting the scancode from the VK does not seem to be 100% possible !
+UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
+// a few keys don't seem to properly convert to scan code (kbd specific?)
+//## PrtScrn, Pause don't convert to the scancode that we received in the kbd hook event !?
+
+-----------
+
++? should map keys based on both (VK & scancode), to avoid probs for eg w. AltGr,
+  see above
+ => how to be certain I have the correct scancodes ??
+    -> need to learn the kbd ?? pretty annoying
+    -> I guess that mapping on vk_scan and ignoring unknown values should be Ok

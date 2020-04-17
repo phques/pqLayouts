@@ -32,10 +32,12 @@ namespace Dbg
         //----
         
         // outputdbg KBDLLHOOK event
-        void KbdEVent(const KbdHookEvent& event, WPARAM wParam)
+        void KbdEVent(const KbdHookEvent& event, WPARAM wParam, bool selfInjected)
         {
-            Printf("@%0X wparam: %0X vkCode: %0X scanCode: %0X %s %s flags: %s\n",
-                event.time, wParam, event.vkCode, event.scanCode,
+            Printf("@%0X %c wparam: %0X vk: %0X scan: %0X %s %s flags: %s\n",
+                event.time, 
+                (selfInjected ? 'I' : ' '),
+                wParam, event.vkCode, event.scanCode,
                 (event.Up() ? " up" : " dn"), 
                 (event.Extended() ? " EX" : " ex"),
                 bitset<8>(event.flags).to_string().c_str());
@@ -63,7 +65,7 @@ namespace Dbg
                 (LPTSTR)&lpMsgBuf,
                 0, NULL);
 
-            Printfw((LPCTSTR)lpMsgBuf); // does this work??
+            Printfw((LPCTSTR)lpMsgBuf); 
 
             LocalFree(lpMsgBuf);
 

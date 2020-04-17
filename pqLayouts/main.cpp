@@ -20,27 +20,38 @@
 #include "pqLayoutsHook.h"
 #include "resource.h"
 
-typedef const std::string& conststr;
 
 namespace
 {
     const wchar_t* const windowTitle = L"PQLayouts";
 
+}
+
+// debug
+namespace
+{
     bool addMapping(char from, char to, bool shifted)
     {
-        UINT qwertyVk = MapVirtualKeyA(from, MAPVK_VK_TO_CHAR);
-        UINT outputVk = MapVirtualKeyA(to, MAPVK_VK_TO_CHAR);
+        // this returns flags for shift etc in upper byte
+        SHORT qwertyVk = VkKeyScanExA(from, NULL);
+        SHORT outputVk = VkKeyScanExA(to, NULL);
+        printf("VkKeyScanExA %c = %0X\n", to, outputVk);
 
-        bool ret = AddMapping("main", qwertyVk, outputVk, shifted);
+        bool ret = AddMapping("main", qwertyVk & 0xFF, outputVk & 0xFF, shifted);
         return ret;
     }
 
     void testMappings()
     {
-        AddMapping("main", 'A', 'G', false);
-        AddMapping("main", 'S', 'I', false);
-        AddMapping("main", 'D', 'O', false);
-        AddMapping("main", 'F', VK_SPACE, false);
+        addMapping('A', 'G', false);
+        addMapping('S', 'é', false);
+        addMapping('d', 'à', false);
+        addMapping('f', ' ', false);
+
+        //AddMapping("main", 'A', 'G', false);
+        //AddMapping("main", 'S', 'I', false);
+        //AddMapping("main", 'D', 'O', false);
+        //AddMapping("main", 'F', VK_SPACE, false);
 
         AddMapping("main", 'A', 'G', true);
         AddMapping("main", 'S', 'I', true);

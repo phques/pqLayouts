@@ -50,7 +50,9 @@ public:
             KbdHookEvent event(lParam);
 
             // dbg output
-            KbdProcDebugOut(event, wParam);
+            // comment out the IF to see debug output for injected kbd inputs
+            //if (!theKbd.SelfInjected(event))
+                KbdProcDebugOut(event, wParam, theKbd.SelfInjected(event));
 
             // process this key
             eat = theKbd.OnKeyEVent(event);
@@ -65,11 +67,18 @@ public:
     }
 
     // dbg output
-    static void KbdProcDebugOut(KbdHookEvent& event, const WPARAM& wParam)
+    static void KbdProcDebugOut(KbdHookEvent& event, const WPARAM& wParam, bool selfInjected)
     {
-        Dbg::Out::KbdEVent(event, wParam);
+        // use SCrollLock key on my kbd to outut ------ in dbg to help separate events
+        if (event.vkCode == 0x91) {
+            if (event.Down() && !selfInjected)
+                Printf("---------\n");
+            return;
+        }
 
-        theKbd.OutNbKeysDn();
+        Dbg::Out::KbdEVent(event, wParam, selfInjected);
+
+        //theKbd.OutNbKeysDn();
 
         //if (event.Down())
         //{
@@ -141,5 +150,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     }
     return TRUE;
 }
+
+
 
 

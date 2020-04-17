@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by pqLayouts.rc
+// Used by testbed.rc
 //
 #define IDD_DIALOG1                     101
 #define IDC_EDIT1                       1001

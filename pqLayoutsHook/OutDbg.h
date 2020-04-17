@@ -25,7 +25,7 @@ namespace Dbg
     namespace Out
     {
         bool LastError(const char* func);
-        void KbdEVent(const KbdHookEvent&, WPARAM);
+        void KbdEVent(const KbdHookEvent&, WPARAM, bool selfInjected);
         void DebugString(std::ostringstream&);
 
     } // namespace Out 

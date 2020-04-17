@@ -49,10 +49,10 @@ Keyboard::Keyboard()
     memset(mappings, 0, sizeof(mappings));
 
     // init mappings for one-to-one (0x00, 0xFF are not VKs)
-    for (DWORD i = 1; i < 0xFF; i++)
-    {
-        mappings[0][i] = mappings[1][i] = i;
-    }
+    //for (DWORD i = 1; i < 0xFF; i++)
+    //{
+    //    mappings[0][i] = mappings[1][i] = i;
+    //}
 }
 
 bool Keyboard::IsModifier(DWORD vk)
@@ -115,22 +115,25 @@ bool Keyboard::Mapping(DWORD vkFrom, DWORD vkTo, bool shifted)
 
     int shiftedIdx(shifted ? 1 : 0);
     mappings[shiftedIdx][vkFrom] = vkTo;
+
     return true;
 }
 
 
 //------
 
+bool Keyboard::SelfInjected(const KbdHookEvent& event)
+{
+    return (event.Injected() && event.dwExtraInfo == injectedFromMe);
+}
+
 
 // return true if we should skip / eat this virtual-key
 bool Keyboard::OnKeyEVent(KbdHookEvent& event)
 {
-    // dont touch if we injected it
-    if (event.Injected() && event.dwExtraInfo == injectedFromMe)
-    {
-        Printf("skip injected\n");
-        return false;
-    }
+    // skip this if we injected it
+    if (SelfInjected(event))
+        return false; // but let it through to next kbd hook
 
     DWORD vkout = Mapping(event.vkCode);
 
@@ -138,6 +141,13 @@ bool Keyboard::OnKeyEVent(KbdHookEvent& event)
         ModifierDown(vkout, event.Down());
 
     KeyDown(vkout, event.Down());
+
+    // safer this way,
+    // for eg. with Windows layouts that use AltGr, right Alt actually outputs
+    //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
+    // ie we don't send exactly the same vk / scancode, it screws and LCtrl up is never generated !!!
+    if (vkout == 0) // not mapped, dont touch
+        return false; // but let it through to next kbd hook
 
     SendVk(vkout, event.Down());
     
