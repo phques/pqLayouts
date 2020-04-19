@@ -1,21 +1,29 @@
+// Copyright 2020 Philippe Quesnel  
+//
+// This file is part of pqLayouts.
+//
+// pqLayouts is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// pqLayouts is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "pch.h"
 #include "resource.h"
+#include "util.h"
 
-//-----
+using namespace luabridge;
 
-// enable visual styles
-#pragma comment(linker, \
-  "\"/manifestdependency:type='Win32' "\
-  "name='Microsoft.Windows.Common-Controls' "\
-  "version='6.0.0.0' "\
-  "processorArchitecture='*' "\
-  "publicKeyToken='6595b64144ccf1df' "\
-  "language='*'\"")
-
-#pragma comment(lib, "ComCtl32.lib")
 
 //-------
+
 
 INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -50,26 +58,18 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 // return true to skip this completely
 bool handleKbdMsg(MSG& msg)
 {
-    // ## need to handle keys up too
+    // is it a keybd message?
+    if (!(msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN ||
+          msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP))
+        return false;
 
-    if (msg.message == WM_KEYDOWN) {
-        printf("wm_keydown %0x\n", msg.wParam);
-
-        // prevent dialog close on Escape
-        if (msg.wParam == VK_ESCAPE) {
-            puts("skip escape");
-            return true;
-        }
-
-        // # dbg replace a with b
-        if (msg.wParam == 'A')
-            msg.wParam = 'B';
+    // prevent dialog close on Escape
+    if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
+        puts("skip escape");
+        return true;
     }
 
-    if (msg.message == WM_SYSKEYDOWN) {
-        printf("wm_syskeydown %0x\n", msg.wParam);
-        //msg.wParam = 'B';
-    }
+    bool down = (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN);
 
     return false;
 }
@@ -81,6 +81,11 @@ bool handleKbdMsg(MSG& msg)
     HWND hDlg;
     hDlg = CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc, 0);
     ShowWindow(hDlg, nCmdShow);
+
+    // init LUA
+    lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+    enableExceptions(L);
 
     // message loop
     BOOL ret;

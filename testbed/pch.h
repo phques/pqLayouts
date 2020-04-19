@@ -5,3 +5,5 @@
 #include <CommCtrl.h>
 #include <stdio.h>
 
+#include <lua.hpp>
+#include <LuaBridge.h>

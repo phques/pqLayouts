@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-//#include "framework.h"
 
 //--------
 
@@ -57,4 +56,30 @@ public:
 
 #endif
 
+//---
+
+namespace luabridge {
+    class LuaRef;
+}
+
+struct lua_State;
+
+
+// for easier access to lua globals (global vars / funcs)
+//   state["myFunc2'](123);
+//   int val = state["value1"];
+struct LuaState
+{
+    LuaState(lua_State* L) : L(L) {}
+
+    inline luabridge::LuaRef operator[](const char* name);
+    inline luabridge::LuaRef GetRef(const char* name);
+
+    lua_State* L;
+};
+
+
+//---
+
 typedef const std::string conststr;
+

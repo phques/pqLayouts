@@ -30,3 +30,16 @@ KbdHookEvent::KbdHookEvent(LPARAM lParam)
     this->time = info.time;
     this->dwExtraInfo = info.dwExtraInfo;
 }
+
+//----------
+
+luabridge::LuaRef LuaState::operator[](const char* name) 
+{ 
+    return luabridge::getGlobal(L, name);
+}
+
+luabridge::LuaRef LuaState::GetRef(const char* name) 
+{ 
+    return luabridge::getGlobal(L, name); 
+}
+
