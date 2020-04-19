@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Windows.h>
-#include <tchar.h>
-#include <CommCtrl.h>
+// add headers that you want to pre-compile here
+#include "framework.h"
+
 #include <stdio.h>
 
 #include <lua.hpp>

@@ -24,12 +24,6 @@ namespace Dbg
 {
     namespace Out
     {
-        void DebugString(ostringstream& os)
-        {
-            OutputDebugStringA(os.str().c_str());
-        }
-
-        //----
         
         // outputdbg KBDLLHOOK event
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam, bool selfInjected)
