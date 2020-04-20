@@ -21,6 +21,47 @@
 
 using namespace luabridge;
 
+class MyLua : public LuaState
+{
+public:
+    MyLua() : LuaState(luaL_newstate())
+    {
+        luaL_openlibs(luaL);
+        enableExceptions(luaL);
+
+        // add ../lua to lua path
+        LuaRef luaPackage = GetRef("package");
+
+        std::string path = luaPackage["path"];
+        path = "../lua/?;../lua/?.lua;" + path;
+
+        luaPackage["path"] = path;
+    }
+
+    bool LoadScript(const char* script)
+    {
+        try
+        {
+            // load our lua script
+            if (luaL_dofile(luaL, script) != LUA_OK)
+            {
+                // get error from stack
+                std::string err = PopString();
+                err = "could not load lua script:\n" + err;
+
+                MessageBoxA(NULL, err.c_str(), "testbed", MB_OK);
+                return false;
+            }
+        }
+        catch (const LuaException& e)
+        {
+            Printf("luaexception %s\n", e.what());
+            return false;
+        }
+
+        return true;
+    }
+};
 
 //-------
 
@@ -74,8 +115,11 @@ bool handleKbdMsg(MSG& msg)
     return false;
 }
 
-
- int __stdcall wWinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdShow)
+#ifdef  UNICODE
+int __stdcall wWinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdShow)
+#else
+int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdShow)
+#endif
 {
      // create & show our dialog
     HWND hDlg;
@@ -83,9 +127,9 @@ bool handleKbdMsg(MSG& msg)
     ShowWindow(hDlg, nCmdShow);
 
     // init LUA
-    lua_State* L = luaL_newstate();
-    luaL_openlibs(L);
-    enableExceptions(L);
+    MyLua lua;
+    if (!lua.LoadScript("../lua/mapping.lua"))
+        return 0;
 
     // message loop
     BOOL ret;
@@ -116,6 +160,10 @@ bool handleKbdMsg(MSG& msg)
  // call WinMain
  int main(int argc, char* argv[])
  {
-     wWinMain(GetModuleHandle(0), 0, NULL, SW_SHOW);
+#ifdef  UNICODE
+     wWinMain(GetModuleHandle(0), 0, GetCommandLine(), SW_SHOW);
+#else
+     WinMain(GetModuleHandle(0), 0, GetCommandLine(), SW_SHOW);
+#endif
      return 0;
  }

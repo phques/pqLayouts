@@ -19,6 +19,9 @@
 
 //--------
 
+#include <lua.hpp>
+#include <LuaBridge.h>
+
 
 // Easy access to KBDLLHOOKSTRUCT info
 class KbdHookEvent : public KBDLLHOOKSTRUCT
@@ -47,20 +50,15 @@ public:
 #ifdef NDEBUG
 
 #define Printf (__noop)
-#define Printfw (__noop)
 
 #else
 
 #define Printf printf
-#define Printfw wprintf
+//#define Printfw wprintf
 
 #endif
 
 //---
-
-namespace luabridge {
-    class LuaRef;
-}
 
 struct lua_State;
 
@@ -68,14 +66,17 @@ struct lua_State;
 // for easier access to lua globals (global vars / funcs)
 //   state["myFunc2'](123);
 //   int val = state["value1"];
-struct LuaState
+class LuaState
 {
-    LuaState(lua_State* L) : L(L) {}
+public:
+    LuaState(lua_State* L) : luaL(L) {}
 
-    inline luabridge::LuaRef operator[](const char* name);
-    inline luabridge::LuaRef GetRef(const char* name);
+    inline luabridge::LuaRef operator[](const char* name) { return luabridge::getGlobal(luaL, name); }
+    inline luabridge::LuaRef GetRef(const char* name) { return luabridge::getGlobal(luaL, name); }
 
-    lua_State* L;
+    std::string PopString();
+
+    lua_State* luaL;
 };
 
 

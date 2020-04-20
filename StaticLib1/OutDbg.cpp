@@ -30,7 +30,7 @@ namespace Dbg
         {
             Printf("@%0X %c wparam: %0X vk: %0X scan: %0X %s %s flags: %s\n",
                 event.time, 
-                (selfInjected ? 'I' : ' '),
+                (selfInjected ? 'I' : (event.Injected() ? 'i' : ' ')),
                 wParam, event.vkCode, event.scanCode,
                 (event.Up() ? " up" : " dn"), 
                 (event.Extended() ? " EX" : " ex"),
@@ -47,19 +47,19 @@ namespace Dbg
 
             // show error descr
             LPVOID lpMsgBuf;
-            DWORD dw = GetLastError();
+            DWORD dwLastError = GetLastError();
 
-            FormatMessage(
+            FormatMessageA(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_FROM_SYSTEM |
                 FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL,
-                dw,
+                dwLastError,
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (LPTSTR)&lpMsgBuf,
+                (LPSTR)&lpMsgBuf,
                 0, NULL);
 
-            Printfw((LPCTSTR)lpMsgBuf); 
+            Printf((LPCSTR)lpMsgBuf); 
 
             LocalFree(lpMsgBuf);
 

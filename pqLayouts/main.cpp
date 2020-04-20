@@ -23,7 +23,7 @@
 
 namespace
 {
-    const wchar_t* const windowTitle = L"PQLayouts";
+    const TCHAR* const windowTitle = TEXT("PQLayouts");
 
 }
 
@@ -102,10 +102,10 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     // Check if there is already an instance running.
     // mutex auto closed on exit
-    CreateMutex(0, 0, L"_PqLayouts Main_");
+    CreateMutex(0, 0, TEXT("_PqLayouts Main_"));
     if (GetLastError() == ERROR_ALREADY_EXISTS) 
     {
-        MessageBox(0, L"Oooppps", L"Ooops", MB_OK);
+        MessageBox(0, TEXT("Oooppps"), TEXT("Ooops"), MB_OK);
         return 0;
     }
 

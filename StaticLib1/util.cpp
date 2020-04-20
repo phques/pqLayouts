@@ -33,13 +33,9 @@ KbdHookEvent::KbdHookEvent(LPARAM lParam)
 
 //----------
 
-luabridge::LuaRef LuaState::operator[](const char* name) 
-{ 
-    return luabridge::getGlobal(L, name);
+std::string LuaState::PopString()
+{
+    std::string s = lua_tostring(luaL, -1);
+    lua_pop(luaL, 1);
+    return s;
 }
-
-luabridge::LuaRef LuaState::GetRef(const char* name) 
-{ 
-    return luabridge::getGlobal(L, name); 
-}
-

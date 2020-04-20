@@ -1,12 +1,15 @@
+require "objectNew"
 
-Mapping = {}
+Mapping = { new = ObjectNew }
 
-function Mapping:new (o)
-  o = o or {}
-  setmetatable(o, self)
-  self.__index = self
-  return o
+function Mapping:toto(msg)
+	print(msg)
 end
 
 
-function 
+m = Mapping:new()
+m:toto("allo")
+
+function toto(msg)
+	print(msg)
+end
