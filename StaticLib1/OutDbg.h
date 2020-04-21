@@ -26,6 +26,7 @@ namespace Dbg
     {
         bool LastError(const char* func);
         void KbdEVent(const KbdHookEvent&, WPARAM, bool selfInjected);
+        void WmKey(MSG msg);
         void DebugString(std::ostringstream&);
 
     } // namespace Out 

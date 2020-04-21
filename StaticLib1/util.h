@@ -42,26 +42,52 @@ public:
     //const KBDLLHOOKSTRUCT& info;
 };
 
+//----------
+
+/* LPARAM bits for wm_keydown/up
+Bits 	Meaning
+0-15 	The repeat count for the current message. The value is the number of times the keystroke is autorepeated as a result of the user holding down the key. If the keystroke is held long enough, multiple messages are sent. However, the repeat count is not cumulative.
+16-23 	The scan code. The value depends on the OEM.
+24 	Indicates whether the key is an extended key, such as the right-hand ALT and CTRL keys that appear on an enhanced 101- or 102-key keyboard. The value is 1 if it is an extended key; otherwise, it is 0.
+25-28 	Reserved; do not use.
+29 	The context code. The value is always 0 for a WM_KEYDOWN message.
+30 	The previous key state. The value is 1 if the key is down before the message is sent, or it is zero if the key is up.
+31 	The transition state. The value is always 0 for a WM_KEYDOWN message.
+*/
+struct WmKeyLPARAM {
+    WmKeyLPARAM(LPARAM lParam = 0) { u.lParam = lParam; }
+
+    bool Up() const { return u.values.transitionState == 1; }
+    bool Down() const { return u.values.transitionState == 0; }
+    bool Extended() const { return u.values.extended == 1; }
+
+    union {
+        struct {
+            unsigned int repeatCount : 16;  // apparently always 1 ??
+            unsigned int scanCode : 8;
+            unsigned int extended : 1;
+            unsigned int reserved : 4;
+            unsigned int contextCode : 1;   // always 0
+            unsigned int previousState : 1;
+            unsigned int transitionState : 1;
+        } values;
+        LPARAM lParam;
+    } u;
+};
 
 //--------
 
 // debug only Printf (build app in console subsystem)
 
 #ifdef NDEBUG
-
-#define Printf (__noop)
-
+ #define Printf (__noop)
+ #define Printfw (__noop)
 #else
-
-#define Printf printf
-//#define Printfw wprintf
-
+ #define Printf printf
+ #define Printfw wprintf
 #endif
 
 //---
-
-struct lua_State;
-
 
 // for easier access to lua globals (global vars / funcs)
 //   state["myFunc2'](123);

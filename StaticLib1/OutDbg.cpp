@@ -37,6 +37,21 @@ namespace Dbg
                 bitset<8>(event.flags).to_string().c_str());
         }
 
+        // outputdbg WM_KEYDOWN/UP message
+        void WmKey(MSG msg)
+        {
+            WmKeyLPARAM lparam(msg.lParam);
+
+            Printf("vk %02x scan %0X %c (%c) %c\n",
+                msg.wParam,
+                lparam.u.values.scanCode,
+                lparam.Up() ? 'u' : 'd',
+                lparam.u.values.previousState ? 'd' : 'u',
+                lparam.u.values.extended ? 'X' : ' '
+                );
+        }
+
+
         // outputdbg message for GetLastError()
         // returns false
         bool LastError(const char* funcName)

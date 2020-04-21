@@ -18,11 +18,16 @@
 #include "pch.h"
 #include "resource.h"
 #include "util.h"
+#include "outDbg.h"
 
 using namespace luabridge;
 
 class MyLua : public LuaState
 {
+//public:
+    LuaRef theKbd = nullptr;
+    LuaRef kbdOnKey = nullptr;
+
 public:
     MyLua() : LuaState(luaL_newstate())
     {
@@ -34,7 +39,6 @@ public:
 
         std::string path = luaPackage["path"];
         path = "../lua/?;../lua/?.lua;" + path;
-
         luaPackage["path"] = path;
     }
 
@@ -52,6 +56,15 @@ public:
                 MessageBoxA(NULL, err.c_str(), "testbed", MB_OK);
                 return false;
             }
+
+            // get 'theKeyboard'
+            theKbd = GetRef("theKeyboard");
+            if (theKbd.isNil()) {
+                MessageBoxA(NULL, "Cannot find 'theKeyboard' in lua script", "testbed", MB_OK);
+                return false;
+            }
+
+            kbdOnKey = theKbd["OnKey"];
         }
         catch (const LuaException& e)
         {
@@ -60,6 +73,14 @@ public:
         }
 
         return true;
+    }
+
+    unsigned int OnKey(WPARAM wParam, bool down)
+    {
+        LuaRef ret = kbdOnKey(theKbd, wParam, down);
+        if (ret.isNil())
+            return 0;
+        return ret;
     }
 };
 
@@ -97,20 +118,49 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 //-----
 
 // return true to skip this completely
-bool handleKbdMsg(MSG& msg)
+bool handleKbdMsg(MSG& msg, MyLua& lua)
 {
     // is it a keybd message?
     if (!(msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN ||
           msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP))
         return false;
 
-    // prevent dialog close on Escape
-    if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
-        puts("skip escape");
+    // clear console on F11
+    if (msg.wParam == VK_F11) {
+        if (msg.message == WM_KEYDOWN) {
+            Printf("\033[2J"); /*clear screen*/
+            Printf("\033[1H"); /*goto line 1 */
+        }
         return true;
     }
 
-    bool down = (msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN);
+    // reload LUA script on F12
+    if (msg.wParam == VK_F12) {
+        if (msg.message == WM_KEYDOWN) {
+            puts("--reload script--");
+            if (!lua.LoadScript("../lua/mapping.lua"))
+                puts("failed to load script");
+        }
+        return true;
+    }
+
+    WmKeyLPARAM lparam(msg.lParam);
+
+    Dbg::Out::WmKey(msg);
+
+    try
+    {
+        unsigned int newVk = lua.OnKey(msg.wParam, lparam.Down());
+        Printf("lua.onkey ret = %0x\n", newVk);
+
+        if (newVk != 0)
+            msg.wParam = static_cast<WPARAM>(newVk);
+    }
+    catch (const LuaException& e)
+    {
+        Printf("luaexception %s\n", e.what());
+        return false;
+    }
 
     return false;
 }
@@ -128,6 +178,7 @@ int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdS
 
     // init LUA
     MyLua lua;
+    // need to pass path here, does not seem to use the lua path
     if (!lua.LoadScript("../lua/mapping.lua"))
         return 0;
 
@@ -139,9 +190,14 @@ int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdS
             return -1;
 
         // handle keyboard messages 
-        if (handleKbdMsg(msg))
+        if (handleKbdMsg(msg, lua))
             continue;  // skip this message
 
+            // prevent dialog close on Escape
+        if ((msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) && msg.wParam == VK_ESCAPE) {
+            puts("skip escape");
+            continue;
+        }
 
         // normal message processing
         if (!IsDialogMessage(hDlg, &msg)) {
