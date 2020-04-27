@@ -22,6 +22,28 @@
 
 using namespace luabridge;
 
+namespace
+{
+    const char* myNamespace = "pqLayout";
+
+    // wrapper for VkKeyScanExA
+    LuaRef GetVk(char character, lua_State* L)
+    {
+        SHORT vkandflags = VkKeyScanExA(character, NULL);
+        BYTE flags = HIBYTE(vkandflags);
+        BYTE vk = LOBYTE(vkandflags);
+
+        LuaRef table = newTable(L);
+        table["vk"] = vk;
+        table["shiftOn"] = (flags & 1) != 0;
+        table["ctrlOn"] = (flags & 2) != 0;
+        table["altOn"] = (flags & 4) != 0;
+        return table;
+    }
+    
+
+}
+
 class MyLua : public LuaState
 {
 //public:
@@ -56,15 +78,50 @@ public:
                 MessageBoxA(NULL, err.c_str(), "testbed", MB_OK);
                 return false;
             }
+        }
+        catch (const LuaException& e)
+        {
+            Printf("luaexception %s\n", e.what());
+            return false;
+        }
 
-            // get 'theKeyboard'
+        return true;
+    }
+
+    bool GetLuaGlobals()
+    {
+        try
+        {
+            // get 'theKeyboard' lua object
             theKbd = GetRef("theKeyboard");
             if (theKbd.isNil()) {
                 MessageBoxA(NULL, "Cannot find 'theKeyboard' in lua script", "testbed", MB_OK);
                 return false;
             }
 
-            kbdOnKey = theKbd["OnKey"];
+            kbdOnKey = theKbd["onKey"];
+        }
+        catch (const LuaException& e)
+        {
+            Printf("GetLuaGlobals luaexception %s\n", e.what());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool SetLuaGlobals()
+    {
+        try
+        {
+            // register C funcs
+            getGlobalNamespace(luaL)
+                .beginNamespace(myNamespace)
+
+                .addFunction("GetVk", &GetVk)
+
+                .endNamespace();
+
         }
         catch (const LuaException& e)
         {
@@ -178,9 +235,17 @@ int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdS
 
     // init LUA
     MyLua lua;
+    lua.SetLuaGlobals();
+
     // need to pass path here, does not seem to use the lua path
     if (!lua.LoadScript("../lua/mapping.lua"))
         return 0;
+
+    if (!lua.GetLuaGlobals())
+        return 0;
+
+    Printf("F11 to clear screen\n");
+    Printf("F12 to reload script\n");
 
     // message loop
     BOOL ret;

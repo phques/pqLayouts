@@ -2,15 +2,6 @@ require "objectNew"
 
 Mapping = { new = ObjectNew }
 
--- function Mapping:toto(msg)
--- 	print(msg)
--- end
-
-
--- m = Mapping:new()
--- m:toto("allo")
-
-
 -------------
 
 -- only one of these
@@ -18,39 +9,41 @@ theKeyboard = {
 	mappings = {}
 }
 
-function theKeyboard:AddMapping(vkFrom, vkTo)
+function theKeyboard:addMapping(fromChar, toChar)
 	-- (#todo get real scancode / vk etc)
 	-- convert string to byte 
-	print(string.format("AddMapping from=%s, tp=%s", vkFrom, vkTo))
-	vkFrom = string.byte(vkFrom)
-	vkTo = string.byte(vkTo)
-	print(string.format("AddMapping from=%x, tp=%x", vkFrom, vkTo))
-	self.mappings[vkFrom] = vkTo
+	print(string.format("addMapping from=%s, tp=%s", fromChar, toChar))
+
+	vkFrom = pqLayout.GetVk(fromChar)
+	vkTo = pqLayout.GetVk(toChar)
+
+	-- self.mappings[vkFrom] = vkTo
 end
 
-function theKeyboard:GetMapping(vkFrom)
+function theKeyboard:getMapping(vkFrom)
 	return self.mappings[vkFrom]
 end
 
 -- called from C++ for wm_keydown/up
-function theKeyboard:OnKey(vk, down)
+function theKeyboard:onKey(vk, down)
 	print(string.format("theKeyboard:OnKey vk=%x", vk))
-	return self.mappings[vk]
+	return self:getMapping(vk)
 end
 
-function OnKey(vk, down)
-	print"onkey"
-	return theKeyboard:OnKey(vk, down)
+-------------------
+
+theKeyboard:addMapping('A','G')
+theKeyboard:addMapping('S','I')
+theKeyboard:addMapping('D','O')
+theKeyboard:addMapping('F',' ')
+
+-- theKeyboard:addMapping('','')
+
+function testGetVk(char)
+	vk = pqLayout.GetVk(char)
+	print(string.format("vk=%d, shft %s, ctrl %s, alt %s", vk.vk, vk.shiftOn, vk.ctrlOn, vk.altOn))
 end
 
-function OnKey2(thekbd, vk, down)
-	print"onkey2"
-	return thekbd:OnKey(vk, down)
-end
-
-theKeyboard:AddMapping('A','G')
-theKeyboard:AddMapping('S','I')
-theKeyboard:AddMapping('D','O')
-theKeyboard:AddMapping('F',' ')
-
--- theKeyboard:AddMapping('','')
+testGetVk('A')
+testGetVk('a')
+testGetVk('@')
