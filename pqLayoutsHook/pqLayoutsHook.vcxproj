@@ -159,13 +159,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Keydef.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="KeyMapping.h" />
+    <ClInclude Include="Layer.h" />
+    <ClInclude Include="Layout.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="pqLayoutsHook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Keydef.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="KeyMapping.cpp" />
+    <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Layout.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

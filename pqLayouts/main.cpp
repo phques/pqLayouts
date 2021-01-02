@@ -30,38 +30,59 @@ namespace
 // debug
 namespace
 {
-    bool addMapping(char from, char to, bool shifted)
+    // checks bit 0 of hibyte of ret val from VkKeyScanExA
+    bool ScanExIsShift(SHORT scanExVal) 
+    { 
+        return ((scanExVal >> 8) & 0x01) != 0; 
+    }
+
+    bool addMapping(CHAR from, CHAR to)
     {
         // this returns flags for shift etc in upper byte
         SHORT qwertyVk = VkKeyScanExA(from, NULL);
         SHORT outputVk = VkKeyScanExA(to, NULL);
         printf("VkKeyScanExA %c = %0X\n", to, outputVk);
 
-        bool ret = AddMapping("main", qwertyVk & 0xFF, outputVk & 0xFF, shifted);
+        KeyValue kfrom(qwertyVk & 0xFF,0, ScanExIsShift(qwertyVk));
+        KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
+        bool ret = AddMapping("main", kfrom, kto);
+        return ret;
+    }
+
+    bool addMapping(WORD from, bool shiftedFrom, WORD to, bool shiftedTo)
+    {
+        // this returns flags for shift etc in upper byte
+        SHORT qwertyVk = VkKeyScanExA(from & 0xFF, NULL);
+        SHORT outputVk = VkKeyScanExA(to & 0xFF, NULL);
+        printf("VkKeyScanExA %c = %0X\n", to, outputVk);
+
+        KeyValue kfrom(qwertyVk & 0xFF, 0, shiftedFrom);
+        KeyValue kto(outputVk & 0xFF, 0, shiftedTo);
+        bool ret = AddMapping("main", kfrom, kto);
         return ret;
     }
 
     void testMappings()
     {
-        addMapping('A', 'G', false);
-        addMapping('S', 'é', false);
-        addMapping('d', 'à', false);
-        addMapping('f', ' ', false);
+        //addMapping('A', 'G', false);
+        //addMapping('S', 'é', false);
+        //addMapping('d', 'à', false);
+        //addMapping('f', ' ', false);
 
-        //AddMapping("main", 'A', 'G', false);
-        //AddMapping("main", 'S', 'I', false);
-        //AddMapping("main", 'D', 'O', false);
-        //AddMapping("main", 'F', VK_SPACE, false);
+        addMapping('a', 'g');
+        addMapping('s', 'i');
+        addMapping('d', 'o');
+        addMapping('f', false, VK_SPACE, false);
 
-        AddMapping("main", 'A', 'G', true);
-        AddMapping("main", 'S', 'I', true);
-        AddMapping("main", 'D', 'O', true);
-        AddMapping("main", 'F', VK_OEM_7, true); // want '"' .. but we map *VIRTUAL KEYS*, need to specify if needs Shift
+        addMapping('A', 'G');
+        addMapping('S', 'I');
+        addMapping('D', 'O');
+        addMapping('F', true, VK_OEM_7, true); // want '"' .. but we map *VIRTUAL KEYS*, need to specify if needs Shift
 
-        AddMapping("main", VK_CAPITAL, VK_SHIFT, false);
-        AddMapping("main", VK_RETURN, VK_RSHIFT, false);
-        AddMapping("main", VK_CAPITAL, VK_SHIFT, true);
-        AddMapping("main", VK_RETURN, VK_RSHIFT, true);
+        addMapping(VK_CAPITAL, false, VK_SHIFT, false);
+        addMapping(VK_RETURN,  false, VK_RSHIFT, false);
+        addMapping(VK_CAPITAL, true, VK_SHIFT, true);
+        addMapping(VK_RETURN,  true, VK_RSHIFT, true);
     }
 }
 

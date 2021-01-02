@@ -18,49 +18,47 @@
 
 #include <cassert>
 #include "util.h"
+#include "layout.h"
 
-class KbdHook; // 
+class KbdHook; // fwd
+
+typedef std::unordered_set<VeeKee> VeeKeeSet;
+
 
 class Keyboard
 {
-    friend class KbdHook;
-
 public:
     Keyboard();
 
-    DWORD Mapping(DWORD vk);
-    bool Mapping(DWORD vkFrom, DWORD vkTo, bool shifted);
+    const KeyMapping* Mapping(VeeKee vk);
+    bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
 
-
-protected:
-    bool OnKeyEVent(KbdHookEvent&);
-
-    void KeyDown(DWORD vk, bool down);
-    bool KeyDown(DWORD vk) const;
-
-    void ModifierDown(DWORD vk, bool down);
-    bool ModifierDown(DWORD vk) const;
-    bool ShiftDown() const;
-
-    bool SelfInjected(const KbdHookEvent& event);
-
-    void SendVk(DWORD vk, bool down);
-
-    static bool IsModifier(DWORD vk);
-    static bool IsExtended(DWORD vk);
-
+    bool OnKeyEVent(KbdHookEvent&, DWORD injectedFromMe);
     // dbg
     void OutNbKeysDn();
 
+protected:
+
+    void KeyDown(VeeKee vk, bool down);
+    bool KeyDown(VeeKee vk) const;
+
+    void ModifierDown(VeeKee vk, bool down);
+    bool ModifierDown(VeeKee vk) const;
+    bool ShiftDown() const;
+
+    void SendVk(VeeKee vk, bool down, DWORD injectedFromMe);
+
+    static bool IsModifier(VeeKee vk);
+    static bool IsExtended(VeeKee vk);
+
 private:
-    // all VKs
-    DWORD downModifiers[256];
-    DWORD downKeys[256];
-    DWORD mappings[2][256];
+    bool downModifiers[256];
+    bool downKeys[256];
 
-    static std::unordered_set<DWORD> modifiers;
-    static std::unordered_set<DWORD> extended;
+    VeeKee mappings[2][256]; // to be replaced by layout..
+    Layout layout;
 
-    // a 'unique' value to identify values we injected with SendInput
-    const ULONG_PTR injectedFromMe = 0x0E5FA78A; // <Guid("0E5FA78A-82FE-4557-956E-320702FEB659")>
+    static VeeKeeSet modifiers;
+    static VeeKeeSet extended;
+
 };

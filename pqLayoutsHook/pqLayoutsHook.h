@@ -16,15 +16,10 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-
-#ifdef PQLAYOUTSHOOK_EXPORTS
-#define PQHOOK_API __declspec(dllexport)
-#else
-#define PQHOOK_API __declspec(dllimport)
-#endif
-
+#include "dllExport.h"
+#include "Keydef.h"
 
 PQHOOK_API bool HookKbdLL();
 PQHOOK_API bool UnhookKbdLL();
 
-PQHOOK_API bool AddMapping(const char* layer, UINT qwertyVk, UINT outputVk, bool shifted);
+PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to);

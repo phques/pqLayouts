@@ -24,7 +24,7 @@
 //----------
 
 
-std::unordered_set<DWORD> Keyboard::modifiers = {
+VeeKeeSet Keyboard::modifiers = {
     VK_LSHIFT, VK_RSHIFT, VK_SHIFT,
     VK_LCONTROL, VK_RCONTROL, VK_CONTROL,
     VK_LMENU, VK_RMENU, VK_MENU,         // Alt !
@@ -32,7 +32,7 @@ std::unordered_set<DWORD> Keyboard::modifiers = {
 };
 
 
-std::unordered_set<DWORD> Keyboard::extended = {
+VeeKeeSet Keyboard::extended = {
     VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN,
     VK_HOME, VK_END, VK_PRIOR, VK_NEXT, 
     VK_INSERT, VK_DELETE, VK_DIVIDE, VK_NUMLOCK,
@@ -44,8 +44,10 @@ std::unordered_set<DWORD> Keyboard::extended = {
 
 Keyboard::Keyboard()
 {
+    // init all to fale
     memset(downModifiers, 0, sizeof(downModifiers));
     memset(downKeys, 0, sizeof(downKeys));
+
     memset(mappings, 0, sizeof(mappings));
 
     // init mappings for one-to-one (0x00, 0xFF are not VKs)
@@ -55,27 +57,27 @@ Keyboard::Keyboard()
     //}
 }
 
-bool Keyboard::IsModifier(DWORD vk)
+bool Keyboard::IsModifier(VeeKee vk)
 {
     return modifiers.find(vk) != modifiers.end();
 }
 
-bool Keyboard::IsExtended(DWORD vk)
+bool Keyboard::IsExtended(VeeKee vk)
 {
     return extended.find(vk) != extended.end();
 }
 
-void Keyboard::ModifierDown(DWORD vk, bool down)
+void Keyboard::ModifierDown(VeeKee vk, bool down)
 {
     assert(vk < 0xFF);
-    downModifiers[vk] = (down ? vk : 0);
+    downModifiers[vk] = down;
 }
 
 
-bool Keyboard::ModifierDown(DWORD vk) const
+bool Keyboard::ModifierDown(VeeKee vk) const
 { 
     assert(vk < 0xff); 
-    return (downModifiers[vk] == vk); 
+    return downModifiers[vk]; 
 }
 
 bool Keyboard::ShiftDown() const
@@ -85,36 +87,44 @@ bool Keyboard::ShiftDown() const
         ModifierDown(VK_SHIFT);
 }
 
-void Keyboard::KeyDown(DWORD vk, bool down)
+void Keyboard::KeyDown(VeeKee vk, bool down)
 {
     assert(vk < 0xFF);
-    downKeys[vk] = (down ? vk : 0);
+    downKeys[vk] = down;
 }
 
-bool Keyboard::KeyDown(DWORD vk) const
+bool Keyboard::KeyDown(VeeKee vk) const
 {
     assert(vk < 0xff); 
-    return (downKeys[vk] == vk);
+    return downKeys[vk];
 }
 
-DWORD Keyboard::Mapping(DWORD vk)
+const KeyMapping* Keyboard::Mapping(VeeKee vk)
 {
     assert(vk < 0xFF);
 
-    int shiftedIdx(ShiftDown() ? 1 : 0);
-    return mappings[shiftedIdx][vk];
+    //int shiftedIdx(ShiftDown() ? 1 : 0);
+    //return mappings[shiftedIdx][vk];
+
+    auto caseMapping = layout.Mapping(vk);
+    if (caseMapping == nullptr)
+        return 0;
+
+    return (ShiftDown() ? &caseMapping->shifted : &caseMapping->nonShifted); 
 }
 
-bool Keyboard::Mapping(DWORD vkFrom, DWORD vkTo, bool shifted)
+bool Keyboard::AddMapping(KeyValue from, KeyValue to)
 {
-    if (vkFrom >= 0xFF || vkTo >= 0xFF)
+    if (from.Vk() >= 0xFF || to.Vk() >= 0xFF)
         return false;
 
     // dbg
-    Printf("Add mapping from %02x, to %02x\n", vkFrom, vkTo);
+    Printf("Add mapping from %02x, to %02x\n", from.Vk(), to.Vk());
 
-    int shiftedIdx(shifted ? 1 : 0);
-    mappings[shiftedIdx][vkFrom] = vkTo;
+    //int shiftedIdx(shifted ? 1 : 0);
+    //mappings[shiftedIdx][vkFrom] = vkTo;
+
+    layout.AddMapping(from, to);
 
     return true;
 }
@@ -122,41 +132,41 @@ bool Keyboard::Mapping(DWORD vkFrom, DWORD vkTo, bool shifted)
 
 //------
 
-bool Keyboard::SelfInjected(const KbdHookEvent& event)
-{
-    return (event.Injected() && event.dwExtraInfo == injectedFromMe);
-}
-
 
 // return true if we should skip / eat this virtual-key
-bool Keyboard::OnKeyEVent(KbdHookEvent& event)
+bool Keyboard::OnKeyEVent(KbdHookEvent& event, DWORD injectedFromMe)
 {
-    // skip this if we injected it
-    if (SelfInjected(event))
-        return false; // but let it through to next kbd hook
-
-    DWORD vkout = Mapping(event.vkCode);
-
-    if (IsModifier(vkout))
-        ModifierDown(vkout, event.Down());
-
-    KeyDown(vkout, event.Down());
+    const CaseMapping* caseMapping = layout.Mapping(event.vkCode);
 
     // safer this way,
     // for eg. with Windows layouts that use AltGr, right Alt actually outputs
     //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
-    // ie we don't send exactly the same vk / scancode, it screws and LCtrl up is never generated !!!
-    if (vkout == 0) // not mapped, dont touch
+    // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
+    // ## actually, avoid using such Windows layouts with this software for now !
+    if (caseMapping == nullptr) // not mapped, dont touch
         return false; // but let it through to next kbd hook
 
-    SendVk(vkout, event.Down());
+    // drill down to out mapping and vk 
+    const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
+    KeyValue valueOut = mapping.Mapping();
+    VeeKee vkOut = valueOut.Vk();
+
+    if (vkOut == 0) // not mapped, dont touch
+        return false; // but let it through to next kbd hook
+
+    if (IsModifier(vkOut))
+        ModifierDown(vkOut, event.Down());
+
+    KeyDown(vkOut, event.Down());
+
+    SendVk(vkOut, event.Down(), injectedFromMe);
     
     return true;
 }
 
 
 
-void Keyboard::SendVk(DWORD vk, bool down)
+void Keyboard::SendVk(VeeKee vk, bool down, DWORD injectedFromMe)
 {
     // maybe pre compute this ?
     //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
@@ -187,7 +197,7 @@ void Keyboard::SendVk(DWORD vk, bool down)
 // dbg 
 void Keyboard::OutNbKeysDn()
 {
-    auto NotZero = [](DWORD vk) {return vk != 0; };
+    auto NotZero = [](VeeKee vk) {return vk != 0; };
     int nbmodsdn = std::count_if(&downModifiers[1], &downModifiers[0xFF], NotZero);
     int nbkeysdn = std::count_if(&downKeys[1], &downKeys[0xFF], NotZero);
 

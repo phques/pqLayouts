@@ -27,6 +27,8 @@ namespace
     HHOOK hKbdHook = NULL;
     Keyboard theKbd;
 
+    // a 'unique' value to identify values we injected with SendInput
+    const ULONG_PTR injectedFromMe = 0x0E5FA78A; // <Guid("0E5FA78A-82FE-4557-956E-320702FEB659")>
 }
 
 
@@ -51,11 +53,14 @@ public:
 
             // dbg output
             // comment out the IF to see debug output for injected kbd inputs
-            //if (!theKbd.SelfInjected(event))
-                KbdProcDebugOut(event, wParam, theKbd.SelfInjected(event));
+            //if (!SelfInjected(event))
+                KbdProcDebugOut(event, wParam, SelfInjected(event));
 
             // process this key
-            eat = theKbd.OnKeyEVent(event);
+            // skip this if we injected it
+            // but let it through to next kbd hook (eat=false)
+            if (!SelfInjected(event))
+                eat = theKbd.OnKeyEVent(event, injectedFromMe);
 
         }
 
@@ -64,6 +69,11 @@ public:
             return 1;  // do not send this message / event
 
         return CallNextHookEx(hKbdHook, nCode, wParam, lParam);
+    }
+
+    static bool SelfInjected(const KbdHookEvent& event)
+    {
+        return (event.Injected() && event.dwExtraInfo == injectedFromMe);
     }
 
     // dbg output
@@ -118,16 +128,17 @@ bool UnhookKbdLL()
 }
 
 
-PQHOOK_API bool AddMapping(const char* layer, UINT qwertyVk, UINT outputVk, bool shifted)
+PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to)
 {
-    // ignore layer at this point (only main)
-    if (qwertyVk >= 0xFF || outputVk >= 0xFF)
+    //## PQ ignore layer at this point (only main)
+
+    if (from.Vk() >= 0xFF || to.Vk() >= 0xFF)
     {
-        Printf("AddMapping, qwertyVk >= 0xFF || outputVk >= 0xFF\n");
+        Printf("AddMapping, skip qwertyVk >= 0xFF || outputVk >= 0xFF\n");
         return false;
     }
 
-    theKbd.Mapping(qwertyVk, outputVk, shifted);
+    theKbd.AddMapping(from, to);
     return true;
 }
 
