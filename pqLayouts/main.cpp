@@ -41,25 +41,20 @@ namespace
         // this returns flags for shift etc in upper byte
         SHORT qwertyVk = VkKeyScanExA(from, NULL);
         SHORT outputVk = VkKeyScanExA(to, NULL);
-        printf("VkKeyScanExA %c = %0X\n", to, outputVk);
+        printf("VkKeyScanExA %c = 0x%0X\n", to, outputVk);
 
         KeyValue kfrom(qwertyVk & 0xFF,0, ScanExIsShift(qwertyVk));
         KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
-        bool ret = AddMapping("main", kfrom, kto);
-        return ret;
+
+        return AddMapping("main", kfrom, kto);
     }
 
     bool addMapping(WORD from, bool shiftedFrom, WORD to, bool shiftedTo)
     {
-        // this returns flags for shift etc in upper byte
-        SHORT qwertyVk = VkKeyScanExA(from & 0xFF, NULL);
-        SHORT outputVk = VkKeyScanExA(to & 0xFF, NULL);
-        printf("VkKeyScanExA %c = %0X\n", to, outputVk);
+        KeyValue kfrom(from, 0, shiftedFrom);
+        KeyValue kto(to, 0, shiftedTo);
 
-        KeyValue kfrom(qwertyVk & 0xFF, 0, shiftedFrom);
-        KeyValue kto(outputVk & 0xFF, 0, shiftedTo);
-        bool ret = AddMapping("main", kfrom, kto);
-        return ret;
+        return AddMapping("main", kfrom, kto);
     }
 
     void testMappings()
@@ -72,7 +67,7 @@ namespace
         addMapping('a', 'g');
         addMapping('s', 'i');
         addMapping('d', 'o');
-        addMapping('f', false, VK_SPACE, false);
+        addMapping('F', false, VK_SPACE, false);
 
         addMapping('A', 'G');
         addMapping('S', 'I');

@@ -138,8 +138,7 @@ PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to)
         return false;
     }
 
-    theKbd.AddMapping(from, to);
-    return true;
+    return theKbd.AddMapping(from, to);
 }
 
 

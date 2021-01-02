@@ -57,6 +57,11 @@ Keyboard::Keyboard()
     //}
 }
 
+bool Keyboard::AddLayer(const Layer::LayerId_t& layerId)
+{
+    return layout.AddLayer(layerId);
+}
+
 bool Keyboard::IsModifier(VeeKee vk)
 {
     return modifiers.find(vk) != modifiers.end();
@@ -124,9 +129,7 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
     //int shiftedIdx(shifted ? 1 : 0);
     //mappings[shiftedIdx][vkFrom] = vkTo;
 
-    layout.AddMapping(from, to);
-
-    return true;
+    return layout.AddMapping(from, to);
 }
 
 

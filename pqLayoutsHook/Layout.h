@@ -25,13 +25,16 @@ class Layout
 {
 public:
     Layout();
+    ~Layout();
+
+    bool AddLayer(const Layer::LayerId_t&);
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;
-    std::map<Layer::LayerId_t, Layer> layers;  
+    std::map<Layer::LayerId_t, Layer*> layers;  
     Layer* currentLayer;
 };
 

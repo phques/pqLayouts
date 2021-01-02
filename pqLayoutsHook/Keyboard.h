@@ -30,6 +30,8 @@ class Keyboard
 public:
     Keyboard();
 
+    bool AddLayer(const Layer::LayerId_t&);
+
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
 

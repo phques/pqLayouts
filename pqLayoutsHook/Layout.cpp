@@ -20,6 +20,25 @@
 
 Layout::Layout() : currentLayer(nullptr)
 {
+    // Layout always has a main layer, starts as the current layer
+    AddLayer("main");
+    currentLayer = layers["main"];
+}
+
+Layout::~Layout()
+{
+    for (auto layerIt : layers)
+        delete layerIt.second;
+}
+
+bool Layout::AddLayer(const Layer::LayerId_t& layerId)
+{
+    // layer already exists?
+    if (layers.find(layerId) != layers.end())
+        return false;
+
+    layers[layerId] = new Layer(layerId);
+    return true;
 }
 
 const CaseMapping* Layout::Mapping(VeeKee vk) const
