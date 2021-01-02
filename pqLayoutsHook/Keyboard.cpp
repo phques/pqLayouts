@@ -124,7 +124,7 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
         return false;
 
     // dbg
-    Printf("Add mapping from %02x, to %02x\n", from.Vk(), to.Vk());
+    Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
 
     //int shiftedIdx(shifted ? 1 : 0);
     //mappings[shiftedIdx][vkFrom] = vkTo;
@@ -135,58 +135,123 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
 
 //------
 
-
-// return true if we should skip / eat this virtual-key
-bool Keyboard::OnKeyEVent(KbdHookEvent& event, DWORD injectedFromMe)
+const KeyValue* Keyboard::GetMappingValue(KbdHookEvent& event)
 {
     const CaseMapping* caseMapping = layout.Mapping(event.vkCode);
 
-    // safer this way,
-    // for eg. with Windows layouts that use AltGr, right Alt actually outputs
-    //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
-    // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
-    // ## actually, avoid using such Windows layouts with this software for now !
-    if (caseMapping == nullptr) // not mapped, dont touch
-        return false; // but let it through to next kbd hook
+    if (caseMapping == nullptr) 
+       return nullptr;
 
-    // drill down to out mapping and vk 
+    // drill down to out mapping
     const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
-    KeyValue valueOut = mapping.Mapping();
-    VeeKee vkOut = valueOut.Vk();
+    const KeyValue& valueOut = mapping.Mapping();
 
-    if (vkOut == 0) // not mapped, dont touch
-        return false; // but let it through to next kbd hook
+    if ( valueOut.Vk() == 0) // not mapped
+        return nullptr; 
 
+    return &valueOut;
+}
+
+
+// return true if we should skip / eat this virtual-key
+bool Keyboard::OnKeyEvent(KbdHookEvent& event, bool isInjectedByMe, DWORD injectedFromMeValue)
+{
+    // get mapped value
+    const KeyValue* valueOut = (isInjectedByMe ? nullptr : GetMappingValue(event));
+
+    bool isMapped = (valueOut != nullptr);
+    VeeKee vkOut = (isMapped ? valueOut->Vk() : event.vkCode);
+
+    // take note of down keys / modifiers
     if (IsModifier(vkOut))
         ModifierDown(vkOut, event.Down());
 
     KeyDown(vkOut, event.Down());
 
-    SendVk(vkOut, event.Down(), injectedFromMe);
+    // if not mapped, don't send it ourself here,
+    // safer this way,
+    // for eg. with Windows layouts that use AltGr, right Alt actually outputs
+    //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
+    // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
+    // ## actually, avoid using such Windows layouts with this software for now !
+    if (isMapped)
+        SendVk(vkOut, event.Down(), valueOut->Shift(), injectedFromMeValue);
     
-    return true;
+    // if we sent a mapped value, don't forward original event
+    return isMapped; 
 }
 
 
 
-void Keyboard::SendVk(VeeKee vk, bool down, DWORD injectedFromMe)
+void Keyboard::SendVk(VeeKee vk, bool down, bool needsShift, DWORD injectedFromMeValue)
 {
     // maybe pre compute this ?
     //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
     //## PrtScrn, Pause don't convert to the scancode that we received in the kbd hook event !?
     UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
-    INPUT input = { 0 };
-    input.type = INPUT_KEYBOARD;
-    input.ki.wVk = static_cast<WORD>(vk);
-    input.ki.wScan = scancode;
-    input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
-    input.ki.time = 0;
-    input.ki.dwExtraInfo = injectedFromMe;
-    if (IsExtended(vk))
-        input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+    INPUT inputs[10] = { 0 };
+    int idx = 0;
 
-    SendInput(1, &input, sizeof(input));
+    bool lshiftDown = ModifierDown(VK_LSHIFT);
+    bool rshiftDown = ModifierDown(VK_RSHIFT);
+    if (needsShift != lshiftDown)
+    {
+        // send a Shift down/up before our key
+        INPUT& input = inputs[idx++];
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_LSHIFT;
+        input.ki.dwFlags = needsShift ? 0 : KEYEVENTF_KEYUP;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = injectedFromMeValue;
+    }
+    if (needsShift != rshiftDown)
+    {
+        // send a Shift down/up before our key
+        INPUT& input = inputs[idx++];
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_RSHIFT;
+        input.ki.dwFlags = needsShift ? 0 : KEYEVENTF_KEYUP;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = injectedFromMeValue;
+    }
+
+    // send mapped key
+    {
+        INPUT& input = inputs[idx++];
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = static_cast<WORD>(vk);
+        input.ki.wScan = scancode;
+        input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = injectedFromMeValue;
+        if (IsExtended(vk))
+            input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+    }
+
+    if (needsShift != lshiftDown)
+    {
+        // restore Shift down/up after our key
+        INPUT& input = inputs[idx++];
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_LSHIFT;
+        input.ki.dwFlags = needsShift ? KEYEVENTF_KEYUP : 0;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = injectedFromMeValue;
+    }
+
+    if (needsShift != rshiftDown)
+    {
+        // restore Shift down/up after our key
+        INPUT& input = inputs[idx++];
+        input.type = INPUT_KEYBOARD;
+        input.ki.wVk = VK_RSHIFT;
+        input.ki.dwFlags = needsShift ? KEYEVENTF_KEYUP : 0;
+        input.ki.time = 0;
+        input.ki.dwExtraInfo = injectedFromMeValue;
+    }
+
+    SendInput(idx, inputs, sizeof(inputs[0]));
 
     //##PQ from touchcursor##
     // Sleep(1) seems to be necessary for mapped Escape events sent to VirtualPC & recent VMware versions.

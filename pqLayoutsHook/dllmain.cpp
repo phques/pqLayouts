@@ -57,10 +57,7 @@ public:
                 KbdProcDebugOut(event, wParam, SelfInjected(event));
 
             // process this key
-            // skip this if we injected it
-            // but let it through to next kbd hook (eat=false)
-            if (!SelfInjected(event))
-                eat = theKbd.OnKeyEVent(event, injectedFromMe);
+            eat = theKbd.OnKeyEvent(event, SelfInjected(event), injectedFromMe);
 
         }
 
@@ -80,7 +77,8 @@ public:
     static void KbdProcDebugOut(KbdHookEvent& event, const WPARAM& wParam, bool selfInjected)
     {
         // use SCrollLock key on my kbd to outut ------ in dbg to help separate events
-        if (event.vkCode == 0x91) {
+        // or F6 (no scrollLock on Mac kbd ;-)
+        if (event.vkCode == 0x91 || event.vkCode == 0x75) {
             if (event.Down() && !selfInjected)
                 Printf("---------\n");
             return;

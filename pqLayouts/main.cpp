@@ -74,9 +74,17 @@ namespace
         addMapping('D', 'O');
         addMapping('F', true, VK_OEM_7, true); // want '"' .. but we map *VIRTUAL KEYS*, need to specify if needs Shift
 
-        addMapping(VK_CAPITAL, false, VK_SHIFT, false);
+        // cannot use CapsLock as LeftShift,
+        // when we send LShift on Caps down event,
+        // (Windows?) we receive a CapsLock UP !!
+        // (how did this work with Autohotkey !?)
+        // This is while running in virtualbox on MacOS, could it be a Mac thing ?
+        //addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
+        //addMapping(VK_CAPITAL, true, VK_LSHIFT, true);
+        addMapping(VK_CAPITAL, false, 'A', true); // test shifted on non-shifted & vice versa
+        addMapping(VK_CAPITAL, true, 'A', false);
+
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
-        addMapping(VK_CAPITAL, true, VK_SHIFT, true);
         addMapping(VK_RETURN,  true, VK_RSHIFT, true);
     }
 }

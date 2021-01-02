@@ -35,7 +35,7 @@ public:
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
 
-    bool OnKeyEVent(KbdHookEvent&, DWORD injectedFromMe);
+    bool OnKeyEvent(KbdHookEvent&, bool isInjectedByMe, DWORD injectedFromMeValue);
     // dbg
     void OutNbKeysDn();
 
@@ -48,7 +48,9 @@ protected:
     bool ModifierDown(VeeKee vk) const;
     bool ShiftDown() const;
 
-    void SendVk(VeeKee vk, bool down, DWORD injectedFromMe);
+    const KeyValue* GetMappingValue(KbdHookEvent& event);
+
+    void SendVk(VeeKee vk, bool down, bool needsShift, DWORD injectedFromMeValue);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);

@@ -28,7 +28,7 @@ namespace Dbg
         // outputdbg KBDLLHOOK event
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam, bool selfInjected)
         {
-            Printf("@%0X %c wparam: %0X vk: %0X scan: %0X %s %s flags: %s\n",
+            Printf("@%0X %c wparam: %04X vk: %02X scan: %02X %s %s flags: %s\n",
                 event.time, 
                 (selfInjected ? 'I' : (event.Injected() ? 'i' : ' ')),
                 wParam, event.vkCode, event.scanCode,
