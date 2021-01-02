@@ -175,8 +175,10 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 //-----
 
 // return true to skip this completely
-bool handleKbdMsg(MSG& msg, MyLua& lua)
+bool handleKbdMsg(MSG& msg, MyLua& lua, bool& needsShift)
 {
+    needsShift = false;
+
     // is it a keybd message?
     if (!(msg.message == WM_KEYDOWN || msg.message == WM_SYSKEYDOWN ||
           msg.message == WM_KEYUP || msg.message == WM_SYSKEYUP))
@@ -211,7 +213,14 @@ bool handleKbdMsg(MSG& msg, MyLua& lua)
         Printf("lua.onkey ret = %0x\n", newVk);
 
         if (newVk != 0)
+        {
+            if ((newVk & 0x1000) != 0)
+            {
+                needsShift = true;
+                newVk = newVk & 0xFF;
+            }
             msg.wParam = static_cast<WPARAM>(newVk);
+        }
     }
     catch (const LuaException& e)
     {
@@ -255,13 +264,24 @@ int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdS
             return -1;
 
         // handle keyboard messages 
-        if (handleKbdMsg(msg, lua))
+        bool needsShift=false;
+        if (handleKbdMsg(msg, lua, needsShift))
             continue;  // skip this message
 
-            // prevent dialog close on Escape
+        // prevent dialog close on Escape
         if ((msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) && msg.wParam == VK_ESCAPE) {
             puts("skip escape");
             continue;
+        }
+
+        if (msg.message == WM_KEYDOWN && needsShift)
+        {
+            MSG msgShift = msg;
+            msgShift.wParam = VK_LSHIFT;
+            //if (!IsDialogMessage(hDlg, &msgShift)) {
+                TranslateMessage(&msgShift); /* translate virtual-key messages */
+                DispatchMessage(&msgShift); /* send it to dialog procedure */
+            //}
         }
 
         // normal message processing
@@ -269,6 +289,18 @@ int __stdcall WinMain(HINSTANCE hInst, HINSTANCE h0, LPTSTR lpCmdLine, int nCmdS
             TranslateMessage(&msg); /* translate virtual-key messages */
             DispatchMessage(&msg); /* send it to dialog procedure */
         }
+
+        if (msg.message == WM_KEYDOWN && needsShift)
+        {
+            MSG msgShift = msg;
+            msgShift.wParam = VK_LSHIFT;
+            msgShift.message = WM_KEYUP;
+            //if (!IsDialogMessage(hDlg, &msgShift)) {
+                TranslateMessage(&msgShift); /* translate virtual-key messages */
+                DispatchMessage(&msgShift); /* send it to dialog procedure */
+            //}
+        }
+
     }
 
     return 0;
