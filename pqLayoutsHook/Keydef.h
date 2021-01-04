@@ -27,7 +27,7 @@ class KeyDef
 public:
 
     KeyDef();
-    KeyDef(VeeKee vk, UINT scancode);
+    PQHOOK_API KeyDef(VeeKee vk, UINT scancode);
      
     VeeKee Vk() const { return vk; }
     UINT Scancode() const { return scancode; }

@@ -21,23 +21,74 @@
 Layout::Layout() : currentLayer(nullptr)
 {
     // Layout always has a main layer, starts as the current layer
-    AddLayer("main");
-    currentLayer = layers["main"];
+    Layer::Idx_t layerIdx=0;
+    AddLayer("main", layerIdx);
+    currentLayer = layersById["main"];
 }
 
 Layout::~Layout()
 {
-    for (auto layerIt : layers)
-        delete layerIt.second;
+    for (auto layer : layers)
+        delete layer;
 }
 
-bool Layout::AddLayer(const Layer::LayerId_t& layerId)
+bool Layout::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 {
+    newLayerIdx = -1;
+
     // layer already exists?
-    if (layers.find(layerId) != layers.end())
+    if (layersById.find(layerId) != layersById.end())
         return false;
 
-    layers[layerId] = new Layer(layerId);
+    // create and save new layer
+    newLayerIdx = layers.size();
+
+    auto layer = new Layer(layerId, newLayerIdx);
+    layersById[layerId] = layer;
+    layers.push_back(layer);
+
+    return true;
+}
+
+bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef)
+{
+    auto foundLayer = layersById.find(layerId);
+    if (foundLayer == layersById.end())
+        return false;
+
+    // mapped vk is  > 0xFF, low byte holds layerIdx
+    VeeKee veekee = 0xFF000000 | foundLayer->second->LayerIdx();
+    KeyValue accessKey(keydef.Vk(), keydef.Scancode(), false);
+    KeyValue mappedKey(veekee, 0, false);
+
+    layers[0]->AddMapping(accessKey, mappedKey);
+
+    return true;
+}
+
+bool Layout::GotoMainLayer()
+{
+    // main layer always 1st
+    currentLayer = layers[0];
+    return true;
+}
+
+bool Layout::GotoLayer(Layer::Idx_t layerIdx)
+{
+    if (layerIdx >= layers.size())
+        return false;
+
+    currentLayer = layers[layerIdx];
+    return true;
+}
+
+bool Layout::GotoLayer(const Layer::Id_t& layerId)
+{
+    auto foundit = layersById.find(layerId);
+    if (foundit == layersById.end())
+        return false;
+
+    currentLayer = foundit->second;
     return true;
 }
 
@@ -56,3 +107,4 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
 
     return currentLayer->AddMapping(from, to);
 }
+

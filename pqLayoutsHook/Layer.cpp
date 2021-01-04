@@ -19,7 +19,7 @@
 #include "Layer.h"
 
 
-Layer::Layer(const LayerId_t& name) : name(name)
+Layer::Layer(const Id_t& name, Idx_t layerIdx) : name(name), layerIdx(layerIdx)
 {
 }
 

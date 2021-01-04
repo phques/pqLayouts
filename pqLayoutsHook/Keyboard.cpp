@@ -57,9 +57,29 @@ Keyboard::Keyboard()
     //}
 }
 
-bool Keyboard::AddLayer(const Layer::LayerId_t& layerId)
+bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 {
-    return layout.AddLayer(layerId);
+    return layout.AddLayer(layerId, newLayerIdx);
+}
+
+bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef)
+{
+    return layout.SetLayerAccessKey(layerId, keydef);
+}
+
+bool Keyboard::GotoMainLayer()
+{
+    return layout.GotoMainLayer();
+}
+
+bool Keyboard::GotoLayer(Layer::Idx_t layerIdx)
+{
+   return layout.GotoLayer(layerIdx);
+}
+
+bool Keyboard::GotoLayer(const Layer::Id_t& layerId)
+{
+    return layout.GotoLayer(layerId);
 }
 
 bool Keyboard::IsModifier(VeeKee vk)
@@ -113,7 +133,7 @@ const KeyMapping* Keyboard::Mapping(VeeKee vk)
 
     auto caseMapping = layout.Mapping(vk);
     if (caseMapping == nullptr)
-        return 0;
+        return nullptr;
 
     return (ShiftDown() ? &caseMapping->shifted : &caseMapping->nonShifted); 
 }
@@ -162,21 +182,41 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, bool isInjectedByMe, DWORD inject
     bool isMapped = (valueOut != nullptr);
     VeeKee vkOut = (isMapped ? valueOut->Vk() : event.vkCode);
 
-    // take note of down keys / modifiers
-    if (IsModifier(vkOut))
-        ModifierDown(vkOut, event.Down());
+    if (vkOut > 0xFF)
+    {
+        // this is a layer access key lower byte indicates which layer
+        if (event.Up())
+        {
+            // coming out of the layer
+            // return to main layer
+            layout.GotoMainLayer();
+        }
+        else
+        {
+            // going into a new layer
+            layout.GotoLayer(vkOut & 0xFF);
+        }
+        // nb: isMapped is true, we will 'eat' the original key
+    }
+    else
+    {
+        // output a ,apped key
+        // take note of down keys / modifiers
+        if (IsModifier(vkOut))
+            ModifierDown(vkOut, event.Down());
 
-    KeyDown(vkOut, event.Down());
+        KeyDown(vkOut, event.Down());
 
-    // if not mapped, don't send it ourself here,
-    // safer this way,
-    // for eg. with Windows layouts that use AltGr, right Alt actually outputs
-    //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
-    // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
-    // ## actually, avoid using such Windows layouts with this software for now !
-    if (isMapped)
-        SendVk(vkOut, event.Down(), valueOut->Shift(), injectedFromMeValue);
-    
+        // if not mapped, don't send it ourself here,
+        // safer this way,
+        // for eg. with Windows layouts that use AltGr, right Alt actually outputs
+        //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
+        // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
+        // ## actually, avoid using such Windows layouts with this software for now !
+        if (isMapped)
+            SendVk(vkOut, event.Down(), valueOut->Shift(), injectedFromMeValue);
+    }
+
     // if we sent a mapped value, don't forward original event
     return isMapped; 
 }

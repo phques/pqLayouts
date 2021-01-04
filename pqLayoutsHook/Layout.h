@@ -27,14 +27,20 @@ public:
     Layout();
     ~Layout();
 
-    bool AddLayer(const Layer::LayerId_t&);
+    bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef);
+
+    bool GotoMainLayer();
+    bool GotoLayer(Layer::Idx_t layerIdx);
+    bool GotoLayer(const Layer::Id_t& layerId);
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;
-    std::map<Layer::LayerId_t, Layer*> layers;  
+    std::map<Layer::Id_t, Layer*> layersById;  
+    std::vector<Layer*> layers;  
     Layer* currentLayer;
 };
 

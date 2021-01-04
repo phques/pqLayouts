@@ -18,8 +18,16 @@
 
 #include "dllExport.h"
 #include "Keydef.h"
+#include "Layer.h"
 
 PQHOOK_API bool HookKbdLL();
 PQHOOK_API bool UnhookKbdLL();
 
-PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to);
+PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
+
+PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
+PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef);
+
+PQHOOK_API bool GotoLayer(const char* layerId);
+PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);
+PQHOOK_API bool GotoMainLayer();

@@ -18,23 +18,25 @@
 #pragma once
 
 #include "KeyMapping.h"
-#include "KeyMapping.h"
 
 class Layer
 {
 public:
-    typedef std::string LayerId_t;
+    typedef std::string Id_t;
+    typedef unsigned int Idx_t;
 
 public:
-    Layer(const LayerId_t& name);
+    Layer(const Id_t& name, Idx_t layerIdx);
 
-    const LayerId_t& Name() const { return name; }
+    const Id_t& Name() const { return name; }
+    Idx_t LayerIdx() const { return layerIdx;}
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
 
 private:
-    LayerId_t name;
+    Id_t name;
+    Idx_t layerIdx;
     std::map<VeeKee, CaseMapping> mappings;
 };
 

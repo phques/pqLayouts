@@ -126,10 +126,8 @@ bool UnhookKbdLL()
 }
 
 
-PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to)
+PQHOOK_API bool AddMapping(KeyValue from, KeyValue to)
 {
-    //## PQ ignore layer at this point (only main)
-
     if (from.Vk() >= 0xFF || to.Vk() >= 0xFF)
     {
         Printf("AddMapping, skip qwertyVk >= 0xFF || outputVk >= 0xFF\n");
@@ -139,6 +137,32 @@ PQHOOK_API bool AddMapping(const char* layer, KeyValue from, KeyValue to)
     return theKbd.AddMapping(from, to);
 }
 
+
+PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)
+{
+    return theKbd.AddLayer(layerId, newLayerIdx);
+}
+
+PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef keydef)
+{
+    return theKbd.SetLayerAccessKey(layerId, keydef);
+}
+
+
+PQHOOK_API bool GotoLayer(const char* layerId)
+{
+    return theKbd.GotoLayer(layerId);
+}
+
+PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx)
+{
+    return theKbd.GotoLayer(layerIdx);
+}
+
+PQHOOK_API bool GotoMainLayer()
+{
+    return theKbd.GotoMainLayer();
+}
 
 //------ ... exports] --------
 

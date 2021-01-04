@@ -46,7 +46,7 @@ namespace
         KeyValue kfrom(qwertyVk & 0xFF,0, ScanExIsShift(qwertyVk));
         KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
 
-        return AddMapping("main", kfrom, kto);
+        return AddMapping(kfrom, kto);
     }
 
     bool addMapping(WORD from, bool shiftedFrom, WORD to, bool shiftedTo)
@@ -54,7 +54,7 @@ namespace
         KeyValue kfrom(from, 0, shiftedFrom);
         KeyValue kto(to, 0, shiftedTo);
 
-        return AddMapping("main", kfrom, kto);
+        return AddMapping(kfrom, kto);
     }
 
     void testMappings()
@@ -79,13 +79,32 @@ namespace
         // (Windows?) we receive a CapsLock UP !!
         // (how did this work with Autohotkey !?)
         // This is while running in virtualbox on MacOS, could it be a Mac thing ?
-        //addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
-        //addMapping(VK_CAPITAL, true, VK_LSHIFT, true);
-        addMapping(VK_CAPITAL, false, 'A', true); // test shifted on non-shifted & vice versa
-        addMapping(VK_CAPITAL, true, 'A', false);
+        //-- IT WORKS on my Win10 64 host / Win10 64 guest setup,
+        //   with my PC (Microsoft) keyboard
+        addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
+        addMapping(VK_CAPITAL, true, VK_LSHIFT, true);
+        //addMapping(VK_CAPITAL, false, 'A', true); // test shifted on non-shifted & vice versa
+        //addMapping(VK_CAPITAL, true, 'A', false);
 
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
         addMapping(VK_RETURN,  true, VK_RSHIFT, true);
+
+        //------------
+        // ? ( - ) $
+        Layer::Idx_t layerIdx = 0;
+        if (AddLayer("alt", layerIdx))
+        {
+            KeyDef accessKey(VK_SPACE,0);
+            SetLayerAccessKey("alt", accessKey);
+
+            GotoLayer(layerIdx);
+            addMapping('a', '?');
+            addMapping('s', '(');
+            addMapping('d', '-');
+            addMapping('f', ')');
+            addMapping('g', '$');
+            GotoMainLayer();
+        }
     }
 }
 

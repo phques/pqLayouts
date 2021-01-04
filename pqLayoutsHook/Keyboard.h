@@ -30,7 +30,12 @@ class Keyboard
 public:
     Keyboard();
 
-    bool AddLayer(const Layer::LayerId_t&);
+    bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef);
+
+    bool GotoMainLayer();
+    bool GotoLayer(Layer::Idx_t layerIdx);
+    bool GotoLayer(const Layer::Id_t& layerId);
 
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
