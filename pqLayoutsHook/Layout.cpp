@@ -56,12 +56,17 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef)
     if (foundLayer == layersById.end())
         return false;
 
+    Layer* layer = foundLayer->second;
+
     // mapped vk is  > 0xFF, low byte holds layerIdx
-    VeeKee veekee = 0xFF000000 | foundLayer->second->LayerIdx();
+    VeeKee veekee = 0xFF000000 | layer->LayerIdx();
     KeyValue accessKey(keydef.Vk(), keydef.Scancode(), false);
     KeyValue mappedKey(veekee, 0, false);
 
+    // set mapped in main layer
+    // AND on the layer itself .. so we can return when access key is Up
     layers[0]->AddMapping(accessKey, mappedKey);
+    layer->AddMapping(accessKey, mappedKey);
 
     return true;
 }

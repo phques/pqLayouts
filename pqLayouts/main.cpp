@@ -30,7 +30,7 @@ namespace
 // debug
 namespace
 {
-    // checks bit 0 of hibyte of ret val from VkKeyScanExA
+    // checks bit 0 of hibyte of ret val from VkKeyScanA
     bool ScanExIsShift(SHORT scanExVal) 
     { 
         return ((scanExVal >> 8) & 0x01) != 0; 
@@ -39,9 +39,9 @@ namespace
     bool addMapping(CHAR from, CHAR to)
     {
         // this returns flags for shift etc in upper byte
-        SHORT qwertyVk = VkKeyScanExA(from, NULL);
-        SHORT outputVk = VkKeyScanExA(to, NULL);
-        printf("VkKeyScanExA %c = 0x%0X\n", to, outputVk);
+        SHORT qwertyVk = VkKeyScanA(from);
+        SHORT outputVk = VkKeyScanA(to);
+        printf("VkKeyScanA %c = 0x%0X\n", to, outputVk);
 
         KeyValue kfrom(qwertyVk & 0xFF,0, ScanExIsShift(qwertyVk));
         KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
@@ -68,6 +68,7 @@ namespace
         addMapping('s', 'i');
         addMapping('d', 'o');
         addMapping('F', false, VK_SPACE, false);
+        addMapping('g', '?');
 
         addMapping('A', 'G');
         addMapping('S', 'I');
@@ -90,7 +91,7 @@ namespace
         addMapping(VK_RETURN,  true, VK_RSHIFT, true);
 
         //------------
-        // ? ( - ) $
+        //asdfg: ? ( - ) $
         Layer::Idx_t layerIdx = 0;
         if (AddLayer("alt", layerIdx))
         {
