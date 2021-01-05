@@ -49,6 +49,21 @@ namespace
         return AddMapping(kfrom, kto);
     }
 
+    bool addMappingSh(CHAR from, CHAR to)
+    {
+        // this returns flags for shift etc in upper byte
+        SHORT qwertyVk = VkKeyScanA(from);
+        SHORT outputVk = VkKeyScanA(to);
+        printf("VkKeyScanA %c = 0x%0X\n", to, outputVk);
+
+        // on shift layer
+        KeyValue kfrom(qwertyVk & 0xFF,0, true);
+        KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
+
+        return AddMapping(kfrom, kto);
+    }
+
+
     bool addMapping(WORD from, bool shiftedFrom, WORD to, bool shiftedTo)
     {
         KeyValue kfrom(from, 0, shiftedFrom);
@@ -107,6 +122,59 @@ namespace
             GotoMainLayer();
         }
     }
+
+    void createPLLTx1dMapping()
+    {
+        // PLLTx1d
+        // main
+        {
+            const char* mask = "weriopasdfgjkl;'zcvm,./";
+            const char* map  = "iuomdnye aglrtsp.,..hcf";
+            while (*mask != 0)
+            {
+                addMapping(*mask++, *map++);
+            }
+        }
+        // main shift
+        {
+            const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
+            const char* map  = "IUOMDNYE\"AGLRTSP:;..HCF";
+            while (*mask != 0)
+            {
+                addMappingSh(*mask++, *map++);
+            }
+        }
+
+        // alt/secondary layer
+        Layer::Idx_t layerIdx = 0;
+        if (AddLayer("alt", layerIdx))
+        {
+            KeyDef accessKey(VK_SPACE,0);
+            SetLayerAccessKey("alt", accessKey);
+            GotoLayer(layerIdx);
+
+                // secondary layer 
+                {
+                    const char* mask = "weriopasdfgjkl;'zcvm,./";
+                    const char* map  = "q'jv!#?(-)$+{=}&*/:zkxb";
+                    while (*mask != 0)
+                    {
+                        addMapping(*mask++, *map++);
+                    }
+                }
+                // secondary layer shift
+                {
+                    const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
+                    const char* map  = "Q`JV|.<<_>-~[@]%^\\.ZKXB";
+                    while (*mask != 0)
+                    {
+                        addMappingSh(*mask++, *map++);
+                    }
+                }
+
+            GotoMainLayer();
+        }
+    }
 }
 
 
@@ -158,7 +226,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     ShowWindow(hDlg, nCmdShow);
 
     //## dbg
-    testMappings();
+    //testMappings();
+    createPLLTx1dMapping();
 
     HookKbdLL();
     //refreshIconState(hDlg);
