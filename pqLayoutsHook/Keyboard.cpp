@@ -44,18 +44,6 @@ VeeKeeSet Keyboard::extended = {
 
 Keyboard::Keyboard()
 {
-    // init all to fale
-    memset(downModifiers, 0, sizeof(downModifiers));
-    memset(downKeys, 0, sizeof(downKeys));
-
-    //memset(mappings, 0, sizeof(mappings));
-
-    // init mappings for one-to-one (0x00, 0xFF are not VKs)
-    //for (DWORD i = 1; i < 0xFF; i++)
-    //{
-    //    mappings[0][i] = mappings[1][i] = i;
-    //}
-
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
     {
@@ -94,6 +82,11 @@ bool Keyboard::IsModifier(VeeKee vk)
     return modifiers.find(vk) != modifiers.end();
 }
 
+bool Keyboard::IsShift(VeeKee vk)
+{
+    return vk == VK_LSHIFT || vk == VK_RSHIFT || vk == VK_SHIFT;
+}
+
 bool Keyboard::IsExtended(VeeKee vk)
 {
     return extended.find(vk) != extended.end();
@@ -101,15 +94,17 @@ bool Keyboard::IsExtended(VeeKee vk)
 
 void Keyboard::ModifierDown(VeeKee vk, bool down)
 {
-    assert(vk < 0xFF);
-    downModifiers[vk] = down;
+    if (down)
+        downModifiers.insert(vk);
+    else
+        downModifiers.erase(vk); 
 }
 
 
 bool Keyboard::ModifierDown(VeeKee vk) const
-{ 
-    assert(vk < 0xff); 
-    return downModifiers[vk]; 
+{
+    return downModifiers.find(vk) != downModifiers.end();
+
 }
 
 bool Keyboard::ShiftDown() const
@@ -119,16 +114,19 @@ bool Keyboard::ShiftDown() const
         ModifierDown(VK_SHIFT);
 }
 
-void Keyboard::KeyDown(VeeKee vk, bool down)
+void Keyboard::KeyDown(VeeKee physicalVk, KeyValue mapped, bool down)
 {
-    assert(vk < 0xFF);
-    downKeys[vk] = down;
+    if (down)
+        downMappedKeys[physicalVk] = mapped;
+    else
+        downMappedKeys.erase(physicalVk); 
 }
 
-bool Keyboard::KeyDown(VeeKee vk) const
+const KeyValue* Keyboard::KeyDown(VeeKee vk) const
 {
-    assert(vk < 0xff); 
-    return downKeys[vk];
+    auto found = downMappedKeys.find(vk);
+    return (found != downMappedKeys.end()) ? &(found->second) : nullptr;
+
 }
 
 const KeyMapping* Keyboard::Mapping(VeeKee vk)
@@ -183,8 +181,17 @@ const KeyValue* Keyboard::GetMappingValue(KbdHookEvent& event)
 // return true if we should skip / eat this virtual-key
 bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 {
-    // get mapped value
-    const KeyValue* valueOut = GetMappingValue(event);
+    // Get mapped value,
+    // use a previous mapped value if physical key is pressed 
+    // (so we output same mapping on UP key !)
+    // this means if a modifier changes state while a key is held down we will keep outputing the
+    // key with the *original modifiers* states though
+    const KeyValue* valueOut = KeyDown(event.vkCode);
+
+    // if no prev key down mapped, get current mapping
+    if (valueOut == nullptr)
+        valueOut = GetMappingValue(event);
+
     bool isMapped = (valueOut != nullptr);
     VeeKee vkOut = (isMapped ? valueOut->Vk() : event.vkCode);
 
@@ -209,16 +216,17 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
     }
     else // normal key
     {
-        // output a ,apped key
-        // take note of down keys / modifiers
+        // output a mapped key
+        if (valueOut != nullptr)
+        {
+            SendVk(*valueOut, event.Down(), injectedFromMeValue);
+
+            // take note of down physical / mapped keys 
+            KeyDown(event.vkCode, *valueOut, event.Down());
+        }
+
         if (IsModifier(vkOut))
             ModifierDown(vkOut, event.Down());
-
-        KeyDown(vkOut, event.Down());
-
-        // if not mapped, don't send it ourself here,
-        if (isMapped)
-            SendVk(*valueOut, event.Down(), injectedFromMeValue);
     }
 
     // if we sent a mapped value, don't forward original event
@@ -243,15 +251,16 @@ void Keyboard::SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue)
     // add any required up/down shifts
     if (down)
     {
+        bool clearShift = ! (IsShift(key.Vk()) || (key.Vk() == VK_CAPITAL));
         bool needsShift = key.Shift();
         bool lshiftDown = ModifierDown(VK_LSHIFT);
         bool rshiftDown = ModifierDown(VK_RSHIFT);
-        if (needsShift && !(lshiftDown || rshiftDown))
+        if (clearShift && needsShift && !(lshiftDown || rshiftDown))
         {
             // send a Shift down before our key
             SetupInputKey(inputs[idx++], VK_LSHIFT, true, injectedFromMeValue);
         }
-        else if (!needsShift)
+        else if (clearShift && !needsShift)
         {
             // send a LShift up before our key
             if (lshiftDown)
@@ -321,11 +330,7 @@ void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedF
 // dbg 
 void Keyboard::OutNbKeysDn()
 {
-    auto NotZero = [](VeeKee vk) {return vk != 0; };
-    int nbmodsdn = std::count_if(&downModifiers[1], &downModifiers[0xFF], NotZero);
-    int nbkeysdn = std::count_if(&downKeys[1], &downKeys[0xFF], NotZero);
-
-    Printf("keys dn %d mods dn %d\n", nbkeysdn, nbmodsdn);
+    Printf("keys dn %d mods dn %d\n", downMappedKeys.size(), downModifiers.size());
 }
 
 //-------

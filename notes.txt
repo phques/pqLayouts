@@ -25,6 +25,9 @@
       also à does not map correctly ? (kinda expected)
       will need to try loading a kbd layout and pass it to VkKeyScanExA
 
+   -> probably works if we load and pass a KHL for french layout to VkKeyScanExA
+     (now using VkKeyScanA)
+
  
 + -- scancode vs VK ----
 

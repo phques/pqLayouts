@@ -48,11 +48,12 @@ public:
 
 protected:
 
-    void KeyDown(VeeKee vk, bool down);
-    bool KeyDown(VeeKee vk) const;
+    void KeyDown(VeeKee physicalVk, KeyValue mapped, bool down);
+    const KeyValue* KeyDown(VeeKee vk) const;
 
     void ModifierDown(VeeKee vk, bool down);
     bool ModifierDown(VeeKee vk) const;
+
     bool ShiftDown() const;
 
     const KeyValue* GetMappingValue(KbdHookEvent& event);
@@ -60,15 +61,16 @@ protected:
     void SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue);
     void SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue);
 
-
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
+    static bool IsShift(VeeKee vk);
 
 private:
-    bool downModifiers[256];
-    bool downKeys[256];
+    // first=pressed *physical* key, second=what we output (ie mapped value)
+    std::map<VeeKee,KeyValue> downMappedKeys;
+    // at a logical level, whatever the source
+    VeeKeeSet downModifiers; 
 
-    //VeeKee mappings[2][256]; // to be replaced by layout..
     Layout layout;
 
     VeeKeeSet isprint;

@@ -47,10 +47,10 @@ namespace
         }
     }
 
-    void addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
+    void addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo, bool controlTo=false)
     {
         KeyValue kfrom(fromVk, 0, shiftedFrom);
-        KeyValue kto(toVk, 0, shiftedTo);
+        KeyValue kto(toVk, 0, shiftedTo, controlTo);
 
         AddMapping(kfrom, kto);
     }
@@ -76,6 +76,16 @@ namespace
                    outputVk & 0xFF, HasShiftBit(outputVk));
     }
 
+    void addMapping(bool shiftLayer, const char* mask, const char* map)
+    {
+        while (*mask != 0)
+        {
+            if (shiftLayer)
+                addMappingSh(*mask++, *map++);
+            else
+                addMapping(*mask++, *map++);
+        }
+    }
 
     void testMappings()
     {
@@ -132,19 +142,16 @@ namespace
     {
         // PLLTx1(e) 'wide mod'
         // main
-        {
-            const char* mask = "weriopasdfgjkl;'zcvm,./";
-            const char* map  = "iuomdnye aglrtsp.,..hcf";
-            while (*mask != 0)
-                addMapping(*mask++, *map++);
-        }
+        addMapping(false,
+            "weriopasdfgjkl;'zcvm,./",
+            "iuomdnye aglrtsp.,..hcf"
+        );
+
         // main shift
-        {
-            const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
-            const char* map  = "IUOMDNYE\"AGLRTSP:;..HCF";
-            while (*mask != 0)
-                addMappingSh(*mask++, *map++);
-        }
+        addMapping(true,
+            "WERIOPASDFGJKL;'ZCVM,./",
+            "IUOMDNYE\"AGLRTSP:;..HCF"
+        );
 
         // alt/secondary layer
         Layer::Idx_t layerIdx = 0;
@@ -156,29 +163,26 @@ namespace
             GotoLayer(layerIdx);
             {
                 // secondary layer 
-                {
-                    const char* mask = "weriopasdfgjkl;'zcvm,./";
-                    const char* map  = "q'jv!#?(-)$+{=}&*/:zkxb";
-                    while (*mask != 0)
-                        addMapping(*mask++, *map++);
-                }
+                addMapping(false,
+                    "weriopasdfgjkl;'zcvm,./",
+                    "q'jv!#?(-)$+{=}&*/:zkxb"
+                );
+
                 // secondary layer shift
-                {
-                    const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
-                    const char* map  = "Q`JV|.<<_>-~[@]%^\\.ZKXB";
-                    while (*mask != 0)
-                        addMappingSh(*mask++, *map++);
-                }
+                addMapping(true,
+                    "WERIOPASDFGJKL;'ZCVM,./",
+                    "Q`JV|.<<_>-~[@]%^\\.ZKXB"
+                );
             }
             GotoMainLayer();
         }
 
         // shift on CapsLock and Enter
         addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
-        addMapping(VK_CAPITAL, true, VK_LSHIFT, false);
+        addMapping(VK_CAPITAL, true, VK_CAPITAL, false);
 
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
-        addMapping(VK_RETURN,  true, VK_RSHIFT, false);
+        addMapping(VK_RETURN,  true, VK_CAPITAL, false);
 
         addMapping(charToVk['x'],  false, VK_RETURN, false);
         addMapping(charToVk['x'],  true, VK_RETURN, true);
@@ -188,6 +192,11 @@ namespace
 
         addMapping(charToVk['['],  false, VK_BACK, false);
         addMapping(charToVk['['],  true, VK_DELETE, false);
+
+        addMapping(charToVk['y'],  false, VK_LEFT, false);
+        addMapping(charToVk['u'],  false, VK_RIGHT, false);
+        addMapping(charToVk['h'],  false, VK_UP, false);
+        addMapping(charToVk['n'],  false, VK_DOWN, false);
 
         /*todo
             Complete support for Ctrl-??
@@ -202,6 +211,7 @@ namespace
 
          French layout !
 
+         Maybe support for layout definitions in text files ! ;-)
         */
     }
 }
