@@ -57,14 +57,15 @@ public:
                 KbdProcDebugOut(event, wParam, SelfInjected(event));
 
             // process this key
-            eat = theKbd.OnKeyEvent(event, SelfInjected(event), injectedFromMe);
-
+            if (!SelfInjected(event))
+                eat = theKbd.OnKeyEvent(event, injectedFromMe);
         }
 
-        // forward to next hook
+        // dont forward to next hook
         if (eat)
-            return 1;  // do not send this message / event
+            return 1;
 
+        // forward to next hook
         return CallNextHookEx(hKbdHook, nCode, wParam, lParam);
     }
 

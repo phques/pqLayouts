@@ -48,13 +48,20 @@ Keyboard::Keyboard()
     memset(downModifiers, 0, sizeof(downModifiers));
     memset(downKeys, 0, sizeof(downKeys));
 
-    memset(mappings, 0, sizeof(mappings));
+    //memset(mappings, 0, sizeof(mappings));
 
     // init mappings for one-to-one (0x00, 0xFF are not VKs)
     //for (DWORD i = 1; i < 0xFF; i++)
     //{
     //    mappings[0][i] = mappings[1][i] = i;
     //}
+
+    //init isprint 
+    for (char c = 0x20; c <= 0x7E; c++)
+    {
+        SHORT vk = VkKeyScanA(c);
+        isprint.insert(vk);
+    }
 }
 
 bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
@@ -174,16 +181,18 @@ const KeyValue* Keyboard::GetMappingValue(KbdHookEvent& event)
 
 
 // return true if we should skip / eat this virtual-key
-bool Keyboard::OnKeyEvent(KbdHookEvent& event, bool isInjectedByMe, DWORD injectedFromMeValue)
+bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 {
     // get mapped value
-    const KeyValue* valueOut = (isInjectedByMe ? nullptr : GetMappingValue(event));
-
+    const KeyValue* valueOut = GetMappingValue(event);
     bool isMapped = (valueOut != nullptr);
     VeeKee vkOut = (isMapped ? valueOut->Vk() : event.vkCode);
 
+    // layer access key
     if (vkOut > 0xFF)
     {
+        Printf("layer access %0x\n", vkOut);
+
         // this is a layer access key lower byte indicates which layer
         if (event.Up())
         {
@@ -198,7 +207,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, bool isInjectedByMe, DWORD inject
         }
         // nb: isMapped is true, we will 'eat' the original key
     }
-    else
+    else // normal key
     {
         // output a ,apped key
         // take note of down keys / modifiers
@@ -208,89 +217,83 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, bool isInjectedByMe, DWORD inject
         KeyDown(vkOut, event.Down());
 
         // if not mapped, don't send it ourself here,
-        // safer this way,
-        // for eg. with Windows layouts that use AltGr, right Alt actually outputs
-        //         LCtrl + RAlt .. but with a weird scancode for LCtrl,
-        // if we don't send exactly the same vk / scancode, it screws up and LCtrl-up is never generated !!!
-        // ## actually, avoid using such Windows layouts with this software for now !
         if (isMapped)
-            SendVk(vkOut, event.Down(), valueOut->Shift(), injectedFromMeValue);
+            SendVk(*valueOut, event.Down(), injectedFromMeValue);
     }
 
     // if we sent a mapped value, don't forward original event
-    return isMapped; 
+    // also eat-up displayable non mapped keys, but be safe and let special keys trough ;-)
+    return isMapped || MyIsPrint(vkOut); 
 }
 
 
 
-void Keyboard::SendVk(VeeKee vk, bool down, bool needsShift, DWORD injectedFromMeValue)
+void Keyboard::SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue)
 {
     // maybe pre compute this ?
     //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
     //## PrtScrn, Pause don't convert to the scancode that we received in the kbd hook event !?
-    UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
+    //UINT scancode = MapVirtualKeyExA(key.Vk(), MAPVK_VK_TO_VSC_EX, NULL);
 
+    // prepare an array of Inputs to send
+    // these include shift/control events surrounding the mapped key to send
     INPUT inputs[10] = { 0 };
-    int idx = 0;
+    size_t idx = 0;
 
-    bool lshiftDown = ModifierDown(VK_LSHIFT);
-    bool rshiftDown = ModifierDown(VK_RSHIFT);
-    if (needsShift != lshiftDown)
+    // add any required up/down shifts
+    if (down)
     {
-        // send a Shift down/up before our key
-        INPUT& input = inputs[idx++];
-        input.type = INPUT_KEYBOARD;
-        input.ki.wVk = VK_LSHIFT;
-        input.ki.dwFlags = needsShift ? 0 : KEYEVENTF_KEYUP;
-        input.ki.time = 0;
-        input.ki.dwExtraInfo = injectedFromMeValue;
-    }
-    if (needsShift != rshiftDown)
-    {
-        // send a Shift down/up before our key
-        INPUT& input = inputs[idx++];
-        input.type = INPUT_KEYBOARD;
-        input.ki.wVk = VK_RSHIFT;
-        input.ki.dwFlags = needsShift ? 0 : KEYEVENTF_KEYUP;
-        input.ki.time = 0;
-        input.ki.dwExtraInfo = injectedFromMeValue;
-    }
+        bool needsShift = key.Shift();
+        bool lshiftDown = ModifierDown(VK_LSHIFT);
+        bool rshiftDown = ModifierDown(VK_RSHIFT);
+        if (needsShift && !(lshiftDown || rshiftDown))
+        {
+            // send a Shift down before our key
+            SetupInputKey(inputs[idx++], VK_LSHIFT, true, injectedFromMeValue);
+        }
+        else if (!needsShift)
+        {
+            // send a LShift up before our key
+            if (lshiftDown)
+            {
+                SetupInputKey(inputs[idx++], VK_LSHIFT, false, injectedFromMeValue);
+            }
+            // send a RShift up before our key
+            if (rshiftDown)
+            {
+                SetupInputKey(inputs[idx++], VK_RSHIFT, false, injectedFromMeValue);
+            }
+        }
 
-    // send mapped key
-    {
-        INPUT& input = inputs[idx++];
-        input.type = INPUT_KEYBOARD;
-        input.ki.wVk = static_cast<WORD>(vk);
-        input.ki.wScan = scancode;
-        input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
-        input.ki.time = 0;
-        input.ki.dwExtraInfo = injectedFromMeValue;
-        if (IsExtended(vk))
-            input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+        // add any required down Ctrl
+        if (key.Control() && !(ModifierDown(VK_LCONTROL) || ModifierDown(VK_RCONTROL)))
+        {
+            // send a control down before our key
+            SetupInputKey(inputs[idx++], VK_RCONTROL, true, injectedFromMeValue);
+        }
     }
 
-    if (needsShift != lshiftDown)
+    // the mapped key
     {
-        // restore Shift down/up after our key
-        INPUT& input = inputs[idx++];
-        input.type = INPUT_KEYBOARD;
-        input.ki.wVk = VK_LSHIFT;
-        input.ki.dwFlags = needsShift ? KEYEVENTF_KEYUP : 0;
-        input.ki.time = 0;
-        input.ki.dwExtraInfo = injectedFromMeValue;
+        SetupInputKey(inputs[idx++], key.Vk(), down, injectedFromMeValue);
     }
 
-    if (needsShift != rshiftDown)
+    // finaly, undo any shift/control exta events we added above
+    if (down)
     {
-        // restore Shift down/up after our key
-        INPUT& input = inputs[idx++];
-        input.type = INPUT_KEYBOARD;
-        input.ki.wVk = VK_RSHIFT;
-        input.ki.dwFlags = needsShift ? KEYEVENTF_KEYUP : 0;
-        input.ki.time = 0;
-        input.ki.dwExtraInfo = injectedFromMeValue;
+        for (size_t i = 0; i < idx-1; i++)
+        {
+            // copy, then invert KEYEVENTF_KEYUP flag
+            inputs[idx+i] = inputs[i];
+            if (inputs[idx+i].ki.dwFlags & KEYEVENTF_KEYUP)
+                inputs[idx+i].ki.dwFlags &= ~KEYEVENTF_KEYUP;
+            else
+                inputs[idx+i].ki.dwFlags |= KEYEVENTF_KEYUP;
+        }
+        idx += idx-1;
     }
 
+    // now send the keys
     SendInput(idx, inputs, sizeof(inputs[0]));
 
     //##PQ from touchcursor##
@@ -301,6 +304,19 @@ void Keyboard::SendVk(VeeKee vk, bool down, bool needsShift, DWORD injectedFromM
     Sleep(1);
 }
 
+void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue)
+{
+    //UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
+
+    input.type = INPUT_KEYBOARD;
+    input.ki.wVk = static_cast<WORD>(vk);
+    //input.ki.wScan = scancode;
+    input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
+    input.ki.time = 0;
+    input.ki.dwExtraInfo = injectedFromMeValue;
+    if (IsExtended(vk))
+        input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
+}
 
 // dbg 
 void Keyboard::OutNbKeysDn()

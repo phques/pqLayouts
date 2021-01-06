@@ -30,47 +30,52 @@ namespace
 // debug
 namespace
 {
+    SHORT charToVk[256] = {0};
+
     // checks bit 0 of hibyte of ret val from VkKeyScanA
-    bool ScanExIsShift(SHORT scanExVal) 
+    bool HasShiftBit(SHORT scanExVal) 
     { 
         return ((scanExVal >> 8) & 0x01) != 0; 
     }
 
-    bool addMapping(CHAR from, CHAR to)
+    void InitCharToVk()
     {
-        // this returns flags for shift etc in upper byte
-        SHORT qwertyVk = VkKeyScanA(from);
-        SHORT outputVk = VkKeyScanA(to);
-        printf("VkKeyScanA %c = 0x%0X\n", to, outputVk);
-
-        KeyValue kfrom(qwertyVk & 0xFF,0, ScanExIsShift(qwertyVk));
-        KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
-
-        return AddMapping(kfrom, kto);
+        // not all are valid, but simpler to let API handle it
+        for (size_t i = 0; i <= 127; i++)
+        {
+            charToVk[i] = VkKeyScanA(static_cast<CHAR>(i));
+        }
     }
 
-    bool addMappingSh(CHAR from, CHAR to)
+    void addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
+    {
+        KeyValue kfrom(fromVk, 0, shiftedFrom);
+        KeyValue kto(toVk, 0, shiftedTo);
+
+        AddMapping(kfrom, kto);
+    }
+
+    void addMapping(CHAR from, CHAR to)
     {
         // this returns flags for shift etc in upper byte
-        SHORT qwertyVk = VkKeyScanA(from);
-        SHORT outputVk = VkKeyScanA(to);
-        printf("VkKeyScanA %c = 0x%0X\n", to, outputVk);
+        SHORT qwertyVk = charToVk[from];
+        SHORT outputVk = charToVk[to];
+
+        addMapping(qwertyVk & 0xFF, HasShiftBit(qwertyVk),
+                   outputVk & 0xFF, HasShiftBit(outputVk));
+    }
+
+    void addMappingSh(CHAR from, CHAR to)
+    {
+        // this returns flags for shift etc in upper byte
+        SHORT qwertyVk = charToVk[from];
+        SHORT outputVk = charToVk[to];
 
         // on shift layer
-        KeyValue kfrom(qwertyVk & 0xFF,0, true);
-        KeyValue kto(outputVk & 0xFF, 0, ScanExIsShift(outputVk));
-
-        return AddMapping(kfrom, kto);
+        addMapping(qwertyVk & 0xFF, true,
+                   outputVk & 0xFF, HasShiftBit(outputVk));
     }
 
-
-    bool addMapping(WORD from, bool shiftedFrom, WORD to, bool shiftedTo)
-    {
-        KeyValue kfrom(from, 0, shiftedFrom);
-        KeyValue kto(to, 0, shiftedTo);
-
-        return AddMapping(kfrom, kto);
-    }
 
     void testMappings()
     {
@@ -125,24 +130,20 @@ namespace
 
     void createPLLTx1dMapping()
     {
-        // PLLTx1d
+        // PLLTx1(e) 'wide mod'
         // main
         {
             const char* mask = "weriopasdfgjkl;'zcvm,./";
             const char* map  = "iuomdnye aglrtsp.,..hcf";
             while (*mask != 0)
-            {
                 addMapping(*mask++, *map++);
-            }
         }
         // main shift
         {
             const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
             const char* map  = "IUOMDNYE\"AGLRTSP:;..HCF";
             while (*mask != 0)
-            {
                 addMappingSh(*mask++, *map++);
-            }
         }
 
         // alt/secondary layer
@@ -151,29 +152,57 @@ namespace
         {
             KeyDef accessKey(VK_SPACE,0);
             SetLayerAccessKey("alt", accessKey);
-            GotoLayer(layerIdx);
 
+            GotoLayer(layerIdx);
+            {
                 // secondary layer 
                 {
                     const char* mask = "weriopasdfgjkl;'zcvm,./";
                     const char* map  = "q'jv!#?(-)$+{=}&*/:zkxb";
                     while (*mask != 0)
-                    {
                         addMapping(*mask++, *map++);
-                    }
                 }
                 // secondary layer shift
                 {
                     const char* mask = "WERIOPASDFGJKL;'ZCVM,./";
                     const char* map  = "Q`JV|.<<_>-~[@]%^\\.ZKXB";
                     while (*mask != 0)
-                    {
                         addMappingSh(*mask++, *map++);
-                    }
                 }
-
+            }
             GotoMainLayer();
         }
+
+        // shift on CapsLock and Enter
+        addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
+        addMapping(VK_CAPITAL, true, VK_LSHIFT, false);
+
+        addMapping(VK_RETURN,  false, VK_RSHIFT, false);
+        addMapping(VK_RETURN,  true, VK_RSHIFT, false);
+
+        addMapping(charToVk['x'],  false, VK_RETURN, false);
+        addMapping(charToVk['x'],  true, VK_RETURN, true);
+
+        addMapping(charToVk['q'],  false, VK_ESCAPE, false);
+        addMapping(charToVk['q'],  true, VK_ESCAPE, true);
+
+        addMapping(charToVk['['],  false, VK_BACK, false);
+        addMapping(charToVk['['],  true, VK_DELETE, false);
+
+        /*todo
+            Complete support for Ctrl-??
+
+                  y u             Left Right
+                  h               Up    
+            v b   n      ^c ^v    Down   
+
+         Put Fn keys on 1234 .., use Shift to access numbers ?
+         (no numpad layer avail in this one)
+         .. might need ShiftLock mode, will get annoying sometimes when lots of nums to enter
+
+         French layout !
+
+        */
     }
 }
 
@@ -226,6 +255,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     ShowWindow(hDlg, nCmdShow);
 
     //## dbg
+    InitCharToVk();
     //testMappings();
     createPLLTx1dMapping();
 

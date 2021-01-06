@@ -26,14 +26,12 @@ KeyDef::KeyDef(VeeKee vk, UINT scancode) : vk(vk), scancode(scancode)
 {
 }
 
-KeyValue::KeyValue() : shift(false)
+//-------
+
+KeyValue::KeyValue() : shift(false), control(false)
 {
 }
 
-KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift) :  KeyDef(vk, scancode), shift(shift)
+KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control) :  KeyDef(vk, scancode), shift(shift), control(control)
 {
 }
-
-//KeyValue::KeyValue(KeyDef keydef, bool shift) : KeyDef(keydef), shift(shift)
-//{
-//}

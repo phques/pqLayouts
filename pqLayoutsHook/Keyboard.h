@@ -40,9 +40,11 @@ public:
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
 
-    bool OnKeyEvent(KbdHookEvent&, bool isInjectedByMe, DWORD injectedFromMeValue);
+    bool OnKeyEvent(KbdHookEvent&, DWORD injectedFromMeValue);
     // dbg
     void OutNbKeysDn();
+
+    bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
 
 protected:
 
@@ -55,7 +57,9 @@ protected:
 
     const KeyValue* GetMappingValue(KbdHookEvent& event);
 
-    void SendVk(VeeKee vk, bool down, bool needsShift, DWORD injectedFromMeValue);
+    void SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue);
+    void SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue);
+
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -64,10 +68,10 @@ private:
     bool downModifiers[256];
     bool downKeys[256];
 
-    VeeKee mappings[2][256]; // to be replaced by layout..
+    //VeeKee mappings[2][256]; // to be replaced by layout..
     Layout layout;
 
+    VeeKeeSet isprint;
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
-
 };
