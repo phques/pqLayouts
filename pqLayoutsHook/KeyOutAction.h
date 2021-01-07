@@ -15,13 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "pch.h"
+#pragma once
 #include "KeyMapping.h"
 
-KeyMapping::KeyMapping()
+// class that output a value (another key) for a mapped key
+class KeyOutAction :
+    public IKeyAction
 {
-}
+public:
+    KeyOutAction(KeyDef inKey, KeyValue outKey);
 
-KeyMapping::KeyMapping(KeyDef key, IKeyAction* mapping) : key(key), mapping(mapping)
-{
-}
+    // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
+    virtual bool OnkeyDown(Keyboard*);
+    virtual bool OnkeyUp(Keyboard*);
+
+protected:
+    KeyDef inKey;
+    KeyValue outKey;
+};
+

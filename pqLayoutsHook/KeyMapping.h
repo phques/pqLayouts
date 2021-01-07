@@ -19,19 +19,39 @@
 
 #include "keydef.h"
 
+//------------
+
+class Keyboard;
+
+class IKeyAction
+{
+public:
+    virtual ~IKeyAction() {}
+
+    // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
+    PQHOOK_API virtual bool OnkeyDown(Keyboard*) = 0;
+    PQHOOK_API virtual bool OnkeyUp(Keyboard*) = 0;
+};
+
+//------------
+
+
 class KeyMapping
 {
 public:
     KeyMapping();
-    KeyMapping(KeyDef key, KeyValue mapping);
+    KeyMapping(KeyDef key, IKeyAction* mapping);
 
     const KeyDef& Key() const { return key; }
-    const KeyValue& Mapping() const { return mapping; }
+    IKeyAction* Mapping() const { return mapping; }
 
 private:
     KeyDef key;        // from
-    KeyValue mapping;    // to
+    IKeyAction* mapping;    // to
 };
+
+//------------
+
 
 // holds the mappings for both shifted and non shifted version of a key
 struct CaseMapping

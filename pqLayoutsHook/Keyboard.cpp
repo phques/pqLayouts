@@ -42,7 +42,7 @@ VeeKeeSet Keyboard::extended = {
 
 //----------
 
-Keyboard::Keyboard()
+Keyboard::Keyboard(DWORD injectedFromMeValue) : injectedFromMeValue(injectedFromMeValue)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -114,7 +114,12 @@ bool Keyboard::ShiftDown() const
         ModifierDown(VK_SHIFT);
 }
 
-void Keyboard::KeyDown(VeeKee physicalVk, KeyValue mapped, bool down)
+void Keyboard::TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down)
+{
+    MappedKeyDown(physicalVk, mapped, down);
+}
+
+void Keyboard::MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down)
 {
     if (down)
         downMappedKeys[physicalVk] = mapped;
@@ -122,20 +127,15 @@ void Keyboard::KeyDown(VeeKee physicalVk, KeyValue mapped, bool down)
         downMappedKeys.erase(physicalVk); 
 }
 
-const KeyValue* Keyboard::KeyDown(VeeKee vk) const
+IKeyAction* Keyboard::MappedKeyDown(VeeKee vk) const
 {
     auto found = downMappedKeys.find(vk);
-    return (found != downMappedKeys.end()) ? &(found->second) : nullptr;
+    return (found != downMappedKeys.end()) ? found->second : nullptr;
 
 }
 
 const KeyMapping* Keyboard::Mapping(VeeKee vk)
 {
-    assert(vk < 0xFF);
-
-    //int shiftedIdx(ShiftDown() ? 1 : 0);
-    //return mappings[shiftedIdx][vk];
-
     auto caseMapping = layout.Mapping(vk);
     if (caseMapping == nullptr)
         return nullptr;
@@ -145,22 +145,18 @@ const KeyMapping* Keyboard::Mapping(VeeKee vk)
 
 bool Keyboard::AddMapping(KeyValue from, KeyValue to)
 {
-    if (from.Vk() >= 0xFF || to.Vk() >= 0xFF)
-        return false;
-
-    // dbg
-    Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
-
-    //int shiftedIdx(shifted ? 1 : 0);
-    //mappings[shiftedIdx][vkFrom] = vkTo;
-
     return layout.AddMapping(from, to);
+}
+
+bool Keyboard::AddCtrlMapping(KeyValue from, KeyValue to)
+{
+    return layout.AddCtrlMapping(from, to);
 }
 
 
 //------
 
-const KeyValue* Keyboard::GetMappingValue(KbdHookEvent& event)
+IKeyAction* Keyboard::GetMappingValue(KbdHookEvent& event)
 {
     const CaseMapping* caseMapping = layout.Mapping(event.vkCode);
 
@@ -169,14 +165,44 @@ const KeyValue* Keyboard::GetMappingValue(KbdHookEvent& event)
 
     // drill down to out mapping
     const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
-    const KeyValue& valueOut = mapping.Mapping();
+    IKeyAction* valueOut = mapping.Mapping();
 
-    if ( valueOut.Vk() == 0) // not mapped
-        return nullptr; 
-
-    return &valueOut;
+    return valueOut;
 }
 
+
+
+bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
+{
+    // is this key currently down (mapped) ?
+    // if so use that action
+    IKeyAction* action = MappedKeyDown(event.vkCode);
+
+    // not a mapped key down
+    if (action == nullptr)
+    {
+        // do we have a mmped key for this input key?
+        action = GetMappingValue(event);
+    }
+
+    // we have something to act on..
+    if (action != nullptr)
+    {
+        if (event.Down())
+            return action->OnkeyDown(this);
+        else
+            return action->OnkeyUp(this);
+    }
+    else
+    {
+        // keep track of pressed modifiers for non mapped keys
+        TrackModifiers(event.vkCode, event.Down());
+    }
+
+    return false; // let key through
+}
+
+#if 0
 
 // return true if we should skip / eat this virtual-key
 bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
@@ -186,7 +212,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
     // (so we output same mapping on UP key !)
     // this means if a modifier changes state while a key is held down we will keep outputing the
     // key with the *original modifiers* states though
-    const KeyValue* valueOut = KeyDown(event.vkCode);
+    const KeyValue* valueOut = MappedKeyDown(event.vkCode);
 
     // if no prev key down mapped, get current mapping
     if (valueOut == nullptr)
@@ -222,7 +248,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
             SendVk(*valueOut, event.Down(), injectedFromMeValue);
 
             // take note of down physical / mapped keys 
-            KeyDown(event.vkCode, *valueOut, event.Down());
+            MappedKeyDown(event.vkCode, *valueOut, event.Down());
         }
 
         if (IsModifier(vkOut))
@@ -231,12 +257,20 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 
     // if we sent a mapped value, don't forward original event
     // also eat-up displayable non mapped keys, but be safe and let special keys trough ;-)
-    return isMapped || MyIsPrint(vkOut); 
+    return isMapped || MyIsPrint(vkOut);
+}
+
+#endif // 0
+
+
+void Keyboard::TrackModifiers(VeeKee vk, bool down)
+{
+    if (IsModifier(vk))
+        ModifierDown(vk, down);
 }
 
 
-
-void Keyboard::SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue)
+bool Keyboard::SendVk(const KeyValue& key, bool down)
 {
     // maybe pre compute this ?
     //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
@@ -311,6 +345,8 @@ void Keyboard::SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue)
     // Also for mapped modifiers with Remote Desktop Connection.
     // Dunno why:
     Sleep(1);
+
+    return true;
 }
 
 void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue)

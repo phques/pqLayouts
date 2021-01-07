@@ -24,11 +24,12 @@
 
 namespace
 {
-    HHOOK hKbdHook = NULL;
-    Keyboard theKbd;
-
     // a 'unique' value to identify values we injected with SendInput
     const ULONG_PTR injectedFromMe = 0x0E5FA78A; // <Guid("0E5FA78A-82FE-4557-956E-320702FEB659")>
+
+    HHOOK hKbdHook = NULL;
+    Keyboard theKbd(injectedFromMe);
+
 }
 
 
@@ -129,13 +130,12 @@ bool UnhookKbdLL()
 
 PQHOOK_API bool AddMapping(KeyValue from, KeyValue to)
 {
-    if (from.Vk() >= 0xFF || to.Vk() >= 0xFF)
-    {
-        Printf("AddMapping, skip qwertyVk >= 0xFF || outputVk >= 0xFF\n");
-        return false;
-    }
-
     return theKbd.AddMapping(from, to);
+}
+
+PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to)
+{
+    return theKbd.AddCtrlMapping(from, to);
 }
 
 

@@ -45,7 +45,7 @@ class KeyValue : public KeyDef
 {
 public:
     KeyValue();
-    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false);
+    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false);
 
     bool Shift() const { return shift; }
     bool Control() const { return control; }

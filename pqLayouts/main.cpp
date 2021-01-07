@@ -47,12 +47,20 @@ namespace
         }
     }
 
-    void addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo, bool controlTo=false)
+    void addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
     {
         KeyValue kfrom(fromVk, 0, shiftedFrom);
-        KeyValue kto(toVk, 0, shiftedTo, controlTo);
+        KeyValue kto(toVk, 0, shiftedTo);
 
         AddMapping(kfrom, kto);
+    }
+
+    void addCtrlMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
+    {
+        KeyValue kfrom(fromVk, 0, shiftedFrom);
+        KeyValue kto(toVk, 0, shiftedTo);
+
+        AddCtrlMapping(kfrom, kto);
     }
 
     void addMapping(CHAR from, CHAR to)
@@ -184,19 +192,29 @@ namespace
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
         addMapping(VK_RETURN,  true, VK_CAPITAL, false);
 
+
         addMapping(charToVk['x'],  false, VK_RETURN, false);
         addMapping(charToVk['x'],  true, VK_RETURN, true);
 
-        addMapping(charToVk['q'],  false, VK_ESCAPE, false);
-        addMapping(charToVk['q'],  true, VK_ESCAPE, true);
+        addMapping(charToVk['q'],  false, VK_TAB, false);
+        addMapping(charToVk['q'],  true, VK_TAB, true);
 
         addMapping(charToVk['['],  false, VK_BACK, false);
         addMapping(charToVk['['],  true, VK_DELETE, false);
 
         addMapping(charToVk['y'],  false, VK_LEFT, false);
-        addMapping(charToVk['u'],  false, VK_RIGHT, false);
-        addMapping(charToVk['h'],  false, VK_UP, false);
+        addMapping(charToVk['u'],  false, VK_RIGHT,false);
+        addMapping(charToVk['h'],  false, VK_UP,   false);
         addMapping(charToVk['n'],  false, VK_DOWN, false);
+        addMapping(charToVk['y'],  true, VK_LEFT,  true);
+        addMapping(charToVk['u'],  true, VK_RIGHT, true);
+        addMapping(charToVk['h'],  true, VK_UP,    true);
+        addMapping(charToVk['n'],  true, VK_DOWN,  true);
+
+        addCtrlMapping(charToVk['v'],  false, 'C', false); // ctrl-c Copy
+        addCtrlMapping(charToVk['b'],  false, 'V', false); // ctrl-v Paste
+        addCtrlMapping(charToVk['t'],  false, 'X', false); // ctrl-x Cut
+        addCtrlMapping(charToVk['`'],  false, 'Z', false); // ctrl-z UNdo
 
         /*todo
             Complete support for Ctrl-??

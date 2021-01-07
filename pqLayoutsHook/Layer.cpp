@@ -17,6 +17,8 @@
 
 #include "pch.h"
 #include "Layer.h"
+#include "KeyOutAction.h"
+#include "OutDbg.h"
 
 
 Layer::Layer(const Id_t& name, Idx_t layerIdx) : name(name), layerIdx(layerIdx)
@@ -33,14 +35,19 @@ const CaseMapping* Layer::Mapping(VeeKee vk) const
     return nullptr;
 }
 
-bool Layer::AddMapping(KeyValue from, KeyValue to)
+bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
 {
+    Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
+
+    to.Control(controlMapping);
+    IKeyAction* action = new KeyOutAction(from, to);
+
     CaseMapping& caseMapping = mappings[from.Vk()];
-    
     if (from.Shift())
-        caseMapping.shifted = KeyMapping(from, to);
+        caseMapping.shifted = KeyMapping(from, action);
     else
-        caseMapping.nonShifted = KeyMapping(from, to);
+        caseMapping.nonShifted = KeyMapping(from, action);
 
     return true;
 }
+

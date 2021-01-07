@@ -60,13 +60,15 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef)
 
     // mapped vk is  > 0xFF, low byte holds layerIdx
     VeeKee veekee = 0xFF000000 | layer->LayerIdx();
-    KeyValue accessKey(keydef.Vk(), keydef.Scancode(), false);
-    KeyValue mappedKey(veekee, 0, false);
+    KeyValue accessKey(keydef.Vk(), keydef.Scancode());
+    KeyValue mappedKey(veekee, 0);
+    //mappedKey.EatKey(true);
 
     // set mapped in main layer
     // AND on the layer itself .. so we can return when access key is Up
-    layers[0]->AddMapping(accessKey, mappedKey);
-    layer->AddMapping(accessKey, mappedKey);
+//##pq todo, actio key
+    //layers[0]->AddMapping(accessKey, mappedKey);
+    //layer->AddMapping(accessKey, mappedKey);
 
     return true;
 }
@@ -110,6 +112,14 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
     if (currentLayer == nullptr)
         return false;
 
-    return currentLayer->AddMapping(from, to);
+    return currentLayer->AddMapping(from, to, false);
+}
+
+bool Layout::AddCtrlMapping(KeyValue from, KeyValue to)
+{
+    if (currentLayer == nullptr)
+        return false;
+
+    return currentLayer->AddMapping(from, to, true);
 }
 

@@ -28,7 +28,7 @@ typedef std::unordered_set<VeeKee> VeeKeeSet;
 class Keyboard
 {
 public:
-    Keyboard();
+    Keyboard(DWORD injectedFromMeValue);
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef);
@@ -39,6 +39,7 @@ public:
 
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
+    bool AddCtrlMapping(KeyValue vkFrom, KeyValue vkTo);
 
     bool OnKeyEvent(KbdHookEvent&, DWORD injectedFromMeValue);
     // dbg
@@ -46,19 +47,22 @@ public:
 
     bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
 
+    bool SendVk(const KeyValue& key, bool down);
+    void TrackModifiers(VeeKee vk, bool down);
+    void TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down);
+
 protected:
 
-    void KeyDown(VeeKee physicalVk, KeyValue mapped, bool down);
-    const KeyValue* KeyDown(VeeKee vk) const;
+    void MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down);
+    IKeyAction* MappedKeyDown(VeeKee vk) const;
 
     void ModifierDown(VeeKee vk, bool down);
     bool ModifierDown(VeeKee vk) const;
 
     bool ShiftDown() const;
 
-    const KeyValue* GetMappingValue(KbdHookEvent& event);
+    IKeyAction* GetMappingValue(KbdHookEvent& event);
 
-    void SendVk(const KeyValue& key, bool down, DWORD injectedFromMeValue);
     void SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue);
 
     static bool IsModifier(VeeKee vk);
@@ -66,13 +70,15 @@ protected:
     static bool IsShift(VeeKee vk);
 
 private:
-    // first=pressed *physical* key, second=what we output (ie mapped value)
-    std::map<VeeKee,KeyValue> downMappedKeys;
+    // first=pressed *physical* key, second=what we do on that key(ie mapped value)
+    std::map<VeeKee, IKeyAction*> downMappedKeys;
+
     // at a logical level, whatever the source
     VeeKeeSet downModifiers; 
 
     Layout layout;
 
+    DWORD injectedFromMeValue;
     VeeKeeSet isprint;
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

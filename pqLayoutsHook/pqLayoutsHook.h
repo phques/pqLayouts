@@ -24,6 +24,7 @@ PQHOOK_API bool HookKbdLL();
 PQHOOK_API bool UnhookKbdLL();
 
 PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
+PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to);
 
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
 PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef);

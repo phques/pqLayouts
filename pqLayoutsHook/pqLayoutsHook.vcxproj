@@ -162,6 +162,7 @@
     <ClInclude Include="Keydef.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="KeyMapping.h" />
+    <ClInclude Include="KeyOutAction.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Layout.h" />
     <ClInclude Include="pch.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Keydef.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyMapping.cpp" />
+    <ClCompile Include="KeyOutAction.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="pch.cpp">

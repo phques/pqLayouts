@@ -36,6 +36,7 @@ public:
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
+    bool AddCtrlMapping(KeyValue from, KeyValue to);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;
