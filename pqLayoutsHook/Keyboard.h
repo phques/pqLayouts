@@ -31,7 +31,7 @@ public:
     Keyboard(DWORD injectedFromMeValue);
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
 
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);

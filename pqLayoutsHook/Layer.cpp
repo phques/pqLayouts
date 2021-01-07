@@ -35,6 +35,17 @@ const CaseMapping* Layer::Mapping(VeeKee vk) const
     return nullptr;
 }
 
+bool Layer::AddMapping(KeyValue from, IKeyAction* actionTo)
+{
+    CaseMapping& caseMapping = mappings[from.Vk()];
+    if (from.Shift())
+        caseMapping.shifted = KeyMapping(from, actionTo);
+    else
+        caseMapping.nonShifted = KeyMapping(from, actionTo);
+
+    return true;
+}
+
 bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
 {
     Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
@@ -42,12 +53,6 @@ bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
     to.Control(controlMapping);
     IKeyAction* action = new KeyOutAction(from, to);
 
-    CaseMapping& caseMapping = mappings[from.Vk()];
-    if (from.Shift())
-        caseMapping.shifted = KeyMapping(from, action);
-    else
-        caseMapping.nonShifted = KeyMapping(from, action);
-
-    return true;
+    return AddMapping(from, action);
 }
 

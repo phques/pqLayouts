@@ -32,6 +32,7 @@ public:
     Idx_t LayerIdx() const { return layerIdx;}
 
     const CaseMapping* Mapping(VeeKee) const;
+    bool AddMapping(KeyValue from, IKeyAction* actionTo);
     bool AddMapping(KeyValue from, KeyValue to, bool controlMapping);
 
 private:

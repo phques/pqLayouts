@@ -15,33 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
+#include "pch.h"
+#include "LayerAccessAction.h"
+#include "Keyboard.h"
 
-#include "Keydef.h"
-#include "layer.h"
-
-
-class Layout
+LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx) : keydef(keydef), layerIdx(layerIdx)
 {
-public:
-    Layout();
-    ~Layout();
+}
 
-    bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
+bool LayerAccessAction::OnkeyDown(Keyboard* kbd)
+{
+    // going into a new layer
+    kbd->GotoLayer(layerIdx);
 
-    bool GotoMainLayer();
-    bool GotoLayer(Layer::Idx_t layerIdx);
-    bool GotoLayer(const Layer::Id_t& layerId);
+    // eat access key
+    return true;
+}
 
-    const CaseMapping* Mapping(VeeKee) const;
-    bool AddMapping(KeyValue from, KeyValue to);
-    bool AddCtrlMapping(KeyValue from, KeyValue to);
+bool LayerAccessAction::OnkeyUp(Keyboard* kbd)
+{
+    // coming out of the layer
+    // return to main layer
+    kbd->GotoMainLayer();
 
-private:
-    std::map<VeeKee, KeyDef> keydefs;
-    std::map<Layer::Id_t, Layer*> layersById;  
-    std::vector<Layer*> layers;  
-    Layer* currentLayer;
-};
-
+    // eat access key
+    return true;
+}

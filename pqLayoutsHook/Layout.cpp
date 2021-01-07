@@ -17,6 +17,8 @@
 
 #include "pch.h"
 #include "Layout.h"
+#include "LayerAccessACtion.h"
+
 
 Layout::Layout() : currentLayer(nullptr)
 {
@@ -50,26 +52,24 @@ bool Layout::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
     return true;
 }
 
-bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef keydef)
+
+bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey)
 {
+    // find layer
     auto foundLayer = layersById.find(layerId);
     if (foundLayer == layersById.end())
         return false;
 
     Layer* layer = foundLayer->second;
 
-    // mapped vk is  > 0xFF, low byte holds layerIdx
-    VeeKee veekee = 0xFF000000 | layer->LayerIdx();
-    KeyValue accessKey(keydef.Vk(), keydef.Scancode());
-    KeyValue mappedKey(veekee, 0);
-    //mappedKey.EatKey(true);
+    // create key action object
+    KeyValue accessKeyValue(accessKey.Vk(), accessKey.Scancode());
+    IKeyAction* actionTo = new LayerAccessAction(accessKey, layer->LayerIdx());
 
-    // set mapped in main layer
-    // AND on the layer itself .. so we can return when access key is Up
-//##pq todo, actio key
-    //layers[0]->AddMapping(accessKey, mappedKey);
-    //layer->AddMapping(accessKey, mappedKey);
-
+    // and register mapping on main layer
+    // AND on the layer itself, so we can return on access key UP
+    layers[0]->AddMapping(accessKeyValue, actionTo);
+    layer->AddMapping(accessKeyValue, actionTo);
     return true;
 }
 

@@ -146,62 +146,47 @@ namespace
         }
     }
 
-    void createPLLTx1dMapping()
+    void SetPLLT1xeShifts()
     {
-        // PLLTx1(e) 'wide mod'
-        // main
-        addMapping(false,
-            "weriopasdfgjkl;'zcvm,./",
-            "iuomdnye aglrtsp.,..hcf"
-        );
-
-        // main shift
-        addMapping(true,
-            "WERIOPASDFGJKL;'ZCVM,./",
-            "IUOMDNYE\"AGLRTSP:;..HCF"
-        );
-
-        // alt/secondary layer
-        Layer::Idx_t layerIdx = 0;
-        if (AddLayer("alt", layerIdx))
-        {
-            KeyDef accessKey(VK_SPACE,0);
-            SetLayerAccessKey("alt", accessKey);
-
-            GotoLayer(layerIdx);
-            {
-                // secondary layer 
-                addMapping(false,
-                    "weriopasdfgjkl;'zcvm,./",
-                    "q'jv!#?(-)$+{=}&*/:zkxb"
-                );
-
-                // secondary layer shift
-                addMapping(true,
-                    "WERIOPASDFGJKL;'ZCVM,./",
-                    "Q`JV|.<<_>-~[@]%^\\.ZKXB"
-                );
-            }
-            GotoMainLayer();
-        }
-
         // shift on CapsLock and Enter
+        // shift-shift == CapsLock
         addMapping(VK_CAPITAL, false, VK_LSHIFT, false);
         addMapping(VK_CAPITAL, true, VK_CAPITAL, false);
 
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
         addMapping(VK_RETURN,  true, VK_CAPITAL, false);
+    }
 
+    void createPLLTx1dMapping()
+    {
+        // PLLTx1(e) 'wide mod'
 
+        // --- main layer ---
+
+        addMapping(false,
+            "weriopasdfgjkl;'zcvm,./",
+            "iuomdnye aglrtsp.,.whcf"
+        );
+
+        // main shift
+        addMapping(true,
+            "WERIOPASDFGJKL;'ZCVM,./",
+            "IUOMDNYE\"AGLRTSP:;.WHCF"
+        );
+
+        SetPLLT1xeShifts();
+
+        // Return on x
         addMapping(charToVk['x'],  false, VK_RETURN, false);
         addMapping(charToVk['x'],  true, VK_RETURN, true);
 
+        // add other special keys on main
         addMapping(charToVk['q'],  false, VK_TAB, false);
         addMapping(charToVk['q'],  true, VK_TAB, true);
-
         addMapping(charToVk['['],  false, VK_BACK, false);
         addMapping(charToVk['['],  true, VK_DELETE, false);
 
+        // cursor & edit keys
         addMapping(charToVk['y'],  false, VK_LEFT, false);
         addMapping(charToVk['u'],  false, VK_RIGHT,false);
         addMapping(charToVk['h'],  false, VK_UP,   false);
@@ -216,12 +201,38 @@ namespace
         addCtrlMapping(charToVk['t'],  false, 'X', false); // ctrl-x Cut
         addCtrlMapping(charToVk['`'],  false, 'Z', false); // ctrl-z UNdo
 
-        /*todo
-            Complete support for Ctrl-??
 
-                  y u             Left Right
-                  h               Up    
-            v b   n      ^c ^v    Down   
+        // --- alt/secondary layer ---
+
+        Layer::Idx_t layerIdx = 0;
+
+        // will set layerIdx
+        if (AddLayer("alt", layerIdx))
+        {
+            SetLayerAccessKey("alt", KeyDef(VK_SPACE,0));
+
+            GotoLayer(layerIdx);
+            {
+                // secondary layer 
+                addMapping(false,
+                    "weriopasdfgjkl;'zcvm,./",
+                    "q'jv!#?(-)$+{=}&*/:zkxb"
+                );
+
+                // secondary layer shift
+                addMapping(true,
+                    "WERIOPASDFGJKL;'ZCVM,./",
+                    "Q`JV|.<<_>-~[@]%^\\.ZKXB"
+                );
+
+                // set shift keys on alt/secondary layer 
+                SetPLLT1xeShifts();
+            }
+            GotoMainLayer();
+        }
+
+
+        /*todo
 
          Put Fn keys on 1234 .., use Shift to access numbers ?
          (no numpad layer avail in this one)
@@ -233,6 +244,7 @@ namespace
         */
     }
 }
+
 
 
 INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) 

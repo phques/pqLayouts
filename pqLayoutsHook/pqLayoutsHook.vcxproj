@@ -164,6 +164,7 @@
     <ClInclude Include="KeyMapping.h" />
     <ClInclude Include="KeyOutAction.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="LayerAccessAction.h" />
     <ClInclude Include="Layout.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="pqLayoutsHook.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="KeyMapping.cpp" />
     <ClCompile Include="KeyOutAction.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="LayerAccessAction.cpp" />
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
