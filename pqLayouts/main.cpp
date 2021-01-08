@@ -164,15 +164,25 @@ namespace
         // --- main layer ---
 
         addMapping(false,
-            "weriopasdfgjkl;'zcvm,./",
-            "iuomdnye aglrtsp.,.whcf"
+            "weriopasdfgjkl;'zcm,./",
+            "iuomdnye aglrtsp.,whcf"
         );
 
         // main shift
         addMapping(true,
-            "WERIOPASDFGJKL;'ZCVM,./",
-            "IUOMDNYE\"AGLRTSP:;.WHCF"
+            "WERIOPASDFGJKL;'ZCM,./",
+            "IUOMDNYE\"AGLRTSP:;WHCF"
         );
+
+        // Fn keys on digits row / digits on shift
+        const char* digits = "1234567890-=";
+        for (int i = 0; i <= strlen(digits); i++)
+        {
+            WORD vk = VK_F1 + i;
+            char digit = digits[i];
+            addMapping(charToVk[digit],  false, vk, false);
+            addMapping(charToVk[digit],  true, charToVk[digit], false);
+        }
 
         SetPLLT1xeShifts();
 
@@ -181,19 +191,19 @@ namespace
         addMapping(charToVk['x'],  true, VK_RETURN, true);
 
         // add other special keys on main
-        addMapping(charToVk['q'],  false, VK_TAB, false);
-        addMapping(charToVk['q'],  true, VK_TAB, true);
+        addMapping(charToVk['q'],  false, VK_ESCAPE, false);
+        addMapping(charToVk['q'],  true, VK_ESCAPE, true);
         addMapping(charToVk['['],  false, VK_BACK, false);
         addMapping(charToVk['['],  true, VK_DELETE, false);
 
         // cursor & edit keys
         addMapping(charToVk['y'],  false, VK_LEFT, false);
-        addMapping(charToVk['u'],  false, VK_RIGHT,false);
-        addMapping(charToVk['h'],  false, VK_UP,   false);
-        addMapping(charToVk['n'],  false, VK_DOWN, false);
         addMapping(charToVk['y'],  true, VK_LEFT,  true);
+        addMapping(charToVk['u'],  false, VK_RIGHT,false);
         addMapping(charToVk['u'],  true, VK_RIGHT, true);
+        addMapping(charToVk['h'],  false, VK_UP,   false);
         addMapping(charToVk['h'],  true, VK_UP,    true);
+        addMapping(charToVk['n'],  false, VK_DOWN, false);
         addMapping(charToVk['n'],  true, VK_DOWN,  true);
 
         addCtrlMapping(charToVk['v'],  false, 'C', false); // ctrl-c Copy
@@ -215,18 +225,29 @@ namespace
             {
                 // secondary layer 
                 addMapping(false,
-                    "weriopasdfgjkl;'zcvm,./",
-                    "q'jv!#?(-)$+{=}&*/:zkxb"
+                    "weriopasdfgjkl;'zxcvm,./",
+                    "q'jv!#?(-)@+{=}&*|/_zkxb"
                 );
 
                 // secondary layer shift
                 addMapping(true,
                     "WERIOPASDFGJKL;'ZCVM,./",
-                    "Q`JV|.<<_>-~[@]%^\\.ZKXB"
+                    "Q`JV|.<<_>-~[$]%^\\.ZKXB"
                 );
 
                 // set shift keys on alt/secondary layer 
                 SetPLLT1xeShifts();
+
+                addMapping(charToVk['y'],  false, VK_HOME, false);
+                addMapping(charToVk['y'],  true, VK_HOME,  true);
+                addMapping(charToVk['u'],  false, VK_END,false);
+                addMapping(charToVk['u'],  true, VK_END, true);
+                addMapping(charToVk['h'],  false, VK_PRIOR, false);
+                addMapping(charToVk['h'],  true, VK_PRIOR,  true);
+                addMapping(charToVk['n'],  false, VK_NEXT, false);
+                addMapping(charToVk['n'],  true, VK_NEXT,  true);
+
+
             }
             GotoMainLayer();
         }
