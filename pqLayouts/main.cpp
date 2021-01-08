@@ -155,6 +155,13 @@ namespace
 
         addMapping(VK_RETURN,  false, VK_RSHIFT, false);
         addMapping(VK_RETURN,  true, VK_CAPITAL, false);
+
+        // Control on Shift
+        addMapping(VK_LSHIFT, false, VK_LCONTROL, false);
+        addMapping(VK_LSHIFT, true, VK_LCONTROL, false);
+
+        addMapping(VK_RSHIFT,  false, VK_RCONTROL, false);
+        addMapping(VK_RSHIFT,  true, VK_RCONTROL, false);
     }
 
     void createPLLTx1dMapping()
@@ -164,14 +171,14 @@ namespace
         // --- main layer ---
 
         addMapping(false,
-            "weriopasdfgjkl;'zcm,./",
-            "iuomdnye aglrtsp.,whcf"
+            "weriuopasdfgjkl;'zc,./",
+            "iuomwdnye aglrtsp.,hcf"
         );
 
         // main shift
         addMapping(true,
-            "WERIOPASDFGJKL;'ZCM,./",
-            "IUOMDNYE\"AGLRTSP:;WHCF"
+            "WERIUOPASDFGJKL;'ZC,./",
+            "IUOMWDNYE\"AGLRTSP:;HCF"
         );
 
         // Fn keys on digits row / digits on shift
@@ -197,14 +204,23 @@ namespace
         addMapping(charToVk['['],  true, VK_DELETE, false);
 
         // cursor & edit keys
-        addMapping(charToVk['y'],  false, VK_LEFT, false);
-        addMapping(charToVk['y'],  true, VK_LEFT,  true);
-        addMapping(charToVk['u'],  false, VK_RIGHT,false);
-        addMapping(charToVk['u'],  true, VK_RIGHT, true);
-        addMapping(charToVk['h'],  false, VK_UP,   false);
-        addMapping(charToVk['h'],  true, VK_UP,    true);
-        addMapping(charToVk['n'],  false, VK_DOWN, false);
-        addMapping(charToVk['n'],  true, VK_DOWN,  true);
+        //addMapping(charToVk['y'],  false, VK_LEFT, false);
+        //addMapping(charToVk['y'],  true, VK_LEFT,  true);
+        //addMapping(charToVk['u'],  false, VK_RIGHT,false);
+        //addMapping(charToVk['u'],  true, VK_RIGHT, true);
+        //addMapping(charToVk['h'],  false, VK_UP,   false);
+        //addMapping(charToVk['h'],  true, VK_UP,    true);
+        //addMapping(charToVk['n'],  false, VK_DOWN, false);
+        //addMapping(charToVk['n'],  true, VK_DOWN,  true);
+
+        addMapping(charToVk['n'],  false, VK_LEFT, false);
+        addMapping(charToVk['n'],  true, VK_LEFT,  true);
+        addMapping(charToVk['m'],  false, VK_RIGHT,false);
+        addMapping(charToVk['m'],  true, VK_RIGHT, true);
+        addMapping(charToVk['y'],  false, VK_UP,   false);
+        addMapping(charToVk['y'],  true, VK_UP,    true);
+        addMapping(charToVk['h'],  false, VK_DOWN, false);
+        addMapping(charToVk['h'],  true, VK_DOWN,  true);
 
         addCtrlMapping(charToVk['v'],  false, 'C', false); // ctrl-c Copy
         addCtrlMapping(charToVk['b'],  false, 'V', false); // ctrl-v Paste
@@ -238,15 +254,23 @@ namespace
                 // set shift keys on alt/secondary layer 
                 SetPLLT1xeShifts();
 
-                addMapping(charToVk['y'],  false, VK_HOME, false);
-                addMapping(charToVk['y'],  true, VK_HOME,  true);
-                addMapping(charToVk['u'],  false, VK_END,false);
-                addMapping(charToVk['u'],  true, VK_END, true);
-                addMapping(charToVk['h'],  false, VK_PRIOR, false);
-                addMapping(charToVk['h'],  true, VK_PRIOR,  true);
-                addMapping(charToVk['n'],  false, VK_NEXT, false);
-                addMapping(charToVk['n'],  true, VK_NEXT,  true);
+                //addMapping(charToVk['y'],  false, VK_HOME, false);
+                //addMapping(charToVk['y'],  true, VK_HOME,  true);
+                //addMapping(charToVk['u'],  false, VK_END,false);
+                //addMapping(charToVk['u'],  true, VK_END, true);
+                //addMapping(charToVk['h'],  false, VK_PRIOR, false);
+                //addMapping(charToVk['h'],  true, VK_PRIOR,  true);
+                //addMapping(charToVk['n'],  false, VK_NEXT, false);
+                //addMapping(charToVk['n'],  true, VK_NEXT,  true);
 
+                addMapping(charToVk['n'],  false, VK_HOME, false);
+                addMapping(charToVk['n'],  true, VK_HOME,  true);
+                addMapping(charToVk['m'],  false, VK_END,false);
+                addMapping(charToVk['m'],  true, VK_END, true);
+                addMapping(charToVk['y'],  false, VK_PRIOR, false);
+                addMapping(charToVk['y'],  true, VK_PRIOR,  true);
+                addMapping(charToVk['h'],  false, VK_NEXT, false);
+                addMapping(charToVk['h'],  true, VK_NEXT,  true);
 
             }
             GotoMainLayer();
