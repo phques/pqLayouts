@@ -287,14 +287,14 @@ namespace
                 //addMapping(charToVk['h'],  false, VK_NEXT, false);
                 //addMapping(charToVk['h'],  true, VK_NEXT,  true);
 
-                addMapping(charToVk['u'],  false, VK_RIGHT,false);
-                addMapping(charToVk['u'],  true, VK_RIGHT, true);
-                addMapping(charToVk['h'],  false, VK_LEFT, false);
-                addMapping(charToVk['h'],  true, VK_LEFT,  true);
-                addMapping(charToVk['y'],  false, VK_UP,   false);
-                addMapping(charToVk['y'],  true, VK_UP,    true);
-                addMapping(charToVk['n'],  false, VK_DOWN, false);
-                addMapping(charToVk['n'],  true, VK_DOWN,  true);
+                addMapping(charToVk['h'],  false, VK_HOME, false);
+                addMapping(charToVk['h'],  true, VK_HOME,  true);
+                addMapping(charToVk['u'],  false, VK_END,false);
+                addMapping(charToVk['u'],  true, VK_END, true);
+                addMapping(charToVk['y'],  false, VK_PRIOR, false);
+                addMapping(charToVk['y'],  true, VK_PRIOR,  true);
+                addMapping(charToVk['n'],  false, VK_NEXT, false);
+                addMapping(charToVk['n'],  true, VK_NEXT,  true);
             }
             GotoMainLayer();
         }
