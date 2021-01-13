@@ -189,7 +189,7 @@ namespace
         const char* digits = "1234567890-=";
         for (size_t i = 0; i <= strlen(digits); i++)
         {
-            WORD vk = VK_F1 + i;
+            WORD vk = VK_F1 + static_cast<WORD>(i);
             char digit = digits[i];
             addMapping(charToVk[digit],  false, vk, false);
             addMapping(charToVk[digit],  true, charToVk[digit], false);
@@ -198,8 +198,8 @@ namespace
         SetPLLT1xeShifts();
 
         // Return on x
-        addMapping(charToVk['x'],  false, VK_RETURN, false);
-        addMapping(charToVk['x'],  true, VK_RETURN, true);
+        addMapping(charToVk['v'],  false, VK_RETURN, false);
+        addMapping(charToVk['v'],  true, VK_RETURN, true);
 
         // add other special keys on main
         addMapping(charToVk['q'],  false, VK_ESCAPE, false);
@@ -235,7 +235,7 @@ namespace
         addMapping(charToVk['n'],  false, VK_DOWN, false);
         addMapping(charToVk['n'],  true, VK_DOWN,  true);
 
-        addCtrlMapping(charToVk['v'],  false, 'C', false); // ctrl-c Copy
+        addCtrlMapping(charToVk['x'],  false, 'C', false); // ctrl-c Copy
         addCtrlMapping(charToVk['b'],  false, 'V', false); // ctrl-v Paste
         addCtrlMapping(charToVk['t'],  false, 'X', false); // ctrl-x Cut
         addCtrlMapping(charToVk['`'],  false, 'Z', false); // ctrl-z UNdo
@@ -299,6 +299,10 @@ namespace
             GotoMainLayer();
         }
 
+        // pause to suspend key mapping
+        // ctrl-pause (VK_CANCEL) to stop/close the app
+        SuspendKey(VK_PAUSE, VK_CANCEL);
+
 
         /*todo
 
@@ -326,6 +330,10 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
+        case IDC_BUTTON_SUSPEND:
+            ToggleSuspend();
+            break;
+
         case IDOK:
         case IDCANCEL:
             SendMessage(hDlg, WM_CLOSE, 0, 0);
@@ -367,7 +375,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     //testMappings();
     createPLLTx1dMapping();
 
-    HookKbdLL();
+    HookKbdLL(hDlg);
     //refreshIconState(hDlg);
     //SetTimer(hDlg, 1, 500, 0);
 

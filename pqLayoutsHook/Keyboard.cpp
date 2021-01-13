@@ -42,7 +42,12 @@ VeeKeeSet Keyboard::extended = {
 
 //----------
 
-Keyboard::Keyboard(DWORD injectedFromMeValue) : injectedFromMeValue(injectedFromMeValue)
+Keyboard::Keyboard(DWORD injectedFromMeValue) : 
+    injectedFromMeValue(injectedFromMeValue), 
+    hMainWindow(NULL),
+    suspended(false), 
+    suspendKey(0), 
+    quitKey(0)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -50,6 +55,11 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) : injectedFromMeValue(injectedFrom
         SHORT vk = VkKeyScanA(c);
         isprint.insert(vk);
     }
+}
+
+void Keyboard::SetMainWnd(HWND hMainWindow)
+{
+    this->hMainWindow = hMainWindow;
 }
 
 bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
@@ -119,6 +129,30 @@ void Keyboard::TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool do
     MappedKeyDown(physicalVk, mapped, down);
 }
 
+bool Keyboard::ToggleSuspend()
+{
+    bool currentSuspended = suspended;
+    suspended = !suspended;
+    Printf("suspended = %d\n", (suspended ? 1 : 0));
+
+    return currentSuspended;
+}
+
+bool Keyboard::Suspended()
+{
+    return suspended;
+}
+
+void Keyboard::SuspendKey(VeeKee vk)
+{
+    suspendKey = vk;
+}
+
+void Keyboard::QuitKey(VeeKee vk)
+{
+    quitKey = vk;
+}
+
 void Keyboard::MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down)
 {
     if (down)
@@ -174,6 +208,31 @@ IKeyAction* Keyboard::GetMappingValue(KbdHookEvent& event)
 
 bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 {
+    // is it the suspend key ?
+    if (event.vkCode == suspendKey)
+    {
+        if (event.Down())
+        {
+            Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
+            ToggleSuspend();
+        }
+        return true; // 'edat' this key
+    }
+
+    // is it the quit key ?
+    if (event.vkCode == quitKey)
+    {
+        if (event.Down())
+        {
+            Printf("quit key pressed, stopping pqLayouts\n");
+            PostMessage(hMainWindow, WM_CLOSE, 0,0);
+        }
+        return true; // 'edat' this key
+    }
+
+
+    if (suspended)
+        return false; // let keys through keys while suspended
     // is this key currently down (mapped) ?
     // if so use that action
     IKeyAction* action = MappedKeyDown(event.vkCode);
@@ -201,66 +260,6 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 
     return false; // let key through
 }
-
-#if 0
-
-// return true if we should skip / eat this virtual-key
-bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
-{
-    // Get mapped value,
-    // use a previous mapped value if physical key is pressed 
-    // (so we output same mapping on UP key !)
-    // this means if a modifier changes state while a key is held down we will keep outputing the
-    // key with the *original modifiers* states though
-    const KeyValue* valueOut = MappedKeyDown(event.vkCode);
-
-    // if no prev key down mapped, get current mapping
-    if (valueOut == nullptr)
-        valueOut = GetMappingValue(event);
-
-    bool isMapped = (valueOut != nullptr);
-    VeeKee vkOut = (isMapped ? valueOut->Vk() : event.vkCode);
-
-    // layer access key
-    if (vkOut > 0xFF)
-    {
-        Printf("layer access %0x\n", vkOut);
-
-        // this is a layer access key lower byte indicates which layer
-        if (event.Up())
-        {
-            // coming out of the layer
-            // return to main layer
-            layout.GotoMainLayer();
-        }
-        else
-        {
-            // going into a new layer
-            layout.GotoLayer(vkOut & 0xFF);
-        }
-        // nb: isMapped is true, we will 'eat' the original key
-    }
-    else // normal key
-    {
-        // output a mapped key
-        if (valueOut != nullptr)
-        {
-            SendVk(*valueOut, event.Down(), injectedFromMeValue);
-
-            // take note of down physical / mapped keys 
-            MappedKeyDown(event.vkCode, *valueOut, event.Down());
-        }
-
-        if (IsModifier(vkOut))
-            ModifierDown(vkOut, event.Down());
-    }
-
-    // if we sent a mapped value, don't forward original event
-    // also eat-up displayable non mapped keys, but be safe and let special keys trough ;-)
-    return isMapped || MyIsPrint(vkOut);
-}
-
-#endif // 0
 
 
 void Keyboard::TrackModifiers(VeeKee vk, bool down)

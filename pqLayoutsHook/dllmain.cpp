@@ -105,8 +105,10 @@ public:
 //------ [exports... --------
 
 // hook our low level kbd procedure
-bool HookKbdLL()
+bool HookKbdLL(HWND hMainWindow)
 {
+    theKbd.SetMainWnd(hMainWindow);
+
     hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, KbdHook::LowLevelKeyboardProc, GetModuleHandle(0), 0);
 
     if (hKbdHook == NULL)
@@ -163,6 +165,17 @@ PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx)
 PQHOOK_API bool GotoMainLayer()
 {
     return theKbd.GotoMainLayer();
+}
+
+PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey)
+{
+    theKbd.SuspendKey(suspendKey);
+    theKbd.QuitKey(quitKey);
+}
+
+PQHOOK_API void ToggleSuspend()
+{
+    theKbd.ToggleSuspend();
 }
 
 //------ ... exports] --------

@@ -29,6 +29,7 @@ class Keyboard
 {
 public:
     Keyboard(DWORD injectedFromMeValue);
+    void SetMainWnd(HWND hMainWindow);
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
@@ -50,6 +51,11 @@ public:
     bool SendVk(const KeyValue& key, bool down);
     void TrackModifiers(VeeKee vk, bool down);
     void TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down);
+
+    bool ToggleSuspend();
+    bool Suspended();
+    void SuspendKey(VeeKee);
+    void QuitKey(VeeKee);
 
 protected:
 
@@ -77,8 +83,12 @@ private:
     VeeKeeSet downModifiers; 
 
     Layout layout;
+    bool suspended;
+    VeeKee suspendKey;
+    VeeKee quitKey;
 
     DWORD injectedFromMeValue;
+    HWND hMainWindow;
     VeeKeeSet isprint;
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
