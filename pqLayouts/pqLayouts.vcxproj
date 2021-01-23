@@ -168,6 +168,17 @@
       <Project>{680c5f5c-3188-42dd-a81d-3464892277b6}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="layouts\mtgapLs23Sp5.0b.kbd" />
+    <None Include="layouts\PLLT1xe.kbd" />
+    <None Include="layouts\PLLT1xe.kbd-" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="layouts\PLLTx1e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="layouts\PLLTx1e.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

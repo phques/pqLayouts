@@ -1,4 +1,4 @@
-// Copyright 2020 Philippe Quesnel  
+// Copyright 2021 Philippe Quesnel  
 //
 // This file is part of pqLayouts.
 //
@@ -197,13 +197,15 @@ namespace
 
         SetPLLT1xeShifts();
 
-        // Return on x
+        // Return on v
         addMapping(charToVk['v'],  false, VK_RETURN, false);
         addMapping(charToVk['v'],  true, VK_RETURN, true);
 
         // add other special keys on main
-        addMapping(charToVk['q'],  false, VK_ESCAPE, false);
-        addMapping(charToVk['q'],  true, VK_ESCAPE, true);
+        addMapping(VK_TAB,  false, VK_ESCAPE, false);
+        addMapping(VK_TAB,  true, VK_ESCAPE, true);
+        addMapping(charToVk['q'],  false, VK_TAB, false);
+        addMapping(charToVk['q'],  true, VK_TAB, true);
         addMapping(charToVk['['],  false, VK_BACK, false);
         addMapping(charToVk['['],  true, VK_DELETE, false);
 
@@ -315,6 +317,115 @@ namespace
          Maybe support for layout definitions in text files ! ;-)
         */
     }
+
+    bool parsek2k(int lineNo, std::string& fromKey, std::string& toKey )
+    {
+        // from key
+        const char* from = fromKey.c_str();
+
+        bool shiftLayer = false;
+        if (*from == '+')
+        {
+            shiftLayer = true;
+            from++;
+        }
+        //pq-todo support key names Esc, Tab etc
+        WORD vkFrom = 0;
+        if (strlen(from) > 1)
+        {
+            std::cerr << "keynames not supported yet, line " << lineNo << std::endl;
+            return false;
+        }
+        else
+        {
+            vkFrom = VkKeyScanA(*from);
+            if (vkFrom == 0xFFFF)
+            {
+                std::cerr << "non valid fromKey, line " << lineNo << std::endl;
+                return false;
+            }
+        }
+
+        // to key
+        const char* to = toKey.c_str();
+
+        bool toKeyNeedsShift = false;
+        if (*to == '+')
+        {
+            toKeyNeedsShift = true;
+            to++;
+        }
+        //pq-todo support key names Esc, Tab etc
+        WORD vkTo = 0;
+        if (strlen(to) > 1)
+        {
+            std::cerr << "keynames not supported yet, line " << lineNo << std::endl;
+            return false;
+        }
+        else
+        {
+            vkTo = VkKeyScanA(*to);
+            if (HasShiftBit(vkTo))
+                toKeyNeedsShift = true;
+
+            if (vkTo == 0xFFFF)
+            {
+                std::cerr << "non valid toKey, line " << lineNo << std::endl;
+                return false;
+            }
+        }
+
+        // add mapping
+        addMapping(vkFrom & 0xFF, shiftLayer, vkTo & 0xFF, toKeyNeedsShift);
+
+        return true;
+    }
+
+    bool readkeyboardfile(const char* filename)
+    {
+        int lineNo = 0;
+        std::string line;
+        std::ifstream kbdfile(filename);
+
+        while (!kbdfile.eof())
+        {
+            std::istringstream string_tokenizer;
+
+            std::getline(kbdfile, line);
+            lineNo++;
+
+            string_tokenizer.str(line);
+
+            // read the k2k command (or skip line)
+            std::string cmd;
+            string_tokenizer >> cmd;
+            if (string_tokenizer.eof() || cmd != "k2k") {
+              continue;
+            }
+
+            // read from key
+            if (string_tokenizer.eof()) {
+              std::cerr << "missing 1st param 'fromkey', line " << lineNo << std::endl;
+              return false;
+            }
+            std::string fromKey;
+            string_tokenizer >> fromKey;
+
+
+            // read 'to' key
+            if (string_tokenizer.eof()) {
+              std::cerr << "missing 2nd param 'tokey', line " << lineNo << std::endl;
+              return false;
+            }
+            std::string toKey;
+            string_tokenizer >> toKey;
+
+            if (!parsek2k(lineNo, fromKey, toKey))
+                return false;
+        }
+
+        return true;
+    }
 }
 
 
@@ -370,10 +481,14 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc);
     ShowWindow(hDlg, nCmdShow);
 
-    //## dbg
     InitCharToVk();
+
+    //## dbg
     //testMappings();
-    createPLLTx1dMapping();
+    if (strlen(commandLine) == 0)
+        createPLLTx1dMapping();
+    else
+        readkeyboardfile(commandLine);
 
     HookKbdLL(hDlg);
     //refreshIconState(hDlg);
@@ -402,6 +517,6 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 // call WinMain
 int main(int argc, char* argv[])
 {
-    WinMain(GetModuleHandle(0), 0, NULL, SW_SHOW);
+    WinMain(GetModuleHandle(0), 0, (argc == 2) ? argv[1] : LPSTR(""), SW_SHOW);
     return 0;
 }

@@ -53,23 +53,23 @@
 ! -- special  keys --
 /map
 ~.
-    q  .  .  .  .    .  .  .  .  [  
- CL .  .  .  .  .    .  .  .  .  .  CR
- LS .  .  .  .  .    .  .  .  .  RS 
+ Tab q .  .  .  .    .  .  .  .  [  
+ CL  . .  .  .  .    .  .  .  .  .  CR
+ LS  . .  .  .  .    .  .  .  .  RS 
 
 
 :main
 :alt
 ~.
-  Esc  .  .  .  .    .  .  .  .  BS     
- LS .  .  .  .  .    .  .  .  .  .  RS
- LC .  .  .  Cr .    .  .  .  .  RC     
+ Esc Tab .  .  .  .    .  .  .  .  BS     
+ LS   .  .  .  .  .    .  .  .  .  .  RS
+ LC   .  .  .  Cr .    .  .  .  .  RC     
 
 :+main
 ~.
- +Esc   .  .  .  .    .  .  .  .  +Del     
- CL  .  .  .  .  .    .  .  .  .  .  CL
- +LC .  .  . +Cr .    .  .  .  .  +RC     
+ +Esc +Tab .  .  .  .    .  .  .  .  +Del     
+ CL     .  .  .  .  .    .  .  .  .  .  CL
+ +LC    .  .  . +Cr .    .  .  .  .  +RC     
 
 
 
