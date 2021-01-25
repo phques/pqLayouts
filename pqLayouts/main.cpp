@@ -381,6 +381,11 @@ namespace
         return true;
     }
 
+    bool isKbdfileCommand(std::string& cmd)
+    {
+        return cmd == "k2k";
+    }
+
     bool readkeyboardfile(const char* filename)
     {
         int lineNo = 0;
@@ -389,19 +394,29 @@ namespace
 
         while (!kbdfile.eof())
         {
-            std::istringstream string_tokenizer;
-
             std::getline(kbdfile, line);
             lineNo++;
 
+            std::istringstream string_tokenizer;
             string_tokenizer.str(line);
 
-            // read the k2k command (or skip line)
+            // read the next command (or !comments)
             std::string cmd;
             string_tokenizer >> cmd;
-            if (string_tokenizer.eof() || cmd != "k2k") {
-              continue;
+
+            // skip comment / empty line
+            if (string_tokenizer.eof() || cmd.c_str()[0] == '!') 
+            {
+                continue;
             }
+
+            // validate line
+            if (!isKbdfileCommand(cmd))
+            {
+                std::cerr << "expecting a command, line " << lineNo << std::endl;
+                return false;
+            }
+
 
             // read from key
             if (string_tokenizer.eof()) {

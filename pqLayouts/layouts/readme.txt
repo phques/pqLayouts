@@ -16,9 +16,9 @@ nb: this software maps KEYS, not characters, this is how the Windows hook we use
   left right up down home end pgup pgdn ins
   F1-F12
 
-one k2k mapping command per line,
-k2k command is 1st word on beginning of line,
-otherwise line is ignored (ie comments :-)
++ one k2k mapping command per line,
++ command is 1st word on beginning of line,
+! this is a comment (! at beginning of line)
 
 
 Mapping commands
