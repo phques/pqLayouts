@@ -9,7 +9,7 @@ nb: this software maps KEYS, not characters, this is how the Windows hook we use
 
  Known 'keyToMap's (1st entry on k2k commands):
   single char: the key of that char,
-  esc tab caps space enter backspace bs del
+  esc tab caps space enter cr backspace bs del
   lshift rshift 
   lcontrol rcontrol lctrl rctrl
   lalt ralt
@@ -28,7 +28,7 @@ Mapping commands
   any text after the 2 parameters is ignored (can be used for comments)
 
 k2k a y			a outputs y, shift-a not mapped
-k2k +a Y		shift-a outputs Y (can only specify shifted key)
+k2k +a Y		shift-a outputs Y 
 
 k2k d *			d outputs *,  shift-8 !!
 k2k d +8		d outputs *, shift-8 same as prev example
@@ -39,6 +39,14 @@ k2k +Tab Esc	shift-tab outputs non-shifted escape
 
 k2k +SP ;		shift-space outputs ';' (NON shifted key ;)
 k2k SP  " 		space outputs " (shift-')
+
+
++ K2K, k2k's big brother ;-)
+  map both non-shifted and shifted output values for a key
+
+K2K a  e  E
+K2K s  sp "
+
 
 
 TODO:

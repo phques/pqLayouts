@@ -18,6 +18,7 @@
 
 #include "stdafx.h"
 #include "pqLayoutsHook.h"
+#include "LoLevelKbdFile.h"
 #include "resource.h"
 
 
@@ -32,11 +33,6 @@ namespace
 {
     SHORT charToVk[256] = {0};
 
-    // checks bit 0 of hibyte of ret val from VkKeyScanA
-    bool HasShiftBit(SHORT scanExVal) 
-    { 
-        return ((scanExVal >> 8) & 0x01) != 0; 
-    }
 
     void InitCharToVk()
     {
@@ -69,8 +65,8 @@ namespace
         SHORT qwertyVk = charToVk[from];
         SHORT outputVk = charToVk[to];
 
-        addMapping(qwertyVk & 0xFF, HasShiftBit(qwertyVk),
-                   outputVk & 0xFF, HasShiftBit(outputVk));
+        addMapping(qwertyVk & 0xFF, KeyParser::HasShiftBit(qwertyVk),
+                   outputVk & 0xFF, KeyParser::HasShiftBit(outputVk));
     }
 
     void addMappingSh(CHAR from, CHAR to)
@@ -81,7 +77,7 @@ namespace
 
         // on shift layer
         addMapping(qwertyVk & 0xFF, true,
-                   outputVk & 0xFF, HasShiftBit(outputVk));
+                   outputVk & 0xFF, KeyParser::HasShiftBit(outputVk));
     }
 
     void addMapping(bool shiftLayer, const char* mask, const char* map)
@@ -318,129 +314,6 @@ namespace
         */
     }
 
-    bool parsek2k(int lineNo, std::string& fromKey, std::string& toKey )
-    {
-        // from key
-        const char* from = fromKey.c_str();
-
-        bool shiftLayer = false;
-        if (*from == '+')
-        {
-            shiftLayer = true;
-            from++;
-        }
-        //pq-todo support key names Esc, Tab etc
-        WORD vkFrom = 0;
-        if (strlen(from) > 1)
-        {
-            std::cerr << "keynames not supported yet, line " << lineNo << std::endl;
-            return false;
-        }
-        else
-        {
-            vkFrom = VkKeyScanA(*from);
-            if (vkFrom == 0xFFFF)
-            {
-                std::cerr << "non valid fromKey, line " << lineNo << std::endl;
-                return false;
-            }
-        }
-
-        // to key
-        const char* to = toKey.c_str();
-
-        bool toKeyNeedsShift = false;
-        if (*to == '+')
-        {
-            toKeyNeedsShift = true;
-            to++;
-        }
-        //pq-todo support key names Esc, Tab etc
-        WORD vkTo = 0;
-        if (strlen(to) > 1)
-        {
-            std::cerr << "keynames not supported yet, line " << lineNo << std::endl;
-            return false;
-        }
-        else
-        {
-            vkTo = VkKeyScanA(*to);
-            if (HasShiftBit(vkTo))
-                toKeyNeedsShift = true;
-
-            if (vkTo == 0xFFFF)
-            {
-                std::cerr << "non valid toKey, line " << lineNo << std::endl;
-                return false;
-            }
-        }
-
-        // add mapping
-        addMapping(vkFrom & 0xFF, shiftLayer, vkTo & 0xFF, toKeyNeedsShift);
-
-        return true;
-    }
-
-    bool isKbdfileCommand(std::string& cmd)
-    {
-        return cmd == "k2k";
-    }
-
-    bool readkeyboardfile(const char* filename)
-    {
-        int lineNo = 0;
-        std::string line;
-        std::ifstream kbdfile(filename);
-
-        while (!kbdfile.eof())
-        {
-            std::getline(kbdfile, line);
-            lineNo++;
-
-            std::istringstream string_tokenizer;
-            string_tokenizer.str(line);
-
-            // read the next command (or !comments)
-            std::string cmd;
-            string_tokenizer >> cmd;
-
-            // skip comment / empty line
-            if (string_tokenizer.eof() || cmd.c_str()[0] == '!') 
-            {
-                continue;
-            }
-
-            // validate line
-            if (!isKbdfileCommand(cmd))
-            {
-                std::cerr << "expecting a command, line " << lineNo << std::endl;
-                return false;
-            }
-
-
-            // read from key
-            if (string_tokenizer.eof()) {
-              std::cerr << "missing 1st param 'fromkey', line " << lineNo << std::endl;
-              return false;
-            }
-            std::string fromKey;
-            string_tokenizer >> fromKey;
-
-
-            // read 'to' key
-            if (string_tokenizer.eof()) {
-              std::cerr << "missing 2nd param 'tokey', line " << lineNo << std::endl;
-              return false;
-            }
-            std::string toKey;
-            string_tokenizer >> toKey;
-
-            if (!parsek2k(lineNo, fromKey, toKey))
-                return false;
-        }
-
-        return true;
-    }
 }
 
 
@@ -500,30 +373,35 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     //## dbg
     //testMappings();
+    bool ok = true;
+    LoLevelKbdFile lokbdrdr;
     if (strlen(commandLine) == 0)
         createPLLTx1dMapping();
     else
-        readkeyboardfile(commandLine);
+        ok = lokbdrdr.ReadKeyboardFile(commandLine);
 
-    HookKbdLL(hDlg);
-    //refreshIconState(hDlg);
-    //SetTimer(hDlg, 1, 500, 0);
-
-    MSG msg;
-    int ret = 0;
-    while (ret = GetMessage(&msg, 0, 0, 0) > 0) 
+    if (ok)
     {
-        if (!IsDialogMessage(hDlg, &msg)) 
+        HookKbdLL(hDlg);
+        //refreshIconState(hDlg);
+        //SetTimer(hDlg, 1, 500, 0);
+
+        MSG msg;
+        int ret = 0;
+        while (ret = GetMessage(&msg, 0, 0, 0) > 0) 
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            if (!IsDialogMessage(hDlg, &msg)) 
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
         }
+
+        UnhookKbdLL();
+        //refreshIconState(hDlg, true);
     }
 
-    UnhookKbdLL();
-    //refreshIconState(hDlg, true);
-
-    return ret;
+    return 0;
 }
 
 

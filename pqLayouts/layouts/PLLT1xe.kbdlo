@@ -8,7 +8,7 @@ k2k o d
 k2k p n
 k2k a y
 k2k s e
-!k2k d Sp
+k2k d space
 k2k f a
 k2k g g
 k2k j l
@@ -45,3 +45,9 @@ k2k +m  W
 k2k +,  H
 k2k +.  C
 k2k +/  F
+
+K2K 1 F1 1
+K2K 2 F2 2
+K2K 3 F3 3
+K2K 4 F4 4
+
