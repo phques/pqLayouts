@@ -260,8 +260,8 @@ namespace
 
                 // secondary layer shift
                 addMapping(true,
-                    "WERIOPASDFGJKL;'ZCVM,./",
-                    "Q`JV|.<<_>-~[$]%^\\.ZKXB"
+                    "WERIOPASDFGJKL;'ZXCVM,./",
+                    "Q`JV|.<<_>-~[$]%^=\\.ZKXB"
                 );
 
                 // set shift keys on alt/secondary layer 
@@ -296,11 +296,6 @@ namespace
             }
             GotoMainLayer();
         }
-
-        // pause to suspend key mapping
-        // ctrl-pause (VK_CANCEL) to stop/close the app
-        SuspendKey(VK_PAUSE, VK_CANCEL);
-
 
         /*todo
 
@@ -382,6 +377,12 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     if (ok)
     {
+        GotoMainLayer();
+
+        // pause to suspend key mapping
+        // ctrl-pause (VK_CANCEL) to stop/close the app
+        SuspendKey(VK_PAUSE, VK_CANCEL);
+
         HookKbdLL(hDlg);
         //refreshIconState(hDlg);
         //SetTimer(hDlg, 1, 500, 0);

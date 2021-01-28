@@ -74,6 +74,7 @@ public:
 private:
     bool doK2kCmd(StringTokener& stringTokener);
     bool doK2kWithShCmd(StringTokener& stringTokener);
+    bool addLayer(StringTokener& tokener);
 
 private:
     static std::map<std::string, WORD> keyNames;

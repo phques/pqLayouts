@@ -48,8 +48,19 @@ K2K a  e  E
 K2K s  sp "
 
 
+Layer command
+---------
+
+addlayer layerName accessKey
+
+This creates a new layer,
+sets its access key on main layer
+and switches to the new layer
+
+ 'main' is reserved layer name for the main layer.
+
 
 TODO:
 ---
 ^ as control prefix for outputs
-layers
+

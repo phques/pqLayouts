@@ -1,53 +1,126 @@
 ! PLLT1xe, PQ adapted PLLT1x, wid mode
 
-k2k w i
-k2k e u
-k2k r o
-k2k i m
-k2k o d
-k2k p n
-k2k a y
-k2k s e
-k2k d space
-k2k f a
-k2k g g
-k2k j l
-k2k k r
-k2k l t
-k2k ; s
-k2k ' p
-k2k z .
-k2k c ,
-k2k m w
-k2k , h
-k2k . c
-k2k / f
+!    w e r        i o p
+!  a s d f g    j k l ; '
+!    z x c v    m , . / 
 
-k2k +w  I
-k2k +e  U
-k2k +r  O
-k2k +i  M
-k2k +o  D
-k2k +p  N
-k2k +a  Y
-k2k +s  E
-k2k +d  "
-k2k +f  A
-k2k +g  G
-k2k +j  L
-k2k +k  R
-k2k +l  T
-k2k +;  S
-k2k +'  P
-k2k +z  :
-k2k +c  ;
-k2k +m  W
-k2k +,  H
-k2k +.  C
-k2k +/  F
+!    i u  o       m d n      
+!  y e Sp a g   l r t s p  
+!    .    ,     w h c f     
+!
+!    I U O        M D N       
+!  Y E " A G    L R T S P  
+!    :    ;     W H C F   
+!
+!    q ' j        v ! #     
+!  ? ( - ) @    + { = } &   
+!    * | / _    z k x b     
+!
+!
+!    Q ` J        V | .       
+!  < < _ > -    ~ [ $ ] %   
+!    ^   \      Z K X B     
 
-K2K 1 F1 1
-K2K 2 F2 2
-K2K 3 F3 3
-K2K 4 F4 4
+
+K2K w   i  I
+K2K e   u  U
+K2K r   o  O
+K2K i   m  M
+K2K o   d  D
+K2K p   n  N
+K2K a   y  Y
+K2K s   e  E
+K2K d   sp "
+K2K f   a  A
+K2K g   g  G
+K2K j   l  L
+K2K k   r  R
+K2K l   t  T
+K2K ;   s  S
+K2K '   p  P
+K2K z   .  :
+K2K c   ,  ;
+K2K m   w  W
+K2K ,   h  H
+K2K .   c  C
+K2K /   f  F
+
+K2K 1   F1 1
+K2K 2   F2 2
+K2K 3   F3 3
+K2K 4   F4 4
+K2K 5   F5 5
+K2K 6   F6 6
+K2K 7   F7 7
+K2K 8   F8 8
+K2K 9   F9 9
+K2K 0   F10 0
+K2K -   F11 -
+K2K =   F12 =
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+K2K v   cr +cr
+K2K tab esc +esc
+K2K q   tab +tab
+K2K [   bs  del
+
+K2K u   right +right
+K2K h   left +left
+K2K y   up +up
+K2K n   down +down
+
+! ------- alt layer --------
+
+addlayer alt space
+
+K2K w   q  Q
+K2K e   '  `
+K2K r   j  J
+K2K i   v  V
+K2K o   !  |
+K2K p   #  .
+K2K a   ?  <
+K2K s   (  <
+K2K d   -  _
+K2K f   )  >
+K2K g   @  -
+K2K j   +  ~
+K2K k   {  [
+K2K l   =  $
+K2K ;   }  ]
+K2K '   &  %
+K2K z   *  ^
+K2K x   |  =
+K2K c   /  \
+k2k v   _  
+K2K m   z  Z
+K2K ,   k  K
+K2K .   x  X
+K2K /   b  B
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+! movement keys
+
+K2K h   home +home
+K2K u   end +end
+K2K y   pgup +pgup
+K2K n   pgdn +pgdn
 

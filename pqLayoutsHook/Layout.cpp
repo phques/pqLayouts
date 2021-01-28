@@ -70,6 +70,12 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey)
     // AND on the layer itself, so we can return on access key UP
     layers[0]->AddMapping(accessKeyValue, actionTo);
     layer->AddMapping(accessKeyValue, actionTo);
+
+    // also register access key shifted
+    accessKeyValue.Shift(true);
+    layers[0]->AddMapping(accessKeyValue, actionTo);
+    layer->AddMapping(accessKeyValue, actionTo);
+
     return true;
 }
 

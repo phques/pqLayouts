@@ -24,18 +24,14 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
     {"caps", VK_CAPITAL},
     {"esc", VK_ESCAPE},
     {"tab", VK_TAB},
-    {"space", VK_SPACE},
-    {"enter", VK_RETURN},
-    {"cr", VK_RETURN},
-    {"backspace", VK_BACK},
-    {"bs", VK_BACK},
+    {"space", VK_SPACE},            {"sp", VK_SPACE},
+    {"enter", VK_RETURN},           {"cr", VK_RETURN},
+    {"backspace", VK_BACK},         {"bs", VK_BACK},
     {"del", VK_DELETE},
     {"lshift", VK_LSHIFT},
     {"rshift", VK_RSHIFT},
-    {"lcontrol", VK_LCONTROL},
-    {"rcontrol", VK_RCONTROL},
-    {"lctrl", VK_LCONTROL},
-    {"rctrl", VK_RCONTROL},
+    {"lcontrol", VK_LCONTROL},      {"lctrl", VK_LCONTROL},
+    {"rcontrol", VK_RCONTROL},      {"rctrl", VK_RCONTROL},
     {"lalt", VK_LMENU},
     {"ralt", VK_RMENU},
     {"left", VK_LEFT},
@@ -170,6 +166,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!doK2kWithShCmd(stringTokener))
                 return false;
         }
+        else if (cmd == "addlayer")
+        {
+            if (!addLayer(stringTokener))
+                return false;
+        }
         else
         {
             std::cerr << "expecting a command, line " << lineNo << std::endl;
@@ -195,6 +196,7 @@ bool LoLevelKbdFile::doK2kCmd(StringTokener& tokener)
     // call DLL hook to add a new mapping
     return AddMapping(kfrom, kto);
 }
+
 
 bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
 {
@@ -229,107 +231,49 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
 }
 
 
-#if 0
-bool LoLevelKbdFile::parseKey(std::string& key, int lineNo, bool& hasShift, WORD& vk)
+bool LoLevelKbdFile::addLayer(StringTokener& tokener)
 {
-    vk = 0;
-    hasShift = false;
-
-    const char* keytext = key.c_str();
-    if (*keytext == '+')
-    {
-        hasShift = true;
-        keytext++;
+    // read layer name
+    if (tokener.eof()) {
+        std::cerr << "layer name, line " << tokener.LineNo() << std::endl;
+        return false;
     }
 
-    if (strlen(keytext) > 1)
+    std::string layerName;
+    tokener >> layerName;
+    if (layerName == "main")
     {
-        auto foundit = keyNames.find(keytext);
-        if (foundit == keyNames.end())
-        {
-            std::cerr << "unknown key [" << key << "], line " << lineNo << std::endl;
-            return false;
-        }
-        vk = foundit->second;
-    }
-    else
-    {
-        vk = VkKeyScanA(*keytext);
-        if (vk == 0xFFFF)
-        {
-            std::cerr << "non valid key [" << key << "], line " << lineNo << std::endl;
-            return false;
-        }
+        std::cerr << "'main' is a reserved layer name, line " << tokener.LineNo() << std::endl;
+        return false;
     }
 
-    return true;
-}
+    // create layer
+    Layer::Idx_t layerIdx = 0;
+    if (!AddLayer(layerName.c_str(), layerIdx))
+    {
+        std::cerr << "failed to create layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
+        return false;
+    }
 
-// add mapping
-if (!addMapping(vkFrom, hasShiftFrom, vkTo, hasShiftTo))
-{
-    std::cerr << "failed to add mapping with DLL hook, line " << tokener.LineNo() << std::endl;
-    return false;
-}
-if (!keyFrom() || !keyTo())
-return false;
-
-std::string fromKey;
-std::string toKey;
-
-// read from key
-if (stringTokener.eof()) {
-    std::cerr << "missing 1st param 'fromkey', line " << lineNo << std::endl;
-    return false;
-}
-stringTokener >> fromKey;
-
-// read 'to' key
-if (stringTokener.eof()) {
-    std::cerr << "missing 2nd param 'tokey', line " << lineNo << std::endl;
-    return false;
-}
-stringTokener >> toKey;
-
-// parse keys and create mapping
-return parsek2k(lineNo, fromKey, toKey);
-}
-
-
-bool LoLevelKbdFile::parsek2k(int lineNo, std::string& fromKey, std::string& toKey )
-{
-    // from key
-    bool  hasShiftFrom = false;
-    WORD vkFrom = 0;
-    if (!parseKey(fromKey, lineNo, hasShiftFrom, vkFrom))
+    // read access key
+    KeyParser accessKey(tokener, "layer access key");
+    if (!accessKey())
         return false;
 
-    // to key
-    bool  hasShiftTo = false;
-    WORD vkTo = 0;
-    if (!parseKey(toKey, lineNo, hasShiftTo, vkTo))
-        return false;
-
-    hasShiftTo = hasShiftTo || HasShiftBit(vkTo);
-
-
-    // add mapping
-    if (!addMapping(vkFrom & 0xFF, hasShiftFrom, vkTo & 0xFF, hasShiftTo))
+    // set access key
+    if (!SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0)))
     {
-        std::cerr << "failed to add mapping with DLL hook, line " << lineNo << std::endl;
+        std::cerr << "failed to set acccess key for layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    // switch to new layer
+    if (!GotoLayer(layerIdx))
+    {
+        std::cerr << "failed to switch to new layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;
     }
 
     return true;
 }
 
-bool LoLevelKbdFile::addMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
-{
-    KeyValue kfrom(fromVk, 0, shiftedFrom);
-    KeyValue kto(toVk, 0, shiftedTo);
-
-    // call DLL hook to add a new mapping
-    return AddMapping(kfrom, kto);
-}
-
-#endif // 0

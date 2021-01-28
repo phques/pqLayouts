@@ -1,0 +1,39 @@
+! mtgapLs23Sp5.0b, wid mode
+
+!     3          9  
+!    w e r      i o p    
+!  a s d f g  j k l ; '
+!      c v    m ,      
+
+!        =               v      
+!     a  SP k         d  n  r   
+!  g  i  o  e  '   f  t  s  h  c
+!           u  _   w  m         
+!        *               V      
+!     A  @  K         D  N  R   
+!  G  I  O  E `    F  T  S  H  C
+!           U  ~   W  M         
+
+
+K2K  3   =  *
+K2K  9   v  V
+K2K  w   a  A
+K2K  e   sp @
+K2K  r   k  K
+K2K  i   d  D
+K2K  o   n  N
+K2K  p   r  R
+K2K  a   g  G
+K2K  s   i  I
+K2K  d   o  O
+K2K  f   e  E
+K2K  g   '  `
+K2K  j   f  F
+K2K  k   t  T
+K2K  l   s  S
+K2K  ;   h  H
+K2K  '   c  C
+K2K  c   u  U
+K2K  v   _  ~
+K2K  m   w  W
+K2K  ,   m  M
