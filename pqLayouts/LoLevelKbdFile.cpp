@@ -161,6 +161,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!doK2kCmd(stringTokener))
                 return false;
         }
+        else if (cmd == "k2ck")
+        {
+            if (!doK2kcCmd(stringTokener))
+                return false;
+        }
         else if (cmd == "K2K")
         {
             if (!doK2kWithShCmd(stringTokener))
@@ -197,6 +202,20 @@ bool LoLevelKbdFile::doK2kCmd(StringTokener& tokener)
     return AddMapping(kfrom, kto);
 }
 
+bool LoLevelKbdFile::doK2kcCmd(StringTokener& tokener)
+{
+    KeyParser keyFrom(tokener, "fromKey");
+    KeyParser keyTo(tokener, "toKey");
+
+    if (!keyFrom() || !keyTo())
+        return false;
+
+    KeyValue kfrom(keyFrom.vk, 0, keyFrom.hasShiftPrefix  || keyFrom.isShifted);
+    KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+
+    // call DLL hook to add a new mapping
+    return AddCtrlMapping(kfrom, kto);
+}
 
 bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
 {

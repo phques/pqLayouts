@@ -24,7 +24,7 @@ nb: this software maps KEYS, not characters, this is how the Windows hook we use
 Mapping commands
 ---------
 
-+ map key to key(s)
++ k2k map key to key(s)
   any text after the 2 parameters is ignored (can be used for comments)
 
 k2k a y			a outputs y, shift-a not mapped
@@ -48,6 +48,11 @@ K2K a  e  E
 K2K s  sp "
 
 
++ k2ck for control-xx output
+
+k2ck a  v   press a, outputs ctrl-v (pase)
+
+
 Layer command
 ---------
 
@@ -59,8 +64,4 @@ and switches to the new layer
 
  'main' is reserved layer name for the main layer.
 
-
-TODO:
----
-^ as control prefix for outputs
 

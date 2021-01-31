@@ -1,0 +1,95 @@
+! mtgapLs22Sp5.3-4 (wide mode)
+! layout not completed yet (syms etc)
+
+!   w e r      i o p    
+! a s d f g  j k l ; '
+!   x c v    m , .    
+
+!    a  e  v         h  t  s
+! g  i  o SP  k   m  n  d  r  c
+!       _  u  '   f  l  b
+!
+!    (  .  ;         :  ,  }
+! ?  y  -  )  *   j  p  =  w  !
+!       _  /  q   z  {  x
+
+
+K2K  w   a  A
+K2K  e   e  E
+K2K  r   v  V
+K2K  i   h  H
+K2K  o   t  T
+K2K  p   s  S
+K2K  a   g  G
+K2K  s   i  I
+K2K  d   o  O
+K2K  f   sp " 
+K2K  g   k  K
+K2K  j   m  M
+K2K  k   n  N
+K2K  l   d  D
+K2K  ;   r  R
+K2K  '   c  C
+K2K  x   _  @
+K2K  c   u  U
+K2K  v   '  `
+K2K  m   f  F
+K2K  ,   l  L
+K2K  .   b  B
+
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+K2K t   cr +cr
+K2K u   tab +tab
+K2K tab esc +esc
+K2K q   tab +tab
+K2K [   bs  del
+
+
+! ------- alt layer --------
+
+addlayer alt space
+
+K2K  w   (  <
+K2K  e   .  .
+K2K  r   ;  ;
+K2K  i   :  :
+K2K  o   ,  ,
+K2K  p   }  ]
+K2K  a   ?  ?
+K2K  s   y  Y
+K2K  d   -  -
+K2K  f   )  > 
+K2K  g   *  *
+K2K  j   j  J
+K2K  k   p  P
+K2K  l   =  =
+K2K  ;   w  W
+K2K  '   !  !
+K2K  x   _  @
+K2K  c   /  /
+K2K  v   q  Q
+K2K  m   z  Z
+K2K  ,   {  [
+K2K  .   x  X
+
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+

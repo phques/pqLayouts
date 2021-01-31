@@ -78,6 +78,14 @@ K2K h   left +left
 K2K y   up +up
 K2K n   down +down
 
+! copy / paste
+
+k2ck x  c
+k2ck b  v
+k2ck t  x
+k2ck `  z
+
+
 ! ------- alt layer --------
 
 addlayer alt space
