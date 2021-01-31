@@ -45,6 +45,7 @@ VeeKeeSet Keyboard::extended = {
 Keyboard::Keyboard(DWORD injectedFromMeValue) : 
     injectedFromMeValue(injectedFromMeValue), 
     hMainWindow(NULL),
+    mainWndMsg(0),
     suspended(false), 
     suspendKey(0), 
     quitKey(0)
@@ -60,6 +61,11 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
 void Keyboard::SetMainWnd(HWND hMainWindow)
 {
     this->hMainWindow = hMainWindow;
+}
+
+void Keyboard::SetMainWndMsg(int mainWndMsg)
+{
+    this->mainWndMsg = mainWndMsg;
 }
 
 bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
@@ -134,6 +140,9 @@ bool Keyboard::ToggleSuspend()
     bool currentSuspended = suspended;
     suspended = !suspended;
     Printf("suspended = %d\n", (suspended ? 1 : 0));
+
+    // notify main app window
+    PostMessage(this->hMainWindow, mainWndMsg, 0,0);
 
     return currentSuspended;
 }

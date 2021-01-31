@@ -13,8 +13,4 @@
 #include <string>
 #include <bitset>
 
-
-#include <lua.hpp>
-#include <LuaBridge.h>
-
 #endif //PCH_H

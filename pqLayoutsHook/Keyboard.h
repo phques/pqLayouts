@@ -30,6 +30,7 @@ class Keyboard
 public:
     Keyboard(DWORD injectedFromMeValue);
     void SetMainWnd(HWND hMainWindow);
+    void SetMainWndMsg(int mainWndMsg);
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
@@ -89,6 +90,7 @@ private:
 
     DWORD injectedFromMeValue;
     HWND hMainWindow;
+    int mainWndMsg;
     VeeKeeSet isprint;
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

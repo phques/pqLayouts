@@ -20,7 +20,7 @@
 #include "Keydef.h"
 #include "Layer.h"
 
-PQHOOK_API bool HookKbdLL(HWND hMainWindow);
+PQHOOK_API bool HookKbdLL(HWND hMainWindow, int mainWndMsg);
 PQHOOK_API bool UnhookKbdLL();
 
 PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
@@ -35,3 +35,5 @@ PQHOOK_API bool GotoMainLayer();
 
 PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
 PQHOOK_API void ToggleSuspend();
+PQHOOK_API bool Suspended();
+

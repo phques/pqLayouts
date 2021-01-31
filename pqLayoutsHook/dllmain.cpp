@@ -105,9 +105,10 @@ public:
 //------ [exports... --------
 
 // hook our low level kbd procedure
-bool HookKbdLL(HWND hMainWindow)
+bool HookKbdLL(HWND hMainWindow, int mainWndMsg)
 {
     theKbd.SetMainWnd(hMainWindow);
+    theKbd.SetMainWndMsg(mainWndMsg);
 
     hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, KbdHook::LowLevelKeyboardProc, GetModuleHandle(0), 0);
 
@@ -177,6 +178,12 @@ PQHOOK_API void ToggleSuspend()
 {
     theKbd.ToggleSuspend();
 }
+
+PQHOOK_API bool Suspended()
+{
+    return theKbd.Suspended();
+}
+
 
 //------ ... exports] --------
 

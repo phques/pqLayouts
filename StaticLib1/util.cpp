@@ -33,9 +33,3 @@ KbdHookEvent::KbdHookEvent(LPARAM lParam)
 
 //----------
 
-std::string LuaState::PopString()
-{
-    std::string s = lua_tostring(luaL, -1);
-    lua_pop(luaL, 1);
-    return s;
-}

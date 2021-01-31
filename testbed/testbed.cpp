@@ -19,6 +19,7 @@
 #include "resource.h"
 #include "util.h"
 #include "outDbg.h"
+#include "luaState.h"
 
 using namespace luabridge;
 

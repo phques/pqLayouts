@@ -21,18 +21,26 @@
 #include "LoLevelKbdFile.h"
 #include "resource.h"
 
+// we need commctrl v6 for LoadIconMetric()
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 
 namespace
 {
     const TCHAR* const windowTitle = TEXT("PQLayouts");
+    HINSTANCE hAppInstance = NULL;
 
+    enum WndMessages
+    {
+        WMAPP_NOTIFYCALLBACK = WM_USER,
+        WMAPP_KBDHOOK_NOTIF 
+    };
 }
 
 // debug
 namespace
 {
     SHORT charToVk[256] = {0};
-
 
     void InitCharToVk()
     {
@@ -308,8 +316,82 @@ namespace
          Maybe support for layout definitions in text files ! ;-)
         */
     }
+}; // namespace
 
-}
+namespace
+{
+    //---------
+
+    void DeleteIcon(HWND hwnd) 
+    {
+        NOTIFYICONDATA nid = {0};
+        nid.cbSize = sizeof(nid);
+        nid.hWnd = hwnd;
+        nid.uID = 0;
+        Shell_NotifyIcon(NIM_DELETE, &nid);
+    }
+
+    void AddIcon(HWND hwnd)
+    {
+        NOTIFYICONDATA nid = {0};
+        nid.cbSize = sizeof(nid);
+        nid.hWnd = hwnd;
+        nid.uID = 0;
+        nid.uCallbackMessage = WMAPP_NOTIFYCALLBACK;
+        nid.uFlags = NIF_MESSAGE;
+        nid.uVersion = NOTIFYICON_VERSION_4;
+
+        // add icon & set version
+        Shell_NotifyIcon(NIM_ADD, &nid);
+        Shell_NotifyIcon(NIM_SETVERSION, &nid);
+    }
+
+    void SetIcon(HWND hwnd, bool enabled)
+    {
+        NOTIFYICONDATA nid = {0};
+        nid.cbSize = sizeof(nid);
+        nid.hWnd = hwnd;
+        nid.uID = 0;
+        nid.uFlags = NIF_ICON;
+
+        // set the icon 
+        int iconId = (enabled ? IDI_ICON1 : IDI_ICON2);
+        LoadIconMetric(hAppInstance, MAKEINTRESOURCE(iconId), LIM_SMALL, &nid.hIcon);
+        //nid.hIcon = LoadIcon(hAppInstance, MAKEINTRESOURCE(iconId));
+
+        Shell_NotifyIcon(NIM_MODIFY, &nid);
+
+    }
+
+    void ShowContextMenu(HWND hwnd, POINT pt)
+    {
+        HMENU hMenu = LoadMenu(hAppInstance, MAKEINTRESOURCE(IDR_MENU1));
+        if (hMenu)
+        {
+            HMENU hSubMenu = GetSubMenu(hMenu, 0);
+            if (hSubMenu)
+            {
+                // our window must be foreground before calling TrackPopupMenu or the menu will not disappear when the user clicks away
+                SetForegroundWindow(hwnd);
+
+                // respect menu drop alignment
+                UINT uFlags = TPM_RIGHTBUTTON;
+                if (GetSystemMetrics(SM_MENUDROPALIGNMENT) != 0)
+                {
+                    uFlags |= TPM_RIGHTALIGN;
+                }
+                else
+                {
+                    uFlags |= TPM_LEFTALIGN;
+                }
+
+                TrackPopupMenuEx(hSubMenu, uFlags, pt.x, pt.y, hwnd, NULL);
+            }
+            DestroyMenu(hMenu);
+        }
+    }
+
+} // namespace
 
 
 
@@ -322,19 +404,6 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         SetWindowText(hDlg, windowTitle);
         return TRUE;
 
-    case WM_COMMAND:
-        switch (LOWORD(wParam)) {
-        case IDC_BUTTON_SUSPEND:
-            ToggleSuspend();
-            break;
-
-        case IDOK:
-        case IDCANCEL:
-            SendMessage(hDlg, WM_CLOSE, 0, 0);
-            return TRUE;
-        }
-        break;
-
     case WM_CLOSE: 
         DestroyWindow(hDlg);
         return TRUE; 
@@ -342,6 +411,56 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     case WM_DESTROY:
         PostQuitMessage(0);
         return TRUE;
+
+    // taskbar icon notif
+    case WMAPP_NOTIFYCALLBACK:
+    {
+        switch (LOWORD(lParam))
+        {
+        case NIN_SELECT:
+            // user clicked our taskbar icon, toggle suspended status
+            ToggleSuspend();
+            return TRUE;
+
+        case WM_LBUTTONDBLCLK:
+            //printf("WM_LBUTTONDBLCLK\n");
+            break;
+
+        case WM_CONTEXTMENU:
+            {
+            // open context menu
+                POINT const pt = { LOWORD(wParam), HIWORD(wParam) };
+                ShowContextMenu(hDlg, pt);
+                return TRUE;
+            }
+        }
+        break;
+    }
+
+    // hool dll notif
+    case WMAPP_KBDHOOK_NOTIF :
+    {
+        // update our icon (for enabled/disabled status)
+        SetIcon(hDlg, !Suspended());
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam)) 
+        {
+        case ID_POPUP_TOGGLESUSPEND:
+            ToggleSuspend();
+            return TRUE;
+
+        case ID_POPUP_EXIT:
+        case IDOK:
+        case IDCANCEL:
+            SendMessage(hDlg, WM_CLOSE, 0, 0);
+            return TRUE;
+        }
+        break;
+    }
 
     }
 
@@ -360,16 +479,17 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
         return 0;
     }
 
+    hAppInstance = hInstance;
+
     // Create our dialog
     HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc);
     ShowWindow(hDlg, nCmdShow);
 
     InitCharToVk();
 
-    //## dbg
-    //testMappings();
     bool ok = true;
     LoLevelKbdFile lokbdrdr;
+
     if (strlen(commandLine) == 0)
         createPLLTx1dMapping();
     else
@@ -379,13 +499,14 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     {
         GotoMainLayer();
 
+        AddIcon(hDlg);
+        SetIcon(hDlg, !Suspended());
+
         // pause to suspend key mapping
         // ctrl-pause (VK_CANCEL) to stop/close the app
         SuspendKey(VK_PAUSE, VK_CANCEL);
 
-        HookKbdLL(hDlg);
-        //refreshIconState(hDlg);
-        //SetTimer(hDlg, 1, 500, 0);
+        HookKbdLL(hDlg, WMAPP_KBDHOOK_NOTIF);
 
         MSG msg;
         int ret = 0;
@@ -398,6 +519,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
             }
         }
 
+        DeleteIcon(hDlg);
         UnhookKbdLL();
         //refreshIconState(hDlg, true);
     }

@@ -89,7 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../StaticLib1;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../StaticLib1;../lua;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../StaticLib1;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../StaticLib1;../lua;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>

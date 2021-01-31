@@ -59,10 +59,22 @@
     <Image Include="layouts\PLLTx1e.png">
       <Filter>Layouts</Filter>
     </Image>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\VS2019 Image Library\vswin2019\LayerDiagram\LayerDiagram_16x.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="layouts\PLLTx1e.txt">
       <Filter>Layouts</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="pqLayouts.manifest.xml" />
   </ItemGroup>
 </Project>
