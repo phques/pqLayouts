@@ -56,7 +56,7 @@ namespace
         KeyValue kfrom(fromVk, 0, shiftedFrom);
         KeyValue kto(toVk, 0, shiftedTo);
 
-        AddMapping(kfrom, kto);
+        HookKbd::AddMapping(kfrom, kto);
     }
 
     void addCtrlMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
@@ -64,7 +64,7 @@ namespace
         KeyValue kfrom(fromVk, 0, shiftedFrom);
         KeyValue kto(toVk, 0, shiftedTo);
 
-        AddCtrlMapping(kfrom, kto);
+        HookKbd::AddCtrlMapping(kfrom, kto);
     }
 
     void addMapping(CHAR from, CHAR to)
@@ -135,18 +135,18 @@ namespace
         //------------
         //asdfg: ? ( - ) $
         Layer::Idx_t layerIdx = 0;
-        if (AddLayer("alt", layerIdx))
+        if (HookKbd::AddLayer("alt", layerIdx))
         {
             KeyDef accessKey(VK_SPACE,0);
-            SetLayerAccessKey("alt", accessKey);
+            HookKbd::SetLayerAccessKey("alt", accessKey);
 
-            GotoLayer(layerIdx);
-            addMapping('a', '?');
-            addMapping('s', '(');
-            addMapping('d', '-');
-            addMapping('f', ')');
-            addMapping('g', '$');
-            GotoMainLayer();
+            HookKbd::GotoLayer(layerIdx);
+                addMapping('a', '?');
+                addMapping('s', '(');
+                addMapping('d', '-');
+                addMapping('f', ')');
+                addMapping('g', '$');
+            HookKbd::GotoMainLayer();
         }
     }
 
@@ -252,11 +252,11 @@ namespace
         Layer::Idx_t layerIdx = 0;
 
         // will set layerIdx
-        if (AddLayer("alt", layerIdx))
+        if (HookKbd::AddLayer("alt", layerIdx))
         {
-            SetLayerAccessKey("alt", KeyDef(VK_SPACE,0));
+            HookKbd::SetLayerAccessKey("alt", KeyDef(VK_SPACE,0));
 
-            GotoLayer(layerIdx);
+            HookKbd::GotoLayer(layerIdx);
             {
                 // secondary layer 
                 addMapping(false,
@@ -302,7 +302,7 @@ namespace
                 addMapping(charToVk['n'],  false, VK_NEXT, false);
                 addMapping(charToVk['n'],  true, VK_NEXT,  true);
             }
-            GotoMainLayer();
+            HookKbd::GotoMainLayer();
         }
 
         /*todo
@@ -419,7 +419,7 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         {
         case NIN_SELECT:
             // user clicked our taskbar icon, toggle suspended status
-            ToggleSuspend();
+            HookKbd::ToggleSuspend();
             return TRUE;
 
         case WM_LBUTTONDBLCLK:
@@ -441,7 +441,7 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     case WMAPP_KBDHOOK_NOTIF :
     {
         // update our icon (for enabled/disabled status)
-        SetIcon(hDlg, !Suspended());
+        SetIcon(hDlg, !HookKbd::Suspended());
         return TRUE;
     }
 
@@ -450,7 +450,8 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         switch (LOWORD(wParam)) 
         {
         case ID_POPUP_TOGGLESUSPEND:
-            ToggleSuspend();
+        case IDC_BUTTON_SUSPEND:
+            HookKbd::ToggleSuspend();
             return TRUE;
 
         case ID_POPUP_EXIT:
@@ -497,16 +498,16 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     if (ok)
     {
-        GotoMainLayer();
+        HookKbd::GotoMainLayer();
 
         AddIcon(hDlg);
-        SetIcon(hDlg, !Suspended());
+        SetIcon(hDlg, !HookKbd::Suspended());
 
         // pause to suspend key mapping
         // ctrl-pause (VK_CANCEL) to stop/close the app
-        SuspendKey(VK_PAUSE, VK_CANCEL);
+        HookKbd::SuspendKey(VK_PAUSE, VK_CANCEL);
 
-        HookKbdLL(hDlg, WMAPP_KBDHOOK_NOTIF);
+        HookKbd::HookKbdLL(hDlg, WMAPP_KBDHOOK_NOTIF);
 
         MSG msg;
         int ret = 0;
@@ -520,7 +521,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
         }
 
         DeleteIcon(hDlg);
-        UnhookKbdLL();
+        HookKbd::UnhookKbdLL();
         //refreshIconState(hDlg, true);
     }
 

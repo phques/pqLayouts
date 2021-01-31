@@ -199,7 +199,7 @@ bool LoLevelKbdFile::doK2kCmd(StringTokener& tokener)
     KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
 
     // call DLL hook to add a new mapping
-    return AddMapping(kfrom, kto);
+    return HookKbd::AddMapping(kfrom, kto);
 }
 
 bool LoLevelKbdFile::doK2kcCmd(StringTokener& tokener)
@@ -214,7 +214,7 @@ bool LoLevelKbdFile::doK2kcCmd(StringTokener& tokener)
     KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
 
     // call DLL hook to add a new mapping
-    return AddCtrlMapping(kfrom, kto);
+    return HookKbd::AddCtrlMapping(kfrom, kto);
 }
 
 bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
@@ -232,7 +232,7 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
         KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
 
         // call DLL hook to add a new mapping
-        if (!AddMapping(kfrom, kto))
+        if (!HookKbd::AddMapping(kfrom, kto))
             return false;
     }
 
@@ -242,7 +242,7 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
         KeyValue kto(keyToSh.vk, 0, keyToSh.hasShiftPrefix || keyToSh.isShifted);
 
         // call DLL hook to add a new mapping
-        if (!AddMapping(kfrom, kto))
+        if (!HookKbd::AddMapping(kfrom, kto))
             return false;
     }
 
@@ -268,7 +268,7 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener)
 
     // create layer
     Layer::Idx_t layerIdx = 0;
-    if (!AddLayer(layerName.c_str(), layerIdx))
+    if (!HookKbd::AddLayer(layerName.c_str(), layerIdx))
     {
         std::cerr << "failed to create layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;
@@ -280,14 +280,14 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener)
         return false;
 
     // set access key
-    if (!SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0)))
+    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0)))
     {
         std::cerr << "failed to set acccess key for layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;
     }
 
     // switch to new layer
-    if (!GotoLayer(layerIdx))
+    if (!HookKbd::GotoLayer(layerIdx))
     {
         std::cerr << "failed to switch to new layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;

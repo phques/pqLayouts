@@ -104,8 +104,11 @@ public:
 
 //------ [exports... --------
 
+namespace HookKbd
+{
+
 // hook our low level kbd procedure
-bool HookKbdLL(HWND hMainWindow, int mainWndMsg)
+PQHOOK_API bool HookKbdLL(HWND hMainWindow, int mainWndMsg)
 {
     theKbd.SetMainWnd(hMainWindow);
     theKbd.SetMainWndMsg(mainWndMsg);
@@ -119,7 +122,7 @@ bool HookKbdLL(HWND hMainWindow, int mainWndMsg)
 }
 
 // unhook our low level kbd procedure
-bool UnhookKbdLL()
+PQHOOK_API bool UnhookKbdLL()
 {
     if (hKbdHook == NULL)
         return false;
@@ -183,6 +186,8 @@ PQHOOK_API bool Suspended()
 {
     return theKbd.Suspended();
 }
+
+}; // namespace HookKbd
 
 
 //------ ... exports] --------
