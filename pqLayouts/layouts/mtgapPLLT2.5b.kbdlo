@@ -1,4 +1,7 @@
-! mtgapPLLT1.5, going PLLT with MTGAP, wid mode
+! mtgapPLLT2.5b, going PLLT with MTGAP, wid mode
+! moved P to mid index, bring ,. etc.
+! manually placed syms / modified alt layer
+
 
 
 !    w e r        i o p
