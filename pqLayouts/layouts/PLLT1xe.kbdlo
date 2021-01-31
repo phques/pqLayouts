@@ -72,6 +72,7 @@ K2K v   cr +cr
 K2K tab esc +esc
 K2K q   tab +tab
 K2K [   bs  del
+k2k ]   del
 
 K2K u   right +right
 K2K h   left +left

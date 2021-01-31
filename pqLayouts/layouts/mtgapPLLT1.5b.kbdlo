@@ -1,0 +1,138 @@
+! mtgapPLLT1.5, going PLLT with MTGAP, wid mode
+
+
+!    w e r        i o p
+!  a s d f g    j k l ; '
+!    z x c v    m , . / 
+
+!     i  o  u         g  r  h
+!  y  a  e SP  p   m  t  s  n  c
+!     .  _  , \n   f  d  l  b
+!
+!     I  O  U         G  R  H
+!  Y  A  E  "  P   M  T  S  N  C
+!     :  _  ; \n   F  D  L  B
+!
+!    >  '  !         q  =  x
+! ?  (  -  )  |   +  w  v  k  &
+!    *  #  /  @   z  {  j  }
+!
+!    ^  `            Q  $  X
+!    <  -  >      ~  W  V  K  %
+!       =  \      Z  [  J  ]
+
+
+K2K w  i  I 
+K2K e  o  O 
+K2K r  u  U 
+K2K i  g  G 
+K2K o  r  R 
+K2K p  h  H 
+K2K a  y  Y 
+K2K s  a  A 
+K2K d  e  E 
+K2K f  sp +sp  
+K2K g  p  P  
+K2K j  m  M 
+K2K k  t  T 
+K2K l  s  S 
+K2K ;  n  N 
+K2K '  c  C 
+K2K z  .  :  
+K2K x  _  _  
+K2K c  ,  ; 
+K2K v  cr +cr
+K2K m  f  F 
+K2K ,  d  D 
+K2K .  l  L 
+K2K /  b  B 
+
+K2K 1   F1 1
+K2K 2   F2 2
+K2K 3   F3 3
+K2K 4   F4 4
+K2K 5   F5 5
+K2K 6   F6 6
+K2K 7   F7 7
+K2K 8   F8 8
+K2K 9   F9 9
+K2K 0   F10 0
+K2K -   F11 -
+K2K =   F12 =
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+K2K tab esc +esc
+K2K q   tab +tab
+K2K [   bs  del
+k2k ]   del
+
+K2K u   right +right
+K2K h   left +left
+K2K y   up +up
+K2K n   down +down
+
+! copy / paste
+
+k2ck  t  c
+k2ck +t  x
+k2ck  b  v
+k2ck  `  z
+
+
+! ------- alt layer --------
+
+addlayer alt space
+
+! todo syms
+K2K w  > ^  
+K2K e  ' `  
+K2K r  ! .  
+K2K i  q Q  
+K2K o  = $  
+K2K p  x X  
+K2K a  ? .  
+K2K s  ( <  
+K2K d  - -  
+K2K f  ) >  
+K2K g  | .  
+K2K j  + ~  
+K2K k  w W  
+K2K l  v V  
+K2K ;  k K  
+K2K '  & %  
+K2K z  * .  
+K2K x  # =  
+K2K c  / \  
+K2K v  @ .  
+K2K m  z Z  
+K2K ,  { [  
+K2K .  j J  
+K2K /  } ]  
+
+
+! special keys
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+! movement keys
+
+K2K h   home +home
+K2K u   end +end
+K2K y   pgup +pgup
+K2K n   pgdn +pgdn
+

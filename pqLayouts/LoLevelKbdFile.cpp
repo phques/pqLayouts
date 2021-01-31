@@ -83,13 +83,13 @@ bool KeyParser::parseKey()
 {
     // check for prefix '+' for shifted key
     const char* keytext = param.c_str();
-    if (*keytext == '+')
+    if (strlen(keytext) > 1 && keytext[0] == '+')
     {
         hasShiftPrefix = true;
         keytext++;
     }
 
-    // heyname ?
+    // keyname ?
     if (strlen(keytext) > 1)
     {
         auto foundit = LoLevelKbdFile::KeyNames().find(keytext);
