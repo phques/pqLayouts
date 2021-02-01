@@ -18,9 +18,11 @@
 #pragma once
 #include "KeyMapping.h"
 
+namespace KeyActions
+{
+
 // class that output a value (another key) for a mapped key
-class KeyOutAction :
-    public IKeyAction
+class KeyOutAction : public IKeyAction
 {
 public:
     KeyOutAction(KeyDef inKey, KeyValue outKey);
@@ -28,9 +30,11 @@ public:
     // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
     virtual bool OnkeyDown(Keyboard*);
     virtual bool OnkeyUp(Keyboard*);
+    virtual bool SkipDownRepeats(Keyboard*) const { return false; }
 
 protected:
     KeyDef inKey;
     KeyValue outKey;
 };
 
+}

@@ -280,7 +280,7 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener)
         return false;
 
     // set access key
-    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0)))
+    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0), false))
     {
         std::cerr << "failed to set acccess key for layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;

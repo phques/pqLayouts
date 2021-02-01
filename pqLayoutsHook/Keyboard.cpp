@@ -19,6 +19,7 @@
 #include "Keyboard.h"
 #include "OutDbg.h"
 
+using namespace KeyActions;
 
 
 //----------
@@ -47,6 +48,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     hMainWindow(NULL),
     mainWndMsg(0),
     suspended(false), 
+    makeSticky(0),
     suspendKey(0), 
     quitKey(0)
 {
@@ -73,9 +75,9 @@ bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
     return layout.AddLayer(layerId, newLayerIdx);
 }
 
-bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey)
+bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle)
 {
-    return layout.SetLayerAccessKey(layerId, accessKey);
+    return layout.SetLayerAccessKey(layerId, accessKey, isToggle);
 }
 
 bool Keyboard::GotoMainLayer()
@@ -91,6 +93,11 @@ bool Keyboard::GotoLayer(Layer::Idx_t layerIdx)
 bool Keyboard::GotoLayer(const Layer::Id_t& layerId)
 {
     return layout.GotoLayer(layerId);
+}
+
+const Layer* Keyboard::CurrentLayer() const
+{
+    return layout.CurrentLayer();
 }
 
 bool Keyboard::IsModifier(VeeKee vk)
@@ -152,6 +159,18 @@ bool Keyboard::Suspended()
     return suspended;
 }
 
+void Keyboard::MakeSticky(VeeKee makeSticky)
+{
+    Printf("make sticky 0x%02X\n", makeSticky);
+    this->makeSticky = makeSticky;
+}
+
+// if != 0then make keys sticky
+VeeKee Keyboard::MakeSticky() const
+{
+    return makeSticky;
+}
+
 void Keyboard::SuspendKey(VeeKee vk)
 {
     suspendKey = vk;
@@ -196,6 +215,12 @@ bool Keyboard::AddCtrlMapping(KeyValue from, KeyValue to)
     return layout.AddCtrlMapping(from, to);
 }
 
+bool Keyboard::AddStickyMapping(KeyValue vk)
+{
+    return layout.AddStickyMapping(vk);
+}
+
+
 
 //------
 
@@ -236,30 +261,60 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
             Printf("quit key pressed, stopping pqLayouts\n");
             PostMessage(hMainWindow, WM_CLOSE, 0,0);
         }
-        return true; // 'edat' this key
+        return true; // 'eat' this key
     }
 
-
+     // let keys through keys while suspended
     if (suspended)
-        return false; // let keys through keys while suspended
+        return false;
+
+    //-------------
+
     // is this key currently down (mapped) ?
     // if so use that action
     IKeyAction* action = MappedKeyDown(event.vkCode);
+    bool wasDown = (action != nullptr);
 
-    // not a mapped key down
-    if (action == nullptr)
+    // not a mapped key currently down
+    if (!wasDown)
     {
-        // do we have a mmped key for this input key?
+        // do we have a mapped key for this input key?
         action = GetMappingValue(event);
     }
+
 
     // we have something to act on..
     if (action != nullptr)
     {
+        // eat key down repeats
+        if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
+            return true;
+
+        // make sticky by eating key up event
+        if (makeSticky != 0)
+        {
+            // eat keys Up, making them sticky
+            bool isStickyMaker = (makeSticky == event.vkCode);
+
+            if (!isStickyMaker && !event.Down())
+            {
+                Printf("sticky, skip 0x%02X\n", event.vkCode);
+                return true;
+            }
+        }
+
+        // register up/down input keys (dont re-register key already down)
+        if (!(wasDown && event.Down()))
+            TrackMappedKeyDown(event.vkCode, action, event.Down());
+
+        // do the action for the key
+        bool ret = false;
         if (event.Down())
-            return action->OnkeyDown(this);
+            ret = action->OnkeyDown(this);
         else
-            return action->OnkeyUp(this);
+            ret =  action->OnkeyUp(this);
+
+        return ret;
     }
     else
     {
@@ -280,68 +335,65 @@ void Keyboard::TrackModifiers(VeeKee vk, bool down)
 
 bool Keyboard::SendVk(const KeyValue& key, bool down)
 {
-    // maybe pre compute this ?
-    //##PQ actually a few keys don't seem to properly convert to scan code (kbd specific?)
-    //## PrtScrn, Pause don't convert to the scancode that we received in the kbd hook event !?
-    //UINT scancode = MapVirtualKeyExA(key.Vk(), MAPVK_VK_TO_VSC_EX, NULL);
-
     // prepare an array of Inputs to send
     // these include shift/control events surrounding the mapped key to send
-    INPUT inputs[10] = { 0 };
+    INPUT inputs[32] = { 0 };
     size_t idx = 0;
 
     // add any required up/down shifts
     if (down)
     {
-        bool clearShift = ! (IsShift(key.Vk()) || (key.Vk() == VK_CAPITAL));
-        bool needsShift = key.Shift();
-        bool lshiftDown = ModifierDown(VK_LSHIFT);
-        bool rshiftDown = ModifierDown(VK_RSHIFT);
-        if (clearShift && needsShift && !(lshiftDown || rshiftDown))
+        // don't surrounding shift up/down keys if the output key is shift or capslock
+        if (!IsShift(key.Vk()) && key.Vk() != VK_CAPITAL)
         {
-            // send a Shift down before our key
-            SetupInputKey(inputs[idx++], VK_LSHIFT, true, injectedFromMeValue);
-        }
-        else if (clearShift && !needsShift)
-        {
-            // send a LShift up before our key
-            if (lshiftDown)
+            bool needsShift = key.Shift();
+            bool lshiftDown = ModifierDown(VK_LSHIFT);
+            bool rshiftDown = ModifierDown(VK_RSHIFT);
+            if (needsShift && !(lshiftDown || rshiftDown))
             {
-                SetupInputKey(inputs[idx++], VK_LSHIFT, false, injectedFromMeValue);
+                // send a Shift down before our key
+                SetupInputKey(inputs[idx++], VK_LSHIFT, true, injectedFromMeValue);
             }
-            // send a RShift up before our key
-            if (rshiftDown)
+            else if (!needsShift)
             {
-                SetupInputKey(inputs[idx++], VK_RSHIFT, false, injectedFromMeValue);
+                // send a LShift up before our key
+                if (lshiftDown)
+                {
+                    SetupInputKey(inputs[idx++], VK_LSHIFT, false, injectedFromMeValue);
+                }
+                // send a RShift up before our key
+                if (rshiftDown)
+                {
+                    SetupInputKey(inputs[idx++], VK_RSHIFT, false, injectedFromMeValue);
+                }
             }
-        }
-
-        // add any required down Ctrl
-        if (key.Control() && !(ModifierDown(VK_LCONTROL) || ModifierDown(VK_RCONTROL)))
-        {
-            // send a control down before our key
-            SetupInputKey(inputs[idx++], VK_RCONTROL, true, injectedFromMeValue);
         }
     }
 
-    // the mapped key
+    // add any required down Ctrl
+    if (key.Control() && !(ModifierDown(VK_LCONTROL) || ModifierDown(VK_RCONTROL)))
+    {
+        // send a control down before our key
+        SetupInputKey(inputs[idx++], VK_LCONTROL, true, injectedFromMeValue);
+    }
+
+    // how many prefix shift/ctrl key we need to revert
+    size_t nbExtras = idx;
+
+    // add the mapped key
     {
         SetupInputKey(inputs[idx++], key.Vk(), down, injectedFromMeValue);
     }
 
     // finaly, undo any shift/control exta events we added above
-    if (down)
+    for (size_t i = 0; i < nbExtras; i++, idx++)
     {
-        for (size_t i = 0; i < idx-1; i++)
-        {
-            // copy, then invert KEYEVENTF_KEYUP flag
-            inputs[idx+i] = inputs[i];
-            if (inputs[idx+i].ki.dwFlags & KEYEVENTF_KEYUP)
-                inputs[idx+i].ki.dwFlags &= ~KEYEVENTF_KEYUP;
-            else
-                inputs[idx+i].ki.dwFlags |= KEYEVENTF_KEYUP;
-        }
-        idx += idx-1;
+        // copy, then invert KEYEVENTF_KEYUP flag
+        inputs[idx] = inputs[i];
+        if (inputs[idx].ki.dwFlags & KEYEVENTF_KEYUP)
+            inputs[idx].ki.dwFlags &= ~KEYEVENTF_KEYUP;
+        else
+            inputs[idx].ki.dwFlags |= KEYEVENTF_KEYUP;
     }
 
     // now send the keys
@@ -353,6 +405,9 @@ bool Keyboard::SendVk(const KeyValue& key, bool down)
     // Also for mapped modifiers with Remote Desktop Connection.
     // Dunno why:
     Sleep(1);
+
+    // and finally, track any modifiers up/down we sent (actual output key, not pre/suffix ones !)
+    TrackModifiers(key.Vk(), down);
 
     return true;
 }

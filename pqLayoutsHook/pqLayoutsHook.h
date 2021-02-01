@@ -22,20 +22,21 @@
 
 namespace HookKbd
 {
-PQHOOK_API bool HookKbdLL(HWND hMainWindow, int mainWndMsg);
-PQHOOK_API bool UnhookKbdLL();
+    PQHOOK_API bool HookKbdLL(HWND hMainWindow, int mainWndMsg);
+    PQHOOK_API bool UnhookKbdLL();
 
-PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
-PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to);
+    PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
+    PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to);
+    PQHOOK_API bool AddStickyMapping(KeyValue vk);
 
-PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
-PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef);
+    PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
+    PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle);
 
-PQHOOK_API bool GotoLayer(const char* layerId);
-PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);
-PQHOOK_API bool GotoMainLayer();
+    PQHOOK_API bool GotoLayer(const char* layerId);
+    PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);
+    PQHOOK_API bool GotoMainLayer();
 
-PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
-PQHOOK_API void ToggleSuspend();
-PQHOOK_API bool Suspended();
+    PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
+    PQHOOK_API void ToggleSuspend();
+    PQHOOK_API bool Suspended();
 };

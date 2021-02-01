@@ -22,10 +22,10 @@
 namespace KeyActions
 {
 
-class LayerAccessAction : public IKeyAction
+class LayerToggleAction : public IKeyAction
 {
 public:
-    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx);
+    LayerToggleAction(KeyDef keydef, Layer::Idx_t layerIdx);
     virtual bool OnkeyDown(Keyboard*);
     virtual bool OnkeyUp(Keyboard*);
     virtual bool SkipDownRepeats(Keyboard*) const { return true; }

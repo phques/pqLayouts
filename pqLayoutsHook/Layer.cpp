@@ -18,7 +18,10 @@
 #include "pch.h"
 #include "Layer.h"
 #include "KeyOutAction.h"
+#include "MakeStickyAction.h"
 #include "OutDbg.h"
+
+using namespace KeyActions;
 
 
 Layer::Layer(const Id_t& name, Idx_t layerIdx) : name(name), layerIdx(layerIdx)
@@ -56,3 +59,11 @@ bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
     return AddMapping(from, action);
 }
 
+bool Layer::AddStickyMapping(KeyValue vk)
+{
+    Printf("Add sticky mapping %02X\n", vk.Vk());
+
+    IKeyAction* action = new MakeStickyAction(vk.Vk());
+
+    return AddMapping(vk, action);
+}

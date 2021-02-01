@@ -28,10 +28,20 @@ namespace Dbg
         // outputdbg KBDLLHOOK event
         void KbdEVent(const KbdHookEvent& event, WPARAM wParam, bool selfInjected)
         {
-            Printf("@%0X %c wparam: %04X vk: %02X scan: %02X %s %s flags: %s\n",
+            // get displayable ascii character from vk
+            static BYTE keystates[256] = {0};
+            WORD asciiChars[16] = {0};
+            ToAscii(event.vkCode, event.scanCode, keystates, asciiChars, 0);
+
+            char asciiChar = ' ';
+            if (asciiChars[0] > 32 && asciiChars[0] < 127)
+                asciiChar = static_cast<char>(asciiChars[0]);
+
+            Printf("@%0X %c wparam: %04X vk: %02X scan: %02X %c %s %s flags: %s\n",
                 event.time, 
                 (selfInjected ? 'I' : (event.Injected() ? 'i' : ' ')),
                 wParam, event.vkCode, event.scanCode,
+                asciiChar,
                 (event.Up() ? " up" : " dn"), 
                 (event.Extended() ? " EX" : " ex"),
                 bitset<8>(event.flags).to_string().c_str());

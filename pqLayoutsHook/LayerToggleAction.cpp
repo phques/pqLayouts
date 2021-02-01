@@ -15,24 +15,35 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
-#include "Layer.h"
-#include "KeyMapping.h"
+#include "pch.h"
+#include "LayerToggleAction.h"
+#include "Keyboard.h"
 
 namespace KeyActions
 {
 
-class LayerAccessAction : public IKeyAction
+LayerToggleAction::LayerToggleAction(KeyDef keydef, Layer::Idx_t layerIdx) : keydef(keydef), layerIdx(layerIdx)
 {
-public:
-    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx);
-    virtual bool OnkeyDown(Keyboard*);
-    virtual bool OnkeyUp(Keyboard*);
-    virtual bool SkipDownRepeats(Keyboard*) const { return true; }
+}
 
-protected:
-    KeyDef keydef;
-    Layer::Idx_t layerIdx;
-};
+bool LayerToggleAction::OnkeyDown(Keyboard* kbd)
+{
+    const Layer* currLayer = kbd->CurrentLayer();
+
+    // switch between main and this layer
+    if (currLayer->LayerIdx() == layerIdx)
+        kbd->GotoMainLayer();
+    else
+        kbd->GotoLayer(layerIdx);
+
+    // eat access key
+    return true;
+}
+
+bool LayerToggleAction::OnkeyUp(Keyboard* kbd)
+{
+    // eat access key
+    return true;
+}
 
 }

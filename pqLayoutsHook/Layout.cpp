@@ -17,8 +17,11 @@
 
 #include "pch.h"
 #include "Layout.h"
-#include "LayerAccessACtion.h"
+#include "LayerAccessAction.h"
+#include "LayerToggleAction.h"
+#include "util.h"
 
+using namespace KeyActions;
 
 Layout::Layout() : currentLayer(nullptr)
 {
@@ -53,7 +56,7 @@ bool Layout::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 }
 
 
-bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey)
+bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle)
 {
     // find layer
     auto foundLayer = layersById.find(layerId);
@@ -64,7 +67,11 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey)
 
     // create key action object
     KeyValue accessKeyValue(accessKey.Vk(), accessKey.Scancode());
-    IKeyAction* actionTo = new LayerAccessAction(accessKey, layer->LayerIdx());
+    IKeyAction* actionTo;
+    if (isToggle)
+        actionTo = new LayerToggleAction(accessKey, layer->LayerIdx());
+    else
+        actionTo = new LayerAccessAction(accessKey, layer->LayerIdx());
 
     // and register mapping on main layer
     // AND on the layer itself, so we can return on access key UP
@@ -83,6 +90,8 @@ bool Layout::GotoMainLayer()
 {
     // main layer always 1st
     currentLayer = layers[0];
+    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
+
     return true;
 }
 
@@ -92,6 +101,8 @@ bool Layout::GotoLayer(Layer::Idx_t layerIdx)
         return false;
 
     currentLayer = layers[layerIdx];
+    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
+
     return true;
 }
 
@@ -102,6 +113,8 @@ bool Layout::GotoLayer(const Layer::Id_t& layerId)
         return false;
 
     currentLayer = foundit->second;
+    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
+
     return true;
 }
 
@@ -129,3 +142,10 @@ bool Layout::AddCtrlMapping(KeyValue from, KeyValue to)
     return currentLayer->AddMapping(from, to, true);
 }
 
+bool Layout::AddStickyMapping(KeyValue vk)
+{
+    if (currentLayer == nullptr)
+        return false;
+
+    return currentLayer->AddStickyMapping(vk);
+}

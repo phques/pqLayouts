@@ -18,7 +18,10 @@
 #include "pch.h"
 #include "KeyMapping.h"
 
-KeyMapping::KeyMapping()
+using namespace KeyActions;
+
+
+KeyMapping::KeyMapping() : mapping(nullptr)
 {
 }
 

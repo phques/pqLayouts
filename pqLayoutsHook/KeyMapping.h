@@ -23,15 +23,26 @@
 
 class Keyboard;
 
+namespace KeyActions
+{
+
+// action classes interface
 class IKeyAction
 {
 public:
     virtual ~IKeyAction() {}
 
     // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
-    PQHOOK_API virtual bool OnkeyDown(Keyboard*) = 0;
-    PQHOOK_API virtual bool OnkeyUp(Keyboard*) = 0;
+    virtual bool OnkeyDown(Keyboard*) = 0;
+    virtual bool OnkeyUp(Keyboard*) = 0;
+
+    // return true to automatically skip repeats of key down
+    virtual bool SkipDownRepeats(Keyboard*) const = 0;
 };
+
+
+}  // namespace KeyActions
+
 
 //------------
 
@@ -40,14 +51,14 @@ class KeyMapping
 {
 public:
     KeyMapping();
-    KeyMapping(KeyDef key, IKeyAction* mapping);
+    KeyMapping(KeyDef key, KeyActions::IKeyAction* mapping);
 
     const KeyDef& Key() const { return key; }
-    IKeyAction* Mapping() const { return mapping; }
+    KeyActions::IKeyAction* Mapping() const { return mapping; }
 
 private:
     KeyDef key;        // from
-    IKeyAction* mapping;    // to
+    KeyActions::IKeyAction* mapping;    // to
 };
 
 //------------

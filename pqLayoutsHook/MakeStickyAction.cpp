@@ -15,24 +15,33 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
-#include "Layer.h"
-#include "KeyMapping.h"
+#include "pch.h"
+#include "MakeStickyAction.h"
+#include "Keyboard.h"
+
 
 namespace KeyActions
 {
 
-class LayerAccessAction : public IKeyAction
+MakeStickyAction::MakeStickyAction(VeeKee vk) : vk(vk)
 {
-public:
-    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx);
-    virtual bool OnkeyDown(Keyboard*);
-    virtual bool OnkeyUp(Keyboard*);
-    virtual bool SkipDownRepeats(Keyboard*) const { return true; }
+}
 
-protected:
-    KeyDef keydef;
-    Layer::Idx_t layerIdx;
-};
+bool MakeStickyAction::OnkeyDown(Keyboard* kbd)
+{
+    kbd->MakeSticky(vk);
+
+    // take note of down original input / mapped keys 
+    kbd->TrackMappedKeyDown(vk, this, true);
+
+    return true;
+}
+
+bool MakeStickyAction::OnkeyUp(Keyboard* kbd)
+{
+    kbd->MakeSticky(0);
+    return true;
+}
+
 
 }

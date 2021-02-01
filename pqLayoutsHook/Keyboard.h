@@ -33,15 +33,17 @@ public:
     void SetMainWndMsg(int mainWndMsg);
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle);
 
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
+    const Layer* CurrentLayer() const;
 
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddCtrlMapping(KeyValue vkFrom, KeyValue vkTo);
+    bool AddStickyMapping(KeyValue vk);
 
     bool OnKeyEvent(KbdHookEvent&, DWORD injectedFromMeValue);
     // dbg
@@ -51,24 +53,26 @@ public:
 
     bool SendVk(const KeyValue& key, bool down);
     void TrackModifiers(VeeKee vk, bool down);
-    void TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down);
+    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool down);
 
     bool ToggleSuspend();
     bool Suspended();
     void SuspendKey(VeeKee);
     void QuitKey(VeeKee);
+    void MakeSticky(VeeKee);
+    VeeKee MakeSticky() const;
 
 protected:
 
-    void MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down);
-    IKeyAction* MappedKeyDown(VeeKee vk) const;
+    void MappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool down);
+    KeyActions::IKeyAction* MappedKeyDown(VeeKee vk) const;
 
     void ModifierDown(VeeKee vk, bool down);
     bool ModifierDown(VeeKee vk) const;
 
     bool ShiftDown() const;
 
-    IKeyAction* GetMappingValue(KbdHookEvent& event);
+    KeyActions::IKeyAction* GetMappingValue(KbdHookEvent& event);
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue);
 
@@ -78,13 +82,14 @@ protected:
 
 private:
     // first=pressed *physical* key, second=what we do on that key(ie mapped value)
-    std::map<VeeKee, IKeyAction*> downMappedKeys;
+    std::map<VeeKee, KeyActions::IKeyAction*> downMappedKeys;
 
     // at a logical level, whatever the source
     VeeKeeSet downModifiers; 
 
     Layout layout;
     bool suspended;
+    VeeKee makeSticky;
     VeeKee suspendKey;
     VeeKee quitKey;
 
@@ -92,6 +97,7 @@ private:
     HWND hMainWindow;
     int mainWndMsg;
     VeeKeeSet isprint;
+
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
 };

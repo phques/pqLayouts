@@ -19,6 +19,9 @@
 #include "LayerAccessAction.h"
 #include "Keyboard.h"
 
+namespace KeyActions
+{
+
 LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx) : keydef(keydef), layerIdx(layerIdx)
 {
 }
@@ -40,4 +43,6 @@ bool LayerAccessAction::OnkeyUp(Keyboard* kbd)
 
     // eat access key
     return true;
+}
+
 }

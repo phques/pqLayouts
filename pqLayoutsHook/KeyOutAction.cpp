@@ -19,6 +19,8 @@
 #include "KeyOutAction.h"
 #include "Keyboard.h"
 
+namespace KeyActions
+{
 
 KeyOutAction::KeyOutAction(KeyDef inKey, KeyValue outKey) : outKey(outKey), inKey(inKey)
 {
@@ -26,36 +28,12 @@ KeyOutAction::KeyOutAction(KeyDef inKey, KeyValue outKey) : outKey(outKey), inKe
 
 bool KeyOutAction::OnkeyDown(Keyboard* kbd)
 {
-    bool ret = kbd->SendVk(outKey, true);
-    if (ret)
-    {
-        // take note of down original input / mapped keys 
-        kbd->TrackMappedKeyDown(inKey.Vk(), this, true);
-
-        // and modifiers
-        kbd->TrackModifiers(outKey.Vk(), true);
-    }
-
-    return ret;
+    return kbd->SendVk(outKey, true);
 }
 
 bool KeyOutAction::OnkeyUp(Keyboard* kbd)
 {
-    // no output on UP for ctrl-x type keys
-    if (outKey.Control())
-    {
-        return true; // eat input key (control-xx map
-    }
-    
-    bool ret = kbd->SendVk(outKey, false);
-    if (ret)
-    {
-        // take note of down *original input* / mapped keys 
-        kbd->TrackMappedKeyDown(inKey.Vk(), this, false);
+    return kbd->SendVk(outKey, false);
+}
 
-        // and modifiers
-        kbd->TrackModifiers(outKey.Vk(), false);
-    }
-
-    return ret;
 }

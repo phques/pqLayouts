@@ -138,7 +138,7 @@ namespace
         if (HookKbd::AddLayer("alt", layerIdx))
         {
             KeyDef accessKey(VK_SPACE,0);
-            HookKbd::SetLayerAccessKey("alt", accessKey);
+            HookKbd::SetLayerAccessKey("alt", accessKey, false);
 
             HookKbd::GotoLayer(layerIdx);
                 addMapping('a', '?');
@@ -254,7 +254,7 @@ namespace
         // will set layerIdx
         if (HookKbd::AddLayer("alt", layerIdx))
         {
-            HookKbd::SetLayerAccessKey("alt", KeyDef(VK_SPACE,0));
+            HookKbd::SetLayerAccessKey("alt", KeyDef(VK_SPACE,0), false);
 
             HookKbd::GotoLayer(layerIdx);
             {
@@ -303,6 +303,10 @@ namespace
                 addMapping(charToVk['n'],  true, VK_NEXT,  true);
             }
             HookKbd::GotoMainLayer();
+
+            //test, \ is the 'make sticky' key
+            KeyValue makeSticky(charToVk['\\'], 0, false);
+            HookKbd::AddStickyMapping(makeSticky);
         }
 
         /*todo
@@ -522,7 +526,6 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
         DeleteIcon(hDlg);
         HookKbd::UnhookKbdLL();
-        //refreshIconState(hDlg, true);
     }
 
     return 0;

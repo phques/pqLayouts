@@ -144,15 +144,19 @@ PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to)
     return theKbd.AddCtrlMapping(from, to);
 }
 
+PQHOOK_API bool AddStickyMapping(KeyValue vk)
+{
+    return theKbd.AddStickyMapping(vk);
+}
 
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)
 {
     return theKbd.AddLayer(layerId, newLayerIdx);
 }
 
-PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef keydef)
+PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef keydef, bool isToggle)
 {
-    return theKbd.SetLayerAccessKey(layerId, keydef);
+    return theKbd.SetLayerAccessKey(layerId, keydef, isToggle);
 }
 
 

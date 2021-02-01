@@ -28,15 +28,17 @@ public:
     ~Layout();
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle);
 
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
+    const Layer* CurrentLayer() const { return currentLayer; }
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddCtrlMapping(KeyValue from, KeyValue to);
+    bool AddStickyMapping(KeyValue vk);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;

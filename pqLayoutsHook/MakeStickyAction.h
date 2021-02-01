@@ -16,23 +16,24 @@
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-#include "Layer.h"
 #include "KeyMapping.h"
 
 namespace KeyActions
 {
 
-class LayerAccessAction : public IKeyAction
+// class that output a value (another key) for a mapped key
+class MakeStickyAction : public IKeyAction
 {
 public:
-    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx);
+    MakeStickyAction(VeeKee vk);
+
+    // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
     virtual bool OnkeyDown(Keyboard*);
     virtual bool OnkeyUp(Keyboard*);
     virtual bool SkipDownRepeats(Keyboard*) const { return true; }
 
 protected:
-    KeyDef keydef;
-    Layer::Idx_t layerIdx;
+    VeeKee vk;
 };
 
 }
