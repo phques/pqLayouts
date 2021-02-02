@@ -173,10 +173,20 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
         else if (cmd == "addlayer")
         {
-            if (!addLayer(stringTokener))
+            if (!addLayer(stringTokener, false))
                 return false;
         }
-        else
+        else if (cmd == "addtogglelayer")
+        {
+            if (!addLayer(stringTokener, true))
+                return false;
+        }
+        else if (cmd == "stickyer")
+        {
+            if (!setMakeSticky(stringTokener))
+                return false;
+        }
+        else 
         {
             std::cerr << "expecting a command, line " << lineNo << std::endl;
             return false;
@@ -250,7 +260,7 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
 }
 
 
-bool LoLevelKbdFile::addLayer(StringTokener& tokener)
+bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool isToggle)
 {
     // read layer name
     if (tokener.eof()) {
@@ -280,7 +290,7 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener)
         return false;
 
     // set access key
-    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0), false))
+    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0), isToggle))
     {
         std::cerr << "failed to set acccess key for layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;
@@ -296,3 +306,14 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener)
     return true;
 }
 
+bool LoLevelKbdFile::setMakeSticky(StringTokener& tokener)
+{
+    // read makeSticky key
+    KeyParser makeSticky(tokener, "make sticky key");
+    if (!makeSticky())
+        return false;
+
+    // assign it
+    KeyValue honey(makeSticky.vk, 0, false);
+    return HookKbd::AddStickyMapping(honey);
+}

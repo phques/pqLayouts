@@ -152,3 +152,31 @@ K2K u   end +end
 K2K y   pgup +pgup
 K2K n   pgdn +pgdn
 
+! 'sticky maker'
+stickyer \
+
+! ------- numpad layer  --------
+
+addtogglelayer numpad rctrl
+
+k2k s -
+k2k d +
+k2k f .
+k2k c ,
+K2K v cr +cr
+
+k2k i 7
+k2k o 8
+k2k p 9
+
+k2k k 4
+k2k l 5
+k2k ; 6
+k2k ' 0
+
+k2k , 1
+k2k . 2
+k2k / 3
+
+K2K [ bs  del
+k2k ] del

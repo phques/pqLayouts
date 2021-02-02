@@ -74,18 +74,20 @@ K2K q   tab +tab
 K2K [   bs  del
 k2k ]   del
 
+! movement keys
 K2K u   right +right
 K2K h   left +left
 K2K y   up +up
 K2K n   down +down
 
 ! copy / paste
-
 k2ck x  c
 k2ck b  v
 k2ck t  x
 k2ck `  z
 
+! 'sticky maker'
+stickyer rctrl
 
 ! ------- alt layer --------
 
@@ -146,4 +148,83 @@ K2K h   home +home
 K2K u   end +end
 K2K y   pgup +pgup
 K2K n   pgdn +pgdn
+
+
+! ------- numpad layer  --------
+
+addtogglelayer numpad \
+
+k2k s -
+k2k d +
+k2k f .
+k2k c ,
+K2K v cr +cr
+
+k2k i 7
+k2k o 8
+k2k p 9
+
+k2k k 4
+k2k l 5
+k2k ; 6
+k2k ' 0
+
+k2k , 1
+k2k . 2
+k2k / 3
+
+K2K [ bs  del
+k2k ] del
+
+! -------  --------
+
+!addtogglelayer edit ralt
+addlayer edit ralt
+
+!stickyer rctrl
+!
+!K2K [ bs  del
+!k2k ] del
+!
+!K2K  i home  +home
+!K2K  o up    +up
+!K2K  p end   +end
+!
+!K2K  k left  +left
+!K2K  l down  +down
+!K2K  ; right +right
+!
+!k2ck d lctrl
+!k2ck f lshift
+!
+!k2ck z c
+!k2ck x x
+!k2ck c v
+!K2CK v cr +cr
+!k2ck b z
+
+
+
+stickyer rctrl
+
+k2k q del
+
+K2K  w home  +home
+K2K  e up    +up
+K2K  r end   +end
+K2K  t pgup  +pgup
+
+K2K  s left  +left
+K2K  d down  +down
+K2K  f right +right
+K2K  g pgdn  +pgdn
+
+k2ck k lshift
+k2ck l lctrl
+
+k2ck z c
+k2ck x x
+k2ck c v
+K2K  v cr +cr
+k2ck b z
 
