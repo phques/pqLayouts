@@ -81,10 +81,10 @@ K2K y   up +up
 K2K n   down +down
 
 ! copy / paste
-k2ck x  c
-k2ck b  v
-k2ck t  x
-k2ck `  z
+K2CK x  c c
+K2CK b  v v
+K2CK t  x x
+K2CK `  z y
 
 ! 'sticky maker'
 stickyer rctrl
@@ -176,6 +176,15 @@ k2k / 3
 K2K [ bs  del
 k2k ] del
 
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+
 ! -------  --------
 
 !addtogglelayer edit ralt
@@ -207,7 +216,7 @@ addlayer edit ralt
 
 stickyer rctrl
 
-k2k q del
+K2K q bs  del
 
 K2K  w home  +home
 K2K  e up    +up
@@ -219,12 +228,26 @@ K2K  d down  +down
 K2K  f right +right
 K2K  g pgdn  +pgdn
 
-k2ck k lshift
-k2ck l lctrl
+k2k k lshift
+K2K l lctrl +lctrl 
 
-k2ck z c
-k2ck x x
-k2ck c v
+K2CK z  c c
+K2CK x  x x 
+K2CK c  v v
+K2CK b  z y
+K2CK `  z y
+
 K2K  v cr +cr
-k2ck b z
+
+K2CK o left +left
+K2CK p right +right
+
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
 

@@ -171,6 +171,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!doK2kWithShCmd(stringTokener))
                 return false;
         }
+        else if (cmd == "K2CK")
+        {
+            if (!doK2kcWithShCmd(stringTokener))
+                return false;
+        }
         else if (cmd == "addlayer")
         {
             if (!addLayer(stringTokener, false))
@@ -259,6 +264,37 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
     return true;
 }
 
+bool LoLevelKbdFile::doK2kcWithShCmd(StringTokener& tokener)
+{
+    KeyParser keyFrom(tokener, "fromKey");
+    KeyParser keyTo(tokener, "toKey");
+    KeyParser keyToSh(tokener, "toKeyShift");
+
+    if (!keyFrom() || !keyTo() || !keyToSh())
+        return false;
+
+    // from to, non shifted layer
+    {
+        KeyValue kfrom(keyFrom.vk, 0, false);
+        KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+
+        // call DLL hook to add a new mapping
+        if (!HookKbd::AddCtrlMapping(kfrom, kto))
+            return false;
+    }
+
+    // from to, shifted layer
+    {
+        KeyValue kfrom(keyFrom.vk, 0, true);
+        KeyValue kto(keyToSh.vk, 0, keyToSh.hasShiftPrefix || keyToSh.isShifted);
+
+        // call DLL hook to add a new mapping
+        if (!HookKbd::AddCtrlMapping(kfrom, kto))
+            return false;
+    }
+
+    return true;
+}
 
 bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool isToggle)
 {
