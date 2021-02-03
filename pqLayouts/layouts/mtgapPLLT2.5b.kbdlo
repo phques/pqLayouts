@@ -90,6 +90,9 @@ k2ck +t  x
 k2ck  b  v
 k2ck  `  z
 
+! 'sticky maker'
+stickyer rctrl
+
 
 ! ------- alt layer --------
 
@@ -155,9 +158,10 @@ K2K n   pgdn +pgdn
 ! 'sticky maker'
 stickyer \
 
+
 ! ------- numpad layer  --------
 
-addtogglelayer numpad rctrl
+addtogglelayer numpad \
 
 k2k s -
 k2k d +
@@ -180,3 +184,79 @@ k2k / 3
 
 K2K [ bs  del
 k2k ] del
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+
+! -------  --------
+
+!addtogglelayer edit ralt
+addlayer edit ralt
+
+!stickyer rctrl
+!
+!K2K [ bs  del
+!k2k ] del
+!
+!K2K  i home  +home
+!K2K  o up    +up
+!K2K  p end   +end
+!
+!K2K  k left  +left
+!K2K  l down  +down
+!K2K  ; right +right
+!
+!k2ck d lctrl
+!k2ck f lshift
+!
+!k2ck z c
+!k2ck x x
+!k2ck c v
+!K2CK v cr +cr
+!k2ck b z
+
+
+
+stickyer rctrl
+
+K2K q bs  del
+
+K2K  w home  +home
+K2K  e up    +up
+K2K  r end   +end
+K2K  t pgup  +pgup
+
+K2K  s left  +left
+K2K  d down  +down
+K2K  f right +right
+K2K  g pgdn  +pgdn
+
+k2k k lshift
+K2K l lctrl +lctrl 
+
+K2CK z  c c
+K2CK x  x x 
+K2CK c  v v
+K2CK b  z y
+K2CK `  z y
+
+K2K  v cr +cr
+
+K2CK o left +left
+K2CK p right +right
+
+
+! shift on caps & enter
+K2K caps  lshift caps
+K2K enter rshift caps
+
+! ctrl on shift
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
