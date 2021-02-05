@@ -217,6 +217,7 @@ addlayer edit ralt
 stickyer rctrl
 
 K2K q bs  del
+K2K [ bs  del
 
 K2K  w home  +home
 K2K  e up    +up

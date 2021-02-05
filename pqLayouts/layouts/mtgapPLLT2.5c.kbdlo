@@ -1,5 +1,8 @@
-! mtgapPLLT2.5b, going PLLT with MTGAP, wid mode
+! mtgapPLLT2.5c, going PLLT with MTGAP, wid mode
 ! moved P to mid index, bring ,. etc.
+! SWAP o-u e-SP, so move SP to middle. Note that E-sp is the highest bigram though
+! Ok, go all the way, swap A-E too !! ;-)
+! add an extra D besides G for gd dg words
 ! manually placed syms / modified alt layer
 
 
@@ -8,12 +11,12 @@
 !  a s d f g    j k l ; '
 !    z x c v    m , . / 
 
-!     i  o  u         g  r  h
-!  y  a  e SP  p   m  t  s  n  c
+!     i  o  u      d  g  r  h
+!  y  e  SP a  p   m  t  s  n  c
 !     .  ;  , \n   f  d  l  b
 !
-!     I  O  U         G  R  H
-!  Y  A  E  "  P   M  T  S  N  C
+!     I  O  U      D  G  R  H
+!  Y  E  "  A  P   M  T  S  N  C
 !     :  _  ; \n   F  D  L  B
 !
 !    >  '  !         q  =  x
@@ -28,13 +31,14 @@
 K2K w  i  I 
 K2K e  o  O 
 K2K r  u  U 
+K2K u  d  D
 K2K i  g  G 
 K2K o  r  R 
 K2K p  h  H 
 K2K a  y  Y 
-K2K s  a  A 
-K2K d  e  E 
-K2K f  sp " 
+K2K s  e  E 
+K2K d  sp " 
+K2K f  a  A 
 K2K g  p  P  
 K2K j  m  M 
 K2K k  t  T 
@@ -78,8 +82,9 @@ K2K q   tab +tab
 K2K [   bs  del
 k2k ]   del
 
-K2K u   right +right
-K2K h   left +left
+!oops using U for extra D now ...
+!K2K u   right +right
+!K2K h   left +left
 K2K y   up +up
 K2K n   down +down
 
