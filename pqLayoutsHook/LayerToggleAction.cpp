@@ -26,7 +26,7 @@ LayerToggleAction::LayerToggleAction(KeyDef keydef, Layer::Idx_t layerIdx) : key
 {
 }
 
-bool LayerToggleAction::OnkeyDown(Keyboard* kbd)
+bool LayerToggleAction::OnKeyDown(Keyboard* kbd)
 {
     const Layer* currLayer = kbd->CurrentLayer();
 
@@ -40,7 +40,7 @@ bool LayerToggleAction::OnkeyDown(Keyboard* kbd)
     return true;
 }
 
-bool LayerToggleAction::OnkeyUp(Keyboard* kbd)
+bool LayerToggleAction::OnKeyUp(Keyboard* kbd, bool isTap)
 {
     // eat access key
     return true;

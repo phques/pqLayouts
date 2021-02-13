@@ -186,10 +186,12 @@
     <None Include="layouts\PLLT1xe.kbd-" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\VS2019 Image Library\vswin2019\LayerDiagram\LayerDiagram_16x.png" />
     <Image Include="icon1.ico" />
     <Image Include="icon2.ico" />
+    <Image Include="icon3.ico" />
     <Image Include="layouts\PLLTx1e.png" />
+    <Image Include="pqLayouts-qr.ico" />
+    <Image Include="pqLayouts-qr.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="layouts\PLLTx1e.txt" />

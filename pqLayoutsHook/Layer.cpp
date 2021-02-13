@@ -61,7 +61,7 @@ bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
 
 bool Layer::AddStickyMapping(KeyValue vk)
 {
-    Printf("Add sticky mapping %02X\n", vk.Vk());
+    Printf("Add sticky mapping 0x%02X\n", vk.Vk());
 
     IKeyAction* action = new MakeStickyAction(vk.Vk());
 

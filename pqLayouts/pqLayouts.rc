@@ -77,6 +77,8 @@ IDI_ICON1               ICON                    "icon1.ico"
 
 IDI_ICON2               ICON                    "icon2.ico"
 
+IDI_ICON_APP            ICON                    "pqLayouts-qr.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

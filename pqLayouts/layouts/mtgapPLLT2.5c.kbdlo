@@ -80,7 +80,7 @@ K2K rshift  rctrl +rctrl
 K2K tab esc +esc
 K2K q   tab +tab
 K2K [   bs  del
-k2k ]   del
+K2K ]   del +del
 
 !oops using U for extra D now ...
 !K2K u   right +right
@@ -96,12 +96,12 @@ k2ck  b  v
 K2CK  `  z y
 
 ! 'sticky maker'
-stickyer rctrl
+! stickyer rctrl
 
 
 ! ------- alt layer --------
 
-addlayer alt space
+addlayertap alt space
 
 ! todo syms
 K2K w  > ^  
@@ -161,12 +161,12 @@ K2K y   pgup +pgup
 K2K n   pgdn +pgdn
 
 ! 'sticky maker'
-stickyer \
+! stickyer rctrl
 
 
 ! ------- numpad layer  --------
 
-addtogglelayer numpad \
+addlayertap numpad \
 
 k2k s -
 k2k d +
@@ -202,9 +202,9 @@ K2K rshift  rctrl +rctrl
 ! -------  --------
 
 !addtogglelayer edit ralt
-addlayer edit ralt
+addlayertap edit ralt
 
-!stickyer rctrl
+!! stickyer rctrl
 !
 !K2K [ bs  del
 !k2k ] del
@@ -228,7 +228,7 @@ addlayer edit ralt
 
 
 
-stickyer rctrl
+! stickyer rctrl
 
 K2K q bs  del
 K2K [ bs  del

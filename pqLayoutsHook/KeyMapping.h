@@ -26,18 +26,24 @@ class Keyboard;
 namespace KeyActions
 {
 
-// action classes interface
+// action classes interface / base class
 class IKeyAction
 {
+    friend class Keyboard;
+
 public:
+    IKeyAction() : downTimeTick(0) {}
     virtual ~IKeyAction() {}
 
     // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
-    virtual bool OnkeyDown(Keyboard*) = 0;
-    virtual bool OnkeyUp(Keyboard*) = 0;
+    virtual bool OnKeyDown(Keyboard*) = 0;
+    virtual bool OnKeyUp(Keyboard*, bool isTap) = 0;
 
     // return true to automatically skip repeats of key down
     virtual bool SkipDownRepeats(Keyboard*) const = 0;
+
+protected:
+    DWORD downTimeTick; // timetick at which the key was pressed
 };
 
 

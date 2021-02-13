@@ -3,7 +3,8 @@
 // Used by pqLayouts.rc
 //
 #define IDD_DIALOG1                     101
-#define IDI_ICON1                       106
+#define IDI_ICON_APP                    106
+#define IDI_ICON1                       107
 #define IDI_ICON2                       108
 #define IDR_MENU1                       109
 #define IDC_EDIT1                       1001
@@ -15,7 +16,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        110
+#define _APS_NEXT_RESOURCE_VALUE        113
 #define _APS_NEXT_COMMAND_VALUE         40003
 #define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           101

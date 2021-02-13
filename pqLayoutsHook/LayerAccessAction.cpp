@@ -22,12 +22,20 @@
 namespace KeyActions
 {
 
-LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx) : keydef(keydef), layerIdx(layerIdx)
+LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx, bool toggleOnTap) :
+    keydef(keydef),
+    layerIdx(layerIdx),
+    layerIdxOnKeypress(0),
+    toggleOnTap(toggleOnTap)
 {
 }
 
-bool LayerAccessAction::OnkeyDown(Keyboard* kbd)
+bool LayerAccessAction::OnKeyDown(Keyboard* kbd)
 {
+    // save which layer is active on initial keypress
+    const Layer* currLayer = kbd->CurrentLayer();
+    layerIdxOnKeypress = currLayer->LayerIdx();
+
     // going into a new layer
     kbd->GotoLayer(layerIdx);
 
@@ -35,11 +43,26 @@ bool LayerAccessAction::OnkeyDown(Keyboard* kbd)
     return true;
 }
 
-bool LayerAccessAction::OnkeyUp(Keyboard* kbd)
+bool LayerAccessAction::OnKeyUp(Keyboard* kbd, bool isTap)
 {
-    // coming out of the layer
-    // return to main layer
-    kbd->GotoMainLayer();
+    Printf("layer action, toggleOnTap %d isTap %d\n", toggleOnTap, isTap);
+
+    if (toggleOnTap && isTap)
+    {
+        Printf("layer action, toggle\n");
+
+        // switch between main and this layer
+        if (layerIdxOnKeypress == layerIdx)
+            kbd->GotoMainLayer();
+        else
+            kbd->GotoLayer(layerIdx);
+    }
+    else
+    {
+        // coming out of the layer
+        // return to main layer
+        kbd->GotoMainLayer();
+    }
 
     // eat access key
     return true;

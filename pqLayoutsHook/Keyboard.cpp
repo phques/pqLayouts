@@ -50,7 +50,8 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     suspended(false), 
     makeSticky(0),
     suspendKey(0), 
-    quitKey(0)
+    quitKey(0),
+    lastKeypressTick(0)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -75,9 +76,9 @@ bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
     return layout.AddLayer(layerId, newLayerIdx);
 }
 
-bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle)
+bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool canTap)
 {
-    return layout.SetLayerAccessKey(layerId, accessKey, isToggle);
+    return layout.SetLayerAccessKey(layerId, accessKey, canTap);
 }
 
 bool Keyboard::GotoMainLayer()
@@ -250,7 +251,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
             Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
             ToggleSuspend();
         }
-        return true; // 'edat' this key
+        return true; // 'eat' this key
     }
 
     // is it the quit key ?
@@ -267,6 +268,11 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
      // let keys through keys while suspended
     if (suspended)
         return false;
+
+    // save time tick of last key press
+    if (event.Down())
+        this->lastKeypressTick = GetTickCount();
+
 
     //-------------
 
@@ -303,16 +309,22 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
             }
         }
 
-        // register up/down input keys (dont re-register key already down)
+        // set time of initial down key press
+        if (!wasDown && event.Down())
+            action->downTimeTick = this->lastKeypressTick;
+
+        // register up/down input keys (don't re-register key already down)
         if (!(wasDown && event.Down()))
             TrackMappedKeyDown(event.vkCode, action, event.Down());
 
         // do the action for the key
+        const bool isTap(action->downTimeTick == this->lastKeypressTick);
+
         bool ret = false;
         if (event.Down())
-            ret = action->OnkeyDown(this);
+            ret = action->OnKeyDown(this);
         else
-            ret =  action->OnkeyUp(this);
+            ret =  action->OnKeyUp(this, isTap);
 
         return ret;
     }

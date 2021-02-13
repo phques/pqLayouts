@@ -85,7 +85,9 @@ private:
     std::map<VeeKee, KeyActions::IKeyAction*> downMappedKeys;
 
     // at a logical level, whatever the source
-    VeeKeeSet downModifiers; 
+    VeeKeeSet downModifiers;
+
+    DWORD lastKeypressTick; // time tick of the last key press event
 
     Layout layout;
     bool suspended;

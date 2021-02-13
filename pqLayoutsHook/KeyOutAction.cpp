@@ -26,12 +26,12 @@ KeyOutAction::KeyOutAction(KeyDef inKey, KeyValue outKey) : outKey(outKey), inKe
 {
 }
 
-bool KeyOutAction::OnkeyDown(Keyboard* kbd)
+bool KeyOutAction::OnKeyDown(Keyboard* kbd)
 {
     return kbd->SendVk(outKey, true);
 }
 
-bool KeyOutAction::OnkeyUp(Keyboard* kbd)
+bool KeyOutAction::OnKeyUp(Keyboard* kbd, bool isTap)
 {
     return kbd->SendVk(outKey, false);
 }

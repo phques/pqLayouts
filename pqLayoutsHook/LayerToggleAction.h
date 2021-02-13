@@ -26,8 +26,8 @@ class LayerToggleAction : public IKeyAction
 {
 public:
     LayerToggleAction(KeyDef keydef, Layer::Idx_t layerIdx);
-    virtual bool OnkeyDown(Keyboard*);
-    virtual bool OnkeyUp(Keyboard*);
+    virtual bool OnKeyDown(Keyboard*);
+    virtual bool OnKeyUp(Keyboard*, bool isTap);
     virtual bool SkipDownRepeats(Keyboard*) const { return true; }
 
 protected:

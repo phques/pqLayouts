@@ -76,7 +76,7 @@ private:
     bool doK2kWithShCmd(StringTokener& stringTokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
-    bool addLayer(StringTokener& tokener, bool isToggle);
+    bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
 
 private:
