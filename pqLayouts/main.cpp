@@ -19,7 +19,9 @@
 #include "stdafx.h"
 #include "pqLayoutsHook.h"
 #include "LoLevelKbdFile.h"
+#include "KbdDisplayWnd.h"
 #include "resource.h"
+#include "../StaticLib1/util.h"
 
 // we need commctrl v6 for LoadIconMetric()
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -29,6 +31,7 @@ namespace
 {
     const TCHAR* const windowTitle = TEXT("PQLayouts");
     HINSTANCE hAppInstance = NULL;
+    KbdDisplayWnd* helpWnd = nullptr;
 
     enum WndMessages
     {
@@ -398,6 +401,73 @@ namespace
 } // namespace
 
 
+bool OnAppNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
+{
+    switch (LOWORD(lParam))
+    {
+    case NIN_SELECT:
+        // user clicked our taskbar icon, toggle suspended status
+        HookKbd::ToggleSuspend();
+        return true;
+
+    case WM_LBUTTONDBLCLK:
+        //printf("WM_LBUTTONDBLCLK\n");
+        break;
+
+    case WM_CONTEXTMENU:
+        {
+            // open context menu
+            POINT const pt = { LOWORD(wParam), HIWORD(wParam) };
+            ShowContextMenu(hDlg, pt);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool OnCommand(HWND hDlg, WPARAM wParam)
+{
+    switch (LOWORD(wParam))
+    {
+    case ID_POPUP_TOGGLESUSPEND:
+    case IDC_BUTTON_SUSPEND:
+        HookKbd::ToggleSuspend();
+        return true;
+
+    case ID_POPUP_EXIT:
+    case IDOK:
+    case IDCANCEL:
+        SendMessage(hDlg, WM_CLOSE, 0, 0);
+        return true;
+    }
+    return false;
+}
+
+void OnHookNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
+{
+    const auto notif = static_cast<HookKbd::Notif>(wParam);
+
+    switch (notif)
+    {
+    case HookKbd::SuspendStateUpdated:
+    {
+        // update our icon (for enabled/disabled status)
+        const bool suspended = (lParam == 1 ? true : false);
+
+        Printf("main, notif SuspendStateUpdated %d\n", lParam);
+        SetIcon(hDlg, !suspended);
+        break;
+    }
+    case HookKbd::LayerChanged:
+    {
+        Printf("main, notif LayerChanged %d\n", lParam);
+
+        const auto imageView = HookKbd::GetImageView();
+        helpWnd->SetImageView(imageView);
+        break;
+    }
+    }
+}
 
 INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 {
@@ -408,68 +478,50 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
         SetWindowText(hDlg, windowTitle);
         return TRUE;
 
-    case WM_CLOSE: 
+    case WM_CLOSE:
         DestroyWindow(hDlg);
-        return TRUE; 
+        return TRUE;
 
     case WM_DESTROY:
         PostQuitMessage(0);
         return TRUE;
 
-    // taskbar icon notif
+        // taskbar icon notif
     case WMAPP_NOTIFYCALLBACK:
-    {
-        switch (LOWORD(lParam))
-        {
-        case NIN_SELECT:
-            // user clicked our taskbar icon, toggle suspended status
-            HookKbd::ToggleSuspend();
+        if (OnAppNotify(hDlg, wParam, lParam)) 
             return TRUE;
-
-        case WM_LBUTTONDBLCLK:
-            //printf("WM_LBUTTONDBLCLK\n");
-            break;
-
-        case WM_CONTEXTMENU:
-            {
-            // open context menu
-                POINT const pt = { LOWORD(wParam), HIWORD(wParam) };
-                ShowContextMenu(hDlg, pt);
-                return TRUE;
-            }
-        }
         break;
-    }
 
-    // hool dll notif
-    case WMAPP_KBDHOOK_NOTIF :
-    {
-        // update our icon (for enabled/disabled status)
-        SetIcon(hDlg, !HookKbd::Suspended());
+    // hook dll notification
+    case WMAPP_KBDHOOK_NOTIF:
+        OnHookNotify(hDlg, wParam, lParam);
         return TRUE;
-    }
 
     case WM_COMMAND:
-    {
-        switch (LOWORD(wParam)) 
-        {
-        case ID_POPUP_TOGGLESUSPEND:
-        case IDC_BUTTON_SUSPEND:
-            HookKbd::ToggleSuspend();
+        if (OnCommand(hDlg, wParam)) 
             return TRUE;
-
-        case ID_POPUP_EXIT:
-        case IDOK:
-        case IDCANCEL:
-            SendMessage(hDlg, WM_CLOSE, 0, 0);
-            return TRUE;
-        }
         break;
-    }
 
     }
 
     return FALSE;
+}
+
+void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd)
+{
+    const auto* pcImageFilename = HookKbd::GetImageFilename();
+    if (pcImageFilename != nullptr)
+    {
+        // Create a 'kbd image' window
+        helpWnd = new KbdDisplayWnd(hInstance);
+
+        // create a wide string from imageFilename
+        std::string basicString(pcImageFilename);
+        std::wstring wideString = std::wstring(basicString.begin(), basicString.end());
+
+        helpWnd->SetImageFile(wideString.c_str());
+        helpWnd->SetImageView(HookKbd::GetImageView());
+    }
 }
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR commandLine, int nCmdShow) 
@@ -477,7 +529,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     // Check if there is already an instance running.
     // mutex auto closed on exit
-    CreateMutex(0, 0, TEXT("_PqLayouts Main_"));
+    CreateMutex(nullptr, 0, TEXT("_PqLayouts Main_"));
     if (GetLastError() == ERROR_ALREADY_EXISTS) 
     {
         MessageBox(0, TEXT("Oooppps"), TEXT("Ooops"), MB_OK);
@@ -487,11 +539,10 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     hAppInstance = hInstance;
 
     // Create our dialog
-    HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, DialogProc);
+    HWND hDlg = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), nullptr, DialogProc);
     ShowWindow(hDlg, nCmdShow);
 
-    InitCharToVk();
-
+    // read keyboard definition
     bool ok = true;
     LoLevelKbdFile lokbdrdr;
 
@@ -502,20 +553,28 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
     if (ok)
     {
-        HookKbd::GotoMainLayer();
+        // initialize GDI+
+        ULONG_PTR gdiplusToken;
+        Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
 
+        // setup taskbar icon
         AddIcon(hDlg);
         SetIcon(hDlg, !HookKbd::Suspended());
 
+        // show the kbd help image if we have one
+        CreateKbdImageWindow(hInstance, helpWnd);
+
         // pause to suspend key mapping
         // ctrl-pause (VK_CANCEL) to stop/close the app
+        HookKbd::SetNotificationMessage(hDlg, WMAPP_KBDHOOK_NOTIF);
         HookKbd::SuspendKey(VK_PAUSE, VK_CANCEL);
 
-        HookKbd::HookKbdLL(hDlg, WMAPP_KBDHOOK_NOTIF);
+        HookKbd::HookKbdLL();
 
+        // message loop
         MSG msg;
-        int ret = 0;
-        while (ret = GetMessage(&msg, 0, 0, 0) > 0) 
+        while (GetMessage(&msg, nullptr, 0, 0) > 0)
         {
             if (!IsDialogMessage(hDlg, &msg)) 
             {
@@ -524,8 +583,12 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
             }
         }
 
+        // cleanup
+        if (helpWnd != nullptr)
+            helpWnd->ClearImage();
         DeleteIcon(hDlg);
         HookKbd::UnhookKbdLL();
+        Gdiplus::GdiplusShutdown(gdiplusToken);
     }
 
     return 0;

@@ -31,8 +31,8 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,190,123,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,244,123,50,14
-    EDITTEXT        IDC_EDIT1,14,7,268,108,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
     PUSHBUTTON      "Suspend",IDC_BUTTON_SUSPEND,7,123,50,14
+    EDITTEXT        IDC_EDIT1,7,7,287,110,ES_AUTOHSCROLL
 END
 
 
@@ -73,11 +73,11 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
+IDI_ICON_APP            ICON                    "pqLayouts-qr.ico"
+
 IDI_ICON1               ICON                    "icon1.ico"
 
 IDI_ICON2               ICON                    "icon2.ico"
-
-IDI_ICON_APP            ICON                    "pqLayouts-qr.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////

@@ -72,12 +72,14 @@ public:
     static const std::map<std::string, WORD>& KeyNames() { return keyNames; }
 
 private:
-    bool doK2kCmd(StringTokener& stringTokener);
-    bool doK2kWithShCmd(StringTokener& stringTokener);
+    bool doK2kCmd(StringTokener& tokener);
+    bool doK2kWithShCmd(StringTokener& tokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
+    bool setImageFile(StringTokener& tokener);
+    bool setImageView(StringTokener& tokener);
 
 private:
     static std::map<std::string, WORD> keyNames;

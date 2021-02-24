@@ -39,7 +39,7 @@ K2K l   t  T
 K2K ;   s  S
 K2K '   p  P
 K2K z   .  :
-K2K x  ;  _  
+K2K x   ;  _  
 K2K c   ,  ;
 K2K m   w  W
 K2K ,   h  H
@@ -83,10 +83,9 @@ K2K n   down +down
 
 ! copy / paste
 
-k2ck  t  c
-k2ck +t  x
-k2ck  b  v
-K2CK `  z y
+K2CK  t  c x
+K2CK  b  v v
+K2CK  `  z y
 
 ! 'sticky maker'
 ! stickyer rctrl
@@ -144,6 +143,11 @@ K2K enter rshift caps
 K2K lshift  lctrl +lctrl
 K2K rshift  rctrl +rctrl
 
+K2K tab esc +esc
+K2K q   tab +tab
+K2K [   bs  del
+K2K ]   del +del
+
 ! movement keys
 
 K2K h   home +home
@@ -178,8 +182,11 @@ k2k , 1
 k2k . 2
 k2k / 3
 
-K2K [ bs  del
-k2k ] del
+K2K tab esc +esc
+K2K q   tab +tab
+K2K [   bs  del
+K2K ]   del +del
+
 
 ! shift on caps & enter
 K2K caps  lshift caps
@@ -196,7 +203,8 @@ K2K rshift  rctrl +rctrl
 addlayertap edit ralt
 
 ! stickyer rctrl
-!
+
+! on right side
 !K2K [ bs  del
 !k2k ] del
 !
@@ -221,6 +229,7 @@ addlayertap edit ralt
 
 ! stickyer rctrl
 
+! on left side
 K2K q bs  del
 K2K [ bs  del
 k2k ] del

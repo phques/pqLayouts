@@ -18,6 +18,7 @@
 #include "pch.h"
 #include "Keyboard.h"
 #include "OutDbg.h"
+#include "pqLayoutsHook.h"
 
 using namespace KeyActions;
 
@@ -116,12 +117,25 @@ bool Keyboard::IsExtended(VeeKee vk)
     return extended.find(vk) != extended.end();
 }
 
+// update the up/down modifiers collection
+// notifies main app when shift goes from up/down ('layer change')
 void Keyboard::ModifierDown(VeeKee vk, bool down)
 {
+    const bool isShiftDownBefore = ShiftDown();
+
     if (down)
         downModifiers.insert(vk);
     else
         downModifiers.erase(vk); 
+
+    const bool isShiftDownAfter = ShiftDown();
+
+    // notify main app when shift goes from up/down ('layer change')
+    if (isShiftDownBefore != isShiftDownAfter)
+    {
+        const auto* const currentLayer = CurrentLayer();
+        Notify(HookKbd::LayerChanged, currentLayer->LayerIdx());
+    }
 }
 
 
@@ -150,7 +164,7 @@ bool Keyboard::ToggleSuspend()
     Printf("suspended = %d\n", (suspended ? 1 : 0));
 
     // notify main app window
-    PostMessage(this->hMainWindow, mainWndMsg, 0,0);
+    Notify(HookKbd::SuspendStateUpdated, (suspended ? 1 : 0));
 
     return currentSuspended;
 }
@@ -170,6 +184,35 @@ void Keyboard::MakeSticky(VeeKee makeSticky)
 VeeKee Keyboard::MakeSticky() const
 {
     return makeSticky;
+}
+
+void Keyboard::SetImageFilename(const char* filename)
+{
+    if (filename != nullptr)
+        imageFilename = filename;
+}
+
+const std::string& Keyboard::GetImageFilename() const
+{
+    return imageFilename;
+}
+
+void Keyboard::SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const
+{
+    layout.SetImageView(imageView, imageViewShift);
+}
+
+Layer::ImageView Keyboard::GetImageView() const
+{
+    const bool isShiftDown = ShiftDown();
+    return layout.GetImageView(isShiftDown);
+}
+
+void Keyboard::Notify(HookKbd::Notif notif, LPARAM lparam)
+{
+    // notify main app window
+    PostMessage(this->hMainWindow, mainWndMsg, notif, lparam);
+
 }
 
 void Keyboard::SuspendKey(VeeKee vk)
@@ -251,7 +294,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
             Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
             ToggleSuspend();
         }
-        return true; // 'eat' this key
+        return true; // 'edat' this key
     }
 
     // is it the quit key ?
@@ -270,8 +313,9 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
         return false;
 
     // save time tick of last key press
+    const DWORD tickCount = GetTickCount();
     if (event.Down())
-        this->lastKeypressTick = GetTickCount();
+        this->lastKeypressTick = tickCount;
 
 
     //-------------
@@ -279,7 +323,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
     // is this key currently down (mapped) ?
     // if so use that action
     IKeyAction* action = MappedKeyDown(event.vkCode);
-    bool wasDown = (action != nullptr);
+    const bool wasDown = (action != nullptr);
 
     // not a mapped key currently down
     if (!wasDown)
@@ -300,7 +344,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
         if (makeSticky != 0)
         {
             // eat keys Up, making them sticky
-            bool isStickyMaker = (makeSticky == event.vkCode);
+            const bool isStickyMaker = (makeSticky == event.vkCode);
 
             if (!isStickyMaker && !event.Down())
             {
@@ -311,8 +355,12 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
 
         // set time of initial down key press
         if (!wasDown && event.Down())
-            action->downTimeTick = this->lastKeypressTick;
+            action->downTimeTick = tickCount;
 
+        // set time of the key release
+        if (wasDown && !event.Down())
+            action->upTimeTick = tickCount;
+        
         // register up/down input keys (don't re-register key already down)
         if (!(wasDown && event.Down()))
             TrackMappedKeyDown(event.vkCode, action, event.Down());
@@ -324,7 +372,7 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
         if (event.Down())
             ret = action->OnKeyDown(this);
         else
-            ret =  action->OnKeyUp(this, isTap);
+            ret = action->OnKeyUp(this, isTap);
 
         return ret;
     }

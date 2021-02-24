@@ -19,6 +19,7 @@
 #include "Layout.h"
 #include "LayerAccessAction.h"
 #include "LayerToggleAction.h"
+#include "Notifier.h"
 #include "util.h"
 
 using namespace KeyActions;
@@ -83,13 +84,22 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, boo
     return true;
 }
 
+
+bool Layout::GotoLayer(Layer* layer)
+{
+    currentLayer = layer;
+    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
+
+    // notify main app window
+    HookKbd::Notify(HookKbd::LayerChanged, currentLayer->LayerIdx());
+
+    return true;
+}
+
 bool Layout::GotoMainLayer()
 {
     // main layer always 1st
-    currentLayer = layers[0];
-    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
-
-    return true;
+    return GotoLayer(layers[0]);
 }
 
 bool Layout::GotoLayer(Layer::Idx_t layerIdx)
@@ -97,10 +107,7 @@ bool Layout::GotoLayer(Layer::Idx_t layerIdx)
     if (layerIdx >= layers.size())
         return false;
 
-    currentLayer = layers[layerIdx];
-    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
-
-    return true;
+    return GotoLayer(layers[layerIdx]);
 }
 
 bool Layout::GotoLayer(const Layer::Id_t& layerId)
@@ -109,10 +116,8 @@ bool Layout::GotoLayer(const Layer::Id_t& layerId)
     if (foundit == layersById.end())
         return false;
 
-    currentLayer = foundit->second;
-    Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
+    return GotoLayer(foundit->second);
 
-    return true;
 }
 
 const CaseMapping* Layout::Mapping(VeeKee vk) const
@@ -145,4 +150,18 @@ bool Layout::AddStickyMapping(KeyValue vk)
         return false;
 
     return currentLayer->AddStickyMapping(vk);
+}
+
+void Layout::SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const
+{
+    if (currentLayer != nullptr)
+        currentLayer->SetImageView(imageView, imageViewShift);
+}
+
+Layer::ImageView Layout::GetImageView(bool shiftDown) const
+{
+    if (currentLayer != nullptr)
+        return currentLayer->GetImageView(shiftDown);
+
+    return {};
 }

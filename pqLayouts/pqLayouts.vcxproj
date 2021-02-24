@@ -94,7 +94,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../pqLayoutsHook</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Gdiplus.lib;Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>
@@ -132,7 +132,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../pqLayoutsHook</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Gdiplus.lib;Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>
@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="KbdDisplayWnd.cpp" />
     <ClCompile Include="LoLevelKbdFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -168,6 +169,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="KbdDisplayWnd.h" />
     <ClInclude Include="LoLevelKbdFile.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -181,20 +183,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="layouts\mtgapLs23Sp5.0b.kbd" />
-    <None Include="layouts\PLLT1xe.kbd" />
-    <None Include="layouts\PLLT1xe.kbd-" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="icon1.ico" />
     <Image Include="icon2.ico" />
     <Image Include="icon3.ico" />
-    <Image Include="layouts\PLLTx1e.png" />
     <Image Include="pqLayouts-qr.ico" />
     <Image Include="pqLayouts-qr.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="layouts\PLLTx1e.txt" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pqLayouts.manifest.xml" />

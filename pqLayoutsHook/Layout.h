@@ -40,6 +40,12 @@ public:
     bool AddCtrlMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
+    void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
+    Layer::ImageView GetImageView(bool shiftDown) const;
+
+private:
+    bool GotoLayer(Layer* layer);
+
 private:
     std::map<VeeKee, KeyDef> keydefs;
     std::map<Layer::Id_t, Layer*> layersById;  

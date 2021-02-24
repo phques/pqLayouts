@@ -191,6 +191,16 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!setMakeSticky(stringTokener))
                 return false;
         }
+        else if (cmd == "imagefile")
+        {
+            if (!setImageFile(stringTokener))
+                return false;
+        }
+        else if (cmd == "imageview")
+        {
+            if (!setImageView(stringTokener))
+                return false;
+        }
         else 
         {
             std::cerr << "expecting a command, line " << lineNo << std::endl;
@@ -198,6 +208,9 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
 
     }
+
+    // always start on main layer
+    HookKbd::GotoMainLayer();
 
     return true;
 }
@@ -353,3 +366,65 @@ bool LoLevelKbdFile::setMakeSticky(StringTokener& tokener)
     KeyValue honey(makeSticky.vk, 0, false);
     return HookKbd::AddStickyMapping(honey);
 }
+
+bool LoLevelKbdFile::setImageFile(StringTokener& tokener)
+{
+    // read image filename
+    if (tokener.eof()) {
+        std::cerr << "image filename, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    std::string imageFilename;
+    tokener >> imageFilename;
+
+    HookKbd::SetImageFilename(imageFilename.c_str());
+
+    return true;
+}
+
+bool LoLevelKbdFile::setImageView(StringTokener& tokener)
+{
+    // read image view topY
+    if (tokener.eof()) {
+        std::cerr << "image view topY, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    int imageViewTopY;
+    tokener >> imageViewTopY;
+
+    // read image view bottomY
+    if (tokener.eof()) {
+        std::cerr << "image view bottomY, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    int imageViewBottomY;
+    tokener >> imageViewBottomY;
+
+    // read image view topY shifted
+    if (tokener.eof()) {
+        std::cerr << "image view topY shifted, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    int imageViewShiftedTopY;
+    tokener >> imageViewShiftedTopY;
+
+    // read image view bottomY shifted
+    if (tokener.eof()) {
+        std::cerr << "image view bottomY shifted, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    int imageViewShiftedBottomY;
+    tokener >> imageViewShiftedBottomY;
+
+    HookKbd::SetImageView(
+        Layer::ImageView(imageViewTopY, imageViewBottomY),
+        Layer::ImageView(imageViewShiftedTopY, imageViewShiftedBottomY));
+
+    return true;
+}
+

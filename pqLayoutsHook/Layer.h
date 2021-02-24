@@ -19,11 +19,24 @@
 
 #include "KeyMapping.h"
 
+
 class Layer
 {
 public:
     typedef std::string Id_t;
     typedef unsigned int Idx_t;
+
+    // Y offsets into the kbd help image for this layer
+    struct ImageView
+    {
+        int TopY;
+        int BottomY;
+
+        ImageView() : TopY(0), BottomY(0) {}
+        ImageView(int topY, int bottomY) : TopY(topY), BottomY(bottomY) {}
+
+        int Height() const { return BottomY - TopY; }
+    };
 
 public:
     Layer(const Id_t& name, Idx_t layerIdx);
@@ -36,9 +49,14 @@ public:
     bool AddMapping(KeyValue from, KeyValue to, bool controlMapping);
     bool AddStickyMapping(KeyValue vk);
 
+    void SetImageView(ImageView imageView, Layer::ImageView imageViewShift);
+    ImageView GetImageView(bool shiftDown) const;
+
 private:
     Id_t name;
     Idx_t layerIdx;
     std::map<VeeKee, CaseMapping> mappings;
+    ImageView imageView;
+    ImageView imageViewShift;
 };
 

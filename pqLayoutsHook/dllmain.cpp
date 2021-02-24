@@ -20,6 +20,8 @@
 #include "util.h"
 #include "OutDbg.h"
 #include "Keyboard.h"
+#include "Notification.h"
+#include "Notifier.h"
 
 
 namespace
@@ -32,6 +34,17 @@ namespace
 
 }
 
+
+namespace HookKbd
+{
+
+    // the 'Notifier'
+    void Notify(Notif notif, LPARAM lParam)
+    {
+        theKbd.Notify(notif, lParam);
+    }
+
+}
 
 // put this in a class since we cannot debug this code,
 // so we'll use friend class KbdHook to access data for dbg output
@@ -108,11 +121,8 @@ namespace HookKbd
 {
 
 // hook our low level kbd procedure
-PQHOOK_API bool HookKbdLL(HWND hMainWindow, int mainWndMsg)
+PQHOOK_API bool HookKbdLL()
 {
-    theKbd.SetMainWnd(hMainWindow);
-    theKbd.SetMainWndMsg(mainWndMsg);
-
     hKbdHook = SetWindowsHookEx(WH_KEYBOARD_LL, KbdHook::LowLevelKeyboardProc, GetModuleHandle(0), 0);
 
     if (hKbdHook == NULL)
@@ -131,6 +141,12 @@ PQHOOK_API bool UnhookKbdLL()
         return Dbg::Out::LastError("UnhookWindowsHookEx"); 
 
     return true;
+}
+
+void SetNotificationMessage(HWND hMainWindow, int mainWndMsg)
+{
+    theKbd.SetMainWnd(hMainWindow);
+    theKbd.SetMainWndMsg(mainWndMsg);
 }
 
 
@@ -173,6 +189,26 @@ PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx)
 PQHOOK_API bool GotoMainLayer()
 {
     return theKbd.GotoMainLayer();
+}
+
+PQHOOK_API void SetImageFilename(const char* filename)
+{
+    theKbd.SetImageFilename(filename);
+}
+
+PQHOOK_API const char* GetImageFilename()
+{
+    return theKbd.GetImageFilename().c_str();
+}
+
+PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift)
+{
+    theKbd.SetImageView(imageView, imageViewShift);
+}
+
+PQHOOK_API Layer::ImageView GetImageView()
+{
+    return theKbd.GetImageView();
 }
 
 PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey)

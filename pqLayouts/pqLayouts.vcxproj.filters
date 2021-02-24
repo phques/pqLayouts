@@ -27,6 +27,9 @@
     <ClCompile Include="LoLevelKbdFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KbdDisplayWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -38,6 +41,9 @@
     <ClInclude Include="LoLevelKbdFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KbdDisplayWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pqLayouts.rc">
@@ -45,20 +51,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="layouts\mtgapLs23Sp5.0b.kbd">
-      <Filter>Layouts</Filter>
-    </None>
-    <None Include="layouts\PLLT1xe.kbd">
-      <Filter>Layouts</Filter>
-    </None>
-    <None Include="layouts\PLLT1xe.kbd-">
-      <Filter>Layouts</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="layouts\PLLTx1e.png">
-      <Filter>Layouts</Filter>
-    </Image>
     <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
@@ -74,11 +66,6 @@
     <Image Include="pqLayouts-qr.ico">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="layouts\PLLTx1e.txt">
-      <Filter>Layouts</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="pqLayouts.manifest.xml" />

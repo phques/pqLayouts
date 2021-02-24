@@ -3,6 +3,8 @@
 
 #include <windows.h>
 #include <commctrl.h>
+#include <gdiplus.h>
+#include <tchar.h>
 
 #include <iostream>
 #include <fstream>

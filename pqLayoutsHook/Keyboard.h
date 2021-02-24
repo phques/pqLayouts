@@ -19,6 +19,7 @@
 #include <cassert>
 #include "util.h"
 #include "layout.h"
+#include "Notification.h"
 
 class KbdHook; // fwd
 
@@ -62,6 +63,14 @@ public:
     void MakeSticky(VeeKee);
     VeeKee MakeSticky() const;
 
+    void SetImageFilename(const char* filename);
+    const std::string& GetImageFilename() const;
+
+    void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
+    Layer::ImageView GetImageView() const;
+
+    void Notify(HookKbd::Notif, LPARAM);
+
 protected:
 
     void MappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool down);
@@ -99,6 +108,8 @@ private:
     HWND hMainWindow;
     int mainWndMsg;
     VeeKeeSet isprint;
+
+    std::string imageFilename;
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

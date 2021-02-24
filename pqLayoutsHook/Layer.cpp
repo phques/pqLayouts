@@ -67,3 +67,14 @@ bool Layer::AddStickyMapping(KeyValue vk)
 
     return AddMapping(vk, action);
 }
+
+void Layer::SetImageView(ImageView imageView, ImageView imageViewShift)
+{
+    this->imageView = imageView;
+    this->imageViewShift = imageViewShift;
+}
+
+Layer::ImageView Layer::GetImageView(bool shiftDown) const
+{
+    return shiftDown ? imageViewShift : imageView;
+}

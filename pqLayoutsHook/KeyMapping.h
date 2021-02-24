@@ -44,6 +44,7 @@ public:
 
 protected:
     DWORD downTimeTick; // timetick at which the key was pressed
+    DWORD upTimeTick;   // timetick at which the key was released
 };
 
 
