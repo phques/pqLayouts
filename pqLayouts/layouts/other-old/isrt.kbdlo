@@ -1,0 +1,133 @@
+! ISRT, NotGate’s SFB Minimized Layout (lo same finger bigrams)
+! https://notgate.github.io/layout/
+
+!  y c l m k   z f u , '
+!  i s r t g   p n e a o ;
+!  q v w d j   b h / . x
+
+
+K2K q  y Y 
+K2K w  c C 
+K2K e  l L 
+K2K r  m M 
+K2K t  k K 
+
+K2K y  z Z
+K2K u  f F
+K2K i  u U
+K2K o  , <
+K2K p  ' "
+
+K2K a  i I  
+K2K s  s S  
+K2K d  r R  
+K2K f  t T  
+K2K g  g G  
+
+K2K h  p P   
+K2K j  n N   
+K2K k  e E   
+K2K l  a A   
+K2K ;  o O   
+K2K '  ; :   
+
+K2K z  q Q   
+K2K x  v V   
+K2K c  w W   
+K2K v  d D   
+K2K b  j J   
+
+K2K n  b B   
+K2K m  h H   
+K2K ,  / ?   
+K2K .  . >   
+K2K /  x X   
+
+
+
+! ------- edit layer --------
+
+addlayertap edit ralt
+
+!! stickyer rctrl
+
+K2K [ bs  del
+k2k ] del
+
+K2K  i home  +home
+K2K  o up    +up
+K2K  p end   +end
+
+K2K  m home  +home
+K2K  k left  +left
+K2K  l down  +down
+K2K  ; right +right
+K2K  ' end   +end
+
+K2CK ,  c c
+K2CK .  x x 
+K2CK /  v v
+
+
+! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt
+! K2K e pgup +pgup
+! K2K s pgdn +pgdn
+! K2K d lctrl +lctrl
+! k2k f lshift
+K2K e pgup +pgup
+K2K s lctrl +lctrl
+K2K d pgdn +pgdn
+k2k f lshift
+
+K2CK z  z y
+K2CK `  z y
+
+!ctrl-left/right (prev/next word)
+K2CK x left +left
+K2CK c right +right
+
+K2CK v cr +cr
+
+! shift on enter
+! for use with x c above
+k2k enter rshift 
+
+
+! stickyer rctrl
+
+!K2K [ bs  del
+!k2k ] del
+!
+!K2K  w home  +home
+!K2K  e up    +up
+!K2K  r end   +end
+!K2K  t pgup  +pgup
+!
+!K2K  s left  +left
+!K2K  d down  +down
+!K2K  f right +right
+!K2K  g pgdn  +pgdn
+!
+!!ctrl-left/right (prev/next word)
+!K2CK o left +left
+!K2CK p right +right
+!
+!K2CK z  c c
+!K2CK x  x x 
+!K2CK c  v v
+!K2CK b  z y
+!K2CK `  z y
+!
+!K2K  v cr +cr
+!
+!k2k k lshift
+!K2K l lctrl +lctrl 
+!
+!! shift on caps & enter
+!K2K caps  lshift caps
+!K2K enter rshift caps
+!
+!! ctrl on shift
+!K2K lshift  lctrl +lctrl
+!K2K rshift  rctrl +rctrl
+
