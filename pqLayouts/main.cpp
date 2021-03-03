@@ -456,6 +456,9 @@ void OnHookNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         Printf("main, notif SuspendStateUpdated %d\n", lParam);
         SetIcon(hDlg, !suspended);
+
+        const auto visible = !suspended;
+        helpWnd->DisplayWindow(visible);
         break;
     }
     case HookKbd::LayerChanged:

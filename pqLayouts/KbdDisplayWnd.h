@@ -32,7 +32,7 @@ public:
     void ClearImage();
 
     void SetImageView(Layer::ImageView);
-
+    void DisplayWindow(bool visible);
 
 private:
 

@@ -120,7 +120,6 @@ LRESULT CALLBACK KbdDisplayWnd::StaticWndProc(HWND hWnd, UINT msg, WPARAM wParam
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-
 LRESULT CALLBACK KbdDisplayWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
@@ -174,6 +173,14 @@ void KbdDisplayWnd::OnPaint(HDC hDc, PAINTSTRUCT& ps) const
     }
 }
 
+void KbdDisplayWnd::DisplayWindow(bool visible)
+{
+    if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
+    {
+        ShowWindow(hWnd, visible ? SW_SHOWNORMAL : SW_HIDE); 
+    }
+}
+
 /// <summary>
 /// Calculates the difference between the client area and the window size
 /// </summary>
@@ -196,7 +203,6 @@ void KbdDisplayWnd::CalculateClientPadding()
     }
 }
 
-
 /// <summary>
 /// Place window centered in monitor in X
 /// and near top / bottom in Y according to displayAtTop
@@ -207,34 +213,36 @@ void KbdDisplayWnd::PlaceWindow() const
     //const auto screenCx = GetSystemMetrics(SM_CXSCREEN); 
     //const auto screenCy = GetSystemMetrics(SM_CYSCREEN);
 
-    RECT desktopRect;
-    SystemParametersInfoA(SPI_GETWORKAREA, 0, &desktopRect, FALSE);
-    const int screenCx = desktopRect.right - desktopRect.left;
-    const int screenCy = desktopRect.bottom - desktopRect.top;
+    if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
+    {
+        RECT desktopRect;
+        SystemParametersInfoA(SPI_GETWORKAREA, 0, &desktopRect, FALSE);
+        const int screenCx = desktopRect.right - desktopRect.left;
+        const int screenCy = desktopRect.bottom - desktopRect.top;
 
-    RECT windowRect;
-    GetWindowRect(hWnd, &windowRect);
-    const int windowWidth  = windowRect.right - windowRect.left;
-    const int windowHeight = windowRect.bottom - windowRect.top;
+        RECT windowRect;
+        GetWindowRect(hWnd, &windowRect);
+        const int windowWidth  = windowRect.right - windowRect.left;
+        const int windowHeight = windowRect.bottom - windowRect.top;
 
-    // center window in X
-    const int x = screenCx / 2 - windowWidth / 2;
+        // center window in X
+        const int x = screenCx / 2 - windowWidth / 2;
 
-    // place window near top or bottom in Y
-    const int y = displayAtTop ? 5 : (screenCy - windowHeight - 5);
+        // place window near top or bottom in Y
+        const int y = displayAtTop ? 5 : (screenCy - windowHeight - 5);
 
-    // move window, setting it TOPMOST, then show it (is created hidden)
-    SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE);
-    ShowWindow(hWnd, SW_SHOWNORMAL); 
+        // move window, setting it TOPMOST, then show it (is created hidden)
+        SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE);
+        ShowWindow(hWnd, SW_SHOWNORMAL); 
+    }
 }
-
 
 void KbdDisplayWnd::ResizeWindow()
 {
     // calculate the size of the window to fit exactly around the image size (ie client size == img size)
     CalculateClientPadding();
 
-    if (image != nullptr)
+    if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
     {
         const int imgWidth = static_cast<int>(image->GetWidth());
         const int imgHeight = imageView.Height(); // static_cast<int>(image->GetHeight());
@@ -255,7 +263,7 @@ bool KbdDisplayWnd::SetImageFile(const WCHAR* imageFilename)
     image = Gdiplus::Bitmap::FromFile(imageFilename);
 
     // update window size / position
-    if (image != nullptr)
+    if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
     {
         ResizeWindow();
         PlaceWindow();
@@ -292,7 +300,6 @@ void KbdDisplayWnd::SetImageView(Layer::ImageView imgView)
 
     InvalidateRect(hWnd, nullptr, TRUE);
 }
-
 
 /// <summary>
 /// Move the window out of the way when we get the mouse over it
