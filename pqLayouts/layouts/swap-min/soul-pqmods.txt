@@ -1,0 +1,43 @@
+according to modDH analyze
+http://colemakmods.github.io/mod-dh/analyze.html
+
+*soul*
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l d p  k m u y ; [ ]
+A S R T g  f N E I O '
+z x C v j  b H , . /
+
+total * 	1.65415	 0.04793	 0.02916	 1.73124
+
+*soul, mod pq1*
+ (swap /k)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l d p  / m u y ; [ ]
+A S R T g  f N E I O '
+z x C v j  b H , . k
+
+total * 	1.65227	 0.04504	 0.03123	 1.72855
+
+modpq1 probably enough of a nice change (/k) while keeping advantages,
+balance price vs betterment
+
+
+
+*soul, mod pq2*
+ (swap /k cd)
+ (we loose ctrl-c shortcut in zxcv though)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l c p  / m u y ; [ ]
+A S R T g  f N E I O '
+z x d v j  b H , . k
+
+total * 	1.64235	 0.04489	 0.03123	 1.71848
+
+*soul, mod pq3*
+ (swap /k cd fb)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l c p  / m u y ; [ ]
+A S R T g  b N E I O '
+z x d v j  f H , . k
+
+total * 	1.64059	 0.04431	 0.03123	 1.71613

@@ -1,0 +1,34 @@
+! SwapSix (jameswiles)
+! "What are the minimum number of key positions that need to change the minimum amount in order to get the maximum"
+! "benefit in typing effieciency?"
+! "Somewhere inbetween Minimak and RowSwapp; I call it SwapSix"
+! http://jameswiles.com/SwapSix.html
+
+! q w d r f  y u k l ;
+! a s e t g  h n i o p
+! z x c v b  j m , . /
+
+
+!imagefile 
+
+imageview 0 50 60 110
+
+K2K d  e E
+K2K e  d D
+
+K2K t  f F
+K2K f  t T
+
+K2K j  n N
+K2K n  j J
+
+K2K k  i I
+K2K i  k K
+
+K2K l  o O
+K2K o  l L
+
+K2K ;  p P
+K2K p  ; :
+
+

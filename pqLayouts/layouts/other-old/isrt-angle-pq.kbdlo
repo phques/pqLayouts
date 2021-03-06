@@ -1,17 +1,18 @@
 ! ISRT, NotGate’s SFB Minimized Layout (lo same finger bigrams)
 ! PQ, ansi angle-mod version
+! PQ swap jk pb
 ! https://notgate.github.io/layout/
 
-!  y c l m k   z f u , '
-!  i s r t g   p n e a o ;
-!  v w d j q  b h / . x
+!  y c l m j   z f u , '
+!  i s r t g   b n e a o ;
+!  v w d k q   p h / . x
 
 
 K2K q  y Y 
 K2K w  c C 
 K2K e  l L 
 K2K r  m M 
-K2K t  k K 
+K2K t  j J 
 
 K2K y  z Z
 K2K u  f F
@@ -25,7 +26,7 @@ K2K d  r R
 K2K f  t T  
 K2K g  g G  
 
-K2K h  p P   
+K2K h  b B   
 K2K j  n N   
 K2K k  e E   
 K2K l  a A   
@@ -35,10 +36,10 @@ K2K '  ; :
 K2K z  v V    
 K2K x  w W    
 K2K c  d D    
-K2K v  j J    
+K2K v  k K    
 K2K b  q Q    
 
-K2K n  b B   
+K2K n  p P   
 K2K m  h H   
 K2K ,  / ?   
 K2K .  . >   

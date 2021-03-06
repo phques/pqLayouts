@@ -549,9 +549,10 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     bool ok = true;
     LoLevelKbdFile lokbdrdr;
 
-    if (strlen(commandLine) == 0)
-        createPLLTx1dMapping();
-    else
+    //##pq-debug
+    //createPLLTx1dMapping();
+
+    if (strlen(commandLine) != 0)
         ok = lokbdrdr.ReadKeyboardFile(commandLine);
 
     if (ok)

@@ -1,0 +1,47 @@
+! Colemak-dhk MK swapped vs colemak-dh
+! (ansi, angle-mod with Z in mid)
+! http://colemakmods.github.io/mod-dh/
+
+! q w f p b  j l u y ;
+! a r s t g  k n e i o
+!  x c d v z m h , . /
+
+!imagefile 
+
+imageview 0 50 60 110
+
+K2K q q Q
+K2K w w W
+K2K e f F
+K2K r p P
+K2K t b B
+
+K2K y j J
+K2K u l L
+K2K i u U
+K2K o y Y
+K2K p ; :
+
+K2K a a A
+K2K s r R
+K2K d s S
+K2K f t T
+K2K g g G
+
+K2K h k K
+K2K j n N
+K2K k e E
+K2K l i I
+K2K ; o O
+
+K2K z x X
+K2K x c C
+K2K c d D
+K2K v v V
+K2K b z Z
+
+K2K n m M
+K2K m h H
+K2K , , <
+K2K . . >
+K2K / / ?

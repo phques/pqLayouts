@@ -1,0 +1,37 @@
+! minmak-12, moves 4+4+4 keys: 83% of the benefit of Dvorak
+! with angle-mod
+! http://www.minimak.org/
+
+! q w d f k  y u i l ;
+! a s t r g  h n e o p
+!  x c v b z j m , . /
+
+!imagefile 
+
+imageview 0 50 60 110
+
+! minmak4
+K2K e d D
+K2K d t T
+K2K t k K
+K2K k e E
+
+! minmak8
+K2K j n N
+K2K n j J
+K2K o l L
+K2K l o O
+
+! minmak12
+K2K r f F
+K2K f r R
+K2K p ; :
+K2K ; p P
+
+! angle mod
+K2K z  x X
+K2K x  c C 
+K2K c  v V 
+K2K v  b B 
+K2K b  z Z 
+

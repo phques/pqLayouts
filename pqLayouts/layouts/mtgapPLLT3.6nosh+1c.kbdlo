@@ -1,26 +1,19 @@
-! mtgapPLLT2.9d, going PLLT with MTGAP, wid mode
-! work in progress / try out, missing syms
+! mtgapPLLT3.6nosh+1c, going PLLT with MTGAP, wid mode
+! no shift keys on left/right, use for extra chars!
+! swap MF to reduce mid column use of right hand
+! designed originally for planck ez
 
-!    w  e               o  p 
-!  a s  d  f  g   j  k  l  ;  '
-!    z  x  c         ,  .  /  
+! dup U/D on top to avoid bad ou and dr
+!       o  i  u)       (d  r  c
+! '  p  a  e SP  _   f  t  n  s  h  q
+!       ,  y  u      m  d  l  b
 
-! - add extra U to avoid row jump OU
-! - add extra D to avoid row jump DR RD
-! - swap y-
-! - swap v;
-
-!    o  i (u)       (d) r  h
-! p  a  e SP  '   m  t  n  s  c
-!    .  ;  u         d  l  f
-
-!>> 2.9d with set keepBrackets 1
-!    v  y               x  =
-! (  k  ,  -  !   q  g  w  b  )
-!    {  }  /         j  z  ?
+!       ;  (            b  "  x
+! +  :  -  .  k  }   =  g  w  v  !  {
+!       ?  /  >      *  )  j  z
 
 
-imagefile mtgapPLLT2.9d-img.png
+imagefile mtgapPLLT3.6nosh+1b.png
 
 imageview 0 60 70 130
 
@@ -30,30 +23,30 @@ K2K r  u  U
 
 K2K i  d  D 
 K2K o  r  R 
-K2K p  h  H 
+K2K p  c  C 
 
+K2K caps ' `  
 K2K a  p  P 
 K2K s  a  A 
 K2K d  e  E 
 K2K f  sp " 
-K2K g  '  `  
+K2K g  _  @  
 
-K2K j  m  M 
+K2K j  f  F 
 K2K k  t  T 
 K2K l  n  N 
 K2K ;  s  S 
-K2K '  c  C 
+K2K '  h  H 
+K2K enter q Q
 
-K2K z  .  :  
-K2K x  ;  ~  
+K2K z  ,  <  
+K2K x  y  Y  
 K2K c  u  U
 
+K2K m  m  M
 K2K ,  d  D 
 K2K .  l  L 
-K2K /  f  F 
-
-k2k v  caps
-K2K m  cr +cr
+K2K /  b  B 
 
 ! for now, leave numbers here
 ! we can use it for the missing symbols
@@ -72,33 +65,27 @@ K2K m  cr +cr
 
 ! special keys
 
-! shift on caps & enter
-K2K caps  lshift caps
-K2K enter rshift caps
-
-! ctrl on shift
-K2K lshift  lctrl +lctrl
-K2K rshift  rctrl +rctrl
-
 K2K tab esc +esc
 K2K q   tab +tab
 K2K [   bs  del
 K2K ]   del +del
 
-!oops using U for extra D now ...
-!K2K u   right +right
-!K2K h   left +left
-!K2K y   up +up
-!K2K n   down +down
+! shift on caps & enter
+!K2K caps  lshift caps
+!K2K enter rshift caps
+
+! ctrl on shift
+!K2K lshift  lctrl +lctrl
+!K2K rshift  rctrl +rctrl
 
 ! copy / paste
 
-k2ck  t  c
+K2CK  t  c x
 k2ck  y  v
-k2ck +t  x
 K2CK  `  z y
-!k2ck  b  
-!k2ck  n  
+
+K2K v  cr +cr
+k2k n  caps
 
 
 ! ------- alt layer --------
@@ -106,33 +93,40 @@ K2CK  `  z y
 addlayertap alt space
 imageview 145 205 215 275
 
-! 2.9c swapped -y
-!    ;  y               x  =
-! (  k  ,  -  !   q  g  w  b  )
-!    {  }  /         j  z  ?
-
+!       ;  (            b  x  "
+! +  :  -  .  k  }   =  g  w  v  !  {
+!       ?  /  >      *  )  j  z
 
 ! todo syms
-K2K w  v V 
-K2K e  y Y 
-K2K o  x X 
-K2K p  = + 
-K2K a  ( [ 
-K2K s  k K 
-K2K d  , * 
-K2K f  - _ 
-K2K g  ! |  
-K2K j  q Q 
+K2K w  ; ;
+K2K e  ( [
+
+K2K i  b B
+K2K o  " "
+K2K p  x X
+
+K2K caps + + 
+K2K a  : : 
+K2K s  - - 
+K2K d  . . 
+K2K f  k K 
+K2K g  } }  
+
+K2K j  = = 
 K2K k  g G 
 K2K l  w W 
-K2K ;  b B 
-K2K '  ) ] 
-K2K z  { <  
-K2K x  } >  
-K2K c  / \
-K2K ,  j J 
-K2K .  z Z 
-K2K /  ? & 
+K2K ;  v V 
+K2K '  ! | 
+K2K cr { {
+
+K2K z  ? ? 
+K2K x  / \ 
+K2K c  > <
+
+K2K m  * * 
+K2K ,  ) ] 
+K2K .  j J 
+K2K /  z Z  
 
 ! bring back digits
 !k2k 1   1 
@@ -163,19 +157,18 @@ K2K =   F12 +F12
 
 ! special keys
 
-! shift on caps & enter
-K2K caps  lshift caps
-K2K enter rshift caps
-
 K2K tab esc +esc
 K2K q   tab +tab
 K2K [   bs  del
 K2K ]   del +del
 
+! shift on caps & enter
+!K2K caps  lshift caps
+!K2K enter rshift caps
 
 ! ctrl on shift
-K2K lshift  lctrl +lctrl
-K2K rshift  rctrl +rctrl
+!K2K lshift  lctrl +lctrl
+!K2K rshift  rctrl +rctrl
 
 
 ! ------- numpad layer  --------
@@ -241,14 +234,11 @@ K2CK .  x x
 K2CK /  v v
 
 
-! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt
-! K2K e pgup +pgup
-! K2K s pgdn +pgdn
-! K2K d lctrl +lctrl
-! k2k f lshift
+! chording space+d+k for ctrl-left does not work on my Microsoft Sculpt
 K2K e pgup +pgup
-K2K s lctrl +lctrl
 K2K d pgdn +pgdn
+
+K2K s lctrl +lctrl
 k2k f lshift
 
 K2CK z  z y
@@ -269,59 +259,6 @@ K2K enter rshift caps
 K2K lshift  lctrl +lctrl
 K2K rshift  rctrl +rctrl
 
-
-
-! stickyer rctrl
-
-!K2K [ bs  del
-!k2k ] del
-!
-!K2K  w home  +home
-!K2K  e up    +up
-!K2K  r end   +end
-!K2K  t pgup  +pgup
-!
-!K2K  s left  +left
-!K2K  d down  +down
-!K2K  f right +right
-!K2K  g pgdn  +pgdn
-!
-!!ctrl-left/right (prev/next word)
-!K2CK o left +left
-!K2CK p right +right
-!
-!K2CK z  c c
-!K2CK x  x x 
-!K2CK c  v v
-!K2CK b  z y
-!K2CK `  z y
-!
-!K2K  v cr +cr
-!
-!k2k k lshift
-!K2K l lctrl +lctrl 
-!
-!! shift on caps & enter
-!K2K caps  lshift caps
-!K2K enter rshift caps
-!
-!! ctrl on shift
-!K2K lshift  lctrl +lctrl
-!K2K rshift  rctrl +rctrl
-
-! bring back digits
-!k2k 1   1 
-!k2k 2   2 
-!k2k 3   3 
-!k2k 4   4 
-!k2k 5   5 
-!k2k 6   6 
-!k2k 7   7 
-!k2k 8   8 
-!k2k 9   9 
-!k2k 0   0
-!k2k -   - 
-!k2k =   =
 
 K2K 1   F1  +F1 
 K2K 2   F2  +F2 
