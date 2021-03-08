@@ -28,8 +28,8 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
     {"enter", VK_RETURN},           {"cr", VK_RETURN},
     {"backspace", VK_BACK},         {"bs", VK_BACK},
     {"del", VK_DELETE},
-    {"lshift", VK_LSHIFT},
-    {"rshift", VK_RSHIFT},
+    {"lshift", VK_LSHIFT},          {"lsh", VK_LSHIFT},
+    {"rshift", VK_RSHIFT},          {"rsh", VK_RSHIFT},
     {"lcontrol", VK_LCONTROL},      {"lctrl", VK_LCONTROL},
     {"rcontrol", VK_RCONTROL},      {"rctrl", VK_RCONTROL},
     {"lalt", VK_LMENU},
@@ -43,6 +43,7 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
     {"pgup", VK_PRIOR},
     {"pgdn", VK_NEXT},
     {"ins", VK_INSERT},
+    {"apps", VK_APPS},
     {"F1", VK_F1},  {"F2", VK_F2},  {"F3", VK_F3},  {"F4", VK_F4},  {"F5", VK_F5}, {"F6", VK_F6},
     {"F7", VK_F7},  {"F8", VK_F8},  {"F9", VK_F9},  {"F10", VK_F10},  {"F11", VK_F11}, {"F12", VK_F12},
 

@@ -1,0 +1,29 @@
+Beakl clp 0
+
+V W R L  G I O '
+B   N H  T E A K
+J C S D  . , U X
+     PM  ZY
+      F  Q
+
+essie-3
+
+      j
+    uq.      l _ vk
+: y f c /  * d s g F
+E i e a (  ) t   n '
+B h o r {  } T I p Q
+      , ;    w
+             mb
+
+essie-3 pq1
+  swap l_
+
+      j
+    uq.      _ l vk
+: y f c /  * d s g F
+E i e a (  ) t   n '
+B h o r {  } T I p Q
+      , ;    w
+             mb
+

@@ -1,0 +1,116 @@
+! essie-3.en.pq1 
+! Ian Douglas
+! https://www.keyboard-design.com/letterlayout.html?layout=essie-3.en.ergolinear
+! 2021-03 PQ adapt for ANSI kbd
+! 2021-03 mod pq
+!  swapped l_
+
+!imagefile 
+imageview 0 50 60 110
+
+! main
+
+k2k caps bs
+
+! Enter, right thumb (or right index?)
+k2k apps cr
+
+! space = shift, 'raise' layer
+k2k sp lsh
+
+
+! left hand, std pos, thumb on Space (Shift/raise layer)
+
+K2K q N G
+K2K w A U
+K2K e u -
+K2K r . j
+K2K t M J
+
+K2K a E :
+K2K s i y
+K2K d e f
+K2K f a c
+K2K g ( /
+
+K2K lsh = \
+K2K z 3 9
+K2K x 1 5
+K2K c , Y
+K2K v ; +
+
+! right hand 'very wide', index on L, pinky on Enter
+! thumb naturally sits on RAlt (alt layer)
+! (extreme right column keys of layout moved elsewhere, not enough keys here ;-)
+
+K2K i D P
+K2K o _ C
+K2K p l &
+K2K [ v S
+K2K ] V K
+! moved from mid external pinky
+K2K \ z x
+
+K2K k )  *
+K2K l t  d
+K2K ; sp s
+K2K '  n g
+K2K cr ' F
+
+K2K , $ !
+K2K . m w
+K2K / 0 4
+K2K rsh 2 6
+
+! 2 rightmost bottom keys moved to MJ
+K2K m % |
+K2K j ` ~
+
+
+
+! *** lower / alt ***
+
+addlayer alt ralt
+
+! left hand 
+
+k2k q Z
+k2k w O 
+k2k e q
+k2k r "
+k2k t L
+
+k2k a B
+k2k s h
+k2k d o
+k2k f r
+k2k g {
+
+k2k lsh [ 
+k2k z 7
+k2k x <
+k2k c W
+k2k v ?
+
+! right hand
+
+k2k i H
+k2k o R
+k2k p @
+k2k [ k
+k2k ] X
+
+k2k k }
+k2k l T
+k2k ; I
+k2k ' p
+k2k cr Q
+
+k2k , #
+k2k . b
+k2k / >
+k2k rsh 8 
+
+! 2 rightmost bottom keys moved to mj
+k2k m ]
+k2k j ^

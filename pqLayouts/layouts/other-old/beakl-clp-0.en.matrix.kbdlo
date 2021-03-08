@@ -1,0 +1,72 @@
+! beakl-clp-0.en.matrix
+! partial, just lowercase chars for now
+
+! main
+! b   n h  t e a k
+!       m  y
+
+! 'raise' / shift
+! v w r l  g i o '
+!       p  z
+
+! lower / alt
+! j c s d  . , u x
+!       f  q
+
+!imagefile 
+
+imageview 0 50 60 110
+
+! main
+! use (very)wide mod so we can use RAlt as lower/alt layer access
+
+! bs cr !? where to put them?
+k2k ] bs
+k2k v cr
+
+k2k a b
+k2k s sp
+k2k d n
+k2k f h
+
+k2k l  t
+k2k ;  e
+k2k '  a
+k2k cr k
+
+k2k c m
+k2k . y
+
+
+! raise / shift
+addlayer raise space
+
+k2k a v
+k2k s w 
+k2k d r
+k2k f l
+
+k2k l  g
+k2k ;  i
+k2k '  o
+k2k cr '
+
+k2k c p
+k2k . z
+
+
+! lower / alt
+addlayer lower ralt
+
+k2k a j
+k2k s c
+k2k d s
+k2k f d
+
+k2k l  .
+k2k ;  ,
+k2k '  u
+k2k cr x
+
+k2k c f
+k2k . q

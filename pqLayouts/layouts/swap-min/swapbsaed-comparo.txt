@@ -1,0 +1,119 @@
+
+swapsix
+q w d r f  y u k l ;
+A S E T g  h N I O P
+ x c v b z j m , . /
+
+soul
+q w l d p  k m u y ;
+A S R T g  f N E I O
+ z x C v j b H , . /
+
+colemak dhk ansi
+ q w f p b  j l u y ;
+ A R S T g  k N E I O
+  x c d v z m h , . /
+
+isrt pq
+y c l m j   z f u , '
+I S R T g   b N E A O ;
+ v w d k q  p h / . x
+
+Wide might good, since hitting right is not as easy
+Wide moght be good, since hitting right shift is not as easy
+
+
+colemak dhk 'alternative'
+1  2  3  4  5  6  7  8  9  0  -  =
+q  w  f  p  b  j  l  u  y  ;  [  ]
+a  r  s  t  g  k  n  e  i  o  '
+z  x  c  d  v  m  h  ,  .  /
+
+total * 	1.66801	 0.04681	 0.02939	 1.74420
+
+soul
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l d p  k m u y ; [ ]
+A S R T g  f N E I O '
+z x C v j  b H , . /
+
+total * 	1.65415	 0.04793	 0.02916	 1.73124
+
+soul, mod pq1 (swap /k)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l d p  / m u y ; [ ]
+A S R T g  f N E I O '
+z x C v j  b H , . k
+
+total * 	1.65227	 0.04504	 0.03123	 1.72855
+
+soul, mod pq2 (swap /k cd)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l c p  / m u y ; [ ]
+A S R T g  f N E I O '
+z x d v j  b H , . k
+
+total * 	1.64235	 0.04489	 0.03123	 1.71848
+
+soul, mod pq3 (swap /k cd fb)
+1  2  3  4  5  6  7  8  9  0  -  =
+q w l c p  / m u y ; [ ]
+A S R T g  b N E I O '
+z x d v j  f H , . k
+
+total * 	1.64059	 0.04431	 0.03123	 1.71613
+
+
+
+ISRT
+1  2  3  4  5  6  7  8  9  0  -  =
+y c l m k  z f u , ' [ ]
+i s r t g  p n e a o ;
+v w d j q  b h / . x
+
+total * 	1.64127	 0.02179	 0.02736	 1.69042
+
+
+ISRT modpq1 swap jk (dont like that qwerty T!)
+1  2  3  4  5  6  7  8  9  0  -  =
+y c l m j  z f u , ' [ ]
+i s r t g  p n e a o ;
+v w d k q  b h / . x
+
+total * 	1.63619	 0.02179	 0.02736	 1.68534
+
+
+ISRT modpq2 swap jk pb
+(dont like that qwerty T!)
+1  2  3  4  5  6  7  8  9  0  -  =
+y c l m j  z f u , ' [ ]
+i s r t g  b n e a o ;
+v w d k q  p h / . x
+
+total * 	1.63592	 0.02179	 0.02736	 1.68508
+
+==============
+
+colemak-dhk alter, angle mod roll
+q  w  f  p  b  j  l  u  y  ;
+a  r  s  t  g  m  n  e  i  o
+x  c  d  v  z  k  h  ,  .  /
+
+total * 	1.60557	 0.03935	 0.02676	 1.67169
+
+
+ISRT pqmod2 (non full kbd, so leave ' in place)
+y c l m j  z f u , ;
+i s r t g  b n e a o 
+v w d k q  p h / . x
+
+total * 	1.60193	 0.02011	 0.02325	 1.64529
+
+
+** my favorite, especially on ansi normal kbd (angle-mod fingering though):
++ Soul modpq1, 
+ very nice to type with, without requiring layers,
+ keeps zxcv, no roll, but still using angle-mod fingering though
+ pretty low same-finger, not any nasty stuff happening with pinkies,
+ some nice 'move your hand and roll' instances.
+- P is pretty bad, being on probably the most difficult key to reach

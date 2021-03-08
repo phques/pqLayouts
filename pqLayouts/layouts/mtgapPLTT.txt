@@ -1496,10 +1496,11 @@ give priority to bottom mid column index vs center mid columns
         999, 999, 999, 999, 999, 999,   999, 999, 999, 999, 999, 999,   
         999, 999, 999, 999, 999, 999,   999, 999, 999, 999, 999, 999
 
-Did NOT change nything ! ;-)
+Did *NOT* change nything ! ;-)
 try adding 
-set doubleJump 260 (vs 220)
-set homeJump 130 (vs 100)
+ set doubleJump 300 (vs 220)
+ set homeJump 130 (vs 100)
+no change either !
 
 setksize kinesis
 setmask 000000000000001100001100111111111111001110111100000000000000000000000000
@@ -1517,10 +1518,162 @@ set sameFingerM 150
 set sameFingerI 140
 set doubleShiftCost 150
 set shiftCost 100
-set doubleJump 260
+set doubleJump 300
 set homeJump 130
 sethandbias 5
 set numThreads 3
 
 set consoleEsc 1
 
+
+3.8
+based on 2.9, add M key
+
+setksize beakpq
+setmask 011000011011111111110111011110
+usel abc defghijklmnopqrst
+useu uvwxyz,.-')(;=/!?{}*>
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 3
+
+set consoleEsc 1
+
+
+Hands: 54% 45%
+Fingers: 2.0% 13% 18% 21% 0.00% 0.00% 16% 15% 11% 3.0%
+
+    ;  (               )  x
+ ?  '  ,  .  >   q  g  w  k  *
+    /  }  !      {  j  =  z
+
+    o  i               r  h
+ p  a  e SP  -   m  t  n  s  c
+    y  v  u      f  d  l  b
+
+Fitness:       54759250
+Distance:      29107630
+Finger work:   336365
+Inward rolls:  6.19%
+Outward rolls: 2.03%
+Same hand:     34.32%
+Same finger:   2.07%
+Row change:    17.14%
+Home jump:     2.03%
+Ring jump:     1.12%
+To center:     0.99%
+
+
+3.9
+beakpq based on 3.6, add M key
+
+setksize beakpq
+setmask 011000011011111111110111011110
+usel abc defghijklmnopqrst
+useu uvwxyz,.-')(;=/!?{}*>
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 3
+
+
+Hands: 54% 45%
+Fingers: 2.0% 13% 18% 21% 0.00% 0.00% 16% 15% 11% 3.0%
+
+    ;  (               )  x
+ ?  '  ,  .  >   =  g  w  k  *
+    /  }  !      {  q  j  z
+
+    o  i               r  h
+ p  a  e SP  -   m  t  n  s  c
+    y  v  u      f  d  l  b
+
+Fitness:       55642197
+Distance:      29111730
+Finger work:   336365
+Inward rolls:  6.21%
+Outward rolls: 2.03%
+Same hand:     34.32%
+Same finger:   5.56%
+Row change:    17.16%
+Home jump:     2.03%
+Ring jump:     1.12%
+To center:     0.97%
+
+
+4.0
+lower shift costs 
+
+setksize beakpq
+setmask 011000011011111111110111011110
+usel abc defghijklmnopqrst
+useu uvwxyz,.-')(;=/!?{}*>
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 3
+
+Hands: 54% 45%
+Fingers: 2.0% 13% 17% 22% 0.00% 0.00% 16% 15% 12% 3.0%
+
+    ;  (               x  =
+ !  .  ,  y  }   q  g  w  v  ?
+    {  >  /      *  )  j  z
+
+    i  o               r  h
+ p  a  e SP  '   m  t  n  s  c
+    -  k  u      f  d  l  b
+
+Fitness:       52466479
+Distance:      27876165
+Finger work:   528520
+Inward rolls:  6.37%
+Outward rolls: 1.96%
+Same hand:     33.26%
+Same finger:   5.92%
+Row change:    14.85%
+Home jump:     1.54%
+Ring jump:     1.35%
+To center:     1.00%
+
+4.0b
+swap mf
+add extra udb
+    ;  (            B  x  =
+ !  .  ,  y  }   q  g  w  v  ?
+    {  >  /      *  )  j  z
+
+    i  o  U         D  r  h
+ p  a  e SP  '   f  t  n  s  c
+    -  k  u      m  d  l  b
