@@ -1,8 +1,8 @@
-  i o u      d r h
+  o i u      d r h
 p a e   '  f t n s c
   k - u    m d l b
 
-  I O U      D R H
+  O I U      D R H
 P A E " @  F T N S C
   K _ U    M D L B
 
@@ -22,11 +22,11 @@ P A E " @  F T N S C
   - + .      4 5 6 0
       ,      1 2 3 
 
-  i o u      d r h
+  o i u      d r h
 p a e   '  f t n s c
   k - u    m d l b
 
-  i o u      d r h
+  o i u      d r h
 p a e   '  f t n s c
   k - u    m d l b
 

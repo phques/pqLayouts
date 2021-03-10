@@ -1,50 +1,40 @@
-! mtgapPLLT4.0b, going PLLT with MTGAP, wid mode
-! mod:
-!  swap MF to reduce mid column use of right hand
-!  swap k- 
-!  add extra UDB
+! mtgapPLLT4.7Ls, going PLLT with MTGAP, wid mode, LaSalle home row
+! using minimum 'nice keys'
+!
+! using top of list entries from allChars.txt
+!  missing: qjz (and bunch of symbols)
+!  includes: SP \n ,.-"_')
 
-!    i  o  U         D  r  h
-! p  a  e SP  '   f  t  n  s  c
-!    k  -  u      m  d  l  b
+!    a  e               r  n
+! c  o  i SP         t  s  h  l
+!          u  _   m  d
 
-!    ;  (            B  x  =
-! !  .  ,  y  }   q  g  w  v  ?
-!    {  >  /      *  )  j  z
+!    .  y               g  p
+! )  '  , \n         f  w  b  k
+!          x  -   "  v
 
 
-imagefile mtgapPLLT4.0b.png
+
+! imagefile mtgapPLLT4.6.png
 
 imageview 0 60 70 130
 
-K2K w  i  I 
-K2K e  o  O 
-K2K r  u  U 
-
-K2K i  d  D 
+K2K w  a  A
+K2K e  e  E 
 K2K o  r  R 
-K2K p  h  H 
-
-K2K a  p  P 
-K2K s  a  A 
-K2K d  e  E 
-K2K f  sp " 
-K2K g  '  @  
-
-K2K j  f  F 
-K2K k  t  T 
-K2K l  n  N 
-K2K ;  s  S 
-K2K '  c  C
-
-K2K z  k  K
-K2K x  -  _  
+K2K p  n  N 
+K2K a  c  C
+K2K s  o  O
+K2K d  i  I
+K2K f  sp ;    
+K2K k  t  T
+K2K l  s  S
+K2K ;  h  H
+K2K '  l  L
 K2K c  u  U
-
+K2K v  _  @
 K2K m  m  M
-K2K ,  d  D 
-K2K .  l  L 
-K2K /  b  B 
+K2K ,  d  D
 
 
 ! special keys
@@ -68,7 +58,6 @@ K2CK  t  c x
 k2ck  y  v
 K2CK  `  z y
 
-K2K v  cr +cr
 k2k n  caps
 
 
@@ -77,38 +66,27 @@ k2k n  caps
 addlayertap alt space
 imageview 145 205 215 275
 
-!    ;  (            B  x  =
-! !  .  ,  y  }   q  g  w  v  ?
-!    {  >  /      *  )  j  z
+!    .  y               g  p
+! )  '  , \n         f  w  b  k
+!          x  -   "  v
 
 ! todo syms
-K2K w  ; ;
-K2K e  ( [
-
-K2K i  b B
-K2K o  x X
-K2K p  = +
-
-K2K a  ! |
-K2K s  . : 
-K2K d  , ,
-K2K f  y Y 
-K2K g  } ]
-
-K2K j  q Q 
-K2K k  g G 
-K2K l  w W 
-K2K ;  v V 
-K2K '  ? % 
-
-K2K z  { [ 
-K2K x  > <
-K2K c  / \
-
-K2K m  * * 
-K2K ,  ) ] 
-K2K .  j J 
-K2K /  z Z  
+K2K w  . :
+K2K e  y Y
+K2K o  g G
+K2K p  p P 
+K2K a  ( )
+K2K s  ' /
+K2K d  , =
+K2K f cr R 
+K2K k  f F
+K2K l  w W
+K2K ;  b B
+K2K '  k K
+K2K c  x X
+K2K v  - !
+K2K m  " ?
+K2K ,  v V
 
 
 K2K 1   F1  +F1 
