@@ -39,8 +39,8 @@ namespace HookKbd
     PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);
     PQHOOK_API bool GotoMainLayer();
 
-    PQHOOK_API void SetImageFilename(const char* filename);
-    PQHOOK_API const char* GetImageFilename();
+    PQHOOK_API void SetImageFilename(const WCHAR* filename);
+    PQHOOK_API const WCHAR* GetImageFilename();
 
     PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift);
     PQHOOK_API Layer::ImageView GetImageView();

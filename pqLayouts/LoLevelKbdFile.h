@@ -78,7 +78,8 @@ private:
     bool doK2kcWithShCmd(StringTokener& tokener);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
-    bool setImageFile(StringTokener& tokener);
+    bool setImageFile(StringTokener& tokener, const char * scriptFilename);
+    bool GetImageFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[260]);
     bool setImageView(StringTokener& tokener);
 
 private:

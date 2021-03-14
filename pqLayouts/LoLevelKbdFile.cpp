@@ -135,6 +135,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
     if (!kbdfile)
     {
         std::cerr << "failed to open lo level kbd def file [" << filename << "]" << std::endl;
+
+        std::string a(filename);
+        std::wstring b(a.begin(), a.end());
+
+        MessageBoxW(NULL, b.c_str(), L"failed to open lo level kbd def file", MB_OK);
         return false;
     }
 
@@ -194,7 +199,7 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
         else if (cmd == "imagefile")
         {
-            if (!setImageFile(stringTokener))
+            if (!setImageFile(stringTokener, filename))
                 return false;
         }
         else if (cmd == "imageview")
@@ -368,7 +373,7 @@ bool LoLevelKbdFile::setMakeSticky(StringTokener& tokener)
     return HookKbd::AddStickyMapping(honey);
 }
 
-bool LoLevelKbdFile::setImageFile(StringTokener& tokener)
+bool LoLevelKbdFile::setImageFile(StringTokener& tokener, const char * pcScriptFilename)
 {
     // read image filename
     if (tokener.eof()) {
@@ -379,14 +384,60 @@ bool LoLevelKbdFile::setImageFile(StringTokener& tokener)
     std::string imageFilename;
     tokener >> imageFilename;
 
-    HookKbd::SetImageFilename(imageFilename.c_str());
+    // calculate te path of the image file
+    // image will be in same directory as this script
+    WCHAR  fullImagePath[MAX_PATH]=TEXT(""); 
+
+    if (!GetImageFilePath(pcScriptFilename, imageFilename, fullImagePath)) 
+    {
+        std::cerr << "failed to get image file path" << std::endl;
+        return false;
+    }
+
+    HookKbd::SetImageFilename(fullImagePath);
+    return true;
+}
+
+bool LoLevelKbdFile::GetImageFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[260])
+{
+    // calc complete path of the kbd def file we are reading
+    DWORD  retval = 0;
+    WCHAR  scriptPath[MAX_PATH] = TEXT("");
+    WCHAR  fullScriptPath[MAX_PATH] = TEXT("");
+    WCHAR* lppPart = { NULL };
+
+    // get complete path of thos script
+    std::string scriptName(pcScriptFilename);
+    std::wstring wscriptName = std::wstring(scriptName.begin(), scriptName.end());
+    std::copy(wscriptName.begin(), wscriptName.end(), scriptPath);
+
+    retval = GetFullPathNameW(scriptPath,
+        MAX_PATH,
+        fullScriptPath,
+        &lppPart);
+
+    if (retval == 0 || retval >= MAX_PATH)
+        return false;
+
+    // replace the script filename with the image filename
+
+    // remove script filename, to get directory
+    if (!PathRemoveFileSpecW(fullScriptPath))
+        return false;
+
+    // add image filename to directory
+    std::wstring wImageFilename = std::wstring(imageFilename.begin(), imageFilename.end());
+
+    HRESULT res = PathCchCombine(fullImagePath, MAX_PATH, fullScriptPath, wImageFilename.c_str());
+    if (res != S_OK)
+        return false;
 
     return true;
 }
 
 bool LoLevelKbdFile::setImageView(StringTokener& tokener)
 {
-    // read image view topY
+    // -- read image view topY
     if (tokener.eof()) {
         std::cerr << "image view topY, line " << tokener.LineNo() << std::endl;
         return false;
@@ -395,16 +446,26 @@ bool LoLevelKbdFile::setImageView(StringTokener& tokener)
     int imageViewTopY;
     tokener >> imageViewTopY;
 
-    // read image view bottomY
+
+    // -- read image view bottomY
     if (tokener.eof()) {
         std::cerr << "image view bottomY, line " << tokener.LineNo() << std::endl;
         return false;
     }
 
-    int imageViewBottomY;
-    tokener >> imageViewBottomY;
+    std::string imageViewBottomYStr;
+    tokener >> imageViewBottomYStr;
 
-    // read image view topY shifted
+    // "+20" is 20 of height
+    int imageViewBottomY = 0;
+    const char* ptr = imageViewBottomYStr.c_str();
+    if (ptr[0] == '+')
+        imageViewBottomY = imageViewTopY + atoi(ptr+1);
+    else
+        imageViewBottomY = atoi(ptr);
+
+
+    // -- read image view topY shifted
     if (tokener.eof()) {
         std::cerr << "image view topY shifted, line " << tokener.LineNo() << std::endl;
         return false;
@@ -413,14 +474,22 @@ bool LoLevelKbdFile::setImageView(StringTokener& tokener)
     int imageViewShiftedTopY;
     tokener >> imageViewShiftedTopY;
 
-    // read image view bottomY shifted
+
+    // -- read image view bottomY shifted
     if (tokener.eof()) {
         std::cerr << "image view bottomY shifted, line " << tokener.LineNo() << std::endl;
         return false;
     }
 
-    int imageViewShiftedBottomY;
-    tokener >> imageViewShiftedBottomY;
+    std::string imageViewShiftedBottomYStr;
+    tokener >> imageViewShiftedBottomYStr;
+
+    int imageViewShiftedBottomY = 0;
+    ptr = imageViewShiftedBottomYStr.c_str();
+    if (ptr[0] == '+')
+        imageViewShiftedBottomY = imageViewShiftedTopY + atoi(ptr+1);
+    else
+        imageViewShiftedBottomY = atoi(ptr);
 
     HookKbd::SetImageView(
         Layer::ImageView(imageViewTopY, imageViewBottomY),

@@ -519,17 +519,18 @@ void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd)
         helpWnd = new KbdDisplayWnd(hInstance);
 
         // create a wide string from imageFilename
-        std::string basicString(pcImageFilename);
-        std::wstring wideString = std::wstring(basicString.begin(), basicString.end());
+        //std::string basicString(pcImageFilename);
+        //std::wstring wideString = std::wstring(basicString.begin(), basicString.end());
 
-        helpWnd->SetImageFile(wideString.c_str());
+        //helpWnd->SetImageFile(wideString.c_str());
+
+        helpWnd->SetImageFile(pcImageFilename);
         helpWnd->SetImageView(HookKbd::GetImageView());
     }
 }
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR commandLine, int nCmdShow) 
 {
-
     // Check if there is already an instance running.
     // mutex auto closed on exit
     CreateMutex(nullptr, 0, TEXT("_PqLayouts Main_"));
@@ -552,8 +553,19 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     //##pq-debug
     //createPLLTx1dMapping();
 
-    if (strlen(commandLine) != 0)
-        ok = lokbdrdr.ReadKeyboardFile(commandLine);
+    // read kbd def file
+    if (commandLine != nullptr && strlen(commandLine) != 0)
+    {
+        // strip prefix/siffix double quotes ! (when called with "Open With" from Windows)
+        char* cmdline = commandLine;
+        if (commandLine[0] == '"')
+        {
+            cmdline[strlen(cmdline)-1] = 0;
+            ++cmdline;
+        }
+
+        ok = lokbdrdr.ReadKeyboardFile(cmdline);
+    }
 
     if (ok)
     {

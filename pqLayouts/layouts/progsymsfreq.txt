@@ -1,0 +1,38 @@
+@Derek Jones cited The New C Standard: An economic and cultural commentary 
+which has the information but here are the frequencies contained therein for quick reference:
+
+
+space 15.083
+_ 2.550
+* 1.769
+, 1.565
+. 1.512
+) 1.373
+( 1.372
+; 1.276
+- 1.176
+= 1.039
+/ 0.718
+> 0.587
+" 0.376
+{ 0.303
+& 0.237
+} 0.210
+: 0.192
++ 0.182
+# 0.175
+] 0.163
+[ 0.163
+< 0.118
+% 0.105
+! 0.102
+' 0.101
+| 0.098
+? 0.022
+@ 0.009
+$ 0.005
+^ 0.003
+~ 0.002
+
+
+_*,.)(;-=/>"{&}:+#][<%!'|?@$^~

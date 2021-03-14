@@ -191,12 +191,12 @@ PQHOOK_API bool GotoMainLayer()
     return theKbd.GotoMainLayer();
 }
 
-PQHOOK_API void SetImageFilename(const char* filename)
+PQHOOK_API void SetImageFilename(const WCHAR* filename)
 {
     theKbd.SetImageFilename(filename);
 }
 
-PQHOOK_API const char* GetImageFilename()
+PQHOOK_API const WCHAR* GetImageFilename()
 {
     return theKbd.GetImageFilename().c_str();
 }

@@ -63,8 +63,8 @@ public:
     void MakeSticky(VeeKee);
     VeeKee MakeSticky() const;
 
-    void SetImageFilename(const char* filename);
-    const std::string& GetImageFilename() const;
+    void SetImageFilename(const WCHAR* filename);
+    const std::wstring& GetImageFilename() const;
 
     void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
     Layer::ImageView GetImageView() const;
@@ -109,7 +109,7 @@ private:
     int mainWndMsg;
     VeeKeeSet isprint;
 
-    std::string imageFilename;
+    std::wstring imageFilename;
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

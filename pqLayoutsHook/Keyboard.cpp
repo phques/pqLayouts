@@ -186,13 +186,13 @@ VeeKee Keyboard::MakeSticky() const
     return makeSticky;
 }
 
-void Keyboard::SetImageFilename(const char* filename)
+void Keyboard::SetImageFilename(const WCHAR* filename)
 {
     if (filename != nullptr)
         imageFilename = filename;
 }
 
-const std::string& Keyboard::GetImageFilename() const
+const std::wstring& Keyboard::GetImageFilename() const
 {
     return imageFilename;
 }

@@ -501,3 +501,53 @@ Home jump:     1.40%
 Ring jump:     1.66%
 To center:     0.87%
 
+
+2021-03-13
+5.0Ls
+
+same 4.9 but no Enter
+
+missing
+z:/*!?$>{}[]\+|&<%@#^`~
+
+
+setksize beaklasalle
+setmask 011100111011111111110001001000
+use etaoi nsrhldcumfgpywb,.vk-"_'x)(;jq=
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+
+Hands: 55% 44%
+Fingers: 3.0% 13% 18% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+    '  y  x         q  f  m
+ (  "  ,  .  ;   =  p  b  k  )
+          -         j
+
+    a  e  v         g  n  r
+ c  o  i SP  _   w  t  s  h  l
+          u         d
+
+Fitness:       66309842
+Distance:      30551570
+Finger work:   353242
+Inward rolls:  4.09%
+Outward rolls: 3.54%
+Same hand:     35.32%
+Same finger:   5.49%
+Row change:    16.75%
+Home jump:     1.40%
+Ring jump:     1.70%
+To center:     0.78%
+
