@@ -1,0 +1,121 @@
+
+! simul Georgi on qwerty:
+
+! Tab  q w e r t   u i o p [  ]
+! Cap  a s d f g   j k l ; '  Cr
+!           c v b n m ,
+
+! (comfy) chords that work on my Mickey Sculpt
+! would need to add chording support in my pqLayouts !
+
+! need to be careful not to use chord that could happen when rolling during typing
+! so can we do 3keys chords and be ok?
+
+! base / simple (?) 4keys chords
+
+! 9 combos of: er sd df / op kl l;
+we op
+we kl
+we l;
+
+sd op
+sd kl
+sd l;
+sd k;
+
+df op
+df kl
+df l;
+
+
+! add sf and k;
+! extra 7:
+sf op
+sf kl
+sf l;
+sf k;
+
+we k;
+sd k;
+df k;
+
+
+! --- more exhaustive list ---
+
+we ko
+we kl
+we kp
+we k;
+we op
+we o;
+we lp
+we l;
+
+sd ko
+sd kl
+sd kp
+sd k;
+sd op
+sd o;
+sd lp
+sd l;
+
+df ko
+df kl
+df kp
+df k;
+df op
+df o;
+df lp
+df l;
+
+! .... etc.. !!!
+
+
+! can also do some 5-6 keys !
+! (pretty comfy)
+
+sdf op
+sdf kl
+sdf l;
+sdf k;
+
+wef op
+wef kl
+wef l;
+wef k;
+
+sdf kop
+sdf kl;
+
+wef kop
+wef kl;
+
+
+! .. might want to stay on only most comfy
+! and then combine !! 
+! that's alrady a large number of chords
+
+! 5 5 = 49 chords
+! 7 x 7 = 49 chords
+
+! left hand
+we
+wf
+sd
+sf
+df
+
+sdf
+wef
+
+! right hand
+ko
+kp
+kl
+k;
+;k
+
+kop
+kl;
+

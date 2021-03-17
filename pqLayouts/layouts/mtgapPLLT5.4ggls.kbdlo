@@ -1,0 +1,125 @@
+! mtgapPLLT5.4ggls, going PLLT with MTGAP, LaSalle, wid mode
+! for Georgi steno kbd (2 rows x 6 + 2 x 3thumbs)
+
+!    .  y  x         j  f  b
+! ;  -  ,  g  z   q  c  p  w  k
+
+!    a  e  v         d  n  r
+! u  o  i SP  '   m  t  s  h  l
+
+! try using cvb  nm, for thumb keys
+
+
+!imagefile mtgapPLLT2.5c-img.png
+
+imageview 0 50 60 110
+
+! left hand
+K2K q tab +tab
+K2K w a A
+K2K e e E
+K2K r v V
+!!K2K t 
+
+K2K a u U
+K2K s o O
+K2K d i I
+K2K f sp "
+K2K g ' @
+
+! right hand (ANSI wide mod)
+!!K2K u
+K2K i d D
+K2K o n N
+K2K p r R
+!!K2K [
+
+K2K j m M
+K2K k t T
+K2K l s S
+K2K ; h H
+K2K ' l L
+
+
+! special keys / 'outside keys'
+
+K2K tab esc +esc
+!!K2K caps lshift caps
+
+!!K2K ] del +del
+!!K2K enter rshift caps
+
+
+! thumb keys
+! cvb nm,
+
+k2k c bs
+k2k v lsh
+k2k b lalt
+
+k2k n lctrl
+! k2k m   alat layer
+k2k , cr 
+
+
+! ------- alt layer --------
+
+addlayertap alt m
+imageview 120 170 180 230
+
+
+! left hand
+K2K q tab +tab
+K2K w . !
+K2K e y Y
+K2K r x X
+!!K2K t 
+
+K2K a ; ?
+K2K s - _
+K2K d , :
+K2K f g G
+K2K g z Z
+
+! right hand (ANSI wide mod)
+!!K2K u
+K2K i j J
+K2K o f F
+K2K p b B
+!!K2K [ 
+
+K2K j q Q
+K2K k c C
+K2K l p P
+K2K ; w W
+K2K ' k K
+
+
+! thumb keys
+! cvb nm,
+
+k2k c bs
+k2k v lsh
+k2k b lalt
+
+k2k n lctrl
+! k2k m   alat layer
+k2k , cr 
+
+
+
+! ------- numpad layer  --------
+
+!! pq-todo ???
+
+!! addlayertap numpad b
+!! imageview  240 290 300 350
+
+
+! ------- edit layer --------
+
+!! pq-todo ???
+
+!!addlayertap edit space
+!!imageview 360 410 420 470
+
