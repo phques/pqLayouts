@@ -1,0 +1,376 @@
+
+layouts created w. modified MTGAP, 
+based on BEAKL PLLT (pinky less, less thumb)
+
+
+punx from allCharsStd (balanced text + pgm)
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+
+---------
+
+2021-02-18
+
+]] 6.1gg
+
+back to less keys
+only letters: 26 (2x13)
+include space: 27, so go for 28 (2x14: 2x2x7)
+
+01110 01110
+11110 01111
+00000 00000
+
+
+abc defghijklmnopqrstuvwxyz,  .-"_')(;=:/*
+
+setksize beakpq
+setmask 011100111011110011110000000000
+use abc defghijklmnopqrstuvwxyz,
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 55% 44%
+Fingers: 2.0% 14% 18% 21% 0.00% 0.00% 14% 14% 12% 4.0%
+
+    q  k  z         v  b  w
+ j  y  ,  p         c  f  m  x
+
+    i  o  u         d  n  l
+ g  a  e SP         t  s  r  h
+
+Fitness:       53781773
+Distance:      23555385
+Finger work:   819514
+Inward rolls:  7.88%
+Outward rolls: 2.39%
+Same hand:     33.93%
+Same finger:   5.95%
+Row change:    10.20%
+Home jump:     0.00%
+Ring jump:     0.93%
+To center:     0.00%
+
+
+
+]] 6.2gg
+
+note that 6.0 is the same as this one but with extra stuff on other keys !
+and 6.1 is a base for this .. we're just adding new stuff over ;-)
+(talking about main layer)
+
+add 2 mid row center 2keys
+2x2x8: 32
+
+26 letters + space +
+,.-"'
+
+abc defghijklmnopqrstuvwxyz,.-"'  _)(;=:/*
+
+01110 01110
+11111 11111
+00000 00000
+
+
+abc defghijklmnopqrstuvwxyz,  .-"_')(;=:/*
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"'
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 17% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+    -  '  x         j  b  w
+ "  .  ,  y  z   v  c  p  m  q
+
+
+    i  o  u         d  n  l
+ g  a  e SP  k   f  t  s  r  h
+
+
+Fitness:       55418553
+Distance:      25519900
+Finger work:   622592
+Inward rolls:  7.63%
+Outward rolls: 2.28%
+Same hand:     33.17%
+Same finger:   6.13%
+Row change:    9.49%
+Home jump:     0.00%
+Ring jump:     0.94%
+To center:     1.46%
+
+
+
+]] 6.3gg
+
+2x2x8: 32
+try w/o Space!
+(buuut .. n ANSI, how to handle layers vs SP?)
+
+26 letters + 
+,.-"';
+
+abcdefghijklmnopqrstuvwxyz,.-"';  _)(=:/*
+
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abcdefghijklmnopqrstuvwxyz,.-"';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+Hands: 51% 48%
+Fingers: 5.0% 11% 18% 18% 0.00% 0.00% 16% 17% 12% 3.0%
+
+    -  .  "         j  b  x
+ '  g  ,  y  ;   q  d  f  w  z
+
+    p  o  u         v  s  l
+ h  i  a  e  k   m  t  n  r  c
+
+Fitness:       41494923
+Distance:      21703810
+Finger work:   99855
+Inward rolls:  5.78%
+Outward rolls: 2.96%
+Same hand:     30.39%
+Same finger:   5.33%
+Row change:    9.60%
+Home jump:     0.00%
+Ring jump:     2.27%
+To center:     1.52%
+
+
+]] 6.4gg
+
+develop the no SP on main  idea
+try reducing nbr keys again
+2x2x7: 28
+26 letters + 
+,.
+
+01110 01110
+11110 01111
+00000 00000
+
+abcdefghijklmnopqrstuvwxyz,.  -"';_)(=:/*
+
+
+setksize beakpq
+setmask 011100111011110011110000000000
+use abcdefghijklmnopqrstuvwxyz,.
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 50% 49%
+Fingers: 5.0% 11% 18% 17% 0.00% 0.00% 16% 17% 13% 3.0%
+
+    j  .  q         k  b  v
+ z  g  ,  y         d  f  w  x
+
+    p  o  u         m  s  l
+ h  i  a  e         t  n  r  c
+
+Fitness:       40944646
+Distance:      21014220
+Finger work:   293066
+Inward rolls:  5.97%
+Outward rolls: 3.28%
+Same hand:     30.46%
+Same finger:   5.16%
+Row change:    9.79%
+Home jump:     0.00%
+Ring jump:     2.31%
+To center:     0.00%
+
+
+]] 6.5gg
+
+std shift costs
+
+2x2x8: 32
+try w/o Space!
+
+26 letters + 
+,.-"';
+
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abcdefghijklmnopqrstuvwxyz,.-"';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 2
+
+Hands: 51% 48%
+Fingers: 5.0% 11% 18% 18% 0.00% 0.00% 18% 16% 12% 3.0%
+
+    -  .  "         q  v  x
+ '  g  ,  y  ;   j  f  b  w  z
+
+    p  o  u         d  n  l
+ h  i  a  e  k   m  t  s  r  c
+
+Fitness:       44895748
+Distance:      23547785
+Finger work:   99855
+Inward rolls:  5.97%
+Outward rolls: 2.99%
+Same hand:     30.39%
+Same finger:   5.40%
+Row change:    9.05%
+Home jump:     0.00%
+Ring jump:     2.27%
+To center:     1.53%
+
+
+
+]] 6.6gg
+
+higher shift costs
+
+2x2x8: 32
+try w/o Space!
+
+26 letters + 
+,.-"';
+
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abcdefghijklmnopqrstuvwxyz,.-"';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 51% 48%
+Fingers: 2.0% 13% 21% 15% 0.00% 0.00% 18% 16% 12% 3.0%
+
+    j  -  "         k  v  x
+ '  .  ,  y  ;   q  f  b  w  z
+
+    i  o  u         d  n  l
+ p  h  e  a  g   m  t  s  r  c
+
+Fitness:       47921716
+Distance:      24005250
+Finger work:   485190
+Inward rolls:  8.53%
+Outward rolls: 1.46%
+Same hand:     30.30%
+Same finger:   6.17%
+Row change:    10.24%
+Home jump:     0.00%
+Ring jump:     1.76%
+To center:     2.84%
+
+
+]] 6.7gg
+
+6.2 + higher shift costs
+
+2x2x8: 32
+26 letters + space +
+,.-"'
+
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"'
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2

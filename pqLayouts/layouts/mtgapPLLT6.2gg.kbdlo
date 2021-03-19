@@ -1,10 +1,11 @@
-! mtgapPLLT6.0gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT6.2gg, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows x 6 + 2 x 3thumbs)
 
-! :  -  '  x  /   =  )  b  w  *
-! (  .  ,  y  _   v  c  p  m  "
+!    -  '  x         j  b  w
+! "  .  ,  y  z   v  c  p  m  q
 
-! ;  i  o  u  z   j  d  n  l  q
+
+!    i  o  u         d  n  l
 ! g  a  e SP  k   f  t  s  r  h
 
 !imagefile mtgapPLLT2.5c-img.png
@@ -12,26 +13,23 @@
 imageview 0 50 60 110
 
 
-K2K q ;  ?
-K2K w i  I
-K2K e o  O
-K2K r u  U
-K2K t z  Z
-K2K u j  J
-K2K i d  D
-K2K o n  N
-K2K p l  L
-K2K [ q  Q
-K2K a g  G
-K2K s a  A
-K2K d e  E
-K2K f sp !
-K2K g k  K
-K2K j f  F
-K2K k t  T
-K2K l s  S
-K2K ; r  R
-K2K ' h  H
+
+K2K w  i  I
+K2K e  o  O
+K2K r  u  U
+K2K i  d  D
+K2K o  n  N
+K2K p  l  L
+K2K a  g  G
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K g  k  K
+K2K j  f  F
+K2K k  t  T
+K2K l  s  S
+K2K ;  r  R
+K2K '  h  H
 
 
 ! special keys / 'outside keys'
@@ -60,26 +58,22 @@ addlayertap alt space
 imageview 120 170 180 230
 
 
-K2K q : :
-K2K w - -
-K2K e ' '
-K2K r x X
-K2K t / /
-K2K u = =
-K2K i ) )
-K2K o b B
-K2K p w W
-K2K [ * *
-K2K a ( (
-K2K s . .
-K2K d , ,
-K2K f y Y
-K2K g _ _
-K2K j v V
-K2K k c C
-K2K l p P
-K2K ; m M
-K2K ' " "
+K2K w  - _
+K2K e  ' `
+K2K r  x X
+K2K i  j J
+K2K o  b B
+K2K p  w W
+K2K a  " /
+K2K s  . :
+K2K d  , ;
+K2K f  y Y
+K2K g  z Z
+K2K j  v V
+K2K k  c C
+K2K l  p P
+K2K ;  m M
+K2K '  q Q
 
 
 

@@ -1,10 +1,18 @@
-! mtgapPLLT6.0gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT6.0gg-b, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows x 6 + 2 x 3thumbs)
+! trying some manual adjustments because of hi same finger
+
+! + swap ae, trade ai for ie
+!   might want then to swap ,. too, but not that bad I think
+!   and I am now used to ,'s position!
+
+! ns is pretty high on the list too
+! rAINS, at least with ai now a roll 
 
 ! :  -  '  x  /   =  )  b  w  *
 ! (  .  ,  y  _   v  c  p  m  "
 
-! ;  i  o  u  z   j  d  n  l  q
+! ;  o  i  u  z   j  d  n  l  q
 ! g  a  e SP  k   f  t  s  r  h
 
 !imagefile mtgapPLLT2.5c-img.png
@@ -13,8 +21,8 @@ imageview 0 50 60 110
 
 
 K2K q ;  ?
-K2K w i  I
-K2K e o  O
+K2K w o  O
+K2K e i  I
 K2K r u  U
 K2K t z  Z
 K2K u j  J

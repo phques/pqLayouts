@@ -1,37 +1,34 @@
-! mtgapPLLT6.0gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT6.6gg, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows x 6 + 2 x 3thumbs)
 
-! :  -  '  x  /   =  )  b  w  *
-! (  .  ,  y  _   v  c  p  m  "
+!    -  .  "         q  v  x
+! '  g  ,  y  ;   j  f  b  w  z
 
-! ;  i  o  u  z   j  d  n  l  q
-! g  a  e SP  k   f  t  s  r  h
+!    p  o  u         d  n  l
+! h  i  a  e  k   m  t  s  r  c
+
 
 !imagefile mtgapPLLT2.5c-img.png
 
 imageview 0 50 60 110
 
 
-K2K q ;  ?
-K2K w i  I
-K2K e o  O
-K2K r u  U
-K2K t z  Z
-K2K u j  J
-K2K i d  D
-K2K o n  N
-K2K p l  L
-K2K [ q  Q
-K2K a g  G
-K2K s a  A
-K2K d e  E
-K2K f sp !
-K2K g k  K
-K2K j f  F
-K2K k t  T
-K2K l s  S
-K2K ; r  R
-K2K ' h  H
+K2K w  p P
+K2K e  o O
+K2K r  u U
+K2K i  d D
+K2K o  n N
+K2K p  l L
+K2K a  h H
+K2K s  i I
+K2K d  a A
+K2K f  e E
+K2K g  k K
+K2K j  m M
+K2K k  t T
+K2K l  s S
+K2K ;  r R
+K2K '  c C
 
 
 ! special keys / 'outside keys'
@@ -41,18 +38,13 @@ K2K enter rshift caps
 K2K lshift  lctrl +lctrl
 K2K rshift  rctrl +rctrl
 
-
-! thumb keys
-! cvb nm,
-
-!k2k c bs
 k2k v bs
-!k2k b lalt
 
-!k2k n lctrl
-K2K m cr +cr
-!k2k , cr 
+! K2K ralt cr +cr
+! k2k m sp
 
+K2K m  cr +cr
+k2k ralt sp
 
 ! ------- alt layer --------
 
@@ -60,26 +52,22 @@ addlayertap alt space
 imageview 120 170 180 230
 
 
-K2K q : :
-K2K w - -
-K2K e ' '
-K2K r x X
-K2K t / /
-K2K u = =
-K2K i ) )
-K2K o b B
-K2K p w W
-K2K [ * *
-K2K a ( (
-K2K s . .
-K2K d , ,
-K2K f y Y
-K2K g _ _
-K2K j v V
-K2K k c C
-K2K l p P
-K2K ; m M
-K2K ' " "
+K2K w  - _
+K2K e  . !
+K2K r  " /
+K2K i  q Q
+K2K o  v V
+K2K p  x X
+K2K a  ' @
+K2K s  g G
+K2K d  , ?
+K2K f  y Y
+K2K g  ; ;
+K2K j  j J
+K2K k  f F
+K2K l  b B
+K2K ;  w W
+K2K '  z Z
 
 
 

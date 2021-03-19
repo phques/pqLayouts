@@ -1,0 +1,73 @@
+
+Punctuation / syms steno (PLover) strokes, (that work on my Sculpt!)
+
+for use on ANSI restricted nbr keys layout
+and/or on a possible Georig (steno kbd) hybrid steno/normal layout
+
+  ,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+ 
+ 
+nb: short (2keys) ones might be triggered by accident on rolls !! 
+.. might need to try out based on layout.
+.. when across the two hands, probably ok anyways
+
+nb: "ol" qwerty does not work (PB)
+
+oh, and pqLayouts can only send ONE output key,
+ie no space after ,  etc
+(and does not do chords yet haha!)
+
+?? Use NM for right hand thumbs in wide?
+   Techn. would be M,  but might be uncomfy / tough
+ BUT using M, lets me do OEU for '/', cf / below
+
+
+in wide mode, qwerty :
+------------------
+
+, sd-l;		(kw-bg +space)
+, d-l		(w-b -space)(*RGBS)
+
+'.' no space (these might be too short anyways!)
+ e-o		(p-p)
+ e-[		(p-t)
+
+'.' with space after 
+(that's the one I am used to .. use this one w. no space?)
+ we-op		(tp-pl +space)
+
+! we-l;		(TP-BG)
+? sd-op		(KW-PL)
+
+			(H-PB doesnt work)
+- rl		(H-B) 
+- r-jl		(H*B +pre-space)
+
+ cant do ..	(RUPBD /  R*UPBD)
+_ f-,o]		(RUPD new)
+_ f-i[		(R-PD 'reasoned')	
+  or direct, normal on layer!
+
+
+" sf-;'		(KR-GS)
+" sf-j;'	(KR*GS)
+
+' c-m		(A-E)
+' asd-[		(SKW-T +space)
+' asd-u[	(SKW*T -space)
+' asd-j[	(SKW*T -space)
+
+( ef-o		(PR-P, new)(PREBP / P*PB  dont work)
+) ef-jo		(PR*P, new)(PR*EBP dont work)
+
+; wr-ip		(th-fl -space)
+
+= sd-p		(KW-L)
+= sd-jp		(KW*L)
+
+real: STPH-FPLT or KHR-PB, cantdo
+: awer-io	(STPH-FP new)
+
+(OEU cant with NM)
+/ v-m,		(OEU with M,)
+

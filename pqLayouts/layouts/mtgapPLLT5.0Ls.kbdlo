@@ -294,6 +294,14 @@ K2CK z  z y
 
 K2K n  cr +cr
 
+! repeat these from Main layer since I tend to hit them by habit
+! copy / paste / undo
+K2CK t  c x
+k2ck y  v
+K2CK u  z y
+
+
+
 ! shift on caps & enter
 K2K caps  lshift caps
 K2K enter rshift caps

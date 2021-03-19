@@ -1013,7 +1013,7 @@ To center:     2.95%
 
 ]] 6.0gg
 
-std shift cost
+lower shift cost
 
 missing
 !?$>{}[]\+|&<%@#^`~
@@ -1031,8 +1031,29 @@ set sameFingerP 180
 set sameFingerR 170
 set sameFingerM 150
 set sameFingerI 140
-set doubleShiftCost 150
-set shiftCost 100
+set doubleShiftCost 125
+set shiftCost 75
 sethandbias 5
 set numThreads 2
 
+
+Hands: 54% 45%
+Fingers: 2.0% 13% 17% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+ :  -  '  x  /   =  )  b  w  *
+ (  .  ,  y  _   v  c  p  m  "
+
+ ;  i  o  u  z   j  d  n  l  q
+ g  a  e SP  k   f  t  s  r  h
+
+Fitness:       64550876
+Distance:      33384371
+Finger work:   549438
+Inward rolls:  7.49%
+Outward rolls: 2.20%
+Same hand:     33.14%
+Same finger:   6.19%
+Row change:    9.71%
+Home jump:     0.00%
+Ring jump:     0.97%
+To center:     1.65%

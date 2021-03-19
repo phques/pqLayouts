@@ -1,0 +1,109 @@
+! mtgapPLLT6.7gg-b, going PLLT with MTGAP, wid mode
+! for Georgi steno kbd (2 rows x 6 + 2 x 3thumbs)
+! swap io (get rid of ai)
+! (tried swapping ae, then need to swap .,  and I didn't like ea anyways)
+! make ou a tad easier I think too
+! of course io is nice to type as inward roll, but ..
+! also make ce bit easier, vs ca
+
+!    -  '  x         k  b  v
+! "  .  ,  y  z   j  f  p  w  q
+
+!    o  i  u         d  n  l
+! c  a  e SP  g   m  t  s  r  h
+
+!imagefile mtgapPLLT2.5c-img.png
+
+imageview 0 50 60 110
+
+
+K2K w  o  O
+K2K e  i  I
+K2K r  u  U
+K2K i  d  D
+K2K o  n  N
+K2K p  l  L
+K2K a  c  C
+K2K s  a  A
+K2K d  e  E
+K2K f  sp _
+K2K g  g  G
+K2K j  m  M
+K2K k  t  T
+K2K l  s  S
+K2K ;  r  R
+K2K '  h  H
+
+
+! special keys / 'outside keys'
+
+K2K caps lshift caps
+K2K enter rshift caps
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+
+K2K v bs del
+
+K2K m cr +cr
+
+
+! ------- alt layer --------
+
+addlayertap alt space
+imageview 120 170 180 230
+
+
+K2K w  - /
+K2K e  ' ?
+K2K r  x X
+K2K i  k K
+K2K o  b B
+K2K p  v V
+K2K a  " @
+K2K s  . !
+K2K d  , ;
+K2K f  y Y
+K2K g  z Z
+K2K j  j J
+K2K k  f F
+K2K l  p P
+K2K ;  w W
+K2K '  q Q
+
+
+
+!K2K tab esc +esc
+K2K caps lshift caps
+
+!!K2K ] del +del
+K2K enter rshift caps
+
+
+! thumb keys
+! cvb nm,
+
+!k2k c bs
+k2k v bs
+!k2k b lalt
+
+!k2k n lctrl
+K2K m cr +cr
+!k2k , cr 
+
+
+! ------- numpad layer  --------
+
+!! pq-todo ???
+
+!! addlayertap numpad b
+!! imageview  240 290 300 350
+
+
+! ------- edit layer --------
+
+!! pq-todo ???
+
+!!addlayertap edit space
+!!imageview 360 410 420 470
+
