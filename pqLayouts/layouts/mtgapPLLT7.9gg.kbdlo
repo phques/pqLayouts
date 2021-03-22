@@ -1,0 +1,103 @@
+! mtgapPLLT7.9gg, going PLLT with MTGAP, wid mode, simili LaSalle
+! for Georgi steno kbd (2 rows, fingers over middle of the rows)
+! same params as 7.8, but with french allChars !!
+
+!    j  q  x         g  b  v
+! z  .  ,  -      w  c  p  m  k
+!
+!    o  i  u         d  n  l
+! y  a  e SP      f  t  s  r  h
+
+!imagefile mtgapPLLT2.5c-img.png
+
+imageview 0 50 60 110
+
+
+K2K w  o  O
+K2K e  i  I
+K2K r  u  U
+K2K i  d  D
+K2K o  n  N
+K2K p  l  L
+K2K a  y  Y
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K j  f  F
+K2K k  t  T
+K2K l  s  S
+K2K ;  r  R
+K2K '  h  H
+
+
+! special keys / 'outside keys'
+
+K2K caps lshift caps
+K2K enter rshift caps
+K2K lshift  lctrl +lctrl
+K2K rshift  rctrl +rctrl
+
+
+K2K v bs del
+
+K2K m cr +cr
+
+
+! ------- alt layer --------
+
+addlayertap alt space
+imageview 120 170 180 230
+
+
+K2K w  j J
+K2K e  q Q
+K2K r  x X
+K2K i  g G
+K2K o  b B
+K2K p  v V
+K2K a  z Z
+K2K s  . !
+K2K d  , ?
+K2K f  - '
+K2K j  w W
+K2K k  c C
+K2K l  p P
+K2K ;  m M
+K2K '  k K
+
+
+
+!K2K tab esc +esc
+K2K caps lshift caps
+
+!!K2K ] del +del
+K2K enter rshift caps
+
+
+! thumb keys
+! cvb nm,
+
+!k2k c bs
+k2k v bs
+!k2k b lalt
+
+!k2k n lctrl
+K2K m cr +cr
+!k2k , cr 
+
+
+! ------- numpad layer  --------
+
+!! pq-todo ???
+
+!! addlayertap numpad b
+!! imageview  240 290 300 350
+
+
+! ------- edit layer --------
+
+!! pq-todo ???
+
+!!addlayertap edit space
+!!imageview 360 410 420 470
+
