@@ -51,7 +51,7 @@ bool Layer::AddMapping(KeyValue from, IKeyAction* actionTo)
 
 bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
 {
-    Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
+    //Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
 
     to.Control(controlMapping);
     IKeyAction* action = new KeyOutAction(from, to);
@@ -67,6 +67,26 @@ bool Layer::AddStickyMapping(KeyValue vk)
 
     return AddMapping(vk, action);
 }
+
+bool Layer::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+{
+    // add chord/keyaction pair to list of chords
+    ChordAction chordAction = { chord, keyAction };
+    chords.push_back(chordAction);
+
+    return true;
+}
+
+// lookup 'chord' and return its asociated key action if found, else null 
+KeyActions::IKeyAction* Layer::GetChordAction(const Kord& chord)
+{
+    auto found = find(chords.begin(), chords.end(), chord);
+    if (found != chords.end())
+        return found->keyAction;
+
+    return nullptr;
+}
+
 
 void Layer::SetImageView(ImageView imageView, ImageView imageViewShift)
 {

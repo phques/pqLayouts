@@ -33,3 +33,14 @@ KbdHookEvent::KbdHookEvent(LPARAM lParam)
 
 //----------
 
+
+// converts a character to a VK and a 'isShifted' flag
+bool VkUtil::CharToVk(char ch, WORD& vk, bool& isShifted)
+{
+    vk = VkKeyScanA(ch);
+    if (vk == 0xFFFF)
+        return false;
+
+    isShifted = HasShiftBit(vk);
+    vk = vk & 0xFF;
+}

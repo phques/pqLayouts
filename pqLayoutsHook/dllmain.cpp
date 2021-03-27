@@ -165,6 +165,11 @@ PQHOOK_API bool AddStickyMapping(KeyValue vk)
     return theKbd.AddStickyMapping(vk);
 }
 
+PQHOOK_API bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+{
+    return theKbd.AddChord(chord, keyAction);
+}
+
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)
 {
     return theKbd.AddLayer(layerId, newLayerIdx);

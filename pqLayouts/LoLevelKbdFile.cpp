@@ -18,6 +18,9 @@
 #include "stdafx.h"
 #include "LoLevelKbdFile.h"
 #include "pqLayoutsHook.h"
+#include "../StaticLib1/util.h"
+#include "KeyOutAction.h"
+#include "Chord.h"
 
 
 std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
@@ -103,15 +106,12 @@ bool KeyParser::parseKey()
     }
     else
     {
-        // just a character represnting the key 'w', '{' etc
-        vk = VkKeyScanA(*keytext);
-        if (vk == 0xFFFF)
+        // just a character representing the key 'w', '{' etc
+        if (!VkUtil::CharToVk(*keytext, vk, isShifted))
         {
             std::cerr << "non valid key [" << param << "], line " << tokener.LineNo() << std::endl;
             return false;
         }
-        isShifted = HasShiftBit(vk);
-        vk = vk & 0xFF;
     }
 
     return true;
@@ -205,6 +205,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         else if (cmd == "imageview")
         {
             if (!setImageView(stringTokener))
+                return false;
+        }
+        else if (cmd == "kord")
+        {
+            if (!doKord(stringTokener))
                 return false;
         }
         else 
@@ -313,6 +318,49 @@ bool LoLevelKbdFile::doK2kcWithShCmd(StringTokener& tokener)
     }
 
     return true;
+}
+
+bool LoLevelKbdFile::doKord(StringTokener& tokener)
+{
+    // the output of the chord
+    KeyParser chordOutput(tokener, "chord outputKey");
+    if (!chordOutput())
+        return false;
+    
+    // now build the chord / read the keys of the chord
+    Kord chord;
+
+    while (!tokener.eof())
+    {
+        std::string tok;
+        tokener >> tok;
+
+        // could be a known key name
+        auto foundit = LoLevelKbdFile::KeyNames().find(tok);
+        if (foundit != LoLevelKbdFile::KeyNames().end())
+        {
+            chord.AddInChordKey(foundit->second);
+        }
+        else
+        {
+            // either a single key represented by its character 'a' or a chain of characters 'asdf'
+            // add each to the chord definition
+            for (auto* ptr = tok.c_str(); *ptr; ++ptr)
+            {
+                auto vk = VkKeyScanA(*ptr);
+                chord.AddInChordKey(vk & 0xFF);
+            }
+        }
+    }
+
+    // register the chord with its output 'action'
+    // create key action
+    KeyDef inKey(0, 0);
+    KeyValue outKey(chordOutput.vk, 0, chordOutput.isShifted || chordOutput.hasShiftPrefix);
+    auto action = new KeyActions::KeyOutAction(inKey, outKey);
+
+    // save chord definition
+    return HookKbd::AddChord(chord, action);
 }
 
 bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)

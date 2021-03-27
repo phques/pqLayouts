@@ -18,6 +18,7 @@
 #pragma once
 
 #include "Keydef.h"
+#include "KeyMapping.h"
 #include "layer.h"
 
 
@@ -40,11 +41,16 @@ public:
     bool AddCtrlMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
+    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
+    KeyActions::IKeyAction* GetChordAction(const Kord& chord);
+
     void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
     Layer::ImageView GetImageView(bool shiftDown) const;
 
 private:
     bool GotoLayer(Layer* layer);
+
+    void CreateChord(const char* chordKeys, char chordOutChar);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;

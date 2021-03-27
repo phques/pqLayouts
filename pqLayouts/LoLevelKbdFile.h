@@ -41,12 +41,6 @@ public:
 
     bool operator ()();
 
-    // checks bit 0 of hibyte of ret val from VkKeyScanA
-    static bool HasShiftBit(SHORT scanExVal) 
-    { 
-        return ((scanExVal >> 8) & 0x01) != 0; 
-    }
-
 public:
     std::string param;  // this is the text value read from file for the key
     bool hasShiftPrefix;
@@ -76,6 +70,7 @@ private:
     bool doK2kWithShCmd(StringTokener& tokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
+    bool doKord(StringTokener& tokener);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);

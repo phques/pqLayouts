@@ -21,6 +21,7 @@
 #include "LayerToggleAction.h"
 #include "Notifier.h"
 #include "util.h"
+#include "../pqLayouts/LoLevelKbdFile.h"
 
 using namespace KeyActions;
 
@@ -31,6 +32,7 @@ Layout::Layout() : currentLayer(nullptr)
     AddLayer("main", layerIdx);
     currentLayer = layersById["main"];
 }
+
 
 Layout::~Layout()
 {
@@ -144,6 +146,14 @@ bool Layout::AddCtrlMapping(KeyValue from, KeyValue to)
     return currentLayer->AddMapping(from, to, true);
 }
 
+bool Layout::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+{
+    if (currentLayer == nullptr)
+        return false;
+
+    return currentLayer->AddChord(chord, keyAction);
+}
+
 bool Layout::AddStickyMapping(KeyValue vk)
 {
     if (currentLayer == nullptr)
@@ -164,4 +174,13 @@ Layer::ImageView Layout::GetImageView(bool shiftDown) const
         return currentLayer->GetImageView(shiftDown);
 
     return {};
+}
+
+// lookup 'chord' and return its asociated key action if found, else null 
+KeyActions::IKeyAction* Layout::GetChordAction(const Kord& chord)
+{
+    if (currentLayer != nullptr)
+        return currentLayer->GetChordAction(chord);
+
+    return nullptr;
 }

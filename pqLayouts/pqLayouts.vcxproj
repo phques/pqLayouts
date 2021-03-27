@@ -88,7 +88,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../pqLayoutsHook</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../pqLayoutsHook;../StaticLib1</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../pqLayoutsHook</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../pqLayoutsHook;../StaticLib1</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,6 +180,9 @@
   <ItemGroup>
     <ProjectReference Include="..\PqLayoutsHook\PqLayoutsHook.vcxproj">
       <Project>{680c5f5c-3188-42dd-a81d-3464892277b6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\StaticLib1\StaticLib1.vcxproj">
+      <Project>{33a9af49-f3f0-46eb-a648-c4b520c34cfd}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -71,6 +71,22 @@ struct WmKeyLPARAM {
     } u;
 };
 
+
+//--------
+
+struct VkUtil
+{
+    // checks bit 0 of hibyte of ret val from VkKeyScanA
+    static bool HasShiftBit(SHORT scanExVal) 
+    { 
+        return ((scanExVal >> 8) & 0x01) != 0; 
+    }
+
+    // converts a character to a VK and a 'isShifted' flag
+    static bool CharToVk(char ch, WORD& vk, bool& isShifted);
+};
+
+
 //--------
 
 // debug only Printf (build app in console subsystem)

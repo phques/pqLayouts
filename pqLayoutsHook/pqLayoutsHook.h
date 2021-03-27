@@ -19,6 +19,8 @@
 #include "dllExport.h"
 #include "Keydef.h"
 #include "Layer.h"
+#include "Chord.h"
+#include "KeyMapping.h"
 #include "Notification.h"
 
 namespace HookKbd
@@ -30,10 +32,10 @@ namespace HookKbd
     PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
     PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to);
     PQHOOK_API bool AddStickyMapping(KeyValue vk);
+    PQHOOK_API bool AddChord(Kord&, KeyActions::IKeyAction*);
 
     PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
     PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle);
-    PQHOOK_API bool SetLayerImage();
 
     PQHOOK_API bool GotoLayer(const char* layerId);
     PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);

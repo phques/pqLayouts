@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Chord.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Keydef.h" />
     <ClInclude Include="Keyboard.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="LayerToggleAction.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chord.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Keydef.cpp" />
     <ClCompile Include="Keyboard.cpp" />

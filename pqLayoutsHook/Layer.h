@@ -18,6 +18,7 @@
 #pragma once
 
 #include "KeyMapping.h"
+#include "Chord.h"
 
 
 class Layer
@@ -49,6 +50,9 @@ public:
     bool AddMapping(KeyValue from, KeyValue to, bool controlMapping);
     bool AddStickyMapping(KeyValue vk);
 
+    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
+    KeyActions::IKeyAction* GetChordAction(const Kord& chord);
+
     void SetImageView(ImageView imageView, Layer::ImageView imageViewShift);
     ImageView GetImageView(bool shiftDown) const;
 
@@ -58,5 +62,19 @@ private:
     std::map<VeeKee, CaseMapping> mappings;
     ImageView imageView;
     ImageView imageViewShift;
+
+    struct ChordAction
+    {
+        Kord chord;
+        KeyActions::IKeyAction* keyAction;
+
+        bool operator==(const Kord& otherChord) const { 
+            return otherChord == chord; 
+        }
+    };
+
+    // pq-todo? might become performance prob if larger qty of chords
+    std::vector<ChordAction> chords;
+
 };
 

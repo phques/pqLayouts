@@ -76,8 +76,8 @@ namespace
         SHORT qwertyVk = charToVk[from];
         SHORT outputVk = charToVk[to];
 
-        addMapping(qwertyVk & 0xFF, KeyParser::HasShiftBit(qwertyVk),
-                   outputVk & 0xFF, KeyParser::HasShiftBit(outputVk));
+        addMapping(qwertyVk & 0xFF, VkUtil::HasShiftBit(qwertyVk),
+                   outputVk & 0xFF, VkUtil::HasShiftBit(outputVk));
     }
 
     void addMappingSh(CHAR from, CHAR to)
@@ -88,7 +88,7 @@ namespace
 
         // on shift layer
         addMapping(qwertyVk & 0xFF, true,
-                   outputVk & 0xFF, KeyParser::HasShiftBit(outputVk));
+                   outputVk & 0xFF, VkUtil::HasShiftBit(outputVk));
     }
 
     void addMapping(bool shiftLayer, const char* mask, const char* map)

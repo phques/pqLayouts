@@ -25,7 +25,7 @@ namespace KeyActions
 class KeyOutAction : public IKeyAction
 {
 public:
-    KeyOutAction(KeyDef inKey, KeyValue outKey);
+    PQHOOK_API KeyOutAction(KeyDef inKey, KeyValue outKey);
 
     // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
     virtual bool OnKeyDown(Keyboard*);

@@ -20,6 +20,7 @@
 #include "util.h"
 #include "layout.h"
 #include "Notification.h"
+#include "chord.h"
 
 class KbdHook; // fwd
 
@@ -45,16 +46,17 @@ public:
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddCtrlMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddStickyMapping(KeyValue vk);
+    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
 
-    bool OnKeyEvent(KbdHookEvent&, DWORD injectedFromMeValue);
+    bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);
     // dbg
     void OutNbKeysDn();
 
     bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
 
-    bool SendVk(const KeyValue& key, bool down);
-    void TrackModifiers(VeeKee vk, bool down);
-    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool down);
+    bool SendVk(const KeyValue& key, bool pressed);
+    void TrackModifiers(VeeKee vk, bool pressed);
+    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);
 
     bool ToggleSuspend();
     bool Suspended();
@@ -62,6 +64,7 @@ public:
     void QuitKey(VeeKee);
     void MakeSticky(VeeKee);
     VeeKee MakeSticky() const;
+    void EnableChording(bool enable);
 
     void SetImageFilename(const WCHAR* filename);
     const std::wstring& GetImageFilename() const;
@@ -73,17 +76,21 @@ public:
 
 protected:
 
-    void MappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool down);
+    void MappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);
     KeyActions::IKeyAction* MappedKeyDown(VeeKee vk) const;
 
-    void ModifierDown(VeeKee vk, bool down);
+    void ModifierDown(VeeKee vk, bool pressed);
     bool ModifierDown(VeeKee vk) const;
 
     bool ShiftDown() const;
 
-    KeyActions::IKeyAction* GetMappingValue(KbdHookEvent& event);
+    KeyActions::IKeyAction* GetMappingValue(const KbdHookEvent & event);
 
-    void SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue);
+    void SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue);
+
+    void HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
+    void OnCompletedChord(const DWORD& injectedFromMeValue);
+    void ReplayCancelledChord(Kord&, DWORD injectedFromMeValue);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -95,6 +102,10 @@ private:
 
     // at a logical level, whatever the source
     VeeKeeSet downModifiers;
+
+    Kord chord;
+    bool chordingEnabled;
+    bool chordingSuspended;
 
     DWORD lastKeypressTick; // time tick of the last key press event
 

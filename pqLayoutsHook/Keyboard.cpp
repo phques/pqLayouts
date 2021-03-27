@@ -52,7 +52,9 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     makeSticky(0),
     suspendKey(0), 
     quitKey(0),
-    lastKeypressTick(0)
+    lastKeypressTick(0),
+    chordingEnabled(false),
+    chordingSuspended(false)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -60,6 +62,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
         SHORT vk = VkKeyScanA(c);
         isprint.insert(vk);
     }
+
 }
 
 void Keyboard::SetMainWnd(HWND hMainWindow)
@@ -119,11 +122,11 @@ bool Keyboard::IsExtended(VeeKee vk)
 
 // update the up/down modifiers collection
 // notifies main app when shift goes from up/down ('layer change')
-void Keyboard::ModifierDown(VeeKee vk, bool down)
+void Keyboard::ModifierDown(VeeKee vk, bool pressed)
 {
     const bool isShiftDownBefore = ShiftDown();
 
-    if (down)
+    if (pressed)
         downModifiers.insert(vk);
     else
         downModifiers.erase(vk); 
@@ -152,9 +155,9 @@ bool Keyboard::ShiftDown() const
         ModifierDown(VK_SHIFT);
 }
 
-void Keyboard::TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down)
+void Keyboard::TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool pressed)
 {
-    MappedKeyDown(physicalVk, mapped, down);
+    MappedKeyDown(physicalVk, mapped, pressed);
 }
 
 bool Keyboard::ToggleSuspend()
@@ -184,6 +187,11 @@ void Keyboard::MakeSticky(VeeKee makeSticky)
 VeeKee Keyboard::MakeSticky() const
 {
     return makeSticky;
+}
+
+void Keyboard::EnableChording(bool enable)
+{
+    chordingEnabled = enable;
 }
 
 void Keyboard::SetImageFilename(const WCHAR* filename)
@@ -225,9 +233,9 @@ void Keyboard::QuitKey(VeeKee vk)
     quitKey = vk;
 }
 
-void Keyboard::MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool down)
+void Keyboard::MappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool pressed)
 {
-    if (down)
+    if (pressed)
         downMappedKeys[physicalVk] = mapped;
     else
         downMappedKeys.erase(physicalVk); 
@@ -264,11 +272,22 @@ bool Keyboard::AddStickyMapping(KeyValue vk)
     return layout.AddStickyMapping(vk);
 }
 
+bool Keyboard::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+{
+    if (layout.AddChord(chord, keyAction))
+    {
+        EnableChording(true);
+        return true;
+    }
+
+    return false;
+}
+
 
 
 //------
 
-IKeyAction* Keyboard::GetMappingValue(KbdHookEvent& event)
+IKeyAction* Keyboard::GetMappingValue(const KbdHookEvent & event)
 {
     const CaseMapping* caseMapping = layout.Mapping(event.vkCode);
 
@@ -284,7 +303,7 @@ IKeyAction* Keyboard::GetMappingValue(KbdHookEvent& event)
 
 
 
-bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
+bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
 {
     // is it the suspend key ?
     if (event.vkCode == suspendKey)
@@ -336,6 +355,13 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
     // we have something to act on..
     if (action != nullptr)
     {
+        // handle possible chording
+        if (chordingEnabled && !chordingSuspended)
+        {
+            HandleChording(event, injectedFromMeValue);
+            return true;
+        }
+
         // eat key down repeats
         if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
             return true;
@@ -385,15 +411,83 @@ bool Keyboard::OnKeyEvent(KbdHookEvent& event, DWORD injectedFromMeValue)
     return false; // let key through
 }
 
-
-void Keyboard::TrackModifiers(VeeKee vk, bool down)
+void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
 {
-    if (IsModifier(vk))
-        ModifierDown(vk, down);
+    chord.OnEvent(event);
+
+    switch (chord.GetState())
+    {
+    case Kord::State::Cancelled:
+    {
+        Printf("cancelled chord, replaying keys\n");
+        
+        ReplayCancelledChord(chord, injectedFromMeValue);
+        chord.Reset();
+        break;
+    }
+
+    case Kord::State::Completed:
+    {
+        OnCompletedChord(injectedFromMeValue);
+        chord.Reset();
+        break;
+    }
+    }
+}
+
+void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
+{
+    // lookup chord and output its value if found
+    // else output original key (cancelled chord)
+    Printf("completed chord [%s]\n", chord.ChordValue().c_str());
+
+    KeyActions::IKeyAction* chordAction = layout.GetChordAction(chord);
+    if (chordAction != nullptr)
+    {
+        Printf("chord found, executing its action keydown/up\n");
+
+        chordingEnabled = false;
+
+        // activate action for this chord
+        chordAction->OnKeyDown(this);
+
+        // should this be a Tap ? techniclly it is
+        chordAction->OnKeyUp(this, false);
+
+        chordingEnabled = true;
+    }
+    else
+    {
+        //not a known chord, cancel it and replay cumulated keys sequence
+        Printf("chord not found, cancelling / replaying keys\n");
+        ReplayCancelledChord(chord, injectedFromMeValue);
+    }
 }
 
 
-bool Keyboard::SendVk(const KeyValue& key, bool down)
+// replays the key events accumulated in a failed chord
+void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
+{
+    chordingEnabled = false;
+
+    for (auto& keyEvent : chord.KeysSequence())
+    {
+        OnKeyEvent(keyEvent, injectedFromMeValue);
+    }
+
+    chordingEnabled = true;
+}
+
+
+
+void Keyboard::TrackModifiers(VeeKee vk, bool pressed)
+{
+    if (IsModifier(vk))
+        ModifierDown(vk, pressed);
+}
+
+
+bool Keyboard::SendVk(const KeyValue& key, bool pressed)
 {
     // prepare an array of Inputs to send
     // these include shift/control events surrounding the mapped key to send
@@ -401,7 +495,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool down)
     size_t idx = 0;
 
     // add any required up/down shifts
-    if (down)
+    if (pressed)
     {
         // don't surrounding shift up/down keys if the output key is shift or capslock
         if (!IsShift(key.Vk()) && key.Vk() != VK_CAPITAL)
@@ -442,7 +536,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool down)
 
     // add the mapped key
     {
-        SetupInputKey(inputs[idx++], key.Vk(), down, injectedFromMeValue);
+        SetupInputKey(inputs[idx++], key.Vk(), pressed, injectedFromMeValue);
     }
 
     // finaly, undo any shift/control exta events we added above
@@ -467,24 +561,25 @@ bool Keyboard::SendVk(const KeyValue& key, bool down)
     Sleep(1);
 
     // and finally, track any modifiers up/down we sent (actual output key, not pre/suffix ones !)
-    TrackModifiers(key.Vk(), down);
+    TrackModifiers(key.Vk(), pressed);
 
     return true;
 }
 
-void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool down, DWORD injectedFromMeValue)
+void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue)
 {
     //UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
     input.type = INPUT_KEYBOARD;
     input.ki.wVk = static_cast<WORD>(vk);
     //input.ki.wScan = scancode;
-    input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
+    input.ki.dwFlags = pressed ? 0 : KEYEVENTF_KEYUP;
     input.ki.time = 0;
     input.ki.dwExtraInfo = injectedFromMeValue;
     if (IsExtended(vk))
         input.ki.dwFlags |= KEYEVENTF_EXTENDEDKEY;
 }
+
 
 // dbg 
 void Keyboard::OutNbKeysDn()
