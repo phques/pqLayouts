@@ -987,6 +987,7 @@ To center:     1.39%
 
 7.8 with french allChars !!
 (wikipedia, english allChars includes programming languages)
+(note that we are still using digraph for english !)
 
 setksize beakpqgg
 setmask 011100111011110111110000000000
@@ -1026,4 +1027,101 @@ Row change:    8.92%
 Home jump:     0.00%
 Ring jump:     0.89%
 To center:     0.90%
+
+
+]] 8.0gg
+
+add back mid col index key 
+(not my fav on ansi kbd, but curious to see, Georgi should be equal nice left/right mid col)
+(compromise, lighten the access to alt layer a bit)
+
+french allChars.txt !!
+(wikipedia, english allChars includes programming languages)
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 55% 44%
+Fingers: 0.00% 12% 19% 24% 0.00% 0.00% 14% 15% 14% 1.0%
+
+    -  q  z         g  b  v
+ !  .  ,  x  ?   j  c  p  m  w
+
+    o  i  u         d  n  l
+ y  a  e SP  k   f  t  s  r  h
+
+Fitness:       101502507
+Distance:      21228190
+Finger work:   1432187
+Inward rolls:  7.36%
+Outward rolls: 2.59%
+Same hand:     32.36%
+Same finger:   5.37%
+Row change:    8.82%
+Home jump:     0.00%
+Ring jump:     0.73%
+To center:     1.28%
+
+
+]] 8.1gg
+
+8.0 by std allChars.txt 
+(add back mid col index key )
+
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 52% 47%
+Fingers: 2.0% 14% 17% 20% 0.00% 0.00% 17% 14% 14% 3.0%
+
+    q  -  z         f  g  b
+ ?  .  ,  x  !   v  m  w  p  j
+
+    i  o  u         r  d  n
+ y  a  e SP  k   l  h  t  s  c
+
+Fitness:       100347670
+Distance:      21877595
+Finger work:   1127610
+Inward rolls:  10.29%
+Outward rolls: 2.05%
+Same hand:     32.36%
+Same finger:   5.19%
+Row change:    9.61%
+Home jump:     0.00%
+Ring jump:     0.82%
+To center:     2.24%
 

@@ -32,7 +32,7 @@ class IKeyAction
     friend class Keyboard;
 
 public:
-    IKeyAction() : downTimeTick(0) {}
+    IKeyAction() : downTimeTick(0), upTimeTick(0) {}
     virtual ~IKeyAction() {}
 
     // returns true to 'eat' the original received key (ie do not forward to next kbd hook)

@@ -133,9 +133,9 @@ public:
         return true;
     }
 
-    unsigned int OnKey(WPARAM wParam, bool down)
+    unsigned int OnKey(WPARAM wParam, bool pressed)
     {
-        LuaRef ret = kbdOnKey(theKbd, wParam, down);
+        LuaRef ret = kbdOnKey(theKbd, wParam, pressed);
         if (ret.isNil())
             return 0;
         return ret;

@@ -109,7 +109,7 @@ K2CK  `  z y
 
 ! ------- alt layer --------
 
-addlayertap alt ralt
+addlayertap alt space
 imageview 120 170 180 230
 
 ! todo syms
@@ -219,7 +219,8 @@ K2K rshift  rctrl +rctrl
 
 ! ------- edit layer --------
 
-addlayertap edit space
+addlayertap edit lalt
+! addlayertap edit ralt
 imageview 360 410 420 470
 
 !! stickyer rctrl

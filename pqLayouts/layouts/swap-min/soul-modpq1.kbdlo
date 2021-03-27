@@ -3,6 +3,7 @@
 ! http://kennetchaz.github.io/symmetric-typing/soul.html
 ! modpq1: swap /k (K up there is really bad on my kbd)
 !  possible other swaps: cd fb
+!  dunno what to do with P waaay up there :-p
 !  see soul-pqmods.txt
 
 ! q w l d p  / m u y ;
@@ -13,6 +14,8 @@ imagefile soul-modpq1.png
 
 imageview 0 60 75 135
 
+K2K q q Q
+K2K w w W
 K2K e l L
 K2K r d D
 K2K t p P
@@ -22,15 +25,25 @@ K2K i u U
 K2K o y Y
 K2K p ; :
 
+K2K a a A
+K2K s s S
 K2K d r R
 K2K f t T
+K2K g g G
 K2K h f F
 K2K j n N
 K2K k e E
 K2K l i I
 K2K ; o O
+K2K ' ' "
 
+K2K z z Z
+K2K x x X
+K2K c c C
+K2K v v V
 K2K b j J
 K2K n b B
 K2K m h H
+K2K , , <
+K2K . . >
 K2K / k K
