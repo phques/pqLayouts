@@ -59,61 +59,66 @@ K2K h ^k +^k
 ! ->  they have same output for now (pqLayouts = single char output, 2021-03)
 !     eg open/close quote are the same
 
-!steakpower QAWSEDRFCVM,IKOLP;['
+! we dont really use -D -Z .. but need to define 'em !
+steakpower QAWSEDRFCVM,IKOLP;[' ] cr
 steakstars TGUJ
 
-kord .  weop		!! TP-PL
-kord ,  sdl;		!! KW-BG
-kord ;  wrip		!! TH-FL
+steaks
 
-kord "  sd;'		!! KW-GS open
-kord "  sf;'		!! KR-GS close
+ .  weop		!! TP-PL
+ ,  sdl;		!! KW-BG
+ ;  wrip		!! TH-FL
 
-kord '  asd[		!! SKW-T {'^} (open single quote)
-kord '  asd*[		!! SKW*T {^'} (close single quote)
+ "  sd;'		!! KW-GS open
+ "  sf;'		!! KR-GS close
 
-kord !  wel;		!! TP-BG
-kord ?  sdop		!! KW-PL
+ '  asd[		!! SKW-T {'^} (open single quote)
+ '  asd*[		!! SKW*T {^'} (close single quote)
 
-kord -  rl 			!! H-B
-kord -  r*l			!! H*B +pre-space
+ !  wel;		!! TP-BG
+ ?  sdop		!! KW-PL
 
-kord _  sdfkl;		!! KWR-RBG (mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS)
+ -  rl 			!! H-B
+ -  r*l			!! H*B +pre-space
 
-kord (  efmo	  	!! PREP  (new, PREBP )
-kord )  ef*mo	  	!! PR*EP (new, PR*EBP)
-kord (  e*l		  	!! P*B   (new, from P*PB)
-kord )  e*l[	  	!! P*BT  (new, from P*PBT)
+ _  sdfkl;		!! KWR-RBG (mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS)
 
-kord =  sdp			!! KW-L, (with space, or KW*L)
+ (  efmo	  	!! PREP  (new, PREBP )
+ )  ef*mo	  	!! PR*EP (new, PR*EBP)
+ (  e*l		  	!! P*B   (new, from P*PB)
+ )  e*l[	  	!! P*BT  (new, from P*PBT)
 
-kord :  awerio		!! STPH-FP new, from STPH-FPLT (also KHR-PB)
+ =  sdp			!! KW-L, (with space, or KW*L)
 
-kord /  vm,			!! OEU
-kord \ 	cmkl		!! AERB new from SPWHRAERB
-kord + ef,'			!! PRUS, new from PHR*US
-kord * awfl;		!! STR-BG
+ :  awerio		!! STPH-FP new, from STPH-FPLT (also KHR-PB)
 
-kord bs  dio		!! W-FP (W-FP, new from PW-FP)
-kord ^bs d*io		!! W*FP (W*FP, new PW*FP, used here as ctrl-BS)
+ /  vm,			!! OEU
+ \ 	cmkl		!! AERB new from SPWHRAERB
+ + ef,'			!! PRUS, new from PHR*US
+ * awfl;		!! STR-BG
 
-kord cr fk			!! R-R
+ bs  dio		!! W-FP (W-FP, new from PW-FP)
+ ^bs d*io		!! W*FP (W*FP, new PW*FP, used here as ctrl-BS)
 
-kord ^home qri[		!! SH-FT
-kord ^end afk'		!! SR-RS
-kord home ri[		!!  H-FT, new PQ 
-kord end  fk'		!!  R-RS, new PQ
+ cr fk			!! R-R
+
+ ^home qri[		!! SH-FT
+ ^end afk'		!! SR-RS
+ home ri[		!!  H-FT, new PQ 
+ end  fk'		!!  R-RS, new PQ
 
 
-kord ^c sfl;		!! KR-BG new short
-kord ^v sf*i		!! KR*F new short
-kord ^w sf*[		!! KR*T new short
-kord ^k sf*l;		!! KR*BG new short
+ ^c sfl;		!! KR-BG new short
+ ^v sf*i		!! KR*F new short
+ ^w sf*[		!! KR*T new short
+ ^k sf*l;		!! KR*BG new short
 
-kord tab wc*l		!! "TA*B": "{#Tab}{^}",
-kord esc wemil;		!! "TPEFBG": "{#Escape}",
+ tab wc*l		!! "TA*B": "{#Tab}{^}",
+ esc wemil;		!! "TPEFBG": "{#Escape}",
 
-kord del wsmp		!! "TKEL": "{#Delete}",
+ del wsmp		!! "TKEL": "{#Delete}",
+
+endsteaks
 
 
 ! ------- alt layer --------

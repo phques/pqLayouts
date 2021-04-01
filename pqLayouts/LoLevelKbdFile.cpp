@@ -52,6 +52,9 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
 
 };
 
+std::string LoLevelKbdFile::steakPower("SSTKPWHRAOEUFRPBLGTSDZ");
+
+
 //--------------
 
 
@@ -59,6 +62,11 @@ StringTokener::StringTokener(const std::string& line, int lineNo) : lineNo(lineN
 {
     str(line);
 }
+
+StringTokener::StringTokener(File& f) : StringTokener(f.line, f.lineNo)
+{
+}
+
 
 //--------------
 
@@ -70,7 +78,7 @@ KeyParser::KeyParser(StringTokener& tokener, const char* paramName) :
 {
 }
 
-bool KeyParser::operator ()()
+bool KeyParser::ReadFromTokener()
 {
     // read key param
     if (tokener.eof()) {
@@ -79,9 +87,17 @@ bool KeyParser::operator ()()
     }
 
     tokener >> param;
+    return true;
+}
+
+bool KeyParser::operator ()()
+{
+    // read key param
+    if (!ReadFromTokener())
+        return false;
 
     // parse key
-    return parseKey();
+    return ParseKey();
 }
 
 // reads multiple keys from current line (from tokener), no modifiers on keys
@@ -134,7 +150,7 @@ KeyValue KeyParser::ToKeyValue() const
     return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix);
 }
 
-bool KeyParser::parseKey()
+bool KeyParser::ParseKey()
 {
     // check for prefix '+' for shifted key
     const char* keytext = param.c_str();
@@ -183,6 +199,14 @@ bool KeyParser::parseKey()
     return true;
 }
 
+//----
+
+void File::GetLine()
+{
+    lineNo++;
+    std::getline(f, line);
+}
+
 
 //--------------------------------
 
@@ -194,11 +218,9 @@ LoLevelKbdFile::LoLevelKbdFile()
 bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
 {
     // open file
-    int lineNo = 0;
-    std::string line;
-    std::ifstream kbdfile(filename);
+    std::ifstream f(filename);
 
-    if (!kbdfile)
+    if (!f)
     {
         std::cerr << "failed to open lo level kbd def file [" << filename << "]" << std::endl;
 
@@ -210,19 +232,20 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
     }
 
     // read file line by line
-    while (!kbdfile.eof())
-    {
-        lineNo++;
-        std::getline(kbdfile, line);
+    File kbdfile(f);
 
-        StringTokener stringTokener(line, lineNo);
+    while (!kbdfile.f.eof())
+    {
+        kbdfile.GetLine();
+
+        StringTokener stringTokener(kbdfile);
 
         // read the next command (or !comments)
         std::string cmd;
         stringTokener >> cmd;
 
         // skip comment / empty line
-        if (stringTokener.eof() || cmd.c_str()[0] == '!') 
+        if (cmd.empty() || cmd.c_str()[0] == '!') 
         {
             continue;
         }
@@ -273,9 +296,19 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!setImageView(stringTokener))
                 return false;
         }
+        else if (cmd == "steakpower")
+        {
+            if (!doSteakPower(kbdfile, stringTokener))
+                return false;
+        }
         else if (cmd == "steakstars")
         {
             if (!doSteakStars(stringTokener))
+                return false;
+        }
+        else if (cmd == "steaks")
+        {
+            if (!doSteaks(kbdfile))
                 return false;
         }
         else if (cmd == "kord")
@@ -285,7 +318,7 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
         else 
         {
-            std::cerr << "expecting a command, line " << lineNo << std::endl;
+            std::cerr << "expecting a command, line " << kbdfile.lineNo << std::endl;
             return false;
         }
 
@@ -391,6 +424,45 @@ bool LoLevelKbdFile::doK2kcWithShCmd(StringTokener& tokener)
     return true;
 }
 
+bool LoLevelKbdFile::doSteakPower(File& kbdfile, StringTokener& tokener)
+{
+    // read the (steno) chord keys mappings
+    // map steno keys SSTKPWHRAO.. .. to qwerty kbd keys
+    stenoKbdMap.clear();
+
+    KeyParser chordKeysParser(tokener, "steno chord keys mapping");
+
+    // read the qwerty keys
+    std::list<VeeKee> stenoQwertyKeys;
+    if (!chordKeysParser.GetKeys(stenoQwertyKeys))
+        return false;
+
+    // do we have enough qwerty keys to define the steno kbd?
+    if (stenoQwertyKeys.size() < steakPower.size())
+    {
+        std::cerr << "not enough keys for steno chord mapping, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    // parse qwerty keys / steno keys to create the steno keys mapping
+    auto stenoQwertyKeyIt = stenoQwertyKeys.begin();
+    auto steakPowerIt = steakPower.begin();
+    std::string prefix;
+
+    for (; steakPowerIt != steakPower.end(); ++steakPowerIt, ++stenoQwertyKeyIt)
+    {
+        // right hand steno keys use a '-' prefix : "-F"
+        if (*steakPowerIt == 'F')
+            prefix = "-";
+
+        // save steno key mapping
+        auto stenoKey = prefix + *steakPowerIt;
+        stenoKbdMap[stenoKey] = *stenoQwertyKeyIt;
+    }
+
+    return true;
+}
+
 bool LoLevelKbdFile::doSteakStars(StringTokener& tokener)
 {
     KeyParser chordStarsParser(tokener, "chord key stars");
@@ -409,21 +481,25 @@ bool LoLevelKbdFile::doSteakStars(StringTokener& tokener)
 bool LoLevelKbdFile::doKord(StringTokener& tokener)
 {
     // the output of the chord
-    KeyParser chordOutput(tokener, "chord outputKey");
+    KeyParser chordOutput(tokener, "chord definition");
     if (!chordOutput())
         return false;
     
     // now build the chord / read the keys of the chord
-    Kord chord;
+    return parseChordValue(tokener, chordOutput);
+}
 
+bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOutput)
+{
+    // build the chord / read the keys of the chord
     std::list<VeeKee> chordKeys;
     if (!chordOutput.GetKeys(chordKeys))
         return false;
 
     // place chords keys into chord definition
+    Kord chord;
     for (auto key : chordKeys)
         chord.AddInChordKey(key);
-
 
     // register the chord with its output 'action'
     // create key action
@@ -433,6 +509,48 @@ bool LoLevelKbdFile::doKord(StringTokener& tokener)
 
     // save chord definition
     return HookKbd::AddChord(chord, action);
+}
+
+bool LoLevelKbdFile::doSteaks(File& file)
+{
+    // exit on eof or "endsteaks"
+    while (true)
+    {
+        // read next line
+        if (file.f.eof())
+        {
+            std::cerr << "unexpected end of file, expecting chord definition or 'endsteaks', line " << file.lineNo << std::endl;
+            return false;
+        }
+
+        file.GetLine();
+        StringTokener tokener(file);
+
+        // chord def or "endsteaks"
+        KeyParser chordDef(tokener, "chord definition");
+
+        // read the next token
+        if (!chordDef.ReadFromTokener())
+            return false;
+
+        // "endsteaks" indicates end of chords defintions
+        if (chordDef.param == "endsteaks")
+            return true;
+
+        // skip empty line / comment
+        if (tokener.eof() || chordDef.param.c_str()[0] == '!')
+            continue;
+
+        // parse the output key of the chord
+        if (!chordDef.ParseKey())
+            return false;
+
+        // now complete the chord definition
+        if (!parseChordValue(tokener, chordDef))
+            return false;
+
+    }
+
 }
 
 bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)

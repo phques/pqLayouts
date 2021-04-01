@@ -22,10 +22,30 @@
 
 //---------
 
+
+class File
+{
+public:
+    File(std::ifstream& f) : lineNo(0), f(f)
+    {}
+
+    void GetLine();
+
+    int lineNo;
+    std::string line;
+    std::ifstream& f;
+};
+
+
+//-------------
+
+
 class StringTokener : public std::istringstream
 {
 public:
     StringTokener(const std::string& line, int lineNo);
+    StringTokener(File&);
+
     int LineNo() const { return lineNo; }
 
 private:
@@ -40,6 +60,8 @@ public:
     KeyParser(StringTokener& tokener, const char* paramName);
 
     bool operator ()();
+    bool ReadFromTokener();
+    bool ParseKey();
 
     bool GetKeys(std::list<VeeKee>&);
     KeyValue ToKeyValue() const;
@@ -51,8 +73,6 @@ public:
     bool isShifted;     // as defined by VkKeyScan()
     WORD vk;
 
-private:
-    bool parseKey();
 private:
     StringTokener& tokener;
     const char* paramName;
@@ -75,7 +95,10 @@ private:
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
     bool doSteakStars(StringTokener& tokener);
+    bool doSteakPower(File&, StringTokener& tokener);
     bool doKord(StringTokener& tokener);
+    bool doSteaks(File& file);
+    bool parseChordValue(StringTokener& tokener, KeyParser& chordOutput);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);
@@ -84,5 +107,10 @@ private:
 
 private:
     static std::map<std::string, WORD> keyNames;
+    static std::string steakPower;
+
+    // map steno keys SSTKPWHRAO.. .. to qwerty kbd keys
+    std::map<std::string, VeeKee> stenoKbdMap;
+
 };
 

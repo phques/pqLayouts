@@ -61,11 +61,14 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 + chording
 ---
-- seems to have broken ctrl-xx?
 - support pre-mapping .. ie, A -> S  T,G,U,J -> *
 - use real steno keys to define chords
+- use a single command to define multiple chords,
+  w. begin/end token (vs using 'kord' on each)
 
 + #include files
   - for edit, numpad, chords..
 
 + one-shot modifier, layer
+  (set temp 'need xyz' flag in found action key?)
+
