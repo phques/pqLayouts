@@ -53,7 +53,6 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
-    chordingEnabled(false),
     chordingSuspended(false)
 {
     //init isprint 
@@ -63,6 +62,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
         isprint.insert(vk);
     }
 
+    star = VkKeyScanA('*') & 0xFF;
 }
 
 void Keyboard::SetMainWnd(HWND hMainWindow)
@@ -189,10 +189,16 @@ VeeKee Keyboard::MakeSticky() const
     return makeSticky;
 }
 
-void Keyboard::EnableChording(bool enable)
+void Keyboard::SuspendChording()
 {
-    chordingEnabled = enable;
+    chordingSuspended = true;
 }
+
+void Keyboard::ResumeChording()
+{
+    chordingSuspended  = false;
+}
+
 
 void Keyboard::SetImageFilename(const WCHAR* filename)
 {
@@ -262,11 +268,6 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
     return layout.AddMapping(from, to);
 }
 
-bool Keyboard::AddCtrlMapping(KeyValue from, KeyValue to)
-{
-    return layout.AddCtrlMapping(from, to);
-}
-
 bool Keyboard::AddStickyMapping(KeyValue vk)
 {
     return layout.AddStickyMapping(vk);
@@ -274,13 +275,7 @@ bool Keyboard::AddStickyMapping(KeyValue vk)
 
 bool Keyboard::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
 {
-    if (layout.AddChord(chord, keyAction))
-    {
-        EnableChording(true);
-        return true;
-    }
-
-    return false;
+    return layout.AddChord(chord, keyAction);
 }
 
 
@@ -352,16 +347,24 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
     }
 
 
-    // we have something to act on..
-    if (action != nullptr)
+    // handle possible chording
+    // do it here so we track non mapped keys to to be able to replay them for failed chord 
+    bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
+
+    if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
     {
-        // handle possible chording
-        if (chordingEnabled && !chordingSuspended)
+        // restrict chording to certain keys ('printable'), since we loose auto-repeat on the chordable keys
+        //pq-todo might need to have a 'repeat' key
+        if (MyIsPrint(event.vkCode))
         {
             HandleChording(event, injectedFromMeValue);
             return true;
         }
+    }
 
+    // we have something to act on..
+    if (action != nullptr)
+    {
         // eat key down repeats
         if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
             return true;
@@ -411,9 +414,22 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
     return false; // let key through
 }
 
-void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
+void Keyboard::HandleChording(const KbdHookEvent& _event, const DWORD& injectedFromMeValue)
 {
-    chord.OnEvent(event);
+    Printf("Keyboard::HandleChording\n");
+
+    // make a copy that we can modify (see chodr star code below)
+    KbdHookEvent event = _event;
+
+    // replace incoming character with 'star' key if defined as such
+    if (chordStars.find(event.vkCode) != chordStars.end())
+    {
+        Printf("chording, key %02X %c => star %02X\n", event.vkCode, static_cast<char>(event.vkCode & 0xFF), star);
+        event.vkCode = star;
+    }
+
+    // pass original unmodified event so we can replay as it was typed (no star keys modifications)
+    chord.OnEvent(event, _event);
 
     switch (chord.GetState())
     {
@@ -439,14 +455,14 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
 {
     // lookup chord and output its value if found
     // else output original key (cancelled chord)
-    Printf("completed chord [%s]\n", chord.ChordValue().c_str());
+    Printf("completed chord [%s]\n", chord.ToChars().c_str());
 
     KeyActions::IKeyAction* chordAction = layout.GetChordAction(chord);
     if (chordAction != nullptr)
     {
         Printf("chord found, executing its action keydown/up\n");
 
-        chordingEnabled = false;
+        SuspendChording();
 
         // activate action for this chord
         chordAction->OnKeyDown(this);
@@ -454,28 +470,50 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
         // should this be a Tap ? techniclly it is
         chordAction->OnKeyUp(this, false);
 
-        chordingEnabled = true;
+        ResumeChording();
     }
     else
     {
         //not a known chord, cancel it and replay cumulated keys sequence
-        Printf("chord not found, cancelling / replaying keys\n");
+        //Printf("chord not found, cancelling / replaying keys\n");
+
         ReplayCancelledChord(chord, injectedFromMeValue);
     }
 }
 
-
 // replays the key events accumulated in a failed chord
 void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
 {
-    chordingEnabled = false;
+    Printf("ReplayCancelledChord chord [%s]\n", chord.ToChars().c_str());
+
+    SuspendChording();
 
     for (auto& keyEvent : chord.KeysSequence())
     {
+        // check that this key is mapped
+        IKeyAction* action = GetMappingValue(keyEvent);
+        
+        // we NEED an action for a key to do something when replaying from here ..
+        // so create a one to one action key if it is not mapped
+        if (action == nullptr)
+        {
+            Printf("replaying non mapped key %0X, creating 1-1 mapping\n", keyEvent.vkCode);
+
+            // non shifted
+            KeyValue kfrom(keyEvent.vkCode, 0, false);
+            KeyValue kto(keyEvent.vkCode, 0, false);
+            HookKbd::AddMapping(kfrom, kto);
+            
+            // and shifted
+            kfrom.Shift(true);
+            kto.Shift(true);
+            HookKbd::AddMapping(kfrom, kto);
+        }
+
         OnKeyEvent(keyEvent, injectedFromMeValue);
     }
 
-    chordingEnabled = true;
+    ResumeChording();
 }
 
 

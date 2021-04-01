@@ -64,7 +64,8 @@ StringTokener::StringTokener(const std::string& line, int lineNo) : lineNo(lineN
 
 
 KeyParser::KeyParser(StringTokener& tokener, const char* paramName) : 
-    hasShiftPrefix(false), vk(0), isShifted(false),
+    hasShiftPrefix(false), hasControlPrefix(false),
+    vk(0), isShifted(false),
     tokener(tokener), paramName(paramName)
 {
 }
@@ -83,15 +84,80 @@ bool KeyParser::operator ()()
     return parseKey();
 }
 
+// reads multiple keys from current line (from tokener), no modifiers on keys
+// can be space separated or as a string:  A S D F tab QWERTY  
+// comments are done with "!!" and end the line
+// read keys are *added* to param 'keys'
+bool KeyParser::GetKeys(std::list<VeeKee>& keys)
+{
+
+    while (!tokener.eof())
+    {
+        std::string tok;
+        tokener >> tok;
+
+        // rest of line is comment 
+        if (tok == "!!")
+            break;
+
+        // could be a known key name
+        auto foundit = LoLevelKbdFile::KeyNames().find(tok);
+        if (foundit != LoLevelKbdFile::KeyNames().end())
+        {
+            keys.push_back(foundit->second);
+        }
+        else
+        {
+            // either a single key represented by its character 'a' or a chain of characters 'asdf'
+            // add each to the chord definition
+            for (auto* ptr = tok.c_str(); *ptr; ++ptr)
+            {
+                WORD vk = 0;
+                bool isShifted = false;
+
+                if (!VkUtil::CharToVk(*ptr, vk, isShifted))
+                {
+                    std::cerr << "non valid key [" << param << "], line " << tokener.LineNo() << std::endl;
+                    return false;
+                }
+
+                keys.push_back(vk);
+            }
+        }
+    }
+
+    return true;
+}
+
+KeyValue KeyParser::ToKeyValue() const
+{
+    return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix);
+}
+
 bool KeyParser::parseKey()
 {
     // check for prefix '+' for shifted key
     const char* keytext = param.c_str();
-    if (strlen(keytext) > 1 && keytext[0] == '+')
+
+    bool stop = false;
+    while (!stop && strlen(keytext) > 1)
     {
-        hasShiftPrefix = true;
-        keytext++;
+        switch (keytext[0])
+        {
+        case '+':
+            hasShiftPrefix = true;
+            keytext++;
+            break;
+        case '^':
+            hasControlPrefix = true;
+            keytext++;
+            break;
+        default:
+            stop = true;
+            break;
+        }
     }
+
 
     // keyname ?
     if (strlen(keytext) > 1)
@@ -207,6 +273,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!setImageView(stringTokener))
                 return false;
         }
+        else if (cmd == "steakstars")
+        {
+            if (!doSteakStars(stringTokener))
+                return false;
+        }
         else if (cmd == "kord")
         {
             if (!doKord(stringTokener))
@@ -235,7 +306,7 @@ bool LoLevelKbdFile::doK2kCmd(StringTokener& tokener)
         return false;
 
     KeyValue kfrom(keyFrom.vk, 0, keyFrom.hasShiftPrefix);
-    KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+    KeyValue kto = keyTo.ToKeyValue();
 
     // call DLL hook to add a new mapping
     return HookKbd::AddMapping(kfrom, kto);
@@ -250,10 +321,10 @@ bool LoLevelKbdFile::doK2kcCmd(StringTokener& tokener)
         return false;
 
     KeyValue kfrom(keyFrom.vk, 0, keyFrom.hasShiftPrefix  || keyFrom.isShifted);
-    KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+    KeyValue kto = keyTo.ToKeyValue();
 
     // call DLL hook to add a new mapping
-    return HookKbd::AddCtrlMapping(kfrom, kto);
+    return HookKbd::AddMapping(kfrom, kto);
 }
 
 bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
@@ -268,7 +339,7 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
     // from to, non shifted layer
     {
         KeyValue kfrom(keyFrom.vk, 0, false);
-        KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+        KeyValue kto = keyTo.ToKeyValue();
 
         // call DLL hook to add a new mapping
         if (!HookKbd::AddMapping(kfrom, kto))
@@ -278,7 +349,7 @@ bool LoLevelKbdFile::doK2kWithShCmd(StringTokener& tokener)
     // from to, shifted layer
     {
         KeyValue kfrom(keyFrom.vk, 0, true);
-        KeyValue kto(keyToSh.vk, 0, keyToSh.hasShiftPrefix || keyToSh.isShifted);
+        KeyValue kto = keyToSh.ToKeyValue();
 
         // call DLL hook to add a new mapping
         if (!HookKbd::AddMapping(kfrom, kto))
@@ -300,22 +371,37 @@ bool LoLevelKbdFile::doK2kcWithShCmd(StringTokener& tokener)
     // from to, non shifted layer
     {
         KeyValue kfrom(keyFrom.vk, 0, false);
-        KeyValue kto(keyTo.vk, 0, keyTo.hasShiftPrefix || keyTo.isShifted);
+        KeyValue kto = keyTo.ToKeyValue().Control(true);
 
         // call DLL hook to add a new mapping
-        if (!HookKbd::AddCtrlMapping(kfrom, kto))
+        if (!HookKbd::AddMapping(kfrom, kto))
             return false;
     }
 
     // from to, shifted layer
     {
         KeyValue kfrom(keyFrom.vk, 0, true);
-        KeyValue kto(keyToSh.vk, 0, keyToSh.hasShiftPrefix || keyToSh.isShifted);
+        KeyValue kto = keyToSh.ToKeyValue().Control(true);
 
         // call DLL hook to add a new mapping
-        if (!HookKbd::AddCtrlMapping(kfrom, kto))
+        if (!HookKbd::AddMapping(kfrom, kto))
             return false;
     }
+
+    return true;
+}
+
+bool LoLevelKbdFile::doSteakStars(StringTokener& tokener)
+{
+    KeyParser chordStarsParser(tokener, "chord key stars");
+
+    std::list<VeeKee> chordStarKeys;
+    if (!chordStarsParser.GetKeys(chordStarKeys))
+        return false;
+
+    // save keys in a vk set and save info
+    VeeKeeSet vkset(chordStarKeys.begin(), chordStarKeys.end());
+    HookKbd::ChordStars(vkset);
 
     return true;
 }
@@ -330,33 +416,19 @@ bool LoLevelKbdFile::doKord(StringTokener& tokener)
     // now build the chord / read the keys of the chord
     Kord chord;
 
-    while (!tokener.eof())
-    {
-        std::string tok;
-        tokener >> tok;
+    std::list<VeeKee> chordKeys;
+    if (!chordOutput.GetKeys(chordKeys))
+        return false;
 
-        // could be a known key name
-        auto foundit = LoLevelKbdFile::KeyNames().find(tok);
-        if (foundit != LoLevelKbdFile::KeyNames().end())
-        {
-            chord.AddInChordKey(foundit->second);
-        }
-        else
-        {
-            // either a single key represented by its character 'a' or a chain of characters 'asdf'
-            // add each to the chord definition
-            for (auto* ptr = tok.c_str(); *ptr; ++ptr)
-            {
-                auto vk = VkKeyScanA(*ptr);
-                chord.AddInChordKey(vk & 0xFF);
-            }
-        }
-    }
+    // place chords keys into chord definition
+    for (auto key : chordKeys)
+        chord.AddInChordKey(key);
+
 
     // register the chord with its output 'action'
     // create key action
     KeyDef inKey(0, 0);
-    KeyValue outKey(chordOutput.vk, 0, chordOutput.isShifted || chordOutput.hasShiftPrefix);
+    KeyValue outKey = chordOutput.ToKeyValue();
     auto action = new KeyActions::KeyOutAction(inKey, outKey);
 
     // save chord definition

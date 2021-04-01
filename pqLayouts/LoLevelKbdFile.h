@@ -41,9 +41,13 @@ public:
 
     bool operator ()();
 
+    bool GetKeys(std::list<VeeKee>&);
+    KeyValue ToKeyValue() const;
+
 public:
     std::string param;  // this is the text value read from file for the key
     bool hasShiftPrefix;
+    bool hasControlPrefix;
     bool isShifted;     // as defined by VkKeyScan()
     WORD vk;
 
@@ -70,6 +74,7 @@ private:
     bool doK2kWithShCmd(StringTokener& tokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
+    bool doSteakStars(StringTokener& tokener);
     bool doKord(StringTokener& tokener);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);

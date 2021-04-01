@@ -155,11 +155,6 @@ PQHOOK_API bool AddMapping(KeyValue from, KeyValue to)
     return theKbd.AddMapping(from, to);
 }
 
-PQHOOK_API bool AddCtrlMapping(KeyValue from, KeyValue to)
-{
-    return theKbd.AddCtrlMapping(from, to);
-}
-
 PQHOOK_API bool AddStickyMapping(KeyValue vk)
 {
     return theKbd.AddStickyMapping(vk);
@@ -168,6 +163,16 @@ PQHOOK_API bool AddStickyMapping(KeyValue vk)
 PQHOOK_API bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
 {
     return theKbd.AddChord(chord, keyAction);
+}
+
+PQHOOK_API void ChordStars(VeeKeeSet& stars)
+{
+    theKbd.ChordStars(stars);
+}
+
+PQHOOK_API const VeeKeeSet& ChordStars()
+{
+    return theKbd.ChordStars();
 }
 
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)

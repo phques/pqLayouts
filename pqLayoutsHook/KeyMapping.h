@@ -41,6 +41,8 @@ public:
 
     // return true to automatically skip repeats of key down
     virtual bool SkipDownRepeats(Keyboard*) const = 0;
+    
+    virtual bool IsLayerAccess() const { return false; }
 
 protected:
     DWORD downTimeTick; // timetick at which the key was pressed

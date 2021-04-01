@@ -51,7 +51,7 @@ public:
     State GetState() const { return state; }
     bool IsConstructing() const;
 
-    void OnEvent(const KbdHookEvent & event);
+    void OnEvent(const KbdHookEvent& event, const KbdHookEvent& realEvent);
 
     bool IsKeyInChord(VeeKee vk);
 
@@ -60,6 +60,7 @@ public:
     const std::vector<KbdHookEvent>& KeysSequence() const { return keysSequence; }
 
     std::string ChordValue() const { return inChord.to_string(); }
+    std::string ToChars() const;
 
     bool operator ==(const Kord& other) const;
 

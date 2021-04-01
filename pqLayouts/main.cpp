@@ -65,9 +65,9 @@ namespace
     void addCtrlMapping(WORD fromVk, bool shiftedFrom, WORD toVk, bool shiftedTo)
     {
         KeyValue kfrom(fromVk, 0, shiftedFrom);
-        KeyValue kto(toVk, 0, shiftedTo);
+        KeyValue kto(toVk, 0, shiftedTo, true);
 
-        HookKbd::AddCtrlMapping(kfrom, kto);
+        HookKbd::AddMapping(kfrom, kto);
     }
 
     void addMapping(CHAR from, CHAR to)

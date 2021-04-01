@@ -47,9 +47,10 @@ public:
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyActions::IKeyAction* actionTo);
-    bool AddMapping(KeyValue from, KeyValue to, bool controlMapping);
+    bool AddMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
+    bool HasChords() const { return chords.size() > 0; }
     bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
     KeyActions::IKeyAction* GetChordAction(const Kord& chord);
 

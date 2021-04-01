@@ -24,8 +24,6 @@
 
 class KbdHook; // fwd
 
-typedef std::unordered_set<VeeKee> VeeKeeSet;
-
 
 class Keyboard
 {
@@ -44,9 +42,11 @@ public:
 
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
-    bool AddCtrlMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddStickyMapping(KeyValue vk);
     bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
+
+    void ChordStars(VeeKeeSet& stars) { chordStars = stars; }
+    const VeeKeeSet& ChordStars() const { return chordStars; }
 
     bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);
     // dbg
@@ -64,7 +64,6 @@ public:
     void QuitKey(VeeKee);
     void MakeSticky(VeeKee);
     VeeKee MakeSticky() const;
-    void EnableChording(bool enable);
 
     void SetImageFilename(const WCHAR* filename);
     const std::wstring& GetImageFilename() const;
@@ -90,6 +89,8 @@ protected:
 
     void HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
     void OnCompletedChord(const DWORD& injectedFromMeValue);
+    void ResumeChording();
+    void SuspendChording();
     void ReplayCancelledChord(Kord&, DWORD injectedFromMeValue);
 
     static bool IsModifier(VeeKee vk);
@@ -103,9 +104,10 @@ private:
     // at a logical level, whatever the source
     VeeKeeSet downModifiers;
 
-    Kord chord;
-    bool chordingEnabled;
+    Kord chord;             // current chord being built / cumulated as keys are pressed
     bool chordingSuspended;
+    VeeKeeSet chordStars;
+    VeeKee star;
 
     DWORD lastKeypressTick; // time tick of the last key press event
 

@@ -29,6 +29,7 @@ public:
     virtual bool OnKeyDown(Keyboard*);
     virtual bool OnKeyUp(Keyboard*, bool isTap);
     virtual bool SkipDownRepeats(Keyboard*) const { return true; }
+    virtual bool IsLayerAccess() const { return true; }
 
 protected:
     KeyDef keydef;

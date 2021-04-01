@@ -28,12 +28,12 @@ bool Kord::IsConstructing() const
     return state == State::Chording || state == State::Unchording;
 }
 
-void Kord::OnEvent(const KbdHookEvent & event)
+void Kord::OnEvent(const KbdHookEvent& event, const KbdHookEvent& realEvent)
 {
     // dont add repeats key downs to pressSequence
     if (!pressed.test(event.vkCode) || !event.Down())
     {
-        keysSequence.push_back(event);
+        keysSequence.push_back(realEvent);
     }
 
     if (event.Down())
@@ -119,6 +119,20 @@ void Kord::Reset()
 void Kord::AddInChordKey(VeeKee vk)
 {
     inChord[vk] = true;
+}
+
+std::string Kord::ToChars() const
+{
+    std::string str;
+    for (int i = 0; i < 255; i++)
+    {
+        if (inChord.test(i))
+        {
+            str += static_cast<char>(i);
+        }
+    }
+
+    return str;
 }
 
 bool Kord::operator==(const Kord& other) const

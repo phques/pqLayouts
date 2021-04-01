@@ -43,4 +43,6 @@ bool VkUtil::CharToVk(char ch, WORD& vk, bool& isShifted)
 
     isShifted = HasShiftBit(vk);
     vk = vk & 0xFF;
+
+    return true;
 }

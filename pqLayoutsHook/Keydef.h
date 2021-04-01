@@ -21,6 +21,10 @@
 
 typedef DWORD VeeKee;
 
+typedef std::unordered_set<VeeKee> VeeKeeSet;
+
+
+
 // represents a single key (e.g. the key that holds ';' and ':' characters)
 class KeyDef
 {
@@ -45,7 +49,7 @@ class KeyValue : public KeyDef
 {
 public:
     KeyValue();
-    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false);
+    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false);
 
     bool Shift() const { return shift; }
     bool Control() const { return control; }

@@ -49,11 +49,10 @@ bool Layer::AddMapping(KeyValue from, IKeyAction* actionTo)
     return true;
 }
 
-bool Layer::AddMapping(KeyValue from, KeyValue to, bool controlMapping)
+bool Layer::AddMapping(KeyValue from, KeyValue to)
 {
     //Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
 
-    to.Control(controlMapping);
     IKeyAction* action = new KeyOutAction(from, to);
 
     return AddMapping(from, action);

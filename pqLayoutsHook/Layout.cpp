@@ -135,15 +135,7 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
     if (currentLayer == nullptr)
         return false;
 
-    return currentLayer->AddMapping(from, to, false);
-}
-
-bool Layout::AddCtrlMapping(KeyValue from, KeyValue to)
-{
-    if (currentLayer == nullptr)
-        return false;
-
-    return currentLayer->AddMapping(from, to, true);
+    return currentLayer->AddMapping(from, to);
 }
 
 bool Layout::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)

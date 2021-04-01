@@ -38,7 +38,6 @@ public:
 
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyValue to);
-    bool AddCtrlMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
     bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
