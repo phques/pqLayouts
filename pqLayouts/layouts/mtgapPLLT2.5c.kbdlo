@@ -34,6 +34,7 @@ imagefile mtgapPLLT2.5c-img.png
 
 imageview 0 50 60 110
 
+
 K2K w  i  I 
 K2K e  o  O 
 K2K r  u  U 
@@ -238,9 +239,9 @@ K2K  l down  +down
 K2K  ; right +right
 K2K  ' end   +end
 
-K2CK ,  c c
-K2CK .  x x 
-K2CK /  v v
+K2K ,  ^c ^c
+K2K .  ^x ^x 
+K2K /  ^v ^v
 
 
 ! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt

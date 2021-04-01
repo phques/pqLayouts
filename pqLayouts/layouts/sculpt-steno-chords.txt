@@ -25,49 +25,141 @@ ie no space after ,  etc
 in wide mode, qwerty :
 ------------------
 
-, sd-l;		(kw-bg +space)
-, d-l		(w-b -space)(*RGBS)
+! we need a real backspace, with auto repeat !
 
-'.' no space (these might be too short anyways!)
+
+'.' no space (these might be too short anyways!?)
  e-o		(p-p)
  e-[		(p-t)
 
-'.' with space after 
+'.' with space after (??)
 (that's the one I am used to .. use this one w. no space?)
- we-op		(tp-pl +space)
+ we-op		(TP-PL +space)
+
+, sd-l;		(kw-bg +space)
+, d-l		(w-b -space)(*RGBS)
+
+; wr-ip		(th-fl -space)
+
 
 ! we-l;		(TP-BG)
 ? sd-op		(KW-PL)
 
-			(H-PB doesnt work)
-- rl		(H-B) 
-- r-jl		(H*B +pre-space)
 
- cant do ..	(RUPBD /  R*UPBD)
-_ f-,o]		(RUPD new)
-_ f-i[		(R-PD 'reasoned')	
-  or direct, normal on layer!
+-:
+   H*B
+   H*PB
+   STKAEURB
+{^-^}:
+   H-B
+   H-PB
+   H*FPB
+   HA*EPB
+{-^}:
+   H-PBS
+   HAO*EPB
+
+!! H-P is too shortm I hit it by accident
+!!- ro 		H-P new, from H-PB 'hyphen'
+- r-l 		H-B
+- r-jl		H*B +pre-space
+
+_ sdfkl;	KWR-RBG (mine, in the line of SKWRRGBS '...' and KW-BG KW-GS)
+_ r-ko		H-RP mine, from my H-P for hyphen, add R 'under'
+
+!! this one seems pretty hard for a possibly common char that could be typed very often
+_ f-,o]		RUPD (new, from RUPBD,  R*UPBD)
 
 
-" sf-;'		(KR-GS)
+" sd-;'		(KW-GS) open dbl quote 
+" sf-;'		(KR-GS) close dbl quote
 " sf-j;'	(KR*GS)
 
-' c-m		(A-E)
-' asd-[		(SKW-T +space)
-' asd-u[	(SKW*T -space)
-' asd-j[	(SKW*T -space)
+{^'}:
+   -PBT
+   SKW*T
+   SKW*TS
+{'^}:
+   SKW-T
+   SKW-TS
+' asd-[		SKW-T {'^} (open single quote)
+' asd-j[	SKW*T {^'} (close single quote)
 
-( ef-o		(PR-P, new)(PREBP / P*PB  dont work)
-) ef-jo		(PR*P, new)(PR*EBP dont work)
+! c-jm does not work, but  c-hn DOES (non-wide), could use that
+! but since this is not REAL steno, with no space suffix, *could* just use AE
+!' c-jm		A*E   {'^} (open single quote)
+!' c-m		A-E   {^'} (close single quote)
 
-; wr-ip		(th-fl -space)
+{^}({^}:
+   P*PB
+{(^}:
+   STPH-FPLTS
 
-= sd-p		(KW-L)
-= sd-jp		(KW*L)
+{^)}:
+   STPH*FPLTS
 
-real: STPH-FPLT or KHR-PB, cantdo
-: awer-io	(STPH-FP new)
+( efmo		PREP  (new, from PREBP )
+) efgmo		PR*EP (new, from PR*EBP)
+(  egl		P*B   (new, from P*PB)
+)  egl[		P*BT  (new, from P*PBT)
 
-(OEU cant with NM)
-/ v-m,		(OEU with M,)
+=  sd-p		KW-L, (with space, or KW*L)
+== sd-p'	KW-LS
+{^=^}: KWA*LS
 
+: awer-io	STPH-FP new, from STPH-FPLT (also KHR-PB)
+
+/ v-m,		OEU
+
+{^\^}:  SPWHRAERB
+\ c-mkl		AERB new from SPWHRAERB
+
+{^+}:
++ ef,'		PRUS, new from PHR*US
+
+*:
+awfl;	STR-BG
+{^*^}:
+qwcjk	STA*R
+awcjk	STA*R
+
+------
+
+CR fk		R-R
+
+BS dio		W-FP (new from PW-FP)
+^BS djio	W*FP (new PQ, from PW*FP .. normally PW*FP == PW-FP, but I use it for ctrl-BS)
+
+
+ home qri[	H-FT, new PQ 
+^home ri[	SH-FT
+^end  afk'	SR-RS
+ end  fk'	R-RS, new PQ
+
+"KHR-BG": "{#Control_L(c)}",
+sfl; kr-bg
+srl; kh-bg
+
+"KHR*F": "{#Control_L(v)}",
+sfui kr*f
+srui kh*f
+
+"KHR*T": "{#Control_L(w)}",
+sfu[ kr*t
+sru[ kh*t
+
+"KHR*BG": "{#Control_L(k)}",
+sfjl; kr*bg
+srjl; kh-bg
+
+
+wcjl	"TA*B": "{#Tab}{^}",
+wemil;	"TPEFBG": "{#Escape}",
+
+! TK*EL is pretty difficult
+! TK-EL is "Dell"
+! so use that one instead?
+wsmp	"TKEL": "{#Delete}",
+wsjmp	"TK*EL": "{#Delete}",
+
+ 

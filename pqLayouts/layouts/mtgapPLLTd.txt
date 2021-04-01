@@ -1125,3 +1125,93 @@ Home jump:     0.00%
 Ring jump:     0.82%
 To center:     2.24%
 
+
+
+]] 8.2gg
+
+try low sameHand (def 5)
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set sameHand 10
+set numThreads 2
+
+Hands: 58% 41%
+Fingers: 0.00% 12% 22% 24% 0.00% 0.00% 14% 15% 11% 1.0%
+
+    q  u  z         g  b  x
+ !  .  ,  -  ?   j  p  m  v  k
+
+    o  i  c         d  n  l
+ w  a  e SP  y   f  t  s  r  h
+
+Fitness:       56275375
+Distance:      21252475
+Finger work:   676181
+Inward rolls:  8.57%
+Outward rolls: 2.40%
+Same hand:     35.69%
+Same finger:   6.30%
+Row change:    11.06%
+Home jump:     0.00%
+Ring jump:     1.08%
+To center:     2.37%
+
+
+
+]] 8.3gg
+
+try even lower sameHand (def 5)
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set sameHand 1
+set numThreads 2
+
+                                        French all chars (U on alt layer !!!)
+Hands: 56% 43%                          Hands: 58% 41%
+                                        
+    -  .  z         k  g  x                 q  u  x         g  b  j
+ ?  ,  y  v  !   j  w  p  b  q           !  .  ,  -  ?   z  p  m  v  k
+                                        
+    a  i  c         r  d  n                 o  i  c         d  n  l
+ f  o  e SP  u   l  h  t  s  m           w  a  e SP  y   f  t  s  r  h
+                                        
+Fitness:       51878509                 Fitness:       53601464
+Distance:      21925295                 Distance:      21151110
+Finger work:   1020251                  Finger work:   719281
+Inward rolls:  9.89%                    Inward rolls:  8.55%
+Outward rolls: 3.24%                    Outward rolls: 2.43%
+Same hand:     37.64%                   Same hand:     35.75%
+Same finger:   6.02%                    Same finger:   6.33%
+Row change:    13.29%                   Row change:    11.10%
+Home jump:     0.00%                    Home jump:     0.00%
+Ring jump:     0.83%                    Ring jump:     1.08%
+To center:     2.86%                    To center:     2.35%
+

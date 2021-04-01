@@ -1,0 +1,247 @@
+! mtgapPLLT8.3ggFR, going PLLT with MTGAP, wid mode
+! for Georgi steno kbd (2 rows, fingers over middle of the rows)
+
+!     q  u  x         g  b  j
+!  !  .  ,  -  ?   z  p  m  v  k
+                                        
+!     o  i  c         d  n  l
+!  w  a  e SP  y   f  t  s  r  h
+
+imagefile mtgapPLLT8.3ggFR.png
+
+imageview 6 +42 58 +42
+
+
+K2K w  o  O
+K2K e  i  I
+K2K r  c  C
+K2K i  d  D
+K2K o  n  N
+K2K p  l  L
+K2K a  w  W
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K g  y  Y
+K2K j  f  F
+K2K k  t  T
+K2K l  s  S
+K2K ;  r  R
+K2K '  h  H
+
+
+! special keys / 'outside keys'
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+K2K t ^c ^x
+k2k y ^v
+K2K u ^z ^y
+
+K2K h ^k +^k
+
+! K2K [ bs +bs
+! K2K ] del +del
+
+
+! chords on ansi wide (right hand moved one spot to the right)
+! used on my Microsoft Sculpt .. non NKRO, so have to use shorter versions sometimes
+! for eg PB ('N') is OL on ansi-w, and that usually fails to chord with other keys
+
+! for strokes that would have space / no-space versions,
+! ->  they have same output for now (pqLayouts = single char output, 2021-03)
+!     eg open/close quote are the same
+
+!steakpower QAWSEDRFCVM,IKOLP;['
+steakstars TGUJ
+
+kord .  weop		!! TP-PL
+kord ,  sdl;		!! KW-BG
+kord ;  wrip		!! TH-FL
+
+kord "  sd;'		!! KW-GS open
+kord "  sf;'		!! KR-GS close
+
+kord '  asd[		!! SKW-T {'^} (open single quote)
+kord '  asd*[		!! SKW*T {^'} (close single quote)
+
+kord !  wel;		!! TP-BG
+kord ?  sdop		!! KW-PL
+
+kord -  rl 			!! H-B
+kord -  r*l			!! H*B +pre-space
+
+kord _  sdfkl;		!! KWR-RBG (mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS)
+
+kord (  efmo	  	!! PREP  (new, PREBP )
+kord )  ef*mo	  	!! PR*EP (new, PR*EBP)
+kord (  e*l		  	!! P*B   (new, from P*PB)
+kord )  e*l[	  	!! P*BT  (new, from P*PBT)
+
+kord =  sdp			!! KW-L, (with space, or KW*L)
+
+kord :  awerio		!! STPH-FP new, from STPH-FPLT (also KHR-PB)
+
+kord /  vm,			!! OEU
+kord \ 	cmkl		!! AERB new from SPWHRAERB
+kord + ef,'			!! PRUS, new from PHR*US
+kord * awfl;		!! STR-BG
+
+kord bs  dio		!! W-FP (W-FP, new from PW-FP)
+kord ^bs d*io		!! W*FP (W*FP, new PW*FP, used here as ctrl-BS)
+
+kord cr fk			!! R-R
+
+kord ^home qri[		!! SH-FT
+kord ^end afk'		!! SR-RS
+kord home ri[		!!  H-FT, new PQ 
+kord end  fk'		!!  R-RS, new PQ
+
+
+kord ^c sfl;		!! KR-BG new short
+kord ^v sf*i		!! KR*F new short
+kord ^w sf*[		!! KR*T new short
+kord ^k sf*l;		!! KR*BG new short
+
+kord tab wc*l		!! "TA*B": "{#Tab}{^}",
+kord esc wemil;		!! "TPEFBG": "{#Escape}",
+
+kord del wsmp		!! "TKEL": "{#Delete}",
+
+
+! ------- alt layer --------
+
+addlayertap alt space
+imageview 114 +42 166 +42
+
+K2K w  q Q
+K2K e  u U
+K2K r  x X
+K2K i  g G
+K2K o  b B
+K2K p  j J
+K2K a  ! !
+K2K s  . .
+K2K d  , ,
+K2K f  - -
+K2K g  ? ?
+K2K j  z Z
+K2K k  p P
+K2K l  m M
+K2K ;  v V
+K2K '  k K
+
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+
+! ------- digits layer  --------
+
+addlayertap numpad b
+imageview  220 +42 272 +42
+
+! 3thrd version
+
+!  * 1 2 .  , 6 7 /  
+!  + 3 4 5  8 9 0 - =
+
+k2k q *
+k2k w 1
+k2k e 2
+k2k r .
+
+k2k i ,
+k2k o 6
+k2k p 7
+k2k [ /
+
+k2k a +
+k2k s 3
+k2k d 4
+k2k f 5
+
+k2k k 8
+k2k l 9
+k2k ; 0
+k2k ' -
+k2k cr =
+
+
+K2K c bs del
+K2K , cr +cr
+
+! 2nd version
+!!!  * 1 2 .  , 5 6 /
+!!!  + 3 4 0  9 7 8 - =
+
+
+! 1st version
+!!  * + 0 .   , 9 - /
+!!  1 2 3 4   5 6 7 8 =
+
+
+
+! ------- edit layer --------
+
+addlayertap edit lalt
+imageview 276 +42 276 +42
+
+
+!! stickyer rctrl
+
+K2K [ bs  del
+k2k ] del
+
+K2K  i home  +home
+K2K  o up    +up
+K2K  p end   +end
+
+K2K  m home  +home
+K2K  k left  +left
+K2K  l down  +down
+K2K  ; right +right
+K2K  ' end   +end
+
+K2K ,  ^c ^c
+K2K .  ^x ^x 
+K2K /  ^v ^v
+
+
+! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt
+! K2K e pgup +pgup
+! K2K s pgdn +pgdn
+! K2K d lctrl +lctrl
+! k2k f lshift
+K2K e pgup +pgup
+K2K s lctrl +lctrl
+K2K d pgdn +pgdn
+k2k f lshift
+
+K2CK z  z y
+K2CK `  z y
+
+!ctrl-left/right (prev/next word)
+K2CK x left +left
+K2CK c right +right
+
+K2CK v cr +cr
+
+! shift on enter
+! for use with x c above
+k2k enter rshift 
+
+
