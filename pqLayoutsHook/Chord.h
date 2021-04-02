@@ -45,6 +45,7 @@ public:
 public:
     PQHOOK_API Kord();
     PQHOOK_API void AddInChordKey(VeeKee);
+    PQHOOK_API std::string ToChars() const;
 
     void Reset();
 
@@ -60,7 +61,6 @@ public:
     const std::vector<KbdHookEvent>& KeysSequence() const { return keysSequence; }
 
     std::string ChordValue() const { return inChord.to_string(); }
-    std::string ToChars() const;
 
     bool operator ==(const Kord& other) const;
 

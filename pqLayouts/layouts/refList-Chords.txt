@@ -1,44 +1,44 @@
-.  WEOP		! TP-PL
-,  SDL;		! KW-BG
-;  WRIP		! TH-FL
-"  SD;'		! KW-GS open
-"  SF;'		! KR-GS close
-'  ASD[		! SKW-T {'^} (open single quote)
-'  ASDJ[	! SKW*T {^'} (close single quote)
-!  WEL;		! TP-BG
-?  SDOP		! KW-PL
--  RL 		! H-B
--  RJL		! H*B +pre-space
-_  SDFKL;	! KWR-RBG (mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS)
-(  EFMO		 ! PREP  (new, PREBP )
-)  EFGMO	 ! PR*EP (new, PR*EBP)
-(  EGL		 ! P*B   (new, from P*PB)
-)  EGL[	 	! P*BT  (new, from P*PBT)
-=  SDP		! KW-L, (with space, or KW*L)
-:  AWERIO	! STPH-FP new, from STPH-FPLT (also KHR-PB)
-/  VM,		! OEU
-\  CMKL		! AERB new from SPWHRAERB
-+  EF,'		! PRUS, new from PHR*US
-*  awfl;	! STR-BG
+ .  TP-PL
+ ,  KW-BG
+ ;  TH-FL
 
-bs  DIO		! W-FP (W-FP, new from PW-FP)
-^bs DJIO	! W*FP (W*FP, new PW*FP, used here as ctrl-BS)
-cr  FK		! R-R
-^home QRI[  ! SH-FT
-^end  AFK'	! SR-RS
-home  RI[	!  H-FT, new PQ 
-end   FK'	!  R-RS, new PQ
+ "  KW-GS		!! open
+ "  KR-GS		!! close
+ '  SKW-T		!! {'^} (open single quote)
+ '  SKW*T		!! {^'} (close single quote)
+ !  TP-BG
+ ?  KW-PL
 
-^c SFL;		! KR-BG new short
-^c SRL;		! KH-BG
-^v SFUI		! KR*F new short
-^v SRUI		! KH*F
-^w SFU[		! KR*T new short
-^w SRU[		! KH*T
-^k SFJL;	! KR*BG new short
-^k SRJL;	! KH-BG
+ -  H-B 		!! {^-^}
+ -  H*B 		!! 
+ _  KWR-RBG		!! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
 
-tab WCJL	! "TA*B": "{#Tab}{^}",
-esc WEMIL;	! "TPEFBG": "{#Escape}",
-del WSMP	! "TKEL": "{#Delete}",
-del WSJMP	! "TK*EL": "{#Delete}",
+ (  PREP  		!! PREBP
+ )  PR*EP 		!! PR*EBP
+ (  P*B 		!! P*PB
+ )  P*BT 		!! P*PBT
+
+ :  STPH-FP 	!! STPH-FPLT Sculpt: use lower S (A)
+ =  KW-L
+ +  PRUS 		!! PHR*US
+ *  STR-BG
+
+ /  OEU
+ \ 	AERB 		!! SPWHRAERB
+
+ cr R-R
+ bs W-FP 		!! PW-FP
+^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
+ del TK-EL 		!! TK*EL
+ tab TA*B
+ esc TPEFBG
+
+^home SH-FT
+^end  SR-RS
+ home H-FT 		!! new PQ based on SH-FT
+ end  R-RS 		!! new PQ baseed on SR-RS
+
+ ^c KR-BG 		!! new from KHR-BG
+ ^v KR*F  		!! new etc..
+ ^w KR*T  		!! new 
+ ^k KR*BG 		!! new 

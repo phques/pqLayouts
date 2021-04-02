@@ -53,6 +53,7 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
 };
 
 std::string LoLevelKbdFile::steakPower("SSTKPWHRAOEUFRPBLGTSDZ");
+VeeKeeSet LoLevelKbdFile::handDelimiters;
 
 
 //--------------
@@ -86,7 +87,7 @@ bool KeyParser::ReadFromTokener()
         return false;
     }
 
-    tokener >> param;
+    tokener >> token;
     return true;
 }
 
@@ -109,15 +110,14 @@ bool KeyParser::GetKeys(std::list<VeeKee>& keys)
 
     while (!tokener.eof())
     {
-        std::string tok;
-        tokener >> tok;
+        tokener >> token;
 
         // rest of line is comment 
-        if (tok == "!!")
+        if (token == "!!")
             break;
 
         // could be a known key name
-        auto foundit = LoLevelKbdFile::KeyNames().find(tok);
+        auto foundit = LoLevelKbdFile::KeyNames().find(token);
         if (foundit != LoLevelKbdFile::KeyNames().end())
         {
             keys.push_back(foundit->second);
@@ -126,14 +126,14 @@ bool KeyParser::GetKeys(std::list<VeeKee>& keys)
         {
             // either a single key represented by its character 'a' or a chain of characters 'asdf'
             // add each to the chord definition
-            for (auto* ptr = tok.c_str(); *ptr; ++ptr)
+            for (auto* ptr = token.c_str(); *ptr; ++ptr)
             {
                 WORD vk = 0;
                 bool isShifted = false;
 
                 if (!VkUtil::CharToVk(*ptr, vk, isShifted))
                 {
-                    std::cerr << "non valid key [" << param << "], line " << tokener.LineNo() << std::endl;
+                    std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
                     return false;
                 }
 
@@ -153,7 +153,7 @@ KeyValue KeyParser::ToKeyValue() const
 bool KeyParser::ParseKey()
 {
     // check for prefix '+' for shifted key
-    const char* keytext = param.c_str();
+    const char* keytext = token.c_str();
 
     bool stop = false;
     while (!stop && strlen(keytext) > 1)
@@ -181,7 +181,7 @@ bool KeyParser::ParseKey()
         auto foundit = LoLevelKbdFile::KeyNames().find(keytext);
         if (foundit == LoLevelKbdFile::KeyNames().end())
         {
-            std::cerr << "unknown key [" << param << "], line " << tokener.LineNo() << std::endl;
+            std::cerr << "unknown key [" << token << "], line " << tokener.LineNo() << std::endl;
             return false;
         }
         vk = foundit->second;
@@ -191,7 +191,7 @@ bool KeyParser::ParseKey()
         // just a character representing the key 'w', '{' etc
         if (!VkUtil::CharToVk(*keytext, vk, isShifted))
         {
-            std::cerr << "non valid key [" << param << "], line " << tokener.LineNo() << std::endl;
+            std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
             return false;
         }
     }
@@ -213,6 +213,19 @@ void File::GetLine()
 
 LoLevelKbdFile::LoLevelKbdFile()
 {
+    // get VK value of '-'
+    bool isShifted;
+    WORD vk;
+    VkUtil::CharToVk('-', vk, isShifted);
+    hyphen = vk;
+
+    // populate handDelimiters keys
+    for (const char* ptr = "AEOU*-"; *ptr; ++ptr)
+    {
+        VkUtil::CharToVk(*ptr, vk, isShifted);
+        handDelimiters.insert(vk);
+    }
+
 }
 
 bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
@@ -498,14 +511,47 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
 
     // place chords keys into chord definition
     Kord chord;
+    std::string prefix;  // will hold the '-' key prefix indicating right hand keys
+
     for (auto key : chordKeys)
+    {
+        // are we using 'steno keys' mapping ?
+        if (stenoKbdMap.size() > 0)
+        {
+            std::string keyStr;
+
+            // is this key one of the keys that separate left hand from right hand ?
+            // if so, set the key prefix
+            bool isHandSeparatorKey = (handDelimiters.find(key) != handDelimiters.end());
+            if (isHandSeparatorKey)
+                prefix = "-";
+
+            // '-' is not part of the chord !
+            if (key == hyphen)
+                continue;
+
+            // if we are in the right hand keys, add the prefix 
+            if (!prefix.empty() && !isHandSeparatorKey)
+                keyStr += prefix;  
+            
+            keyStr += key;  
+            
+            // replace chord key with qwerty key if found in steno kbd map
+            auto foundit = stenoKbdMap.find(keyStr);
+            if (foundit != stenoKbdMap.end())
+                key = foundit->second;
+        }
+
         chord.AddInChordKey(key);
+    }
 
     // register the chord with its output 'action'
     // create key action
     KeyDef inKey(0, 0);
     KeyValue outKey = chordOutput.ToKeyValue();
     auto action = new KeyActions::KeyOutAction(inKey, outKey);
+
+    Printf("chord %s [%c]\n", chord.ToChars().c_str(), VkUtil::VkToChar(outKey.Vk(),0));
 
     // save chord definition
     return HookKbd::AddChord(chord, action);
@@ -534,11 +580,11 @@ bool LoLevelKbdFile::doSteaks(File& file)
             return false;
 
         // "endsteaks" indicates end of chords defintions
-        if (chordDef.param == "endsteaks")
+        if (chordDef.token == "endsteaks")
             return true;
 
         // skip empty line / comment
-        if (tokener.eof() || chordDef.param.c_str()[0] == '!')
+        if (tokener.eof() || chordDef.token == "!!")
             continue;
 
         // parse the output key of the chord

@@ -126,10 +126,9 @@ std::string Kord::ToChars() const
     std::string str;
     for (int i = 0; i < 255; i++)
     {
+        // convert VK to char and add to output string
         if (inChord.test(i))
-        {
-            str += static_cast<char>(i);
-        }
+            str += VkUtil::VkToChar(i, 0);
     }
 
     return str;

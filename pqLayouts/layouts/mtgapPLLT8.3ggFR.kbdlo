@@ -65,59 +65,51 @@ steakstars TGUJ
 
 steaks
 
- .  weop		!! TP-PL
- ,  sdl;		!! KW-BG
- ;  wrip		!! TH-FL
+ .  TP-PL
+ ,  KW-BG
+ ;  TH-FL
 
- "  sd;'		!! KW-GS open
- "  sf;'		!! KR-GS close
+ "  KW-GS		!! open
+ "  KR-GS		!! close
+ '  SKW-T		!! {'^} (open single quote)
+ '  SKW*T		!! {^'} (close single quote)
+ !  TP-BG
+ ?  KW-PL
 
- '  asd[		!! SKW-T {'^} (open single quote)
- '  asd*[		!! SKW*T {^'} (close single quote)
+ -  H-B 		!! {^-^}
+ -  H*B 		!! 
+ _  KWR-RBG		!! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
 
- !  wel;		!! TP-BG
- ?  sdop		!! KW-PL
+ (  PREP  		!! PREBP
+ )  PR*EP 		!! PR*EBP
+ (  P*B 		!! P*PB
+ )  P*BT 		!! P*PBT
 
- -  rl 			!! H-B
- -  r*l			!! H*B +pre-space
+ :  STPH-FP 	!! STPH-FPLT Sculpt: use lower S (A)
+ =  KW-L
+ +  PRUS 		!! PHR*US
+ *  STR-BG
 
- _  sdfkl;		!! KWR-RBG (mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS)
+ /  OEU
+ \ 	AERB 		!! SPWHRAERB
 
- (  efmo	  	!! PREP  (new, PREBP )
- )  ef*mo	  	!! PR*EP (new, PR*EBP)
- (  e*l		  	!! P*B   (new, from P*PB)
- )  e*l[	  	!! P*BT  (new, from P*PBT)
+ cr R-R
+ bs W-FP 		!! PW-FP
+^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
+ del TK-EL 		!! TK*EL
+ tab TA*B
+ esc TPEFBG
 
- =  sdp			!! KW-L, (with space, or KW*L)
+^home SH-FT
+^end  SR-RS
+ home H-FT 		!! new PQ based on SH-FT
+ end  R-RS 		!! new PQ baseed on SR-RS
 
- :  awerio		!! STPH-FP new, from STPH-FPLT (also KHR-PB)
-
- /  vm,			!! OEU
- \ 	cmkl		!! AERB new from SPWHRAERB
- + ef,'			!! PRUS, new from PHR*US
- * awfl;		!! STR-BG
-
- bs  dio		!! W-FP (W-FP, new from PW-FP)
- ^bs d*io		!! W*FP (W*FP, new PW*FP, used here as ctrl-BS)
-
- cr fk			!! R-R
-
- ^home qri[		!! SH-FT
- ^end afk'		!! SR-RS
- home ri[		!!  H-FT, new PQ 
- end  fk'		!!  R-RS, new PQ
-
-
- ^c sfl;		!! KR-BG new short
- ^v sf*i		!! KR*F new short
- ^w sf*[		!! KR*T new short
- ^k sf*l;		!! KR*BG new short
-
- tab wc*l		!! "TA*B": "{#Tab}{^}",
- esc wemil;		!! "TPEFBG": "{#Escape}",
-
- del wsmp		!! "TKEL": "{#Delete}",
-
+ ^c KR-BG 		!! new from KHR-BG
+ ^v KR*F  		!! new etc..
+ ^w KR*T  		!! new 
+ ^k KR*BG 		!! new 
+ 
 endsteaks
 
 

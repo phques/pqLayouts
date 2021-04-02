@@ -67,7 +67,8 @@ public:
     KeyValue ToKeyValue() const;
 
 public:
-    std::string param;  // this is the text value read from file for the key
+    std::string token;  // this is the text value read from file for the key
+
     bool hasShiftPrefix;
     bool hasControlPrefix;
     bool isShifted;     // as defined by VkKeyScan()
@@ -108,9 +109,10 @@ private:
 private:
     static std::map<std::string, WORD> keyNames;
     static std::string steakPower;
+    static VeeKeeSet handDelimiters;
 
     // map steno keys SSTKPWHRAO.. .. to qwerty kbd keys
     std::map<std::string, VeeKee> stenoKbdMap;
-
+    VeeKee hyphen;
 };
 
