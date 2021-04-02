@@ -1,13 +1,16 @@
+ .  P-P 		!! {^.^}
  .  TP-PL
  ,  KW-BG
  ;  TH-FL
 
- "  KW-GS		!! open
- "  KR-GS		!! close
- '  SKW-T		!! {'^} (open single quote)
- '  SKW*T		!! {^'} (close single quote)
  !  TP-BG
  ?  KW-PL
+ "  KW-GS		!! open
+ "  KR-GS		!! close
+ '  A*E			!! {'^} (open single quote)
+ '  A-E			!! {^'} (close single quote)
+ '  SKW-T		!! {'^} (open single quote)
+ '  SKW*T		!! {^'} (close single quote)
 
  -  H-B 		!! {^-^}
  -  H*B 		!! 
@@ -29,7 +32,7 @@
  cr R-R
  bs W-FP 		!! PW-FP
 ^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
- del TK-EL 		!! TK*EL
+ del TKEL 		!! TK*EL
  tab TA*B
  esc TPEFBG
 
@@ -41,4 +44,5 @@
  ^c KR-BG 		!! new from KHR-BG
  ^v KR*F  		!! new etc..
  ^w KR*T  		!! new 
- ^k KR*BG 		!! new 
+ ^k KR*BG 		!! nw
+

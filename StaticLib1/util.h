@@ -26,6 +26,7 @@ public:
     // Init KbdHookEvent from the recvd LPARAM of LowLevelKeyboardProc
     // ## lParam is cast to KBDLLHOOKSTRUCT*, MUST be from LowLevelKeyboardProc ##
     KbdHookEvent(LPARAM lParam);
+    KbdHookEvent();
 
     inline bool Extended() const { return (flags & LLKHF_EXTENDED) != 0; }
     inline bool Injected() const { return (flags & LLKHF_INJECTED) != 0; }
@@ -34,8 +35,10 @@ public:
     inline bool Up() const { return (flags & LLKHF_UP) != 0; }
     inline bool Down() const { return (flags & LLKHF_UP) == 0; }
 
-public:
-    //const KBDLLHOOKSTRUCT& info;
+    DWORD TimeDiff(const KbdHookEvent& startEvent);
+    void QpcDiff(const KbdHookEvent& startEvent, LARGE_INTEGER& diff);
+
+    LARGE_INTEGER perfoCounter;
 };
 
 //----------
@@ -105,3 +108,5 @@ struct VkUtil
 
 typedef const std::string conststr;
 
+DWORD TickCountDiff(DWORD start, DWORD end);
+void QpcDiff(const LARGE_INTEGER& start, const LARGE_INTEGER& end, LARGE_INTEGER& diff);

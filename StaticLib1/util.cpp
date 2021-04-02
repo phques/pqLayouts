@@ -27,8 +27,61 @@ KbdHookEvent::KbdHookEvent(LPARAM lParam)
     this->vkCode = info.vkCode;
     this->scanCode = info.scanCode;
     this->flags = info.flags;
-    this->time = info.time;
+    this->time = info.time;     // nb, this will be the same as GetTickCount() at the moment we are called
     this->dwExtraInfo = info.dwExtraInfo;
+
+    QueryPerformanceCounter(&perfoCounter);
+}
+
+KbdHookEvent::KbdHookEvent()
+{
+    memset(this, 0, sizeof(KbdHookEvent));
+}
+
+
+DWORD KbdHookEvent::TimeDiff(const KbdHookEvent& startEvent)
+{
+    return TickCountDiff(startEvent.time, this->time);
+}
+
+void KbdHookEvent::QpcDiff(const KbdHookEvent& startEvent, LARGE_INTEGER& diff)
+{
+    ::QpcDiff(startEvent.perfoCounter, this->perfoCounter, diff);
+}
+
+//-------------
+
+
+// calculates the time difference between two values from GetTickCount / GetMessageTime / KBDLLHOOKSTRUCT.time
+/* msdn:
+  The time is a long integer that specifies the elapsed time, in milliseconds, 
+  from the time the system was started to the time the message was created 
+  (that is, placed in the thread's message queue).
+
+  To calculate time delays between messages, 
+  subtract the time of the first message from the time of the second message (ignoring overflow) 
+  and compare the result of the subtraction against the desired delay amount.
+*/
+DWORD TickCountDiff(DWORD start, DWORD end)
+{   
+    LONG diff = static_cast<LONG>(end) - static_cast<LONG>(start);
+    return abs(diff);
+}
+
+// convert elapsed number of ticks from 2 QueryPerformanceCounter into elapsed microseconds
+void QpcDiff(const LARGE_INTEGER& start, const LARGE_INTEGER& end, LARGE_INTEGER& diff)
+{
+    static bool frequencyInitialized = false;
+    static LARGE_INTEGER frequency;
+
+    if (!frequencyInitialized)
+    {
+        QueryPerformanceFrequency(&frequency); 
+        frequencyInitialized = true;
+    }
+    diff.QuadPart = end.QuadPart - start.QuadPart;
+    diff.QuadPart *= 1000000;
+    diff.QuadPart /= frequency.QuadPart;
 }
 
 //----------

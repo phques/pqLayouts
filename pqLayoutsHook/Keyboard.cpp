@@ -327,9 +327,8 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         return false;
 
     // save time tick of last key press
-    const DWORD tickCount = GetTickCount();
     if (event.Down())
-        this->lastKeypressTick = tickCount;
+        this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
 
 
     //-------------
@@ -384,11 +383,11 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
 
         // set time of initial down key press
         if (!wasDown && event.Down())
-            action->downTimeTick = tickCount;
+            action->downTimeTick = event.time;
 
         // set time of the key release
         if (wasDown && !event.Down())
-            action->upTimeTick = tickCount;
+            action->upTimeTick = event.time;
         
         // register up/down input keys (don't re-register key already down)
         if (!(wasDown && event.Down()))

@@ -534,7 +534,7 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
             if (!prefix.empty() && !isHandSeparatorKey)
                 keyStr += prefix;  
             
-            keyStr += key;  
+            keyStr += static_cast<char>(key);
             
             // replace chord key with qwerty key if found in steno kbd map
             auto foundit = stenoKbdMap.find(keyStr);
@@ -551,7 +551,7 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
     KeyValue outKey = chordOutput.ToKeyValue();
     auto action = new KeyActions::KeyOutAction(inKey, outKey);
 
-    Printf("chord %s [%c]\n", chord.ToChars().c_str(), VkUtil::VkToChar(outKey.Vk(),0));
+    Printf("chord %s [%c]\n", chord.ToChars().c_str(), VkUtil::VkToChar((WORD)outKey.Vk(),0));
 
     // save chord definition
     return HookKbd::AddChord(chord, action);

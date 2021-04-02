@@ -60,21 +60,27 @@ K2K h ^k +^k
 !     eg open/close quote are the same
 
 ! we dont really use -D -Z .. but need to define 'em !
+! Q W E R t  u I O P [ ]
+! A S D F g  j K L ; ' cr
+!      C V    M ,
 steakpower QAWSEDRFCVM,IKOLP;[' ] cr
 steakstars TGUJ
 
 steaks
 
+ .  P-P 		!! {^.^}
  .  TP-PL
  ,  KW-BG
  ;  TH-FL
 
- "  KW-GS		!! open
- "  KR-GS		!! close
- '  SKW-T		!! {'^} (open single quote)
- '  SKW*T		!! {^'} (close single quote)
  !  TP-BG
  ?  KW-PL
+ "  KW-GS		!! open
+ "  KR-GS		!! close
+ '  A*E			!! {'^} (open single quote)
+ '  A-E			!! {^'} (close single quote)
+ '  SKW-T		!! {'^} (open single quote)
+ '  SKW*T		!! {^'} (close single quote)
 
  -  H-B 		!! {^-^}
  -  H*B 		!! 
@@ -96,7 +102,7 @@ steaks
  cr R-R
  bs W-FP 		!! PW-FP
 ^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
- del TK-EL 		!! TK*EL
+ del TKEL 		!! TK*EL
  tab TA*B
  esc TPEFBG
 
@@ -108,8 +114,10 @@ steaks
  ^c KR-BG 		!! new from KHR-BG
  ^v KR*F  		!! new etc..
  ^w KR*T  		!! new 
- ^k KR*BG 		!! new 
- 
+ ^k KR*BG 		!! nw
+
+
+
 endsteaks
 
 

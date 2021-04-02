@@ -34,12 +34,6 @@ public:
         Completed
     };
 
-    struct KeyEvent
-    {
-        VeeKee vk;
-        bool down;
-    };
-    
     typedef std::bitset<256> Keys;
 
 public:
@@ -65,7 +59,7 @@ public:
     bool operator ==(const Kord& other) const;
 
 private:
-    void KeyDown(VeeKee vk);
+    void KeyDown(VeeKee vk, const KbdHookEvent& event);
     void KeyUp(VeeKee vk);
 
 private:
@@ -77,5 +71,7 @@ private:
     std::vector<KbdHookEvent> keysSequence;  // keys that were pressed, in order (to 'replay'/send if chord fails)
 
     State state;
+    KbdHookEvent firstKeyDownEvent;
+    KbdHookEvent lastKeyDownEvent;
 };
 

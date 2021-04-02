@@ -19,8 +19,9 @@
 #include "Chord.h"
 
 
-Kord::Kord() : state(State::New)
+Kord::Kord()
 {
+    Reset();
 }
 
 bool Kord::IsConstructing() const
@@ -37,29 +38,26 @@ void Kord::OnEvent(const KbdHookEvent& event, const KbdHookEvent& realEvent)
     }
 
     if (event.Down())
-        KeyDown(event.vkCode);
+        KeyDown(event.vkCode, realEvent);
     else
         KeyUp(event.vkCode);
 }
 
 
-void Kord::KeyDown(VeeKee vk)
+void Kord::KeyDown(VeeKee vk, const KbdHookEvent& event)
 {
-    // dont add repeats to pressSequence
-    //if (!pressed.test(vk))
-    //{
-    //    KeyEvent keyEvent = { vk, true };
-    //    keysSequence.push_back(keyEvent);
-    //}
-
     switch (state)
     {
     case State::New:
         state = State::Chording;
+        firstKeyDownEvent = event;
         break;
     case State::Unchording: // key pressed before all keys are up, cancel chord
-        state = State::Cancelled;
-        return;
+        //pq 2021-04-01 try to allow adding subsequent keys to chord
+        //   similar to what Plover does.
+        //state = State::Cancelled;
+        //return;
+        break;
     case State::Cancelled:  // ignore
     case State::Completed:
         return;
@@ -70,13 +68,11 @@ void Kord::KeyDown(VeeKee vk)
     inChord[vk] = true;
     pressed[vk] = true;
 
+    lastKeyDownEvent = event;
 }
 
 void Kord::KeyUp(VeeKee vk)
 {
-    //KeyEvent keyEvent = { vk, false };
-    //keysSequence.push_back(keyEvent);
-
     switch (state)
     {
     case State::Cancelled:
@@ -95,10 +91,35 @@ void Kord::KeyUp(VeeKee vk)
     // all keys are up, chord is 'complete' (or cancelled if there was only one key)
     if (NbKeysDown() == 0)
     {
-        if (inChord.count() > 1)
-            state = State::Completed;
-        else
+        switch (inChord.count())
+        {
+        case 0:
+        case 1:
             state = State::Cancelled;
+            break;
+        case 2:
+        {
+            // to prevent accidental trigger of short (2 keys) chords,
+            // consider it complete only if the 2 keys were pressed almost at the same time
+            // pq-todo: configurable ? enabled/disabled/delay
+            // pq ? needs to be a very short time ! the precision of tickDiff is +- 10-16ms !! (x 2 ?)
+            DWORD tickDiff = lastKeyDownEvent.TimeDiff(firstKeyDownEvent);
+            
+            LARGE_INTEGER qpcDiff;
+            lastKeyDownEvent.QpcDiff(firstKeyDownEvent, qpcDiff);
+
+            Printf("2keys chord tickdiff = %d, qpc diff = %lld\n", tickDiff, qpcDiff.QuadPart);
+
+            //if (tickDiff < 32)
+            if (qpcDiff.QuadPart < 50000) // 50ms
+                state = State::Completed;
+            else
+                state = State::Cancelled;
+            break;
+        }
+        default:
+            state = State::Completed;
+        }
     }
 }
 
@@ -113,6 +134,8 @@ void Kord::Reset()
     pressed = Keys();
     keysSequence.clear();
     state = State::New;
+    memset(&firstKeyDownEvent, 0, sizeof(firstKeyDownEvent));
+    memset(&lastKeyDownEvent, 0, sizeof(lastKeyDownEvent));
 }
 
 // used when creating chord definitions
