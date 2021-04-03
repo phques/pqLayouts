@@ -19,6 +19,9 @@
 
 #include <sstream>
 #include "Keydef.h"
+#include "KeyMapping.h"
+#include "Chord.h"
+#include "Chording.h"
 
 //---------
 
@@ -63,7 +66,7 @@ public:
     bool ReadFromTokener();
     bool ParseKey();
 
-    bool GetKeys(std::list<VeeKee>&);
+    bool GetKeys(VeeKeeList&, std::vector<char>& stenoChars);
     KeyValue ToKeyValue() const;
 
 public:
@@ -95,11 +98,11 @@ private:
     bool doK2kWithShCmd(StringTokener& tokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
-    bool doSteakStars(StringTokener& tokener);
-    bool doSteakPower(File&, StringTokener& tokener);
+    bool doSteakPower(File&);
     bool doKord(StringTokener& tokener);
     bool doSteaks(File& file);
-    bool parseChordValue(StringTokener& tokener, KeyParser& chordOutput);
+    bool readKeysList(File& kbdfile, const char* paramName, VeeKeeList& stenoKeys, std::vector<char>& stenoChars);
+    KeyActions::IKeyAction* parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);
@@ -108,11 +111,7 @@ private:
 
 private:
     static std::map<std::string, WORD> keyNames;
-    static std::string steakPower;
-    static VeeKeeSet handDelimiters;
-
-    // map steno keys SSTKPWHRAO.. .. to qwerty kbd keys
-    std::map<std::string, VeeKee> stenoKbdMap;
-    VeeKee hyphen;
+    
+    Chording chording;
 };
 

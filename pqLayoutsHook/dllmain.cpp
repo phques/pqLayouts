@@ -165,14 +165,9 @@ PQHOOK_API bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
     return theKbd.AddChord(chord, keyAction);
 }
 
-PQHOOK_API void ChordStars(VeeKeeSet& stars)
+PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys)
 {
-    theKbd.ChordStars(stars);
-}
-
-PQHOOK_API const VeeKeeSet& ChordStars()
-{
-    return theKbd.ChordStars();
+    return theKbd.InitChordingKeys(chordingKeys);
 }
 
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)

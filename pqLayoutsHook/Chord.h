@@ -21,7 +21,9 @@
 #include "util.h"
 
 
-// 'Chord' is a Windows function grrr, so use 'Kord'
+// Used to hold chord definitions AND
+// to build chords as user presses keys.
+// (nb:'Chord' is a Windows function grrr, so use 'Kord')
 class Kord
 {
 public:
@@ -38,37 +40,36 @@ public:
 
 public:
     PQHOOK_API Kord();
-    PQHOOK_API void AddInChordKey(VeeKee);
-    PQHOOK_API std::string ToChars() const;
+    PQHOOK_API void AddInChordKey(int stenoOrderIdx);
 
     void Reset();
 
     State GetState() const { return state; }
     bool IsConstructing() const;
 
-    void OnEvent(const KbdHookEvent& event, const KbdHookEvent& realEvent);
+    void OnEvent(int keyStenoOrder, const KbdHookEvent & event);
+    void Cancel() { state = State::Cancelled; }
 
-    bool IsKeyInChord(VeeKee vk);
-
-    size_t NbKeysDown() const { return pressed.count(); }
-
+    const Keys& ChordKeys() const { return inChord; }
     const std::vector<KbdHookEvent>& KeysSequence() const { return keysSequence; }
 
-    std::string ChordValue() const { return inChord.to_string(); }
+    //std::string ChordValue() const { return inChord.to_string(); }
 
     bool operator ==(const Kord& other) const;
 
 private:
-    void KeyDown(VeeKee vk, const KbdHookEvent& event);
-    void KeyUp(VeeKee vk);
+    void KeyDown(int keyStenoOrder, const KbdHookEvent& event);
+    void KeyUp(int keyStenoOrder, const KbdHookEvent& event);
 
 private:
-    //##pq-todo?, for perfo
-    //int  nbDown;        // nb of keys currently still down
-    Keys pressed;       // keys that are currently down/depressed
-    Keys inChord;       // keys that were pressed
+    // keys that were chorded, kept using stenoOrderIdx
+    Keys inChord;       
 
-    std::vector<KbdHookEvent> keysSequence;  // keys that were pressed, in order (to 'replay'/send if chord fails)
+    // Next two use the original key VK
+    // keys that are currently down/depressed
+    Keys pressed;
+    // keys that were pressed, in order (to 'replay'/send if chord fails)
+    std::vector<KbdHookEvent> keysSequence;  
 
     State state;
     KbdHookEvent firstKeyDownEvent;

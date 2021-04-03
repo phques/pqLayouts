@@ -22,7 +22,8 @@
 typedef DWORD VeeKee;
 
 typedef std::unordered_set<VeeKee> VeeKeeSet;
-
+typedef std::vector<VeeKee> VeeKeeArray;
+typedef std::list<VeeKee> VeeKeeList;
 
 
 // represents a single key (e.g. the key that holds ';' and ':' characters)

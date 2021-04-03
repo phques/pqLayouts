@@ -16,8 +16,8 @@
  -  H*B 		!! 
  _  KWR-RBG		!! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
 
- (  PREP  		!! PREBP
- )  PR*EP 		!! PR*EBP
+ (  PREP  		!! PREPB
+ )  PR*EP 		!! PR*EPB
  (  P*B 		!! P*PB
  )  P*BT 		!! P*PBT
 

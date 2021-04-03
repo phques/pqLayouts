@@ -21,6 +21,7 @@
 #include "layout.h"
 #include "Notification.h"
 #include "chord.h"
+#include "chording.h"
 
 class KbdHook; // fwd
 
@@ -43,10 +44,9 @@ public:
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddStickyMapping(KeyValue vk);
-    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
 
-    void ChordStars(VeeKeeSet& stars) { chordStars = stars; }
-    const VeeKeeSet& ChordStars() const { return chordStars; }
+    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
+    bool InitChordingKeys(const ChordingKeys& chordingKeys);
 
     bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);
     // dbg
@@ -106,6 +106,7 @@ private:
 
     Kord chord;             // current chord being built / cumulated as keys are pressed
     bool chordingSuspended;
+    Chording chording;
     VeeKeeSet chordStars;
     VeeKee star;
 

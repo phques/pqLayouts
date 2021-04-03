@@ -59,15 +59,23 @@ K2K h ^k +^k
 ! ->  they have same output for now (pqLayouts = single char output, 2021-03)
 !     eg open/close quote are the same
 
-! we dont really use -D -Z .. but need to define 'em !
-! Q W E R t  u I O P [ ]
-! A S D F g  j K L ; ' cr
+! Q W E R t  u I O P [ 
+! A S D F g  j K L ; ' 
 !      C V    M ,
-steakpower QAWSEDRFCVM,IKOLP;[' ] cr
-steakstars TGUJ
+! (not using / defining -D-Z here)
+! order is important, left hand, left vowels, stars, right vowelsm right hand
+! stars separate left / right hand !
+steakpower 
+ SSTKPWHR AO ** ** EU FRPBLGTS
+ QAWSEDRF CV TG UJ M, IKOLP;[' 
+
+!!steakstars TGUJ
 
 steaks
 
+!! debug
+ +  PRUS 		!! PHR*US
+ 
  .  P-P 		!! {^.^}
  .  TP-PL
  ,  KW-BG
@@ -86,8 +94,8 @@ steaks
  -  H*B 		!! 
  _  KWR-RBG		!! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
 
- (  PREP  		!! PREBP
- )  PR*EP 		!! PR*EBP
+ (  PREP  		!! PREPB
+ )  PR*EP 		!! PR*EPB
  (  P*B 		!! P*PB
  )  P*BT 		!! P*PBT
 

@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Chord.h" />
+    <ClInclude Include="Chording.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Keydef.h" />
     <ClInclude Include="Keyboard.h" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chord.cpp" />
+    <ClCompile Include="Chording.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Keydef.cpp" />
     <ClCompile Include="Keyboard.cpp" />

@@ -297,6 +297,11 @@ IKeyAction* Keyboard::GetMappingValue(const KbdHookEvent & event)
 }
 
 
+bool Keyboard::InitChordingKeys(const ChordingKeys& chordingKeys)
+{
+    chording.Init(chordingKeys);
+    return true;
+}
 
 bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
 {
@@ -413,29 +418,33 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
     return false; // let key through
 }
 
-void Keyboard::HandleChording(const KbdHookEvent& _event, const DWORD& injectedFromMeValue)
+void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
 {
-    Printf("Keyboard::HandleChording\n");
-
-    // make a copy that we can modify (see chodr star code below)
-    KbdHookEvent event = _event;
-
-    // replace incoming character with 'star' key if defined as such
-    if (chordStars.find(event.vkCode) != chordStars.end())
+    // map qwerty chord key to steno key (by steno order)
+    const ChordingKey* chordingKey = chording.GetChordingKeyFromQwerty(event.vkCode);
+    if (chordingKey != nullptr)
     {
-        Printf("chording, key %02X %c => star %02X\n", event.vkCode, static_cast<char>(event.vkCode & 0xFF), star);
-        event.vkCode = star;
-    }
+        // debug
+        //Printf("chording, qwerty key %02X %c => %c %d\n", 
+        //    event.vkCode, 
+        //    static_cast<char>(event.vkCode & 0xFF), 
+        //    chordingKey->steno, chordingKey->stenoOrder);
 
-    // pass original unmodified event so we can replay as it was typed (no star keys modifications)
-    chord.OnEvent(event, _event);
+        // pass original unmodified event so we can replay as it was typed (no star keys modifications)
+        chord.OnEvent(chordingKey->stenoOrder, event);
+    }
+    else
+    {
+        // not a chording key! cancel any chording
+        // pass original unmodified event so we can replay as it was typed (no star keys modifications)
+        chord.OnEvent(0, event);
+        chord.Cancel();
+    }
 
     switch (chord.GetState())
     {
     case Kord::State::Cancelled:
     {
-        Printf("cancelled chord, replaying keys\n");
-        
         ReplayCancelledChord(chord, injectedFromMeValue);
         chord.Reset();
         break;
@@ -454,7 +463,7 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
 {
     // lookup chord and output its value if found
     // else output original key (cancelled chord)
-    Printf("completed chord [%s]\n", chord.ToChars().c_str());
+    Printf("completed chord [%s]\n", chording.ToString(chord).c_str());
 
     KeyActions::IKeyAction* chordAction = layout.GetChordAction(chord);
     if (chordAction != nullptr)
@@ -483,7 +492,7 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
 // replays the key events accumulated in a failed chord
 void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
 {
-    Printf("ReplayCancelledChord chord [%s]\n", chord.ToChars().c_str());
+    Printf("ReplayCancelledChord chord [%s]\n", chording.ToString(chord).c_str());
 
     SuspendChording();
 
