@@ -312,6 +312,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!doKord(stringTokener))
                 return false;
         }
+        else if (cmd == "include")
+        {
+            if (!doInclude(stringTokener, filename))
+                return false;
+        }
         else 
         {
             std::cerr << "expecting a command, line " << kbdfile.lineNo << std::endl;
@@ -690,7 +695,7 @@ bool LoLevelKbdFile::setImageFile(StringTokener& tokener, const char * pcScriptF
     // image will be in same directory as this script
     WCHAR  fullImagePath[MAX_PATH]=TEXT(""); 
 
-    if (!GetImageFilePath(pcScriptFilename, imageFilename, fullImagePath)) 
+    if (!GetRelativeFilePath(pcScriptFilename, imageFilename, fullImagePath)) 
     {
         std::cerr << "failed to get image file path" << std::endl;
         return false;
@@ -700,7 +705,7 @@ bool LoLevelKbdFile::setImageFile(StringTokener& tokener, const char * pcScriptF
     return true;
 }
 
-bool LoLevelKbdFile::GetImageFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[260])
+bool LoLevelKbdFile::GetRelativeFilePath(const char* pcScriptFilename, std::string& otherFilename, WCHAR  fullOtherPath[MAX_PATH])
 {
     // calc complete path of the kbd def file we are reading
     DWORD  retval = 0;
@@ -708,7 +713,7 @@ bool LoLevelKbdFile::GetImageFilePath(const char* pcScriptFilename, std::string&
     WCHAR  fullScriptPath[MAX_PATH] = TEXT("");
     WCHAR* lppPart = { NULL };
 
-    // get complete path of thos script
+    // get complete path of this script
     std::string scriptName(pcScriptFilename);
     std::wstring wscriptName = std::wstring(scriptName.begin(), scriptName.end());
     std::copy(wscriptName.begin(), wscriptName.end(), scriptPath);
@@ -721,16 +726,16 @@ bool LoLevelKbdFile::GetImageFilePath(const char* pcScriptFilename, std::string&
     if (retval == 0 || retval >= MAX_PATH)
         return false;
 
-    // replace the script filename with the image filename
+    // replace the script filename with the other filename
 
     // remove script filename, to get directory
     if (!PathRemoveFileSpecW(fullScriptPath))
         return false;
 
-    // add image filename to directory
-    std::wstring wImageFilename = std::wstring(imageFilename.begin(), imageFilename.end());
+    // add other filename to directory
+    std::wstring wotherFilename = std::wstring(otherFilename.begin(), otherFilename.end());
 
-    HRESULT res = PathCchCombine(fullImagePath, MAX_PATH, fullScriptPath, wImageFilename.c_str());
+    HRESULT res = PathCchCombine(fullOtherPath, MAX_PATH, fullScriptPath, wotherFilename.c_str());
     if (res != S_OK)
         return false;
 
@@ -800,3 +805,40 @@ bool LoLevelKbdFile::setImageView(StringTokener& tokener)
     return true;
 }
 
+// read / process from an include file
+// ## warning: no check for recursive includes, will go into infinite loop if it happens
+bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char * pcScriptFilename)
+{
+    // read include filename
+    if (tokener.eof()) {
+        std::cerr << "include filename, line " << tokener.LineNo() << std::endl;
+        return false;
+    }
+
+    std::string includeFilename;
+    tokener >> includeFilename;
+
+    // calculate te path of the image file
+    // image will be in same directory as this script
+    WCHAR  fullIncludePath[MAX_PATH]=TEXT(""); 
+
+    if (!GetRelativeFilePath(pcScriptFilename, includeFilename, fullIncludePath)) 
+    {
+        std::cerr << "failed to get include file path" << std::endl;
+        return false;
+    }
+
+    // convert to non-wide string
+    // better way to do this ???
+    //std::string otherFilename = std::string(fullIncludePath, fullIncludePath + wcslen(fullIncludePath));
+    //char* nstring = (char*)_malloca(wcslen(fullIncludePath) * 2 + 4);
+    WCHAR* wptr = fullIncludePath;
+    char nstring[MAX_PATH*2+2] = {0};
+    for (char* pstr = nstring; *wptr; )
+    {
+        *pstr++ = (char)*wptr++;
+    }
+
+    // recursively call ReadKeyboardFile!
+    return ReadKeyboardFile(nstring);
+}

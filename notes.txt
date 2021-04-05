@@ -72,3 +72,6 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 + one-shot modifier, layer
   (set temp 'need xyz' flag in found action key?)
 
++ to reduce the chances of accidental chording of two keys chords (R-R = enter),
+  add a time constraint on those: they must be chorded inside a short time.
+  

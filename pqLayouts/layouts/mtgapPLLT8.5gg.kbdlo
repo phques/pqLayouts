@@ -1,32 +1,39 @@
-! mtgapPLLT8.3gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT8.5gg, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows, fingers over middle of the rows)
 
-!    -  .  z         k  g  x   
-! ?  ,  y  v  !   j  w  p  b  q
-                                        
-!    a  i  c         r  d  n   
-! f  o  e SP  u   l  h  t  s  m
+! :  ;  '  -  ?   z  )  v  "  q 
+! (  .  ,  x  !   =  b  w  k  j 
+!                               
+! y  o  i  l  _   f  n  d  r  g 
+! p  a  e SP  u   m  h  t  s  c 
 
-imagefile mtgapPLLT8.3gg.png
+
+imagefile mtgapPLLT8.5gg.png
 
 imageview 6 +42 58 +42
 
-K2K w  a  A
-K2K e  i  I
-K2K r  c  C
-K2K i  r  R
-K2K o  d  D
-K2K p  n  N
-K2K a  f  F
-K2K s  o  O
-K2K d  e  E
-K2K f  sp @
-K2K g  u  U
-K2K j  l  L
-K2K k  h  H
-K2K l  t  T
-K2K ;  s  S
-K2K '  m  M
+
+K2K q y  Y
+K2K w o  O
+K2K e i  I
+K2K r l  L
+K2K t _  _
+K2K u f  F
+K2K i n  N
+K2K o d  D
+K2K p r  R
+K2K [ g  G
+K2K a p  P
+K2K s a  A
+K2K d e  E
+K2K f sp @
+K2K g u  U
+K2K j m  M
+K2K k h  H
+K2K l t  T
+K2K ; s  S
+K2K ' c  C
+
 
 
 ! special keys / 'outside keys'
@@ -40,6 +47,9 @@ K2K rshift	rctrl +rctrl
 K2K c bs del
 K2K , cr +cr
 
+K2K y ^c ^x
+k2k h ^v
+
 
 include chords-wide_1.kbdlo
 
@@ -50,22 +60,26 @@ addlayertap alt space
 imageview 114 +42 166 +42
 
 
-K2K w  - -
-K2K e  . .
-K2K r  z Z
-K2K i  k K
-K2K o  g G
-K2K p  x X
-K2K a  ? ?
-K2K s  , ,
-K2K d  y Y
-K2K f  v V
-K2K g  ! !
-K2K j  j J
-K2K k  w W
-K2K l  p P
-K2K ;  b B
-K2K '  q Q
+K2K q : :
+K2K w ; ;
+K2K e ' '
+K2K r - -
+K2K t ? ?
+K2K u z Z
+K2K i ) )
+K2K o v V
+K2K p " "
+K2K [ q Q
+K2K a ( (
+K2K s . .
+K2K d , ,
+K2K f x X
+K2K g ! !
+K2K j = =
+K2K k b B
+K2K l w W
+K2K ; k K
+K2K ' j J
 
 
 K2K caps	lshift caps

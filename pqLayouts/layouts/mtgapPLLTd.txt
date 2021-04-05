@@ -1215,3 +1215,175 @@ Home jump:     0.00%                    Home jump:     0.00%
 Ring jump:     0.83%                    Ring jump:     1.08%
 To center:     2.86%                    To center:     2.35%
 
+
+
+]] 8.4gg
+
+add back pinkies on top rows, 
+
+11110 01111
+11111 11111
+00000 00000
+
+setksize beakpqgg
+setmask 111100111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?;'"_
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set sameHand 1
+set numThreads 2
+
+                                            frenchWikip allchars (U on alt)
+Hands: 56% 43%                              Hands: 58% 41%
+                                            
+ ?  '  -  _         k  g  x  z               !  -  u  z         k  b  q  ;
+ ;  "  ,  v  !   j  .  w  b  q               _  .  ,  x  ?   j  v  p  '  "
+                                            
+ y  o  i  c         r  d  n  f               y  o  i  c         d  n  l  f
+ p  a  e SP  u   l  h  t  s  m               w  a  e SP  g   m  t  s  r  h
+                                            
+Fitness:       50369354                     Fitness:       51334230
+Distance:      25463810                     Distance:      24350520
+Finger work:   727708                       Finger work:   664499
+Inward rolls:  10.01%                       Inward rolls:  7.95%
+Outward rolls: 2.87%                        Outward rolls: 2.57%
+Same hand:     36.14%                       Same hand:     36.63%
+Same finger:   5.57%                        Same finger:   5.76%
+Row change:    13.50%                       Row change:    12.77%
+Home jump:     0.00%                        Home jump:     0.00%
+Ring jump:     1.02%                        Ring jump:     1.41%
+To center:     2.87%                        To center:     2.68%
+
+
+]] 8.5gg
+
+try full 2rows !
+
+            130,  25,  25, 30,  140,   140,  30,  25,  25, 130,
+            110,  10,  10, 10,   80,    80,  10,  10,  10, 110,
+            180, 150, 150, 130, 140,   140, 130, 150, 150, 180,
+
+11111 11111
+11111 11111
+00000 00000
+
+setksize beakpqgg
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-!?;'"_():=
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+set sameHand 1
+
+                                    frenchWikip all chars
+Hands: 57% 42%                      Hands: 56% 43%
+                                    
+ :  ;  '  -  ?   z  )  v  "  q       ;  (  -  )  !   =  b  v  q  "
+ (  .  ,  x  !   =  b  w  k  j       :  .  ,  x  ?   j  p  m  '  z
+                                    
+ y  o  i  l  _   f  n  d  r  g       y  o  i  u  _   w  d  n  l  f
+ p  a  e SP  u   m  h  t  s  c       g  a  e SP  k   c  t  s  r  h
+                                    
+Fitness:       50615026             Fitness:       52303445
+Distance:      27480765             Distance:      25931475
+Finger work:   744679               Finger work:   637716
+Inward rolls:  8.38%                Inward rolls:  6.75%
+Outward rolls: 3.38%                Outward rolls: 2.09%
+Same hand:     36.68%               Same hand:     33.29%
+Same finger:   5.57%                Same finger:   5.02%
+Row change:    13.91%               Row change:    11.07%
+Home jump:     0.00%                Home jump:     0.00%
+Ring jump:     1.20%                Ring jump:     1.35%
+To center:     2.81%                To center:     2.90%
+
+
+
+]] 8.6gg
+
+Y moves to alt
+K moves to main
+
+higher top pinkies cost
+            190,  25,  25, 30,  140,   140,  30,  25,  25, 190,
+            110,  10,  10, 10,   80,    80,  10,  10,  10, 110,
+            180, 150, 150, 130, 140,   140, 130, 150, 150, 180,
+
+
+Hands: 56% 43%
+
+ ?  ;  '  -  !   =  )  b  "  z
+ (  .  ,  x  :   j  y  w  v  q
+
+ k  i  o  l  _   f  n  d  r  p
+ g  a  e SP  u   m  h  t  s  c
+
+Fitness:       55263969
+Distance:      29122850
+Finger work:   730129
+Inward rolls:  8.53%
+Outward rolls: 3.00%
+Same hand:     35.06%
+Same finger:   5.68%
+Row change:    13.23%
+Home jump:     0.00%
+Ring jump:     1.27%
+To center:     3.02%
+
+
+]] 8.7gg
+
+use non common symbols so that lower weight keys on alt layer
+can use better spots
+
+setksize beakpqgg
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz[]\\+|&<%@#^`~
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+set sameHand 1
+
+hahaha, one of the intermediate results :
+(oop, was missing \\ in 'use')
+
+JOYEU !!
+
+ Q  P  k  /  E   U  q  g  b  Y
+ I  ;  f  .  W   R  x  w  p  T
+
+ z  a  s  i  O   m  r  d  n  v
+ j  o  y  e  u   l  h  t  ,  c
+
+

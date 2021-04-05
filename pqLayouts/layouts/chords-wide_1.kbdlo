@@ -1,11 +1,25 @@
+! chords on ansi wide (right hand moved one spot to the right)
+! based on steno !
+! (some will be used in real steno eventully)
+! used on my Microsoft Sculpt .. non NKRO, so have to use shorter versions sometimes
+! for eg PB ('N') is OL on ansi-w, and that usually fails to chord with other keys
 
-chords for punctuation
-used with my pqLayouts pgrm chording
-based on steno !
-(some will be used in real steno eventully)
+! for strokes that would have space / no-space versions,
+! ->  they have same output for now (pqLayouts = single char output, 2021-03)
+!     eg open/close quote are the same
 
-note that on non NKRO kbd (my Microsoft Sculpt),
-chording two vertical keys with another key is usually a problem 
+! Q W E R t  u I O P [ ]
+! A S D F g  j K L ; ' 
+!      C V    M ,
+! (not using / defining -Z here)
+! order is important, left hand, left vowels, stars, right vowelsm right hand
+! stars separate left / right hand !
+
+steakpower 
+ SSTKPWHR AO ** ** EU FRPBLGTSD
+ QAWSEDRF CV TG UJ M, IKOLP;[']
+
+steaks
 
  .  P-P 		!! {^.^}
  .  TP-PL
@@ -24,20 +38,6 @@ chording two vertical keys with another key is usually a problem
  -  H-B 		!! {^-^}
  -  H*B 		!! 
  _  KWR-RBG		!! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
-
-!! [[ original design for (){}{}<> ...
-!!   (PWR does not work (PW) on Sculpt)
- (  PREP  		!! PREPB
- )  PR*EP 		!! PR*EPB
- (  P*B 		!! P*PB
- )  P*BT 		!! P*PBT
- {  TPR-BG 	    !! TPR-BGT ("FRC" ??)
- }  TPR*BG 	    !! TPR*BGT ("FRC" ??)
- [  TWR-BG	    !! PWR-BG 
- ]  TWR*BG	    !! (PWR-BGS) (newpq * ver of TWR-BG, simi to TPR-BG, TPR*BG)
- <  AEPG 		!! AEPBG
- >  A*EPG		!! A*EPBG
-!! .... ]]
 
 !! ** new design, based on using tpr/twr/kwr/kpr + rb/bg (open/close)
 !!   similar to TP-PL KW-BG TP-BG KW-PL 
@@ -67,6 +67,19 @@ chording two vertical keys with another key is usually a problem
  <  KRP-RB		!! AEPBG
  >  KRP-BG		!! A*EPBG
 
+!! [[ original design for (){}{}<> ...
+!!   (PWR does not work (PW) on Sculpt)
+!! (  PREP  		!! PREPB
+!! )  PR*EP 		!! PR*EPB
+!! (  P*B 		!! P*PB
+!! )  P*BT 		!! P*PBT
+!! {  TPR-BG 	    !! TPR-BGT ("FRC" ??)
+!! }  TPR*BG 	    !! TPR*BGT ("FRC" ??)
+!! [  TWR-BG	    !! PWR-BG 
+!! ]  TWR*BG	    !! (PWR-BGS) (newpq * ver of TWR-BG, simi to TPR-BG, TPR*BG)
+!! <  AEPG 		!! AEPBG
+!! >  A*EPG		!! A*EPBG
+!! .... ]]
 
  :  STPH-FP 	!! STPH-FPLT Sculpt: use lower S (A)
  =  KW-L
@@ -83,7 +96,7 @@ chording two vertical keys with another key is usually a problem
  ~  T*LD		!! {^~}
  ^  KR-RT		!! {^}^{^}
  `  KH-FG
-
+ 
  cr R-R
  bs W-FP 		!! PW-FP
 ^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
@@ -100,3 +113,5 @@ chording two vertical keys with another key is usually a problem
  ^v KR*F  		!! new etc..
  ^w KR*T  		!! new 
  ^k KR*BG 		!! nw
+
+endsteaks

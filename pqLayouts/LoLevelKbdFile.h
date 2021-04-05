@@ -106,8 +106,9 @@ private:
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);
-    bool GetImageFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[260]);
+    bool GetRelativeFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[MAX_PATH]);
     bool setImageView(StringTokener& tokener);
+    bool doInclude(StringTokener& tokener, const char * scriptFilename);
 
 private:
     static std::map<std::string, WORD> keyNames;
