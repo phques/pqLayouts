@@ -21,6 +21,12 @@
 using namespace KeyActions;
 
 
+namespace KeyActions
+{
+    KeyActionPair nullActionPair = { nullptr, nullptr };
+};
+
+
 KeyMapping::KeyMapping() : mapping(nullptr)
 {
 }

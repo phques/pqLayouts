@@ -51,8 +51,8 @@ public:
     bool AddStickyMapping(KeyValue vk);
 
     bool HasChords() const { return chords.size() > 0; }
-    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
-    KeyActions::IKeyAction* GetChordAction(const Kord& chord);
+    bool AddChord(Kord& chord, KeyActions::KeyActionPair keyAction);
+    KeyActions::KeyActionPair GetChordAction(const Kord& chord);
 
     void SetImageView(ImageView imageView, Layer::ImageView imageViewShift);
     ImageView GetImageView(bool shiftDown) const;
@@ -67,7 +67,7 @@ private:
     struct ChordAction
     {
         Kord chord;
-        KeyActions::IKeyAction* keyAction;
+        KeyActions::KeyActionPair keyActions;
 
         bool operator==(const Kord& otherChord) const { 
             return otherChord == chord; 

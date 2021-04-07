@@ -102,7 +102,7 @@ private:
     bool doKord(StringTokener& tokener);
     bool doSteaks(File& file);
     bool readKeysList(File& kbdfile, const char* paramName, VeeKeeList& stenoKeys, std::vector<char>& stenoChars);
-    KeyActions::IKeyAction* parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
+    std::pair<KeyActions::IKeyAction*,KeyActions::IKeyAction*> parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);

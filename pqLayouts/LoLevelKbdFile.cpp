@@ -515,11 +515,11 @@ bool LoLevelKbdFile::doKord(StringTokener& tokener)
     
     // now build the chord / read the keys of the chord
     Kord chord;
-    KeyActions::IKeyAction* action = parseChordValue(tokener, chordOutput, chord);
-    if (action == nullptr)
+    KeyActions::KeyActionPair actions = parseChordValue(tokener, chordOutput, chord);
+    if (actions == KeyActions::nullActionPair)
         return false;
 
-    return HookKbd::AddChord(chord, action);
+    return HookKbd::AddChord(chord, actions);
 
 }
 
@@ -559,23 +559,23 @@ bool LoLevelKbdFile::doSteaks(File& file)
 
         // now complete the chord definition
         Kord chord;
-        KeyActions::IKeyAction* action = parseChordValue(tokener, chordDef, chord);
-        if (action == nullptr)
+        KeyActions::KeyActionPair actions = parseChordValue(tokener, chordDef, chord);
+        if (actions == KeyActions::nullActionPair)
             return false;
 
-        if (!HookKbd::AddChord(chord, action))
+        if (!HookKbd::AddChord(chord, actions))
             return false;
     }
 
 }
 
-KeyActions::IKeyAction* LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOutputParser, Kord& chord)
+KeyActions::KeyActionPair LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOutputParser, Kord& chord)
 {
     // build the chord / read the keys of the chord
     VeeKeeList chordKeys;
     std::vector<char> keysChars;
     if (!chordOutputParser.GetKeys(chordKeys, keysChars))
-        return nullptr;
+        return KeyActions::nullActionPair;
 
     // get VK value of '-'
     bool isShifted;
@@ -615,11 +615,15 @@ KeyActions::IKeyAction* LoLevelKbdFile::parseChordValue(StringTokener& tokener, 
     KeyValue outKey = chordOutputParser.ToKeyValue();
     auto action = new KeyActions::KeyOutAction(inKey, outKey);
 
+    // shifted version
+    KeyValue outKeySh = chordOutputParser.ToKeyValue().Shift(true);
+    auto actionSh = new KeyActions::KeyOutAction(inKey, outKeySh);
+
     Printf("chord %s [%c]\n", 
         chording.ToString(chord).c_str(), 
         VkUtil::VkToChar((WORD)outKey.Vk(), 0));
 
-    return action;
+    return KeyActions::KeyActionPair(action, actionSh);
 }
 
 bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)

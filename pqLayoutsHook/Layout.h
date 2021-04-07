@@ -40,8 +40,8 @@ public:
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
-    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
-    KeyActions::IKeyAction* GetChordAction(const Kord& chord);
+    bool AddChord(Kord& chord, KeyActions::KeyActionPair keyActions);
+    KeyActions::KeyActionPair GetChordAction(const Kord& chord);
 
     void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
     Layer::ImageView GetImageView(bool shiftDown) const;

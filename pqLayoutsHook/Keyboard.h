@@ -45,7 +45,7 @@ public:
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddStickyMapping(KeyValue vk);
 
-    bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction);
+    bool AddChord(Kord& chord, KeyActions::KeyActionPair keyActions);
     bool InitChordingKeys(const ChordingKeys& chordingKeys);
 
     bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);

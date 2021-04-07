@@ -50,6 +50,12 @@ protected:
 };
 
 
+// both normal and shifted actions
+typedef std::pair<IKeyAction*, IKeyAction*> KeyActionPair;
+
+PQHOOK_API extern KeyActionPair nullActionPair;
+
+
 }  // namespace KeyActions
 
 

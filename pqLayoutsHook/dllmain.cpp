@@ -160,9 +160,9 @@ PQHOOK_API bool AddStickyMapping(KeyValue vk)
     return theKbd.AddStickyMapping(vk);
 }
 
-PQHOOK_API bool AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+PQHOOK_API bool AddChord(Kord& chord, KeyActions::KeyActionPair keyActions)
 {
-    return theKbd.AddChord(chord, keyAction);
+    return theKbd.AddChord(chord, keyActions);
 }
 
 PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys)

@@ -138,12 +138,22 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
     return currentLayer->AddMapping(from, to);
 }
 
-bool Layout::AddChord(Kord& chord, KeyActions::IKeyAction* keyAction)
+bool Layout::AddChord(Kord& chord, KeyActions::KeyActionPair keyActions)
 {
     if (currentLayer == nullptr)
         return false;
 
-    return currentLayer->AddChord(chord, keyAction);
+    return currentLayer->AddChord(chord, keyActions);
+}
+
+// lookup 'chord' and return its asociated key action if found, else null 
+KeyActions::KeyActionPair Layout::GetChordAction(const Kord& chord)
+{
+    if (currentLayer != nullptr)
+        return currentLayer->GetChordAction(chord);
+
+    // return empty actions
+    return KeyActions::nullActionPair;
 }
 
 bool Layout::AddStickyMapping(KeyValue vk)
@@ -168,11 +178,3 @@ Layer::ImageView Layout::GetImageView(bool shiftDown) const
     return {};
 }
 
-// lookup 'chord' and return its asociated key action if found, else null 
-KeyActions::IKeyAction* Layout::GetChordAction(const Kord& chord)
-{
-    if (currentLayer != nullptr)
-        return currentLayer->GetChordAction(chord);
-
-    return nullptr;
-}
