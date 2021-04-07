@@ -1078,7 +1078,7 @@ Home jump:     0.00%
 Ring jump:     0.73%
 To center:     1.28%
 
-
+ 
 ]] 8.1gg
 
 8.0 by std allChars.txt 
@@ -1354,7 +1354,7 @@ To center:     3.02%
 ]] 8.7gg
 
 use non common symbols so that lower weight keys on alt layer
-can use better spots
+can use better spots(?)
 
 setksize beakpqgg
 setmask 111111111111111111110000000000
@@ -1386,4 +1386,246 @@ JOYEU !!
  z  a  s  i  O   m  r  d  n  v
  j  o  y  e  u   l  h  t  ,  c
 
+
+Hands: 55% 44%
+Fingers: 2.0% 13% 18% 23% 0.00% 0.00% 17% 14% 11% 3.0%
+
+ ^  +  ]  [  `   %  k  g  j  ~
+ @  \  y  x  #   |  w  b  q  <
+
+ &  o  i  c  z   f  r  d  n  v
+ p  a  e SP  u   l  h  t  s  m
+
+Fitness:       45797253
+Distance:      25122585
+Finger work:   473530
+Inward rolls:  9.80%
+Outward rolls: 2.59%
+Same hand:     33.96%
+Same finger:   5.97%
+Row change:    11.81%
+Home jump:     0.00%
+Ring jump:     0.71%
+To center:     3.29%
+
+
+]] 8.8gg
+
+higher toCenter
+
+setksize beakpqgg
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz[]\\+|&<%@#^`~
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set toCenter 100
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+set sameHand 1
+
+
+Hands: 55% 44%
+Fingers: 2.0% 13% 18% 24% 0.00% 0.00% 15% 13% 11% 4.0%
+
+ ~  [  ]  z  `   %  q  v  j  #
+ +  \  y  x  ^   |  b  w  k  <
+
+ &  o  i  l  @   f  n  d  r  g
+ p  a  e SP  u   m  h  t  s  c
+
+Fitness:       46906046
+Distance:      26301795
+Finger work:   623950
+Inward rolls:  8.68%
+Outward rolls: 3.68%
+Same hand:     35.65%
+Same finger:   5.50%
+Row change:    12.96%
+Home jump:     0.00%
+Ring jump:     0.92%
+To center:     2.67%
+
+-----
+
+]] 8.9gg
+2021-04-06
+
+try to move keys from alt layer to 2keys chords on main:
+(from 8.0, uses french all chars)
+    -  q  z         g  b  v
+ !  .  ,  x  ?   j  c  p  m  w
+cpmg  
+(wb)
+
+base=8.1 
+
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use ab defhijklnoqrstuvwxyz,.-!?'";:
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 3
+
+                                    french all chars
+Hands: 55% 44%                      Hands: 60% 39%
+                                    
+    :  ;  z         v  k  x             :  q  ?         k  v  x
+ ?  "  .  -  !   j  ,  w  b  q       ;  '  .  -  !   j  ,  b  w  "
+                                    
+    i  o  u         r  d  n             o  i  u         d  n  l
+ y  a  e SP  '   l  h  t  s  f       y  a  e SP  z   f  t  s  r  h
+                                    
+Fitness:       76410408             Fitness:       77690167
+Distance:      19212440             Distance:      19460020
+Finger work:   989816               Finger work:   1315071
+Inward rolls:  10.38%               Inward rolls:  6.84%
+Outward rolls: 2.15%                Outward rolls: 2.71%
+Same hand:     31.85%               Same hand:     31.92%
+Same finger:   5.05%                Same finger:   4.96%
+Row change:    9.82%                Row change:    9.26%
+Home jump:     0.00%                Home jump:     0.00%
+Ring jump:     0.67%                Ring jump:     0.68%
+To center:     1.45%                To center:     0.71%
+
+
+
+]] 9.0gg
+2021-04-06
+
+try to move keys from alt layer to 2keys chords on main:
+  (from 8.1, uses std all chars)
+    q  -  z         f  g  b
+ ?  .  ,  x  !   v  m  w  p  j
+
+mfgp wb
+base=8.1 
+
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+etaoinsrhldcuMFGPywbvk
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc dehijklnoqrstuvwxyz,.-!?'";:
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 3
+
+english                             french all chars
+Hands: 54% 45%                      Hands: 58% 41%
+                                    
+    :  ;  z         v  b  x             ?  '  z         q  v  x
+ ?  "  .  -  !   j  ,  w  k  q       ;  :  .  -  !   j  c  b  ,  "
+                                    
+    i  o  u         n  d  r             o  i  u         d  n  l
+ y  a  e SP  '   l  h  t  s  c       y  a  e SP  k   w  t  s  r  h
+                                    
+Fitness:       78857557             Fitness:       80904551
+Distance:      20012005             Distance:      19293035
+Finger work:   607896               Finger work:   1189480
+Inward rolls:  9.46%                Inward rolls:  6.51%
+Outward rolls: 3.04%                Outward rolls: 2.54%
+Same hand:     32.50%               Same hand:     32.79%
+Same finger:   4.95%                Same finger:   5.19%
+Row change:    10.12%               Row change:    9.38%
+Home jump:     0.00%                Home jump:     0.00%
+Ring jump:     0.89%                Ring jump:     0.68%
+To center:     1.47%                To center:     1.61%
+
+
+]] 9.1gg
+2021-04-06
+
+*use low weight symbols
+
+try to move keys from alt layer to 2keys chords on main:
+  (from 8.1, uses std all chars)
+    q  -  z         f  g  b
+ ?  .  ,  x  !   v  m  w  p  j
+
+    i  o  u         r  d  n
+ y  a  e SP  k   l  h  t  s  c
+
+mfgp wb
+base=8.1 
+
+iso of trying to use places as were on alt (ie optimized),
+use steno order, makes it easier
+will see with use  if too many same fingers etc..
+
+                    f m
+                    p g
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+etaoinsrhldcuMFGPywbvk
+
+setksize beakpqgg
+setmask 011100111011111111110000000000
+use abc dehijklnoqrstuvwxyz|&<%@#^`~
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 3
+
+english                             french all chars
+Hands: 54% 45%                      Hands: 58% 41%
+                                    
+    %  &  `         k  b  j             ~  <  `         j  v  z
+ ~  <  |  @  ^   q  v  w  x  z       @  %  q  #  ^   |  c  b  x  &
+                                    
+    i  o  u         r  d  n             o  i  u         d  n  l
+ y  a  e SP  #   l  h  t  s  c       y  a  e SP  k   w  t  s  r  h
+                                    
+Fitness:       69135575             Fitness:       70868572
+Distance:      19300385             Distance:      18263440
+Finger work:   760876               Finger work:   1056040
+Inward rolls:  10.01%               Inward rolls:  6.09%
+Outward rolls: 2.22%                Outward rolls: 2.42%
+Same hand:     31.52%               Same hand:     32.10%
+Same finger:   4.53%                Same finger:   4.89%
+Row change:    10.06%               Row change:    9.33%
+Home jump:     0.00%                Home jump:     0.00%
+Ring jump:     0.86%                Ring jump:     0.58%
+To center:     1.26%                To center:     1.56%
 

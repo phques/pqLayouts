@@ -1,69 +1,50 @@
-! mtgapPLLT8.0gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT9.1gg, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows, fingers over middle of the rows)
 
-!    -  q  z         g  b  v
-! !  .  ,  x  ?   j  c  p  m  w
-!
-!    o  i  u         d  n  l
-! y  a  e SP  k   f  t  s  r  h
+!    %  &  `         k  b  j    
+! ~  <  |  @  ^   q  v  w  x  z 
+                                    
+!    i  o  u         r  d  n    
+! y  a  e SP  #   l  h  t  s  c 
 
-imagefile mtgapPLLT8.0gg.png
+imagefile mtgapPLLT9.1gg.png
 
 imageview 2 +42 54 +42
 
 
-K2K w  o  O
-K2K e  i  I
+K2K w  i  I
+K2K e  o  O
 K2K r  u  U
-
-K2K i  d  D
-K2K o  n  N
-K2K p  l  L
-
+K2K i  r  R
+K2K o  d  D
+K2K p  n  N
 K2K a  y  Y
 K2K s  a  A
 K2K d  e  E
 K2K f  sp @
-K2K g  k  K
-
-K2K j  f  F
-K2K k  t  T
-K2K l  s  S
-K2K ;  r  R
-K2K '  h  H
+K2K g  #  #
+K2K j  l  L
+K2K k  h  H
+K2K l  t  T
+K2K ;  s  S
+K2K '  c  C
 
 
 ! include chords BEFORE those below, since we need the steakpower definition
 include chords-wide_1.kbdlo
 
-!! didnt work too well
-! try using two vertical keys chord for the alt layer consonants
-! etaoinsrhldcumfgpywb,.vkxjq
-! cmgp wbv xjq
-! left hand, with the vowels!
-!!kord c HR
-! place gpm on same fingers as their alt position
-!!kord g -FR
-!!kord p -PB
-!!kord m -LG
-
-! try two horiz keys
-! better .. not certain about the c sleeping with the vowel girls though
-!!kord c KW  !! left (vowels) hand .. bad idea !?
-!!kord g -BG
-!!kord m -PL
-!!kord p -RB
 
 !! ok this is interesting.
-kord p -FP
-kord g -RB
-kord c -BG
+kord f -FP
 kord m -PL
+kord p -RB
+kord g -BG
 
 !! other 'feels good' two keys chords:
 !! not sure .. leave 'em in but will see.
-kord w -RP
-kord b -PG
+!kord w -RP
+!kord b -PG
+
 
 ! special keys / 'outside keys'
 
@@ -84,25 +65,22 @@ addlayertap alt space
 imageview 110 +42 162 +42
 
 
-K2K w  - -
-K2K e  q Q
-K2K r  z Z
-
-K2K i  g G
+K2K w  % %
+K2K e  & &
+K2K r  ` `
+K2K i  k K
 K2K o  b B
-K2K p  v V
-
-K2K a  ! !
-K2K s  . .
-K2K d  , ,
-K2K f  x X
-K2K g  ? ?
-
-K2K j  j J
-K2K k  c C
-K2K l  p P
-K2K ;  m M
-K2K '  w W
+K2K p  j J
+K2K a  ~ ~
+K2K s  < <
+K2K d  | |
+K2K f  @ @
+K2K g  ^ ^
+K2K j  q Q
+K2K k  v V
+K2K l  w W
+K2K ;  x X
+K2K '  z Z
 
 
 K2K caps	lshift caps
