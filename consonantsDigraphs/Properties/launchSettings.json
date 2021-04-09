@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "consonantsDigraphs": {
+      "commandName": "Project",
+      "workingDirectory": "."
+    }
+  }
+}
