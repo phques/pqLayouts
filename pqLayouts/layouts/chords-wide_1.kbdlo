@@ -64,8 +64,8 @@ steaks
  }  TPR-BG	    !! TPR*BGT ("FRC" ??)
  [  TWR-RB	    !! PWR-BG 
  ]  TWR-BG	    !! PWR-BGS
- <  KRP-RB		!! AEPBG
- >  KRP-BG		!! A*EPBG
+ <  KPR-RB		!! AEPBG
+ >  KPR-BG		!! A*EPBG
 
 !! [[ original design for (){}{}<> ...
 !!   (PWR does not work (PW) on Sculpt)
@@ -130,5 +130,6 @@ endsteaks
 ! SKWR-P shift-up (ie STPH-P = up)
 !
 ! discord
-! \ B-SH, O*EU, SK-PH
-
+! \ B-SH 'back slash' PW-RB, Sculpt: W*RB
+!    sculpt S-RB (S-sh 'slash')
+!    O*EU ("oi"), SK-PH ?

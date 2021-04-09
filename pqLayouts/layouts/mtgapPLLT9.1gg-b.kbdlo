@@ -1,4 +1,4 @@
-! mtgapPLLT9.1gg, going PLLT with MTGAP, wid mode
+! mtgapPLLT9.1gg-b, going PLLT with MTGAP, wid mode
 ! for Georgi steno kbd (2 rows, fingers over middle of the rows)
 
 !    %  &  `         k  b  j    
@@ -48,6 +48,8 @@ kord g -BG
 
 ! special keys / 'outside keys'
 
+K2K q tab +tab
+
 K2K caps	lshift caps
 K2K lshift 	lctrl +lctrl
 
@@ -65,22 +67,26 @@ addlayertap alt space
 imageview 114 +42 166 +42
 
 
-K2K w  % %
-K2K e  & &
-K2K r  ` `
-K2K i  k K
-K2K o  b B
-K2K p  j J
-K2K a  ~ ~
-K2K s  < <
-K2K d  | |
-K2K f  @ @
-K2K g  ^ ^
-K2K j  q Q
-K2K k  v V
-K2K l  w W
-K2K ;  x X
-K2K '  z Z
+K2K q  F1 +F1
+K2K w  F2 +F2
+K2K e  F3 +F3
+K2K r  F4 +F4
+K2K t  F5 +F5
+K2K u  F6 +F6
+K2K i  k   K
+K2K o  b   B
+K2K p  j   J
+K2K [  F7  +F7
+K2K a  F8  +F8 
+K2K s  F9  +F9 
+K2K d  F10 +F10
+K2K f  F11 +F11
+K2K g  F12 +F12
+K2K j  q   Q
+K2K k  v   V
+K2K l  w   W
+K2K ;  x   X
+K2K '  z   Z
 
 
 K2K caps	lshift caps

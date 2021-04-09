@@ -1629,3 +1629,199 @@ Home jump:     0.00%                Home jump:     0.00%
 Ring jump:     0.86%                Ring jump:     0.58%
 To center:     1.26%                To center:     1.56%
 
+
+----- 2021-04-08
+
+]] 9.2gg
+
+base=8.0
+
+idea: 
+ have all consonants on right hand main+alt,
+ duplicate vowels on alt layer
+
+01110 01111
+11111 11111
+00000 00000
+
+setksize beakpqgg
+setmask 011100111111111111110000000000
+usel aeiouybc dfghjklm
+useu AEIOUYnpqrstvwxz~
+setkeeppairschars:aAeEiIoOuUyY
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 3
+
+
+english                                 frenchallchars
+Hands: 51% 48%                          Hands: 54% 45%
+                                        
+    I  O  U         f  g  v  z              O  I  U         g  b  v  z
+ Y  A  E  x  ~   j  m  p  b  q           Y  A  E  x  ~   q  c  p  m  j
+                                        
+    i  o  u         r  d  n  w              o  i  u         d  n  l  w
+ y  a  e SP  k   l  h  t  s  c           y  a  e SP  k   f  t  s  r  h
+                                        
+Fitness:       90426364                 Fitness:       90416787
+Distance:      24162780                 Distance:      21744295
+Finger work:   790712                   Finger work:   1273262
+Inward rolls:  9.43%                    Inward rolls:  6.35%
+Outward rolls: 2.14%                    Outward rolls: 2.54%
+Same hand:     30.82%                   Same hand:     30.82%
+Same finger:   4.79%                    Same finger:   5.15%
+Row change:    9.69%                    Row change:    9.16%
+Home jump:     0.00%                    Home jump:     0.00%
+Ring jump:     0.81%                    Ring jump:     0.69%
+To center:     2.20%                    To center:     1.24%
+
+
+]] 9.3gg
+
+base=9.2
+try lower shift cost (9.2: w on upper pinky on main !!?)
+and higher toCenter 60->90
+ higher top row pinkies cost
+
+            500,  25,  25, 30,  140,   140,  30,  25,  25, 500,
+            110,  10,  10, 10,   80,    80,  10,  10,  10, 110,
+            180, 150, 150, 130, 140,   140, 130, 150, 150, 180,
+
+idea: 
+ have all consonants on right hand main+alt,
+ duplicate vowels on alt layer
+
+setksize beakpqgg
+setmask 011100111111111111110000000000
+usel aeiouy bcdfghjklm
+useu AEIOUY~npqrstvwxz
+setkeeppairschars:aAeEiIoOuUyY ~
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 90
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 3
+
+english                             frenchallchars
+Hands: 51% 48%                      Hands: 54% 45%
+                                    
+    I  O  U         f  g  b  z          O  I  U         g  b  v  z
+ Y  A  E  ~  x   v  m  w  p  j       Y  A  E  ~  q   j  c  p  m  k
+                                    
+    i  o  u         r  d  n  q          o  i  u         d  n  l  w
+ y  a  e SP  k   l  h  t  s  c       y  a  e SP  x   f  t  s  r  h
+                                    
+Fitness:       88034501             Fitness:       87734879
+Distance:      22370050             Distance:      22734120
+Finger work:   993812               Finger work:   1341122
+Inward rolls:  9.41%                Inward rolls:  6.21%
+Outward rolls: 1.98%                Outward rolls: 2.59%
+Same hand:     30.82%               Same hand:     30.63%
+Same finger:   4.97%                Same finger:   5.05%
+Row change:    9.65%                Row change:    9.17%
+Home jump:     0.00%                Home jump:     0.00%
+Ring jump:     0.74%                Ring jump:     0.87%
+To center:     2.54%                To center:     0.91%
+
+
+]] 9.4gg
+
+base=9.2
+even lower shift cost
+even higher toCenter 
+
+idea: 
+ have all consonants on right hand main+alt,
+ duplicate vowels on alt layer
+
+useu AEIOUY@npqrstvwxz
+setkeeppairschars:aAeEiIoOuUyY @
+
+lower case on alt also, changes results !!
+useu aeiouy@npqrstvwxz
+setkeeppairschars:aaeeiioouuyy @
+
+setksize beakpqgg
+setmask 011100111111111111110000000000
+usel aeiouy bcdfghjklm
+useu AEIOUY@npqrstvwxz
+setkeeppairschars:aAeEiIoOuUyY @
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 175
+set toCenter 111
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 3
+
+(english)
+Hands: 50% 49%
+Fingers: 2.0% 13% 16% 20% 0.00% 0.00% 18% 15% 12% 4.0%
+
+    I  O  U         g  f  b  q
+ Y  A  E  @  z   v  c  p  w  k
+
+    i  o  u         d  n  r  j
+ y  a  e SP  x   m  t  s  h  l
+
+Fitness:       83492849
+Distance:      22598550
+Finger work:   441694
+Inward rolls:  6.89%
+Outward rolls: 2.03%
+Same hand:     30.60%
+Same finger:   4.97%
+Row change:    9.64%
+Home jump:     0.00%
+Ring jump:     1.13%
+To center:     1.11%
+
+-b
+lowercase on alt also, somehow changes results !
+(I prefer this one even though numbers are a bit worst)
+
+Hands: 50% 49%
+Fingers: 2.0% 13% 16% 20% 0.00% 0.00% 17% 17% 12% 3.0%
+
+    i  o  u         g  l  b  q
+ y  a  e  @  z   v  p  m  w  k
+
+    i  o  u         d  n  r  j
+ y  a  e SP  x   f  t  s  h  c
+
+Fitness:       120306563
+Distance:      21872260
+Finger work:   441694
+Inward rolls:  7.78%
+Outward rolls: 1.94%
+Same hand:     30.60%
+Same finger:   5.02%
+Row change:    9.86%
+Home jump:     0.00%
+Ring jump:     1.18%
+To center:     0.97%
+
