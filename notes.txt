@@ -61,17 +61,46 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 + chording
 ---
-- support pre-mapping .. ie, A -> S  T,G,U,J -> *
-- use real steno keys to define chords
-- use a single command to define multiple chords,
-  w. begin/end token (vs using 'kord' on each)
 
-+ #include files
-  - for edit, numpad, chords..
++ bug: because of chording, 
+  shift-xx does not shift unless we keep shift done when press 'xx'
+  (shift is not kept in the 'replay sequence')
+
++ bug: sometimes stays stuck in chord building mode (when doing it on alt layer?)
+
++ possibly use a different approach:
+  gather keys in a chord as they are typed,
+  look for a valid chord,
+  IF we have a valid chord,
+  - on either
+   - key up
+   - keydown that invalidates the current chord,
+   - keydown not part of steakpower
+   THEN use the last found chord
+   and then output the other key ?
+
++ give an error if trying to define chords before stkpower
+
++ 'repeat' key
+
+
+-- usage ideas
+
++ use 2keys chords to do consonants to limit use of alt layer
+
++ use 3keys chords to output some of the consonants pairs that require alt/main alternation
+  eg. in 9.4-b TW CK WH LT NG (ing)
+ *-> this requires pqLayouts to support multiple chars output !!
+  -> write util prog that would read allDigraphs.txt and
+  test all permutations of consonants main/alt 
+  and sort the results in frequency (so I can create the most useful chords)
+
+---
 
 + one-shot modifier, layer
   (set temp 'need xyz' flag in found action key?)
 
-+ to reduce the chances of accidental chording of two keys chords (R-R = enter),
-  add a time constraint on those: they must be chorded inside a short time.
-  
++ see about how Plover handles kbd hook & text output,
+  possibility of using its lib ?
+  -> this could let me have a Mac version of pqLayouts !?
+
