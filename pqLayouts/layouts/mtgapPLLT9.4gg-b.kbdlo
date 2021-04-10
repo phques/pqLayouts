@@ -32,8 +32,23 @@ K2K ;  h  H
 K2K '  c  C
 
 
-! include chords BEFORE those below
 include chords-wide_1.kbdlo
+
+!! define 2chars output chords for easier some consonants pairs found between main/alt layers
+!! the key used to chord them is -W
+
+!    i  o  u         pt ng rm .
+! y  a  e  SP x   .  tl sp rg ck
+steaks
+  pt  W-F
+  ng  W-P
+  rm  W-L
+  tl  W-R
+  sp  W-B		!! the oupt is parsed as space not "sp"
+  rg  W-G
+  ck  W-S
+endsteaks
+
 
 
 ! special keys / 'outside keys'
@@ -74,6 +89,18 @@ K2K k  p P
 K2K l  m M
 K2K ;  w W
 K2K '  k K
+
+!    i  o  u         gr ld br .
+! y  a  e  SP z   .  pr ls lt cl
+steaks
+  gr  W-F
+  ld  W-P
+  br  W-L
+  pr  W-R
+  ls  W-B
+  lt  W-G
+  cl  W-S
+endsteaks
 
 
 K2K caps	lshift caps
