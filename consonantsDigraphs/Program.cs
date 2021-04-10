@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// small program to find highest frequency bigraphs of consonants
+// small program to find highest frequency digraphs of consonants
 // combines two sets of consonants (from cmdline), creating digraphs from all permutations
 
 namespace consonantsDigraphs
@@ -28,30 +28,30 @@ namespace consonantsDigraphs
     {
         public DigraphValue(string di, int val)
         {
-            digraph = di;
-            value = val;
+            Digraph = di;
+            Value = val;
         }
 
-        public string digraph;
-        public int value;
+        public string Digraph;
+        public int Value;
     }
 
     public class TwoDigraphs
     {
         public TwoDigraphs(DigraphValue di1, DigraphValue di2)
         {
-            digraph1 = di1;
-            digraph2 = di2;
-            TotalValue = (di1?.value ?? 0) + (di2?.value ?? 0);
+            Digraph1 = di1;
+            Digraph2 = di2;
+            TotalValue = (di1?.Value ?? 0) + (di2?.Value ?? 0);
         }
         public int TotalValue;
-        public DigraphValue digraph1;
-        public DigraphValue digraph2;
+        public DigraphValue Digraph1;
+        public DigraphValue Digraph2;
     }
 
     public class Doit
     {
-        Dictionary<string, DigraphValue> digraphs;
+        readonly Dictionary<string, DigraphValue> digraphs;
 
         public Doit()
         {
@@ -64,9 +64,10 @@ namespace consonantsDigraphs
             var lines = System.IO.File.ReadAllLines("consonantsDigraphs.txt");
             foreach (var line in lines)
             {
-                // create digraph value from "ng 1234:
+                // create digraph value from "ng 1234"
                 var parts = line.Split(' ');
                 var digraphValue = new DigraphValue(parts[0], int.Parse(parts[1]));
+
                 // add to dictio
                 digraphs.Add(parts[0], digraphValue);
             }
@@ -74,7 +75,7 @@ namespace consonantsDigraphs
 
         internal void Go(string mainLayerConsonants, string altLayerConsonants)
         {
-            var twoDigraphList = new List<TwoDigraphs>();
+            var digraphList = new List<DigraphValue>();
 
             foreach (var charMain in mainLayerConsonants)
             {
@@ -94,27 +95,27 @@ namespace consonantsDigraphs
                     // create dummy digraph value if !found
                     digraphValue2 ??= new DigraphValue(digraph, 0);
 
-                    var twoDigraphs = new TwoDigraphs(digraphValue1, digraphValue2);
-                    twoDigraphList.Add(twoDigraphs);
+                    // actually, try to output both separately
+                    //var twoDigraphs = new TwoDigraphs(digraphValue1, digraphValue2);
+                    //digraphList.Add(twoDigraphs);
+                    digraphList.Add(digraphValue1);
+                    digraphList.Add(digraphValue2);
                 }
             }
 
             // sort list descending
 
-            var sorted = from element in twoDigraphList
-                         orderby element.TotalValue descending
+            var sorted = from element in digraphList
+                         orderby element.Value descending
                          select element;
 
             // output results
-            foreach (var twoDigraphs in sorted)
+            foreach (var digraphValue in sorted)
             {
-                string digraph1 = twoDigraphs.digraph1?.digraph ?? "";
-                string digraph2 = twoDigraphs.digraph2?.digraph ?? "";
-                int digraphValue1 = twoDigraphs.digraph1?.value ?? 0;
-                int digraphValue2 = twoDigraphs.digraph2?.value ?? 0;
+                string digraph1 = digraphValue?.Digraph ?? "";
+                int digraphValue1 = digraphValue?.Value ?? 0;
 
-                Console.WriteLine("[{0}]/[{1}] {2} ({3}/{4})",
-                    digraph1, digraph2, twoDigraphs.TotalValue, digraphValue1, digraphValue2);
+                Console.WriteLine("[{0}] {1}", digraph1, digraphValue1);
             }
         }
     }
