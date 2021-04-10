@@ -138,7 +138,7 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
     return currentLayer->AddMapping(from, to);
 }
 
-bool Layout::AddChord(Kord& chord, KeyActions::KeyActionPair keyActions)
+bool Layout::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
     if (currentLayer == nullptr)
         return false;
@@ -147,13 +147,13 @@ bool Layout::AddChord(Kord& chord, KeyActions::KeyActionPair keyActions)
 }
 
 // lookup 'chord' and return its asociated key action if found, else null 
-KeyActions::KeyActionPair Layout::GetChordAction(const Kord& chord)
+const std::list<KeyActions::KeyActionPair>* Layout::GetChordActions(const Kord& chord)
 {
     if (currentLayer != nullptr)
-        return currentLayer->GetChordAction(chord);
+        return currentLayer->GetChordActions(chord);
 
     // return empty actions
-    return KeyActions::nullActionPair;
+    return nullptr;
 }
 
 bool Layout::AddStickyMapping(KeyValue vk)

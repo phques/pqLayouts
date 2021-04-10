@@ -55,15 +55,18 @@ include chords-wide_1.kbdlo
 !!kord p -RB
 
 !! ok this is interesting.
-kord p -FP
-kord g -RB
-kord c -BG
-kord m -PL
+steaks
+ p -FP
+ g -RB
+ c -BG
+ m -PL
 
 !! other 'feels good' two keys chords:
 !! not sure .. leave 'em in but will see.
-kord w -RP
-kord b -PG
+ w -RP
+ b -PG
+
+endsteaks
 
 ! special keys / 'outside keys'
 

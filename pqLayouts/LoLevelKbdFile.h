@@ -66,7 +66,8 @@ public:
     bool ReadFromTokener();
     bool ParseKey();
 
-    bool GetKeys(VeeKeeList&, std::vector<char>& stenoChars);
+    bool GetKeys(std::list<KeyValue> & keys, std::vector<char>& stenoChars);
+    bool GetKeysFromToken(std::list<KeyValue>& keys, std::vector<char>& stenoChars);
     KeyValue ToKeyValue() const;
 
 public:
@@ -99,10 +100,11 @@ private:
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
     bool doSteakPower(File&);
-    bool doKord(StringTokener& tokener);
+    //bool doKord(StringTokener& tokener);
     bool doSteaks(File& file);
-    bool readKeysList(File& kbdfile, const char* paramName, VeeKeeList& stenoKeys, std::vector<char>& stenoChars);
-    std::pair<KeyActions::IKeyAction*,KeyActions::IKeyAction*> parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
+    void SetChordKeyActionPair(const KeyValue& outKey, KeyActions::KeyActionPair& actionPair);
+    bool readKeysList(File& kbdfile, const char* paramName, std::list<KeyValue>& stenoKeys, std::vector<char>& stenoChars);
+    bool parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
     bool addLayer(StringTokener& tokener, bool toggleOnTap);
     bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);

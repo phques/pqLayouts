@@ -273,7 +273,7 @@ bool Keyboard::AddStickyMapping(KeyValue vk)
     return layout.AddStickyMapping(vk);
 }
 
-bool Keyboard::AddChord(Kord& chord, KeyActions::KeyActionPair keyActions)
+bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
     return layout.AddChord(chord, keyActions);
 }
@@ -465,26 +465,30 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
     // else output original key (cancelled chord)
     Printf("completed chord [%s]\n", chording.ToString(chord).c_str());
 
-    KeyActions::KeyActionPair chordActions = layout.GetChordAction(chord);
-    if (chordActions != KeyActions::nullActionPair)
+    const std::list<KeyActions::KeyActionPair>* chordActions = layout.GetChordActions(chord);
+    if (chordActions != nullptr)
     {
         Printf("chord found, executing its action keydown/up\n");
 
-        // get normal / shifted version of the action 
-        KeyActions::IKeyAction* action = (ShiftDown() ? chordActions.second : chordActions.first);
-
-        // sanity check
-        if (action != nullptr)
+        for (auto actionPair : *chordActions)        
         {
-            SuspendChording();
+            // get normal / shifted version of the action 
+            KeyActions::IKeyAction* action = (ShiftDown() ? actionPair.second : actionPair.first);
 
-            // activate action for this chord
-            action->OnKeyDown(this);
+            // sanity check
+            if (action != nullptr)
+            {
+                SuspendChording();
 
-            // should this be a Tap ? techniclly it is
-            action->OnKeyUp(this, false);
+                // activate action for this chord
+                action->OnKeyDown(this);
 
-            ResumeChording();
+                // should this be a Tap ? techniclly it is
+                action->OnKeyUp(this, false);
+
+                ResumeChording();
+            }
+
         }
     }
     else

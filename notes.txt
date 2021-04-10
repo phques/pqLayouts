@@ -83,17 +83,21 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 + 'repeat' key
 
++ multi chars output chords:
+  + bug: outut "sp" is interpreted a the SP key !!
+    -> make all key names uppercase?
+->? for 'steaks', use /sse dd/ to enter literal text ??
+  /sp/ would be "sp" not a space
+  /^c/ "^c" not ctrl-c
+  Would also permit to have spaces in output:
+  /this is some text/
+  
 
 -- usage ideas
 
+  (does not work very well)
 + use 2keys chords to do consonants to limit use of alt layer
 
-+ use 3keys chords to output some of the consonants pairs that require alt/main alternation
-  eg. in 9.4-b TW CK WH LT NG (ing)
- *-> this requires pqLayouts to support multiple chars output !!
-  -> write util prog that would read allDigraphs.txt and
-  test all permutations of consonants main/alt 
-  and sort the results in frequency (so I can create the most useful chords)
 
 ---
 

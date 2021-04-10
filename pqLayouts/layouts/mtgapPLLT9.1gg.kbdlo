@@ -35,10 +35,12 @@ include chords-wide_1.kbdlo
 
 
 !! ok this is interesting.
-kord f -FP
-kord m -PL
-kord p -RB
-kord g -BG
+steaks
+ f -FP
+ m -PL
+ p -RB
+ g -BG
+endsteaks
 
 !! other 'feels good' two keys chords:
 !! not sure .. leave 'em in but will see.

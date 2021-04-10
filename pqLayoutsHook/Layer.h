@@ -51,8 +51,8 @@ public:
     bool AddStickyMapping(KeyValue vk);
 
     bool HasChords() const { return chords.size() > 0; }
-    bool AddChord(Kord& chord, KeyActions::KeyActionPair keyAction);
-    KeyActions::KeyActionPair GetChordAction(const Kord& chord);
+    bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
+    const std::list<KeyActions::KeyActionPair>* GetChordActions(const Kord& chord);
 
     void SetImageView(ImageView imageView, Layer::ImageView imageViewShift);
     ImageView GetImageView(bool shiftDown) const;
@@ -64,10 +64,10 @@ private:
     ImageView imageView;
     ImageView imageViewShift;
 
-    struct ChordAction
+    struct ChordActions
     {
         Kord chord;
-        KeyActions::KeyActionPair keyActions;
+        std::list<KeyActions::KeyActionPair> keyActions;
 
         bool operator==(const Kord& otherChord) const { 
             return otherChord == chord; 
@@ -75,7 +75,7 @@ private:
     };
 
     // pq-todo? might become performance prob if larger qty of chords
-    std::vector<ChordAction> chords;
+    std::vector<ChordActions> chords;
 
 };
 

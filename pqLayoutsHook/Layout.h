@@ -40,16 +40,14 @@ public:
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 
-    bool AddChord(Kord& chord, KeyActions::KeyActionPair keyActions);
-    KeyActions::KeyActionPair GetChordAction(const Kord& chord);
+    bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
+    const std::list<KeyActions::KeyActionPair>* GetChordActions(const Kord& chord);
 
     void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
     Layer::ImageView GetImageView(bool shiftDown) const;
 
 private:
     bool GotoLayer(Layer* layer);
-
-    void CreateChord(const char* chordKeys, char chordOutChar);
 
 private:
     std::map<VeeKee, KeyDef> keydefs;

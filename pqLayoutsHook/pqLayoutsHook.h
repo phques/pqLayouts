@@ -33,7 +33,7 @@ namespace HookKbd
     PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
     PQHOOK_API bool AddStickyMapping(KeyValue vk);
 
-    PQHOOK_API bool AddChord(Kord&, KeyActions::KeyActionPair);
+    PQHOOK_API bool AddChord(Kord&, const std::list<KeyActions::KeyActionPair>& keyActions);
     PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys);
 
     PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);

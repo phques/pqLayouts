@@ -102,7 +102,7 @@ bool KeyParser::operator ()()
 // can be space separated or as a string:  A S D F tab QWERTY  
 // comments are done with "!!" and end the line
 // read keys are *added* to param 'keys'
-bool KeyParser::GetKeys(VeeKeeList& keys, std::vector<char>& stenoChars)
+bool KeyParser::GetKeys(std::list<KeyValue> & keys, std::vector<char>& stenoChars)
 {
 
     while (!tokener.eof())
@@ -114,32 +114,40 @@ bool KeyParser::GetKeys(VeeKeeList& keys, std::vector<char>& stenoChars)
         if (token == "!!")
             break;
 
-        // could be a known key name
-        auto foundit = LoLevelKbdFile::KeyNames().find(token);
-        if (foundit != LoLevelKbdFile::KeyNames().end())
+        if (!GetKeysFromToken(keys, stenoChars))
+            return false;
+    }
+
+    return true;
+}
+
+bool KeyParser::GetKeysFromToken(std::list<KeyValue>& keyValues, std::vector<char>& stenoChars)
+{
+    // could be a known key name
+    auto foundit = LoLevelKbdFile::KeyNames().find(token);
+    if (foundit != LoLevelKbdFile::KeyNames().end())
+    {
+        // key name, save key's VK
+        keyValues.push_back(KeyValue(foundit->second, 0));
+        stenoChars.push_back('?'); // unknown char
+    }
+    else
+    {
+        // either a single key represented by its character 'a' or a chain of characters 'asdf'
+        // add each to the chord definition
+        for (char ch : token)
         {
-            // key name, save key's VK
-            keys.push_back(foundit->second);
-            stenoChars.push_back('?'); // unknown char
-        }
-        else
-        {
-            // either a single key represented by its character 'a' or a chain of characters 'asdf'
-            // add each to the chord definition
-            for (char ch : token)
+            WORD vk = 0;
+            bool isShifted = false;
+
+            if (!VkUtil::CharToVk(ch, vk, isShifted))
             {
-                WORD vk = 0;
-                bool isShifted = false;
-
-                if (!VkUtil::CharToVk(ch, vk, isShifted))
-                {
-                    std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
-                    return false;
-                }
-
-                keys.push_back(vk);
-                stenoChars.push_back(ch);
+                std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
+                return false;
             }
+
+            keyValues.push_back(KeyValue(vk, 0, isShifted));
+            stenoChars.push_back(ch);
         }
     }
 
@@ -307,11 +315,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!doSteaks(kbdfile))
                 return false;
         }
-        else if (cmd == "kord")
-        {
-            if (!doKord(stringTokener))
-                return false;
-        }
+        //else if (cmd == "kord")
+        //{
+        //    if (!doKord(stringTokener))
+        //        return false;
+        //}
         else if (cmd == "include")
         {
             if (!doInclude(stringTokener, filename))
@@ -436,8 +444,8 @@ steakpower
 */
 bool LoLevelKbdFile::doSteakPower(File& kbdfile)
 {
-    VeeKeeList stenoKeys;
-    VeeKeeList qwertyKeys;
+    std::list<KeyValue> stenoKeys;
+    std::list<KeyValue> qwertyKeys;
     std::vector<char> stenoChars;
     std::vector<char> qwertyChars; // unused
 
@@ -475,8 +483,8 @@ bool LoLevelKbdFile::doSteakPower(File& kbdfile)
         ChordingKey key;
         key.handId = isStar ? HandId::HAND_STARS : 
                     (leftHandDone ? HandId::HAND_RIGHT : HandId::HAND_LEFT);
-        key.qwerty = *qwertyKeysIt;
-        key.steno = *stenoKeysIt;
+        key.qwerty = qwertyKeysIt->Vk();
+        key.steno = stenoKeysIt->Vk();
         key.stenoChar = *stenoCharsIt;
         key.stenoOrder = 0;  // will be setup in chording.init
 
@@ -487,7 +495,7 @@ bool LoLevelKbdFile::doSteakPower(File& kbdfile)
     return HookKbd::InitChordingKeys(chordingKeys);
 }
 
-bool LoLevelKbdFile::readKeysList(File& kbdfile, const char* paramName, VeeKeeList& stenoKeys, std::vector<char>& stenoChars)
+bool LoLevelKbdFile::readKeysList(File& kbdfile, const char* paramName, std::list<KeyValue>& stenoKeys, std::vector<char>& stenoChars)
 {
     // read next line
     if (kbdfile.f.eof())
@@ -505,14 +513,16 @@ bool LoLevelKbdFile::readKeysList(File& kbdfile, const char* paramName, VeeKeeLi
     return keyParser.GetKeys(stenoKeys, stenoChars);
 }
 
-
+#if 0
 bool LoLevelKbdFile::doKord(StringTokener& tokener)
 {
     // the output of the chord
     KeyParser chordOutput(tokener, "chord definition");
     if (!chordOutput())
         return false;
-    
+
+    KeyValue outKey = chordOutput.ToKeyValue();
+
     // now build the chord / read the keys of the chord
     Kord chord;
     KeyActions::KeyActionPair actions = parseChordValue(tokener, chordOutput, chord);
@@ -522,7 +532,10 @@ bool LoLevelKbdFile::doKord(StringTokener& tokener)
     return HookKbd::AddChord(chord, actions);
 
 }
+#endif // 0
 
+// reads list of chord definitions 'steaks'
+// end of list = 'endsteaks'
 bool LoLevelKbdFile::doSteaks(File& file)
 {
     // exit on eof or "endsteaks"
@@ -554,28 +567,60 @@ bool LoLevelKbdFile::doSteaks(File& file)
             continue;
 
         // parse the output key of the chord
-        if (!chordDef.ParseKey())
+        //if (!chordDef.ParseKey())
+        //    return false;
+
+        //KeyValue outKey = chordDef.ToKeyValue();
+
+        std::list<KeyValue> keys;
+        std::vector<char> chars;
+        if (!chordDef.GetKeysFromToken(keys, chars))
             return false;
 
         // now complete the chord definition
         Kord chord;
-        KeyActions::KeyActionPair actions = parseChordValue(tokener, chordDef, chord);
-        if (actions == KeyActions::nullActionPair)
+        if (!parseChordValue(tokener, chordDef, chord))
             return false;
 
-        if (!HookKbd::AddChord(chord, actions))
+        // create actions for chord output
+        std::list<KeyActions::KeyActionPair> actionPairs;
+        for (auto key : keys)
+        {
+            KeyActions::KeyActionPair actionPair(KeyActions::nullActionPair);
+            SetChordKeyActionPair(key, actionPair);
+
+            actionPairs.push_back(actionPair);
+        }
+
+        Printf("chord %s\n", chording.ToString(chord).c_str());
+
+        if (!HookKbd::AddChord(chord, actionPairs))
             return false;
     }
 
 }
 
-KeyActions::KeyActionPair LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOutputParser, Kord& chord)
+void LoLevelKbdFile::SetChordKeyActionPair(const KeyValue& outKey, KeyActions::KeyActionPair& actionPair)
+{
+    // create key actions for this chord
+    KeyDef inKey(0, 0);
+
+    // shifted output 
+    KeyValue outKeySh = outKey;
+    outKeySh.Shift(true);
+
+    actionPair.first = new KeyActions::KeyOutAction(inKey, outKey);
+    actionPair.second = new KeyActions::KeyOutAction(inKey, outKeySh);
+}
+
+// reads the chord itself ("P-P")
+bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOutputParser, Kord& chord)
 {
     // build the chord / read the keys of the chord
-    VeeKeeList chordKeys;
+    std::list<KeyValue> chordKeys;
     std::vector<char> keysChars;
     if (!chordOutputParser.GetKeys(chordKeys, keysChars))
-        return KeyActions::nullActionPair;
+        return false;
 
     // get VK value of '-'
     bool isShifted;
@@ -587,43 +632,32 @@ KeyActions::KeyActionPair LoLevelKbdFile::parseChordValue(StringTokener& tokener
     // place chords keys into chord definition
     for (auto key : chordKeys)
     {
+        VeeKee vk = key.Vk();
+
         // detect left vs right hand
-        if (!leftHandDone && chording.IsHandDelimiterKey(key))
+        if (!leftHandDone && chording.IsHandDelimiterKey(vk))
         {
             leftHandDone = true;
         }
 
         // '-' is not part of the chord !
-        if (key == hyphenVk)
+        if (vk == hyphenVk)
             continue;
 
         // use steno order to define chord
         if (leftHandDone)
         {
-            key = chording.AdjustForRightHand(key);
+            vk = chording.AdjustForRightHand(vk);
         }
 
-        const ChordingKey* chordingKey = chording.GetChordingKeyFromSteno(key);
+        const ChordingKey* chordingKey = chording.GetChordingKeyFromSteno(vk);
         if (chordingKey != nullptr)
         {
             chord.AddInChordKey(chordingKey->stenoOrder);
         }
     }
 
-    // create key action for this chord
-    KeyDef inKey(0, 0);
-    KeyValue outKey = chordOutputParser.ToKeyValue();
-    auto action = new KeyActions::KeyOutAction(inKey, outKey);
-
-    // shifted version
-    KeyValue outKeySh = chordOutputParser.ToKeyValue().Shift(true);
-    auto actionSh = new KeyActions::KeyOutAction(inKey, outKeySh);
-
-    Printf("chord %s [%c]\n", 
-        chording.ToString(chord).c_str(), 
-        VkUtil::VkToChar((WORD)outKey.Vk(), 0));
-
-    return KeyActions::KeyActionPair(action, actionSh);
+    return true;
 }
 
 bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)

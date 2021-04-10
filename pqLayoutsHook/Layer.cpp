@@ -67,10 +67,10 @@ bool Layer::AddStickyMapping(KeyValue vk)
     return AddMapping(vk, action);
 }
 
-bool Layer::AddChord(Kord& chord, KeyActionPair keyActions)
+bool Layer::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
     // add chord/keyaction pair to list of chords
-    ChordAction chordAction = { chord, keyActions };
+    ChordActions chordAction = { chord, keyActions };
     chords.push_back(chordAction);
 
     return true;
@@ -78,14 +78,13 @@ bool Layer::AddChord(Kord& chord, KeyActionPair keyActions)
 
 // lookup 'chord' and return its asociated key action if found, else null 
 // if !found returns a pair with no actions
-KeyActionPair Layer::GetChordAction(const Kord& chord)
+const std::list<KeyActions::KeyActionPair>* Layer::GetChordActions(const Kord& chord)
 {
     auto found = find(chords.begin(), chords.end(), chord);
     if (found != chords.end())
-        return found->keyActions;
+        return &found->keyActions;
 
-    // return empty actions
-    return KeyActions::nullActionPair;
+    return nullptr;
 }
 
 
