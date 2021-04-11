@@ -567,30 +567,38 @@ bool LoLevelKbdFile::doSteaks(File& file)
             continue;
 
         // parse the output key of the chord
-        //if (!chordDef.ParseKey())
-        //    return false;
-
-        //KeyValue outKey = chordDef.ToKeyValue();
-
+        
+        // actions for chord output
         std::list<KeyValue> keys;
-        std::vector<char> chars;
-        if (!chordDef.GetKeysFromToken(keys, chars))
-            return false;
 
-        // now complete the chord definition
-        Kord chord;
-        if (!parseChordValue(tokener, chordDef, chord))
-            return false;
+        // Try as a simple one key, supports +^ prefixes
+        if (chordDef.ParseKey())
+        {
+            KeyValue outKey = chordDef.ToKeyValue();
+            keys.push_back(outKey);
+        }
+        else
+        {
+            // read a list of keys
+            std::vector<char> chars;
+            if (!chordDef.GetKeysFromToken(keys, chars))
+                return false;
+        }
 
-        // create actions for chord output
+        // create actions for chord output from list of keys
         std::list<KeyActions::KeyActionPair> actionPairs;
-        for (auto key : keys)
+        for (auto& key : keys)
         {
             KeyActions::KeyActionPair actionPair(KeyActions::nullActionPair);
             SetChordKeyActionPair(key, actionPair);
 
             actionPairs.push_back(actionPair);
         }
+
+        // now complete the chord definition
+        Kord chord;
+        if (!parseChordValue(tokener, chordDef, chord))
+            return false;
 
         Printf("chord %s\n", chording.ToString(chord).c_str());
 
@@ -630,7 +638,7 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
     bool leftHandDone = false;
 
     // place chords keys into chord definition
-    for (auto key : chordKeys)
+    for (auto& key : chordKeys)
     {
         VeeKee vk = key.Vk();
 
