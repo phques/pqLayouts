@@ -95,7 +95,7 @@ bool KeyParser::operator ()()
         return false;
 
     // parse key
-    return ParseKey();
+    return ParseKey(true);
 }
 
 // reads multiple keys from current line (from tokener), no modifiers on keys
@@ -159,7 +159,7 @@ KeyValue KeyParser::ToKeyValue() const
     return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix);
 }
 
-bool KeyParser::ParseKey()
+bool KeyParser::ParseKey(bool showError)
 {
     // check for prefix '+' for shifted key
     const char* keytext = token.c_str();
@@ -190,7 +190,10 @@ bool KeyParser::ParseKey()
         auto foundit = LoLevelKbdFile::KeyNames().find(keytext);
         if (foundit == LoLevelKbdFile::KeyNames().end())
         {
-            std::cerr << "unknown key [" << token << "], line " << tokener.LineNo() << std::endl;
+            if (showError)
+            {
+                std::cerr << "unknown key [" << token << "], line " << tokener.LineNo() << std::endl;
+            }
             return false;
         }
         vk = foundit->second;
@@ -200,7 +203,10 @@ bool KeyParser::ParseKey()
         // just a character representing the key 'w', '{' etc
         if (!VkUtil::CharToVk(*keytext, vk, isShifted))
         {
-            std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
+            if (showError)
+            {
+                std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
+            }
             return false;
         }
     }
@@ -222,6 +228,9 @@ void File::GetLine()
 
 LoLevelKbdFile::LoLevelKbdFile()
 {
+    // get VK value of '-'
+    bool isShifted;
+    VkUtil::CharToVk('-', hyphenVk, isShifted);
 }
 
 bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
@@ -566,13 +575,22 @@ bool LoLevelKbdFile::doSteaks(File& file)
         if (tokener.eof() || chordDef.token == "!!")
             continue;
 
+        // parse the chord keys definition
+        Kord chord;
+        if (!parseChordValue(tokener, chordDef, chord))
+            return false;
+
         // parse the output key of the chord
         
         // actions for chord output
         std::list<KeyValue> keys;
 
+        // read the next token
+        if (!chordDef.ReadFromTokener())
+            return false;
+
         // Try as a simple one key, supports +^ prefixes
-        if (chordDef.ParseKey())
+        if (chordDef.ParseKey(false))
         {
             KeyValue outKey = chordDef.ToKeyValue();
             keys.push_back(outKey);
@@ -594,11 +612,6 @@ bool LoLevelKbdFile::doSteaks(File& file)
 
             actionPairs.push_back(actionPair);
         }
-
-        // now complete the chord definition
-        Kord chord;
-        if (!parseChordValue(tokener, chordDef, chord))
-            return false;
 
         Printf("chord %s\n", chording.ToString(chord).c_str());
 
@@ -627,13 +640,8 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
     // build the chord / read the keys of the chord
     std::list<KeyValue> chordKeys;
     std::vector<char> keysChars;
-    if (!chordOutputParser.GetKeys(chordKeys, keysChars))
+    if (!chordOutputParser.GetKeysFromToken(chordKeys, keysChars))
         return false;
-
-    // get VK value of '-'
-    bool isShifted;
-    WORD hyphenVk;
-    VkUtil::CharToVk('-', hyphenVk, isShifted);
 
     bool leftHandDone = false;
 

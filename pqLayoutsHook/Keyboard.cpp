@@ -357,9 +357,10 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
 
     if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
     {
-        // restrict chording to certain keys ('printable'), since we loose auto-repeat on the chordable keys
+        // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
         //pq-todo might need to have a 'repeat' key
-        if (MyIsPrint(event.vkCode))
+        //if (MyIsPrint(event.vkCode))
+        if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
         {
             HandleChording(event, injectedFromMeValue);
             return true;

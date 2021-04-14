@@ -11,13 +11,12 @@
 ! Q W E R t  u I O P [ ]
 ! A S D F g  j K L ; ' 
 !      C V    M ,
-! (not using / defining -Z here)
 ! order is important, left hand, left vowels, stars, right vowelsm right hand
 ! stars separate left / right hand !
 
 steakpower 
- SSTKPWHR AO ** ** EU FRPBLGTSD
- QAWSEDRF CV TG UJ M, IKOLP;[']
+ SSTKPWHR AO ** ** EU FRPBLGTS D Z
+ QAWSEDRF CV TG UJ M, IKOLP;[' ] cr
 
 steaks
 
@@ -82,12 +81,14 @@ steaks
 !! .... ]]
 
  :  STPH-FP 	!! STPH-FPLT Sculpt: use lower S (A)
- =  KW-L
+ =  KW*L		!! KW-L is now usewd for my consonants cluster
+ == KW-LS
  +  PRUS 		!! PHR*US
  *  STR-BG
  @  KWR-T		!! KWRAT (KWRT = "why the", or KWR/T)
  &  SKP*		!! {&&}
  /  OEU
+ // OEU-S		!! TedM
  \ 	AERB 		!! SPWHRAERB
  |  TWR-GS		!! newpq based on my TWR-BG [ (real= PAO*EUP)
  #  HAERB		!! #{^}
@@ -98,21 +99,52 @@ steaks
  `  KH-FG
  
  cr R-R
- bs W-FP 		!! PW-FP
-^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
+ bs P-FP 		!! PW-FP
+^bs P*FP 		!! pqnew PW*FP, used here as ctrl-BS
+!! bs W-FP 		!! PW-FP
+!!^bs W*FP 		!! pqnew PW*FP, used here as ctrl-BS
  del TKEL 		!! TK*EL
  tab TA*B
  esc TPEFBG
 
-^home SH-FT
-^end  SR-RS
- home H-FT 		!! new PQ based on SH-FT
- end  R-RS 		!! new PQ baseed on SR-RS
+!! ^home SH-FT
+!! ^end  SR-RS
+!! home H-FT 		!! new PQ based on SH-FT
+!! end  R-RS 		!! new PQ baseed on SR-RS
+!!
+!! ^c KR-BG 		!! new from KHR-BG
+!! ^v KR*F  		!! new etc..
+!! ^w KR*T  		!! new 
+!! ^k KR*BG 		!! nw
 
- ^c KR-BG 		!! new from KHR-BG
- ^v KR*F  		!! new etc..
- ^w KR*T  		!! new 
- ^k KR*BG 		!! nw
+!! from my Plover user.json
+up		STP-P
+left	STP-R
+down	STP-B
+right	STP-G
+^right	STP-BG
+^left	STP-RB
++up		STPH-P
++left	STPH-R
++down	STPH-B
++right	STPH-G
++^right	STPH-BG
++^left	STPH-RB
+home	STP-F
+end		STP-L
++home	STPH-F
++end	STPH-L
+^home	KPH-P
+^end	KPH-B
+^c		KPH-BG
+^v		KPH*F
+^w		KPH*T
+^k		KPH*BG
+^s		KPH-S
+^z		KPH-Z
+^y		KPH*Z
+^a		KPHA*
+
 
 endsteaks
 
@@ -125,9 +157,6 @@ endsteaks
 !
 ! (  PR-PB  	PREPB 
 ! {  PWR-S PWR*S
-! undo? KPH-Z ctrl-z
-! save? KPH-S ctrl-s
-! SKWR-P shift-up (ie STPH-P = up)
 !
 ! discord
 ! \ B-SH 'back slash' PW-RB, Sculpt: W*RB

@@ -64,7 +64,7 @@ public:
 
     bool operator ()();
     bool ReadFromTokener();
-    bool ParseKey();
+    bool ParseKey(bool showError);
 
     bool GetKeys(std::list<KeyValue> & keys, std::vector<char>& stenoChars);
     bool GetKeysFromToken(std::list<KeyValue>& keys, std::vector<char>& stenoChars);
@@ -116,5 +116,6 @@ private:
     static std::map<std::string, WORD> keyNames;
     
     Chording chording;
+    WORD hyphenVk;
 };
 
