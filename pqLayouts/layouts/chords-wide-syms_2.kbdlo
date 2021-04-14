@@ -1,22 +1,3 @@
-! chords on ansi wide (right hand moved one spot to the right)
-! based on steno !
-! (some will be used in real steno eventully)
-! used on my Microsoft Sculpt .. non NKRO, so have to use shorter versions sometimes
-! for eg PB ('N') is OL on ansi-w, and that usually fails to chord with other keys
-
-! for strokes that would have space / no-space versions,
-! ->  they have same output for now (pqLayouts = single char output, 2021-03)
-!     eg open/close quote are the same
-
-! Q W E R t  u I O P [ ]
-! A S D F g  j K L ; ' CR
-!      C V    M ,
-! order is important, left hand, left vowels, stars, right vowelsm right hand
-! stars separate left / right hand !
-
-steakpower 
- SSTKPWHR AO ** ** EU FRPBLGTS D Z
- QAWSEDRF CV TG UJ M, IKOLP;[' ] cr
 
 steaks
 
@@ -83,54 +64,6 @@ steaks
  T*LD       ~      !! {^~}
  KR-RT      ^      !! {^}^{^}
  KH-FG      `
-
- R-R         cr      
- P-FP        bs     !! PW-FP
- P*FP       ^bs     !! pqnew PW*FP, used here as ctrl-BS
- TKEL        del    !! TK*EL
- TA*B        tab     
- TPEFBG      esc     
-!! W-FP        bs     !! PW-FP
-!! W*FP       ^bs     !! pqnew PW*FP, used here as ctrl-BS
-
-!! old
-!! ^home SH-FT
-!! ^end  SR-RS
-!! home H-FT        !! new PQ based on SH-FT
-!! end  R-RS        !! new PQ baseed on SR-RS
-!!
-!! ^c KR-BG         !! new from KHR-BG
-!! ^v KR*F          !! new etc..
-!! ^w KR*T          !! new 
-!! ^k KR*BG         !! nw
-
-!! from my Plover user.json
- STP-P      up      
- STP-R      left    
- STP-B      down    
- STP-G      right   
- STP-BG     ^right  
- STP-RB     ^left   
- STPH-P     +up     
- STPH-R     +left   
- STPH-B     +down   
- STPH-G     +right  
- STPH-BG    +^right 
- STPH-RB    +^left  
- STP-F      home    
- STP-L      end     
- STPH-F     +home    
- STPH-L     +end     
- KPH-P      ^home   
- KPH-B      ^end    
- KPH-BG     ^c      
- KPH*F      ^v      
- KPH*T      ^w      
- KPH*BG     ^k      
- KPH-S      ^s      
- KPH-Z      ^z      
- KPH*Z      ^y      
- KPHA*      ^a      
 
 endsteaks
 

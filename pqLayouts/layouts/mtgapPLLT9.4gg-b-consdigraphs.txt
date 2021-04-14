@@ -62,7 +62,7 @@ placed on start letter as much as possible
 [sp] 108612
 [tl] 63005
 
-main
+main				  ing
     i  o  u         pt ng rm .
  y  a  e  SP x   .  tl sp rg ck
 
@@ -93,6 +93,7 @@ alt
 [br] 55769
 [pt] 55734
 [rg] 53963
+
 [nk] 47938
 [rl] 47607
 [wn] 46692

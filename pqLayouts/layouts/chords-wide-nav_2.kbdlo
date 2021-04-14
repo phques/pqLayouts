@@ -1,0 +1,53 @@
+!! chords, edition / navigation
+
+steaks
+
+ R-R        cr       
+ P-FP       bs      !! PW-FP
+ P*FP      ^bs      !! pqnew PW*FP, used here as ctrl-BS
+ TKEL       del     !! TK*EL
+ TA*B       tab      
+ TPEFBG     esc      
+!! W-FP        bs     !! PW-FP
+!! W*FP       ^bs     !! pqnew PW*FP, used here as ctrl-BS
+
+!! old
+!! ^home SH-FT
+!! ^end  SR-RS
+!! home H-FT        !! new PQ based on SH-FT
+!! end  R-RS        !! new PQ baseed on SR-RS
+!!
+!! ^c KR-BG         !! new from KHR-BG
+!! ^v KR*F          !! new etc..
+!! ^w KR*T          !! new 
+!! ^k KR*BG         !! nw
+
+!! from my Plover user.json
+ STP-P      up      
+ STP-R      left    
+ STP-B      down    
+ STP-G      right   
+ STP-BG     ^right  
+ STP-RB     ^left   
+ STPH-P     +up     
+ STPH-R     +left   
+ STPH-B     +down   
+ STPH-G     +right  
+ STPH-BG    +^right 
+ STPH-RB    +^left  
+ STP-F      home    
+ STP-L      end     
+ STPH-F     +home    
+ STPH-L     +end     
+ KPH-P      ^home   
+ KPH-B      ^end    
+ KPH-BG     ^c      
+ KPH*F      ^v      
+ KPH*T      ^w      
+ KPH*BG     ^k      
+ KPH-S      ^s      
+ KPH-Z      ^z      
+ KPH*Z      ^y      
+ KPHA*      ^a      
+
+endsteaks

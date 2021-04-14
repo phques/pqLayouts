@@ -1,0 +1,19 @@
+! chords on ansi wide (right hand moved one spot to the right)
+! based on steno !
+! (some will be used in real steno eventully)
+! used on my Microsoft Sculpt .. non NKRO, so have to use shorter versions sometimes
+! for eg PB ('N') is OL on ansi-w, and that usually fails to chord with other keys
+
+! for strokes that would have space / no-space versions,
+! ->  they have same output for now (pqLayouts = single char output, 2021-03)
+!     eg open/close quote are the same
+
+! Q W E R t  u I O P [ ]
+! A S D F g  j K L ; ' CR
+!      C V    M ,
+! order is important, left hand, left vowels, stars, right vowelsm right hand
+! stars separate left / right hand !
+
+steakpower 
+ SSTKPWHR AO ** ** EU FRPBLGTS D Z
+ QAWSEDRF CV TG UJ M, IKOLP;[' ] cr
