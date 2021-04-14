@@ -249,6 +249,8 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         return false;
     }
 
+    std::cout << "reading from file [" << filename << "]" << std::endl;
+
     // read file line by line
     File kbdfile(f);
 
@@ -333,6 +335,8 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         {
             if (!doInclude(stringTokener, filename))
                 return false;
+
+            std::cout << "back to file [" << filename << "]" << std::endl;
         }
         else 
         {
@@ -341,9 +345,6 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
 
     }
-
-    // always start on main layer
-    HookKbd::GotoMainLayer();
 
     return true;
 }

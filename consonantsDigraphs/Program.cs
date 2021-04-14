@@ -17,7 +17,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 
 // small program to find highest frequency digraphs of consonants
 // combines two sets of consonants (from cmdline), creating digraphs from all permutations
@@ -61,7 +63,7 @@ namespace consonantsDigraphs
 
         public void ReadDigraphs()
         {
-            var lines = System.IO.File.ReadAllLines("consonantsDigraphs.txt");
+            var lines = System.IO.File.ReadAllLines("data/consonantsDigraphs.txt");
             foreach (var line in lines)
             {
                 // create digraph value from "ng 1234"
@@ -73,7 +75,7 @@ namespace consonantsDigraphs
             }
         }
 
-        internal void Go(string mainLayerConsonants, string altLayerConsonants)
+        internal void SortByFrequecy(string mainLayerConsonants, string altLayerConsonants)
         {
             var digraphList = new List<DigraphValue>();
 
@@ -118,24 +120,111 @@ namespace consonantsDigraphs
                 Console.WriteLine("[{0}] {1}", digraph1, digraphValue1);
             }
         }
-    }
 
-    class Program
-    {
-
-        static void Main(string[] args)
+        /*
+         * this expects a consonants cluster of 8 keys, 4x2 (expected to be on right hand side!)
+         * First 3 params are the same length
+         */
+        internal void GenerateOneSetDigraphChords(
+            string consonantsLayer1, string consonantsLayer2, string rightStenoKeys, 
+            string leftStenoKey1, string leftStenoKey2)
         {
-            if (args.Length != 2)
+            for (int i = 0; i < consonantsLayer1.Length; i++)
             {
-                Console.WriteLine("arguments: mainLayerConsonants altLayerConsonants");
-                return;
+                for (int j = 0; j < consonantsLayer2.Length; j++)
+                {
+                    int layer1X = i % 4;
+                    int layer1Y = i / 4;
+                    int layer2X = j % 4;
+                    int layer2Y = j / 4;
+                    if (i == j)
+                    {
+                        Console.Write(" {0}{1}-{2}", leftStenoKey1, leftStenoKey2, rightStenoKeys[i]);
+                        Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
+                        Console.WriteLine("");
+                    }
+                    else
+                    {
+                        string leftStenoKey;
+                        if (layer1X < layer2X)
+                            leftStenoKey = leftStenoKey1;
+                        else if (layer1X > layer2X)
+                            leftStenoKey = leftStenoKey2;
+                        else if (layer1Y < layer2Y)
+                            leftStenoKey = leftStenoKey1;
+                        else 
+                            leftStenoKey = leftStenoKey2;
+                        Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
+                        Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
+                        Console.WriteLine("");
+
+                        if (layer2X < layer1X)
+                            leftStenoKey = leftStenoKey1;
+                        else if (layer2X > layer1X)
+                            leftStenoKey = leftStenoKey2;
+                        else if (layer2Y < layer1Y)
+                            leftStenoKey = leftStenoKey1;
+                        else
+                            leftStenoKey = leftStenoKey2;
+                        Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
+                        Console.Write(" {0}{1}  ", consonantsLayer1[j], consonantsLayer2[i]);
+                        Console.WriteLine("");
+                    }
+                    //                    Console.WriteLine(" {0}  {1}-{2}{3}", digraph, leftStenoKey1, rightStenoKeys[i], rightStenoKeys[j]);
+                }
             }
+        }
 
-            var mainLayerConsonants = args[0]; //"dnrjftshc";
-            var altLayerConsonants = args[1]; //"glbqzvpmwk";
+        internal void GenerateDigraphChords(string mainLayerConsonants, string altLayerConsonants,
+            string rightStenoKeys, string leftStenoKey1, string leftStenoKey2)
+        {
+            Console.WriteLine("! main layer consonants digraphs");
+            Console.WriteLine("steaks");
+            GenerateOneSetDigraphChords(mainLayerConsonants, altLayerConsonants,
+                rightStenoKeys, leftStenoKey1, leftStenoKey2);
+            Console.WriteLine("endsteaks");
 
-            var doit = new Doit();
-            doit.Go(mainLayerConsonants, altLayerConsonants);
+            Console.WriteLine("\n");
+            Console.WriteLine("! alt layer consonants digraphs");
+            Console.WriteLine("steaks");
+            GenerateOneSetDigraphChords(altLayerConsonants, mainLayerConsonants,
+                rightStenoKeys, leftStenoKey1, leftStenoKey2);
+            Console.WriteLine("endsteaks");
+        }
+
+        class Program
+        {
+
+            static void Main(string[] args)
+            {
+                if (args.Length == 2)
+                {
+                    var mainLayerConsonants = args[0]; //"dnrjftshc";
+                    var altLayerConsonants = args[1]; //"glbqzvpmwk";
+
+                    var doit = new Doit();
+                    doit.SortByFrequecy(mainLayerConsonants, altLayerConsonants);
+                }
+                else if (args.Length == 5)
+                {
+                    var mainLayerConsonants = args[0]; //"dnrjftshc";
+                    var altLayerConsonants = args[1]; //"glbqzvpmwk";
+                    var rightStenoKeys = args[2]; //"glbqzvpmwk";
+                    var leftStenoKey1 = args[3]; //"glbqzvpmwk";
+                    var leftStenoKey2 = args[4]; //"glbqzvpmwk";
+
+                    var doit = new Doit();
+                    doit.GenerateDigraphChords(mainLayerConsonants, altLayerConsonants, rightStenoKeys, leftStenoKey1, leftStenoKey2);
+                }
+                else
+                {
+                    Console.WriteLine("arguments:");
+                    Console.WriteLine(" mainLayerConsonants altLayerConsonants");
+                    Console.WriteLine("or ");
+                    Console.WriteLine(" mainLayerConsonants altLayerConsonants rightStenoKeys leftStenoKey1st leftStenoKey2nd");
+                }
+
+            }
         }
     }
 }
