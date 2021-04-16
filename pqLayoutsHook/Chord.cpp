@@ -148,6 +148,11 @@ void Kord::AddInChordKey(int stenoOrderIdx)
 }
 
 
+void Kord::SetDisplay(const std::string& _display)
+{
+    display = _display;
+}
+
 bool Kord::operator==(const Kord& other) const
 {
     return this->inChord == other.inChord;

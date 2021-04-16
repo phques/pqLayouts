@@ -127,7 +127,7 @@ namespace consonantsDigraphs
          */
         internal void GenerateOneSetDigraphChords(
             string consonantsLayer1, string consonantsLayer2, string rightStenoKeys, 
-            string leftStenoKey1, string leftStenoKey2)
+            string leftStenoKey1, string leftStenoKey2, string leftStenoKeyVert)
         {
             for (int i = 0; i < consonantsLayer1.Length; i++)
             {
@@ -137,6 +137,7 @@ namespace consonantsDigraphs
                     int layer1Y = i / 4;
                     int layer2X = j % 4;
                     int layer2Y = j / 4;
+                    // same finger, use both left hand chord keys with single right hand key
                     if (i == j)
                     {
                         Console.Write(" {0}{1}-{2}", leftStenoKey1, leftStenoKey2, rightStenoKeys[i]);
@@ -145,50 +146,47 @@ namespace consonantsDigraphs
                     }
                     else
                     {
+                        // layer1 to layer2
                         string leftStenoKey;
-                        if (layer1X < layer2X)
-                            leftStenoKey = leftStenoKey1;
-                        else if (layer1X > layer2X)
-                            leftStenoKey = leftStenoKey2;
-                        else if (layer1Y < layer2Y)
-                            leftStenoKey = leftStenoKey1;
-                        else 
-                            leftStenoKey = leftStenoKey2;
-                        Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
-                        Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
-                        Console.WriteLine("");
+                        // vertical, use left 1st/2nd + leftVert + single right hand key
+                        if (layer1X == layer2X)
+                        {
+                            leftStenoKey = layer1Y < layer2Y ? leftStenoKey1 : leftStenoKey2;
 
-                        if (layer2X < layer1X)
-                            leftStenoKey = leftStenoKey1;
-                        else if (layer2X > layer1X)
-                            leftStenoKey = leftStenoKey2;
-                        else if (layer2Y < layer1Y)
-                            leftStenoKey = leftStenoKey1;
+                            Console.Write(" {0}{1}-{2}", leftStenoKey, leftStenoKeyVert, rightStenoKeys[i]);
+                            Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
+                            Console.WriteLine("");
+                        }
                         else
-                            leftStenoKey = leftStenoKey2;
-                        Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
-                        Console.Write(" {0}{1}  ", consonantsLayer1[j], consonantsLayer2[i]);
-                        Console.WriteLine("");
+                        {
+                            leftStenoKey = layer1X < layer2X ? leftStenoKey1 : leftStenoKey2;
+
+                            Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
+                            Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
+                            Console.WriteLine("");
+
+                        }
+
                     }
-                    //                    Console.WriteLine(" {0}  {1}-{2}{3}", digraph, leftStenoKey1, rightStenoKeys[i], rightStenoKeys[j]);
                 }
             }
         }
 
-        internal void GenerateDigraphChords(string mainLayerConsonants, string altLayerConsonants,
-            string rightStenoKeys, string leftStenoKey1, string leftStenoKey2)
+        internal void GenerateDigraphChords(string mainLayerConsonants, string altLayerConsonants, string rightStenoKeys, 
+            string leftStenoKey1, string leftStenoKey2, string leftStenoKeyVert,
+            string leftStenoKeyAlt1, string leftStenoKeyAlt2, string leftStenoKeyVertAlt)
         {
             Console.WriteLine("! main layer consonants digraphs");
             Console.WriteLine("steaks");
             GenerateOneSetDigraphChords(mainLayerConsonants, altLayerConsonants,
-                rightStenoKeys, leftStenoKey1, leftStenoKey2);
+                rightStenoKeys, leftStenoKey1, leftStenoKey2, leftStenoKeyVert);
             Console.WriteLine("endsteaks");
 
             Console.WriteLine("\n");
             Console.WriteLine("! alt layer consonants digraphs");
             Console.WriteLine("steaks");
             GenerateOneSetDigraphChords(altLayerConsonants, mainLayerConsonants,
-                rightStenoKeys, leftStenoKey1, leftStenoKey2);
+                rightStenoKeys, leftStenoKeyAlt1, leftStenoKeyAlt2, leftStenoKeyVertAlt);
             Console.WriteLine("endsteaks");
         }
 
@@ -199,29 +197,35 @@ namespace consonantsDigraphs
             {
                 if (args.Length == 2)
                 {
-                    var mainLayerConsonants = args[0]; //"dnrjftshc";
-                    var altLayerConsonants = args[1]; //"glbqzvpmwk";
+                    var mainLayerConsonants = args[0];
+                    var altLayerConsonants = args[1]; 
 
                     var doit = new Doit();
                     doit.SortByFrequecy(mainLayerConsonants, altLayerConsonants);
                 }
-                else if (args.Length == 5)
+                else if (args.Length == 9)
                 {
-                    var mainLayerConsonants = args[0]; //"dnrjftshc";
-                    var altLayerConsonants = args[1]; //"glbqzvpmwk";
-                    var rightStenoKeys = args[2]; //"glbqzvpmwk";
-                    var leftStenoKey1 = args[3]; //"glbqzvpmwk";
-                    var leftStenoKey2 = args[4]; //"glbqzvpmwk";
+                    var mainLayerConsonants = args[0];
+                    var altLayerConsonants = args[1]; 
+                    var rightStenoKeys = args[2]; 
+                    var leftStenoKey1 = args[3]; 
+                    var leftStenoKey2 = args[4]; 
+                    var leftStenoKeyVert = args[5]; 
+                    var leftStenoKey1Alt = args[6]; 
+                    var leftStenoKey2Alt = args[7]; 
+                    var leftStenoKeyVertAlt = args[8]; 
 
                     var doit = new Doit();
-                    doit.GenerateDigraphChords(mainLayerConsonants, altLayerConsonants, rightStenoKeys, leftStenoKey1, leftStenoKey2);
+                    doit.GenerateDigraphChords(mainLayerConsonants, altLayerConsonants, rightStenoKeys, 
+                        leftStenoKey1, leftStenoKey2, leftStenoKeyVert,
+                        leftStenoKey1Alt, leftStenoKey2Alt, leftStenoKeyVertAlt);
                 }
                 else
                 {
                     Console.WriteLine("arguments:");
                     Console.WriteLine(" mainLayerConsonants altLayerConsonants");
                     Console.WriteLine("or ");
-                    Console.WriteLine(" mainLayerConsonants altLayerConsonants rightStenoKeys leftStenoKey1st leftStenoKey2nd");
+                    Console.WriteLine(" mainLayerConsonants altLayerConsonants rightStenoKeys leftStenoKey1st leftStenoKey2nd leftStenoKeyVert altLeftStenoKey1st altLeftStenoKey2nd altLeftStenoKeyVert");
                 }
 
             }

@@ -46,18 +46,17 @@ steaks
  TWR-BG     ]      !! PWR-BGS
  KPR-RB     <      !! AEPBG
  KPR-BG     >      !! A*EPBG
-
+ KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
+ TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
  STPH-FP    :      !! STPH-FPLT Sculpt: use lower S (A)
- KW*L       =      !! KW-L is now usewd for my consonants cluster
+ KW-L       =      !! 
  KW-LS      ==     
  PRUS       +      !! PHR*US
  STR-BG     *      
- KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
  SKP*       &      !! {&&}
  OEU        /      
  OEU-S      //     !! TedM
  AERB       \      !! SPWHRAERB
- TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
  HAERB      #      !! #{^}
  P*ERS      %      !! {&%}
  TK-PL      $      !! ${^}

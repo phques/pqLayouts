@@ -37,6 +37,8 @@ std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
     {"rcontrol", VK_RCONTROL},      {"rctrl", VK_RCONTROL},
     {"lalt", VK_LMENU},
     {"ralt", VK_RMENU},
+    {"lwin", VK_LWIN},
+    {"rwin", VK_RWIN},
     {"left", VK_LEFT},
     {"right", VK_RIGHT},
     {"up", VK_UP},
@@ -614,7 +616,8 @@ bool LoLevelKbdFile::doSteaks(File& file)
             actionPairs.push_back(actionPair);
         }
 
-        Printf("chord %s\n", chording.ToString(chord).c_str());
+        chord.SetDisplay(chording.ToString(chord));
+        //Printf("chord %s\n", chodr.GetDisplay().c_str());
 
         if (!HookKbd::AddChord(chord, actionPairs))
             return false;

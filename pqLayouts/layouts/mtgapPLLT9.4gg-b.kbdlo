@@ -44,6 +44,12 @@ K2K lshift 	lctrl +lctrl
 K2K enter	rshift caps
 K2K rshift	rctrl +rctrl
 
+! swap Win / Apps
+k2k lwin apps
+k2k apps lwin
+
+
+!! these are also 'thumb keys' for the steno/chords !
 K2K c bs del
 K2K , cr +cr
 
@@ -54,13 +60,15 @@ include chords-wide-steaks_2.kbdlo
 include chords-wide-syms_2.kbdlo
 include chords-wide-nav_2.kbdlo
 
-! consonants cluster helper chords main->alt
+! consonants cluster helper chords main<->alt
+! note that vertical right hand chord usually don't work on Sculpt
 include mtgapPLLT9.4gg-b_consk2.kbdlo
 
-! add one for 'ing'
 steaks
- KR-FP	ing
+!! K*-F dp  
+ KR-FP	ing		!! add for 'ing'
 endsteaks
+
 
 
 
@@ -115,9 +123,6 @@ K2K =   F12 +F12
 
 !! chords
 
-! consonants cluster helper chords alt->main
-include mtgapPLLT9.4gg-b_consk2-alt.kbdlo
-
 ! repeat nav/edit chords on this layer too
 include chords-wide-nav_2.kbdlo
 
@@ -130,8 +135,8 @@ imageview  192 +52 192 +52
 
 ! 3thd version
 
-!  * 1 2 .  , 6 7 /  
-!  + 3 4 5  8 9 0 - =
+!  * 1 2 .    , 6 7 /  
+!  + 3 4 5  : 8 9 0 - =
 
 k2k q *
 k2k w 1
@@ -148,6 +153,7 @@ k2k s 3
 k2k d 4
 k2k f 5
 
+k2k j :  ! 15:30
 k2k k 8
 k2k l 9
 k2k ; 0

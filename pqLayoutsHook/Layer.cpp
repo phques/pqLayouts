@@ -69,6 +69,11 @@ bool Layer::AddStickyMapping(KeyValue vk)
 
 bool Layer::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
+    // give a warning if this already exists
+    const std::list<KeyActions::KeyActionPair>* existingKeyActions = GetChordActions(chord);
+    if (existingKeyActions != nullptr)
+        Printf("chord [%s] already registered\n", chord.GetDisplay().c_str());
+
     // add chord/keyaction pair to list of chords
     ChordActions chordAction = { chord, keyActions };
     chords.push_back(chordAction);

@@ -2,123 +2,135 @@
 steaks
  KR-F dg  
  K-FP dl  
- R-FP ng  
  K-FL db  
- R-FL rg  
  K-FT dq  
- R-FT jg  
- K-FR dp  
- R-FR tg  
+ K*-F dp  
  K-FB dm  
- R-FB sg  
  K-FG dw  
- R-FG hg  
  K-FS dk  
- R-FS cg  
  R-PF ng  
- K-PF dl  
  KR-P nl  
  K-PL nb  
- R-PL rl  
  K-PT nq  
- R-PT jl  
  R-PR np  
- K-PR tl  
- K-PB nm  
- R-PB sl  
+ K*-P nm  
  K-PG nw  
- R-PG hl  
  K-PS nk  
- R-PS cl  
  R-LF rg  
- K-LF db  
  R-LP rl  
- K-LP nb  
  KR-L rb  
  K-LT rq  
- R-LT jb  
  R-LR rp  
- K-LR tb  
  R-LB rm  
- K-LB sb  
- K-LG rw  
- R-LG hb  
+ K*-L rw  
  K-LS rk  
- R-LS cb  
  R-TF jg  
- K-TF dq  
  R-TP jl  
- K-TP nq  
  R-TL jb  
- K-TL rq  
  KR-T jq  
  R-TR jp  
- K-TR tq  
  R-TB jm  
- K-TB sq  
  R-TG jw  
- K-TG hq  
- K-TS jk  
- R-TS cq  
- R-RF tg  
- K-RF dp  
+ K*-T jk  
+ R*-R tg  
  K-RP tl  
- R-RP np  
  K-RL tb  
- R-RL rp  
  K-RT tq  
- R-RT jp  
  KR-R tp  
  K-RB tm  
- R-RB sp  
  K-RG tw  
- R-RG hp  
  K-RS tk  
- R-RS cp  
  R-BF sg  
- K-BF dm  
- R-BP sl  
- K-BP nm  
+ R*-B sl  
  K-BL sb  
- R-BL rm  
  K-BT sq  
- R-BT jm  
  R-BR sp  
- K-BR tm  
  KR-B sm  
  K-BG sw  
- R-BG hm  
  K-BS sk  
- R-BS cm  
  R-GF hg  
- K-GF dw  
  R-GP hl  
- K-GP nw  
- R-GL hb  
- K-GL rw  
+ R*-G hb  
  K-GT hq  
- R-GT jw  
  R-GR hp  
- K-GR tw  
  R-GB hm  
- K-GB sw  
  KR-G hw  
  K-GS hk  
- R-GS cw  
  R-SF cg  
- K-SF dk  
  R-SP cl  
- K-SP nk  
  R-SL cb  
- K-SL rk  
- R-ST cq  
- K-ST jk  
+ R*-S cq  
  R-SR cp  
- K-SR tk  
  R-SB cm  
- K-SB sk  
  R-SG cw  
- K-SG hk  
  KR-S ck  
 endsteaks
 
+
+! alt layer consonants digraphs
+steaks
+ SW-F gd  
+ S-FP gn  
+ S-FL gr  
+ S-FT gj  
+ S*-F gt  
+ S-FB gs  
+ S-FG gh  
+ S-FS gc  
+ W-PF ld  
+ SW-P ln  
+ S-PL lr  
+ S-PT lj  
+ W-PR lt  
+ S*-P ls  
+ S-PG lh  
+ S-PS lc  
+ W-LF bd  
+ W-LP bn  
+ SW-L br  
+ S-LT bj  
+ W-LR bt  
+ W-LB bs  
+ S*-L bh  
+ S-LS bc  
+ W-TF qd  
+ W-TP qn  
+ W-TL qr  
+ SW-T qj  
+ W-TR qt  
+ W-TB qs  
+ W-TG qh  
+ S*-T qc  
+ W*-R pd  
+ S-RP pn  
+ S-RL pr  
+ S-RT pj  
+ SW-R pt  
+ S-RB ps  
+ S-RG ph  
+ S-RS pc  
+ W-BF md  
+ W*-B mn  
+ S-BL mr  
+ S-BT mj  
+ W-BR mt  
+ SW-B ms  
+ S-BG mh  
+ S-BS mc  
+ W-GF wd  
+ W-GP wn  
+ W*-G wr  
+ S-GT wj  
+ W-GR wt  
+ W-GB ws  
+ SW-G wh  
+ S-GS wc  
+ W-SF kd  
+ W-SP kn  
+ W-SL kr  
+ W*-S kj  
+ W-SR kt  
+ W-SB ks  
+ W-SG kh  
+ SW-S kc  
+endsteaks

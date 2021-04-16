@@ -53,7 +53,8 @@ public:
     const Keys& ChordKeys() const { return inChord; }
     const std::vector<KbdHookEvent>& KeysSequence() const { return keysSequence; }
 
-    //std::string ChordValue() const { return inChord.to_string(); }
+    PQHOOK_API void SetDisplay(const std::string& display);
+    const std::string& GetDisplay() const { return display; }
 
     bool operator ==(const Kord& other) const;
 
@@ -62,6 +63,8 @@ private:
     void KeyUp(int keyStenoOrder, const KbdHookEvent& event);
 
 private:
+    std::string display; // text representation
+    //
     // keys that were chorded, kept using stenoOrderIdx
     Keys inChord;       
 

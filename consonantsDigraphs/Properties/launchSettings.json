@@ -2,7 +2,7 @@
   "profiles": {
     "consonantsDigraphs": {
       "commandName": "Project",
-      "commandLineArgs": "dnrjtshc glbqpmwk FPLTRBGS K W",
+      "commandLineArgs": "dnrjtshc glbqpmwk FPLTRBGS K * W *",
       "workingDirectory": "."
     }
   }

@@ -4,7 +4,7 @@ steaks
 
  R-R        cr       
  P-FP       bs      !! PW-FP
- P*FP      ^bs      !! pqnew PW*FP, used here as ctrl-BS
+ P*FP      ^bs      !! pq PW*FP, used here as ctrl-BS
  TKEL       del     !! TK*EL
  TA*B       tab      
  TPEFBG     esc      
@@ -22,32 +22,35 @@ steaks
 !! ^w KR*T          !! new 
 !! ^k KR*BG         !! nw
 
-!! from my Plover user.json
- STP-P      up      
- STP-R      left    
- STP-B      down    
- STP-G      right   
- STP-BG     ^right  
- STP-RB     ^left   
- STPH-P     +up     
- STPH-R     +left   
- STPH-B     +down   
- STPH-G     +right  
- STPH-BG    +^right 
- STPH-RB    +^left  
- STP-F      home    
- STP-L      end     
- STPH-F     +home    
- STPH-L     +end     
+!! modified from my Plover user.json
+!!real=STP, try SP
+ SP-P      up      
+ SP-R      left    
+ SP-B      down    
+ SP-G      right   
+ SP-BG     ^right  
+ SP-RB     ^left   
+ SP-F      home    
+ SP-L      end     
+ SPH-P     +up     
+ SPH-R     +left   
+ SPH-B     +down   
+ SPH-G     +right  
+ SPH-BG    +^right 
+ SPH-RB    +^left  
+ SPH-F     +home    
+ SPH-L     +end  
+!! these could be KHR? original plover?
  KPH-P      ^home   
  KPH-B      ^end    
  KPH-BG     ^c      
+ KPH*BG     ^k      
+!! KPH*BG     ^x 		!! pq KPH-BGS (ctrl-x) !Sculpt
  KPH*F      ^v      
  KPH*T      ^w      
- KPH*BG     ^k      
  KPH-S      ^s      
  KPH-Z      ^z      
- KPH*Z      ^y      
- KPHA*      ^a      
+ KPH*Z      ^y      !! pq
+!! KPHA*      ^a      !! not on Sculpt
 
 endsteaks

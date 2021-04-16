@@ -115,10 +115,7 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
       - use -k and -w for left to right / right to left
         ie, indicates which one is one the corrent layer
     *-> need to be 'geographically' aware, some of the chords' left / right logic is reversed
-
-+ help image file, have both main and alt show
-
-+ need to have the edit/movement chords on alt layer
+    - use chords with extra key on the left hand iso using layer access
 
 
 ---
