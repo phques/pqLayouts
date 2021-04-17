@@ -289,7 +289,7 @@ void KbdDisplayWnd::SetImageView(Layer::ImageView imgView)
 
     // update image view
     imageView = imgView;
-    Printf("KbdDisplayWnd::SetImageView top/bott %d-%d\n", imageView.TopY, imageView.BottomY);
+    //Printf("KbdDisplayWnd::SetImageView top/bott %d-%d\n", imageView.TopY, imageView.BottomY);
 
     // resize window if height changed
     if (imgView.Height() != currentViewHeight)

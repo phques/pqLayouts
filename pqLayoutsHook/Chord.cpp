@@ -55,8 +55,8 @@ void Kord::KeyDown(int keyStenoOrder, const KbdHookEvent& event)
     case State::Unchording: // key pressed before all keys are up, cancel chord
         //pq 2021-04-01 to allow adding subsequent keys to chord
         //   similar to what Plover does, comment out the next two lines.
-        state = State::Cancelled;
-        return;
+        //state = State::Cancelled;
+        //return;
         break;
     case State::Cancelled:  // ignore
     case State::Completed:

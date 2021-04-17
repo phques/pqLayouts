@@ -136,6 +136,8 @@ void Keyboard::ModifierDown(VeeKee vk, bool pressed)
     // notify main app when shift goes from up/down ('layer change')
     if (isShiftDownBefore != isShiftDownAfter)
     {
+        Printf("##**shift %s **##\n", isShiftDownAfter ? "DOWN" : "up");
+
         const auto* const currentLayer = CurrentLayer();
         Notify(HookKbd::LayerChanged, currentLayer->LayerIdx());
     }
@@ -353,19 +355,21 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
 
     // handle possible chording
     // do it here so we track non mapped keys to to be able to replay them for failed chord 
-    bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
+    //const bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
 
-    if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
-    {
-        // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
-        //pq-todo might need to have a 'repeat' key
-        //if (MyIsPrint(event.vkCode))
-        if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
-        {
-            HandleChording(event, injectedFromMeValue);
-            return true;
-        }
-    }
+    //if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
+    //{
+    //    // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
+    //    //pq-todo might need to have a 'repeat' key
+    //    //if (MyIsPrint(event.vkCode))
+    //    if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
+    //    {
+    //        if (HandleChording(event, injectedFromMeValue))
+    //            return true;
+    //    }
+    //}
+
+    bool ret = false;
 
     // we have something to act on..
     if (action != nullptr)
@@ -402,13 +406,11 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         // do the action for the key
         const bool isTap(action->downTimeTick == this->lastKeypressTick);
 
-        bool ret = false;
         if (event.Down())
             ret = action->OnKeyDown(this);
         else
             ret = action->OnKeyUp(this, isTap);
 
-        return ret;
     }
     else
     {
@@ -416,11 +418,26 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         TrackModifiers(event.vkCode, event.Down());
     }
 
-    return false; // let key through
+    // detect possible chording from previous keys
+    const bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
+
+    if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
+    {
+        // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
+        if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
+        {
+            if (HandleChording(event, injectedFromMeValue))
+                ret = true;
+        }
+    }
+
+    return ret; // let key through if ret = true
 }
 
-void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
+bool Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
 {
+    bool ret = false;
+
     // map qwerty chord key to steno key (by steno order)
     const ChordingKey* chordingKey = chording.GetChordingKeyFromQwerty(event.vkCode);
     if (chordingKey != nullptr)
@@ -446,30 +463,51 @@ void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFr
     {
     case Kord::State::Cancelled:
     {
-        ReplayCancelledChord(chord, injectedFromMeValue);
+        Printf("CancelledChord chord [%s]\n", chording.ToString(chord).c_str());
+        //ReplayCancelledChord(chord, injectedFromMeValue);
         chord.Reset();
         break;
     }
 
     case Kord::State::Completed:
     {
-        OnCompletedChord(injectedFromMeValue);
+        ret = OnCompletedChord(injectedFromMeValue);
         chord.Reset();
         break;
     }
+
+    default:
+        break;
+
     }
+
+    return ret;
 }
 
-void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
+bool Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
 {
+    bool ret = false;
+
     // lookup chord and output its value if found
     // else output original key (cancelled chord)
     Printf("completed chord [%s]\n", chording.ToString(chord).c_str());
+
+    //GetNbrKeysInChord
 
     const std::list<KeyActions::KeyActionPair>* chordActions = layout.GetChordActions(chord);
     if (chordActions != nullptr)
     {
         Printf("chord found, executing its action keydown/up\n");
+
+        // output 1 backspace for each previously typed char of the chord
+        //## pq-todo warning, if CTRL is down, this will generate a bunch of ctrl-BS which deletes WORDS not chars
+        const KeyValue bsKey(VK_BACK, false, false);
+        for (size_t i = 0; i < chord.GetNbrKeysInChord(); i++)
+        {
+            SendVk(bsKey, true);
+            SendVk(bsKey, false);
+        }
+
 
         for (auto actionPair : *chordActions)        
         {
@@ -491,14 +529,21 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
             }
 
         }
+
+        ret = true;
     }
     else
     {
         //not a known chord, cancel it and replay cumulated keys sequence
         //Printf("chord not found, cancelling / replaying keys\n");
 
-        ReplayCancelledChord(chord, injectedFromMeValue);
+        Printf("CancelledChord chord [%s]\n", chording.ToString(chord).c_str());
+        //ReplayCancelledChord(chord, injectedFromMeValue);
+
+        ret = false;
     }
+
+    return ret;
 }
 
 // replays the key events accumulated in a failed chord
@@ -508,7 +553,7 @@ void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
 
     SuspendChording();
 
-    for (auto& keyEvent : chord.KeysSequence())
+    for (const auto& keyEvent : chord.KeysSequence())
     {
         // check that this key is mapped
         IKeyAction* action = GetMappingValue(keyEvent);
@@ -549,8 +594,10 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
 {
     // prepare an array of Inputs to send
     // these include shift/control events surrounding the mapped key to send
-    INPUT inputs[32] = { 0 };
+    INPUT inputs[32];
     size_t idx = 0;
+
+    memset(&inputs,0, sizeof(inputs));
 
     // add any required up/down shifts
     if (pressed)
@@ -558,9 +605,9 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
         // don't surrounding shift up/down keys if the output key is shift or capslock
         if (!IsShift(key.Vk()) && key.Vk() != VK_CAPITAL)
         {
-            bool needsShift = key.Shift();
-            bool lshiftDown = ModifierDown(VK_LSHIFT);
-            bool rshiftDown = ModifierDown(VK_RSHIFT);
+            const bool needsShift = key.Shift();
+            const bool lshiftDown = ModifierDown(VK_LSHIFT);
+            const bool rshiftDown = ModifierDown(VK_RSHIFT);
             if (needsShift && !(lshiftDown || rshiftDown))
             {
                 // send a Shift down before our key
@@ -590,7 +637,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
     }
 
     // how many prefix shift/ctrl key we need to revert
-    size_t nbExtras = idx;
+    const size_t nbExtras = idx;
 
     // add the mapped key
     {
@@ -616,7 +663,8 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
     // (Sleep(0) is no good)
     // Also for mapped modifiers with Remote Desktop Connection.
     // Dunno why:
-    Sleep(1);
+    // PQ 2021-04-16, try without, not really required for my normal use and slows down my chording logic
+    //Sleep(1);
 
     // and finally, track any modifiers up/down we sent (actual output key, not pre/suffix ones !)
     TrackModifiers(key.Vk(), pressed);

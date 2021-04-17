@@ -59,6 +59,34 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 ----
 
+
+*** 2021-0417 ***
+** 'late-chords' branch **
+
+this branch tries a different approach to chording.
+instead of 'eating' the keys tha we receive, accumulating them in a possible chord,
+then if it's not a chord, replay the keys 9having bugs witht his method)
+instead,
+-> we let keys through, trying to build a chord as we go along
+   if we get a successful chord build (keys in proper sequence of down + keys up)
+   then we output backspaces to erase the characters that were generated
+   and then output the chord as before
+
+.. there are problems with this:
+
+- it can be used only (almost) for chords that output text, nav/edit is problematic
+  e.g. if text is selected and we try to chord something, 
+   then the (temp) output of keys of the chord erase / replace the selected text !
+  e.g. if a chord is supposed to do 'copy', ctrl-c, it will not work
+
+- having to 'undo' the output from when the keys were pressed before we id a chord
+  means that the keys allowed for chord are limited to doing simple 1char output,
+  e/g a key that output CR or BS can usually not be undone.
+
+
+
+**********
+
 + chording
 ---
 

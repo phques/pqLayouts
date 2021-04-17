@@ -41,6 +41,7 @@ public:
 public:
     PQHOOK_API Kord();
     PQHOOK_API void AddInChordKey(int stenoOrderIdx);
+    PQHOOK_API size_t GetNbrKeysInChord() const { return inChord.count(); }
 
     void Reset();
 
@@ -54,7 +55,7 @@ public:
     const std::vector<KbdHookEvent>& KeysSequence() const { return keysSequence; }
 
     PQHOOK_API void SetDisplay(const std::string& display);
-    const std::string& GetDisplay() const { return display; }
+    PQHOOK_API const std::string& GetDisplay() const { return display; }
 
     bool operator ==(const Kord& other) const;
 

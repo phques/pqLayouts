@@ -87,8 +87,8 @@ protected:
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue);
 
-    void HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
-    void OnCompletedChord(const DWORD& injectedFromMeValue);
+    bool HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
+    bool OnCompletedChord(const DWORD& injectedFromMeValue);
     void ResumeChording();
     void SuspendChording();
     void ReplayCancelledChord(Kord&, DWORD injectedFromMeValue);
