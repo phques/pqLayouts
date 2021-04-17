@@ -137,7 +137,7 @@ namespace consonantsDigraphs
                     int layer1Y = i / 4;
                     int layer2X = j % 4;
                     int layer2Y = j / 4;
-                    // same finger, use both left hand chord keys with single right hand key
+                    // same finger, use 2 left hand key + single right hand key
                     if (i == j)
                     {
                         Console.Write(" {0}{1}-{2}", leftStenoKey1, leftStenoKey2, rightStenoKeys[i]);
@@ -146,20 +146,16 @@ namespace consonantsDigraphs
                     }
                     else
                     {
-                        // layer1 to layer2
-                        string leftStenoKey;
-                        // vertical, use left 1st/2nd + leftVert + single right hand key
+                        // vertical, use left hand chord key1 + left key 'vert' + single right hand key
                         if (layer1X == layer2X)
                         {
-                            leftStenoKey = layer1Y < layer2Y ? leftStenoKey1 : leftStenoKey2;
-
-                            Console.Write(" {0}{1}-{2}", leftStenoKey, leftStenoKeyVert, rightStenoKeys[i]);
+                            Console.Write(" {0}{1}-{2}", leftStenoKey1, leftStenoKeyVert, rightStenoKeys[i]);
                             Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
                             Console.WriteLine("");
                         }
                         else
                         {
-                            leftStenoKey = layer1X < layer2X ? leftStenoKey1 : leftStenoKey2;
+                            string leftStenoKey = layer1X < layer2X ? leftStenoKey1 : leftStenoKey2;
 
                             Console.Write(" {0}-{1}{2}", leftStenoKey, rightStenoKeys[i], rightStenoKeys[j]);
                             Console.Write(" {0}{1}  ", consonantsLayer1[i], consonantsLayer2[j]);
@@ -215,6 +211,14 @@ namespace consonantsDigraphs
                     var leftStenoKey2Alt = args[7]; 
                     var leftStenoKeyVertAlt = args[8]; 
 
+                    Console.Write("! ");
+                    foreach (var arg in args)
+                    {
+                        Console.Write("{0} ", arg);
+                    }
+
+                    Console.WriteLine("");
+                    
                     var doit = new Doit();
                     doit.GenerateDigraphChords(mainLayerConsonants, altLayerConsonants, rightStenoKeys, 
                         leftStenoKey1, leftStenoKey2, leftStenoKeyVert,
