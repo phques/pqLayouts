@@ -60,13 +60,16 @@ include chords-wide-steaks_2.kbdlo
 include chords-wide-syms_2.kbdlo
 include chords-wide-nav_2.kbdlo
 
-! consonants cluster helper chords main<->alt
-! note that vertical right hand chord usually don't work on Sculpt
+! Consonants cluster helper chords main<->alt
+! Note that R*xx done with qwerty FG-xx does not work
+! Use T for the star (FT-)
 include mtgapPLLT9.4gg-b_consk2.kbdlo
 
 steaks
-!! K*-F dp  
- KR-FP	ing		!! add for 'ing'
+ KR-FP	ing		!! add 'ing' on ng keys
+!! Me ;-)
+ SKW*P   philippe
+ SKW*BG  quesnel
 endsteaks
 
 
@@ -75,6 +78,7 @@ endsteaks
 ! ------- alt layer --------
 
 addlayertap alt space
+
 !imageview 114 +42 166 +42
 imageview 99 +88 99 +88 
 
