@@ -1,3 +1,4 @@
+! dnrjtshc glbqpmwk FPLTRBGS K R * S W * 
 ! main layer consonants digraphs
 steaks
  KR-F dg  
@@ -32,7 +33,7 @@ steaks
  R-TB jm  
  R-TG jw  
  K*-T jk  
- R*-R tg  
+ K*-R tg  
  K-RP tl  
  K-RL tb  
  K-RT tq  
@@ -41,7 +42,7 @@ steaks
  K-RG tw  
  K-RS tk  
  R-BF sg  
- R*-B sl  
+ K*-B sl  
  K-BL sb  
  K-BT sq  
  R-BR sp  
@@ -50,7 +51,7 @@ steaks
  K-BS sk  
  R-GF hg  
  R-GP hl  
- R*-G hb  
+ K*-G hb  
  K-GT hq  
  R-GR hp  
  R-GB hm  
@@ -59,7 +60,7 @@ steaks
  R-SF cg  
  R-SP cl  
  R-SL cb  
- R*-S cq  
+ K*-S cq  
  R-SR cp  
  R-SB cm  
  R-SG cw  
@@ -101,7 +102,7 @@ steaks
  W-TB qs  
  W-TG qh  
  S*-T qc  
- W*-R pd  
+ S*-R pd  
  S-RP pn  
  S-RL pr  
  S-RT pj  
@@ -110,7 +111,7 @@ steaks
  S-RG ph  
  S-RS pc  
  W-BF md  
- W*-B mn  
+ S*-B mn  
  S-BL mr  
  S-BT mj  
  W-BR mt  
@@ -119,7 +120,7 @@ steaks
  S-BS mc  
  W-GF wd  
  W-GP wn  
- W*-G wr  
+ S*-G wr  
  S-GT wj  
  W-GR wt  
  W-GB ws  
@@ -128,7 +129,7 @@ steaks
  W-SF kd  
  W-SP kn  
  W-SL kr  
- W*-S kj  
+ S*-S kj  
  W-SR kt  
  W-SB ks  
  W-SG kh  
