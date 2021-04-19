@@ -47,8 +47,10 @@ public:
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
     bool InitChordingKeys(const ChordingKeys& chordingKeys);
+    bool CheckForSuspendKey(const KbdHookEvent& event);
+    bool ProcessKeyEvent(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
-    bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);
+    bool OnKeyEvent(const KbdHookEvent & event);
     // dbg
     void OutNbKeysDn();
 
@@ -87,7 +89,7 @@ protected:
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue);
 
-    void HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
+    bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
     void OnCompletedChord(const DWORD& injectedFromMeValue);
     void ResumeChording();
     void SuspendChording();

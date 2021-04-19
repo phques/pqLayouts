@@ -55,8 +55,8 @@ void Kord::KeyDown(int keyStenoOrder, const KbdHookEvent& event)
     case State::Unchording: // key pressed before all keys are up, cancel chord
         //pq 2021-04-01 to allow adding subsequent keys to chord
         //   similar to what Plover does, comment out the next two lines.
-        state = State::Cancelled;
-        return;
+        //state = State::Cancelled;
+        //return;
         break;
     case State::Cancelled:  // ignore
     case State::Completed:
@@ -73,15 +73,28 @@ void Kord::KeyDown(int keyStenoOrder, const KbdHookEvent& event)
 
 void Kord::KeyUp(int keyStenoOrder, const KbdHookEvent& event)
 {
+    auto isPressed = pressed.test(event.vkCode);
+
     switch (state)
     {
     case State::Cancelled:
     case State::Completed:
     case State::New:
         return;             // just ignore
-    case State::Chording:   // start unchording
-        state = State::Unchording;
+    case State::Chording:
+        if (isPressed)
+        {
+            // start unchording if was part of the chord
+            state = State::Unchording;
+        }
+        else
+        {
+            // invalid key up, cancel
+            state = State::Cancelled;
+            return;
+        }
         break;
+
     default:
         break;
     }
@@ -89,7 +102,7 @@ void Kord::KeyUp(int keyStenoOrder, const KbdHookEvent& event)
     // the key is not pressed anymore
     pressed[event.vkCode] = false;
     
-    // all keys are up, chord is 'complete' (or cancelled)
+    // if all keys are up, chord is 'complete' (or cancelled)
     if (pressed.count() == 0)
     {
         switch (inChord.count())
@@ -102,18 +115,20 @@ void Kord::KeyUp(int keyStenoOrder, const KbdHookEvent& event)
             break;
         }
         case 2:
+        case 3: // also include 3 keys chords, consonants cluster main/alt chords causing probs
         {
             // to reduce the chance of accidental trigger of short (2 keys) chords,
             // consider it complete only if the 2 keys were pressed almost at the same time
             // pq-todo: configurable ? enabled/disabled/delay
             // pq ? needs to be a very short time ! 
-            // the precision of tickDiff is +- 10-16ms !! (x 2 since we have two values!?)
-            DWORD tickDiff = lastKeyDownEvent.TimeDiff(firstKeyDownEvent);
+            // the precision of tickDiff is +- 10-16ms !! (x 2 since we have two values!?),
+            // not good enough, so we actually use QueryPerformanceCounter()
+            //DWORD tickDiff = lastKeyDownEvent.TimeDiff(firstKeyDownEvent);
             
             LARGE_INTEGER qpcDiff;
             lastKeyDownEvent.QpcDiff(firstKeyDownEvent, qpcDiff);
 
-            Printf("2keys chord tickdiff = %d, qpc diff = %lld\n", tickDiff, qpcDiff.QuadPart);
+            Printf("2-3keys chord qpc diff = %lld\n", qpcDiff.QuadPart);
 
             //if (tickDiff < 32)
             if (qpcDiff.QuadPart < 50000) // 50ms

@@ -72,7 +72,7 @@ public:
 
             // process this key
             if (!SelfInjected(event))
-                eat = theKbd.OnKeyEvent(event, injectedFromMe);
+                eat = theKbd.OnKeyEvent(event);
         }
 
         // dont forward to next hook

@@ -1,0 +1,10 @@
+
+2021-04-19
+Chording
+- start new chording only for valid chording keys
+- cancel chord if receive keyup for a key that was not in the chord
+  (fixes the bugs about shift or layerAccess released before the shifted key)
+- include 3keys chords for the 'must be pressed all together' test
+  note: still a compromise, it can happen that a quick 'roll' is fast
+  enough to be detected as a chord (specially woth 2keys roll)
+- 

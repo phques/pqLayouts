@@ -303,7 +303,7 @@ bool Keyboard::InitChordingKeys(const ChordingKeys& chordingKeys)
     return true;
 }
 
-bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
+bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
 {
     // is it the suspend key ?
     if (event.vkCode == suspendKey)
@@ -313,7 +313,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
             Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
             ToggleSuspend();
         }
-        return true; // 'edat' this key
+        return true; // 'eat' this key
     }
 
     // is it the quit key ?
@@ -326,8 +326,58 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         }
         return true; // 'eat' this key
     }
+    return false;
+}
 
-     // let keys through keys while suspended
+bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, const bool wasDown)
+{
+    // (possibly) eat key down repeats (e.g. layerAccess key)
+    if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
+        return true;
+
+    // make sticky by eating key up event
+    if (makeSticky != 0)
+    {
+        // eat keys Up, making them sticky
+        const bool isStickyMaker = (makeSticky == event.vkCode);
+
+        if (!isStickyMaker && !event.Down())
+        {
+            Printf("sticky, skip 0x%02X\n", static_cast<WORD>(event.vkCode));
+            return true;
+        }
+    }
+
+    // set time of initial down key press
+    if (!wasDown && event.Down())
+        action->downTimeTick = event.time;
+
+    // set time of the key release
+    if (wasDown && !event.Down())
+        action->upTimeTick = event.time;
+        
+    // register up/down input keys (don't re-register key already down)
+    if (!(wasDown && event.Down()))
+        TrackMappedKeyDown(event.vkCode, action, event.Down());
+
+    // do the action for the key
+    const bool isTap(action->downTimeTick == this->lastKeypressTick);
+
+    bool ret = false;
+    if (event.Down())
+        ret = action->OnKeyDown(this);
+    else
+        ret = action->OnKeyUp(this, isTap);
+
+    return ret;
+}
+
+bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
+{
+    if (CheckForSuspendKey(event)) 
+        return true;
+
+    // let keys through keys while suspended
     if (suspended)
         return false;
 
@@ -336,7 +386,24 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
 
 
-    //-------------
+    // handle possible chording
+    // do it here so we track non mapped keys to to be able to replay them for failed chord 
+    if (!chordingSuspended && CurrentLayer()->HasChords())
+    {
+        //pq-todo might need to have a 'repeat' key or a way to suspend chording
+
+        // map qwerty chord key to steno key (by steno order)
+        auto* chordingKey = chording.GetChordingKeyFromQwerty(event.vkCode);
+        bool isChordingKey = chordingKey != nullptr;
+
+        // only start chording for valid chording keys
+        bool chordInProgress = chord.GetState() != Kord::State::New;
+        if (chordInProgress || (!chordInProgress && isChordingKey))
+        {
+            if (HandleChording(event, chordingKey))
+                return true;
+        }
+    }
 
     // is this key currently down (mapped) ?
     // if so use that action
@@ -350,65 +417,10 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         action = GetMappingValue(event);
     }
 
-
-    // handle possible chording
-    // do it here so we track non mapped keys to to be able to replay them for failed chord 
-    bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
-
-    if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
-    {
-        // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
-        //pq-todo might need to have a 'repeat' key
-        //if (MyIsPrint(event.vkCode))
-        if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
-        {
-            HandleChording(event, injectedFromMeValue);
-            return true;
-        }
-    }
-
     // we have something to act on..
     if (action != nullptr)
     {
-        // eat key down repeats
-        if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
-            return true;
-
-        // make sticky by eating key up event
-        if (makeSticky != 0)
-        {
-            // eat keys Up, making them sticky
-            const bool isStickyMaker = (makeSticky == event.vkCode);
-
-            if (!isStickyMaker && !event.Down())
-            {
-                Printf("sticky, skip 0x%02X\n", event.vkCode);
-                return true;
-            }
-        }
-
-        // set time of initial down key press
-        if (!wasDown && event.Down())
-            action->downTimeTick = event.time;
-
-        // set time of the key release
-        if (wasDown && !event.Down())
-            action->upTimeTick = event.time;
-        
-        // register up/down input keys (don't re-register key already down)
-        if (!(wasDown && event.Down()))
-            TrackMappedKeyDown(event.vkCode, action, event.Down());
-
-        // do the action for the key
-        const bool isTap(action->downTimeTick == this->lastKeypressTick);
-
-        bool ret = false;
-        if (event.Down())
-            ret = action->OnKeyDown(this);
-        else
-            ret = action->OnKeyUp(this, isTap);
-
-        return ret;
+        return ProcessKeyEvent(event, action, wasDown);
     }
     else
     {
@@ -419,10 +431,8 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
     return false; // let key through
 }
 
-void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
+bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey)
 {
-    // map qwerty chord key to steno key (by steno order)
-    const ChordingKey* chordingKey = chording.GetChordingKeyFromQwerty(event.vkCode);
     if (chordingKey != nullptr)
     {
         // debug
@@ -458,6 +468,9 @@ void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFr
         break;
     }
     }
+
+    // we always eat the passed key event
+    return true;
 }
 
 void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
@@ -530,7 +543,7 @@ void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
             HookKbd::AddMapping(kfrom, kto);
         }
 
-        OnKeyEvent(keyEvent, injectedFromMeValue);
+        OnKeyEvent(keyEvent);
     }
 
     ResumeChording();

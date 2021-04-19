@@ -62,13 +62,6 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 + chording
 ---
 
-+ bug: because of chording, 
-  - shift-xx does not shift unless we keep shift done when press 'xx'
-  (shift is not kept in the 'replay sequence')
-  - same thing for alt layer access
-
-+ bug: shift-shift / caps lock doesn't work anymore
-+ ctrl on alt layer doesnt work
 
 + bug: sometimes stays stuck in chord building mode (when doing it on alt layer?)
  (haven't happened in a while)
@@ -88,39 +81,29 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 + give an error if trying to define chords before stkpower
 
 + 'repeat' key
++ or chord suspend key (would allow normal auto-repeat)
 
 + multi chars output chords:
   + bug: outut "sp" is interpreted a the SP key !!
     -> make all key names uppercase?
-->? for 'steaks', use /sse dd/ to enter literal text ??
+->? use /sse dd/ to enter literal text ??
   /sp/ would be "sp" not a space
   /^c/ "^c" not ctrl-c
   Would also permit to have spaces in output:
   /this is some text/
-
-+ reverse order of chord def vs chord ouput:
-  P-P  .
+  /, / could be used to have auto space after ','
 
 
---- usage ideas
+[--- usage ideas
 
-  (does not work very well)
-+ use 2keys chords to do consonants to limit use of alt layer
+..
 
-+ for consonants chords (to reduce need to use alt multiple times in a row)
-  : auto-generate (w. a pgrm) (or in pqLayouts !!? dont think so)
-    all permutations chords to access in a logical manner two consecutives consonants from two layers
-    - right hand presses both wanted keys (from current layer + other layer),
-    - left hand presses keys to indicate consonants chording 
-      - use -k and -w for left to right / right to left
-        ie, indicates which one is one the corrent layer
-    *-> need to be 'geographically' aware, some of the chords' left / right logic is reversed
-    - use chords with extra key on the left hand iso using layer access
+---]
 
 
----
+------
 
-+ one-shot modifier, layer
++ one-shot modifier, layer (?)
   (set temp 'need xyz' flag in found action key?)
 
 + see about how Plover handles kbd hook & text output,
@@ -129,4 +112,4 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 + add support for 'alt' prefix on char, 
   -> alt-tab !!
-  -> ctrl-shift (Sublime Text, column selection)
+  -> alt-shift-click (notepad++, column selection)
