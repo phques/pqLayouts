@@ -398,7 +398,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
 
         // only start chording for valid chording keys
         bool chordInProgress = chord.GetState() != Kord::State::New;
-        if (chordInProgress || (!chordInProgress && isChordingKey))
+        if (chordInProgress || (!chordInProgress && isChordingKey && event.Down()))
         {
             if (HandleChording(event, chordingKey))
                 return true;

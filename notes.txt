@@ -67,6 +67,13 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
  (haven't happened in a while)
  - also had a case of stuck alt key
 
+ - happened with Win-xx and also shift-xx on physical machine with new version !
+ - shift-shift for caps-lock seems to caute it maybe
+
+ ++ to reproduce: right hand qwerty shift-ctrl seems to do it every time
+ FIXED
+
+
 + possibly use a different approach:
   gather keys in a chord as they are typed,
   look for a valid chord,
@@ -113,3 +120,5 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 + add support for 'alt' prefix on char, 
   -> alt-tab !!
   -> alt-shift-click (notepad++, column selection)
+
++ help image: support multiple monitors

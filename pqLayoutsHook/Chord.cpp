@@ -115,7 +115,7 @@ void Kord::KeyUp(int keyStenoOrder, const KbdHookEvent& event)
             break;
         }
         case 2:
-        case 3: // also include 3 keys chords, consonants cluster main/alt chords causing probs
+        //case 3: // also include 3 keys chords, consonants cluster main/alt chords causing probs
         {
             // to reduce the chance of accidental trigger of short (2 keys) chords,
             // consider it complete only if the 2 keys were pressed almost at the same time

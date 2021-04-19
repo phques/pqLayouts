@@ -7,4 +7,7 @@ Chording
 - include 3keys chords for the 'must be pressed all together' test
   note: still a compromise, it can happen that a quick 'roll' is fast
   enough to be detected as a chord (specially woth 2keys roll)
-- 
+
+2021-04-19
+- bug fix: only start chording for valid chording keys DOWN
+  (was getting stuck (lost shift up) shift)
