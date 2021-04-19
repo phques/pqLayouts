@@ -305,8 +305,9 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
         else if (cmd == "stickyer")
         {
-            if (!setMakeSticky(stringTokener))
-                return false;
+            std::cerr << "** warning, 'stickyer' not supported in this version" << std::endl;
+            //if (!setMakeSticky(stringTokener))
+            //    return false;
         }
         else if (cmd == "imagefile")
         {

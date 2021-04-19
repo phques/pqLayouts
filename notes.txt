@@ -55,35 +55,52 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   see above
  => how to be certain I have the correct scancodes ??
     -> need to learn the kbd ?? pretty annoying
-    -> I guess that mapping on vk_scan and ignoring unknown values should be Ok
+    -> I guess that mapping on vk_code and ignoring unknown values should be Ok
 
 ----
 
 + chording
 ---
 
-+ bug: because of chording, 
-  - shift-xx does not shift unless we keep shift done when press 'xx'
-  (shift is not kept in the 'replay sequence')
-  - same thing for alt layer access
+*** branch early-chord-b 2021-04-17  ***
+This branch tries this approach:
+We accumulate pressed keys without outputing / executing anything until all pressed keys are up.
+We then replay the keys..
+If in that sequence we have a chord then the chord will replace those keys in the replay
 
-+ bug: shift-shift / caps lock doesn't work anymore
-+ ctrl on alt layer doesnt work
+nb: 2021-04-18, work in progress, does not do the actual chording yet .. see encountered probs below:
 
-+ bug: sometimes stays stuck in chord building mode (when doing it on alt layer?)
- (haven't happened in a while)
- - also had a case of stuck alt key
 
-+ possibly use a different approach:
-  gather keys in a chord as they are typed,
-  look for a valid chord,
-  IF we have a valid chord,
-  - on either
-   - key up
-   - keydown that invalidates the current chord,
-   - keydown not part of steakpower
-   THEN use the last found chord
-   and then output the other key ?
+***!!
+-> cannot Shift-click or Ctrl-Click !!**
+
+a)-> causes problems when doing edits
+  - when selecting we hold Shift and use arrows, nothing happens until we release !
+  -> don't gather keys when on a layer that does not have chords and only use edit layer (?)
+
+-> we don't see layers change live
+  -> detect layer changes while gathering:
+    - go to it if it does not have chords
+    - otherwise, send the layer change msg so that the help image updates
+  -> need to detect Shifts too and also send the layer change msg
+
+-> maybe have a way to suspend chording? for editing, for example.
+  - would also allow to auto-repeat keys
+
+??-=> possible mod of this approach:
+  - execute modifiers and layer changes as we gather !
+    -> would let us do shift or ctrl-click
+    -> help image would update
+  - still have problem a) above though
+
+??-=> only gather when 'steno keys' are pressed in idle mode (i.e. no keys down)
+ -> means cannot use modifiers with chords
+   (might be safer anyways ! a bit dangerous otherwise: 
+    ctrl-chord_that_output_bunchs_of_chars .. could have disastrous results!)
+ -> what about layerAccess ?? do special case for this (?)
+ ??=> this actually is more or less the approach on the master branch anyways
+
+----
 
 + give an error if trying to define chords before stkpower
 
@@ -97,6 +114,7 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   /^c/ "^c" not ctrl-c
   Would also permit to have spaces in output:
   /this is some text/
+  /, /  <- auto space after ','
 
 + reverse order of chord def vs chord ouput:
   P-P  .
@@ -104,8 +122,6 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 --- usage ideas
 
-  (does not work very well)
-+ use 2keys chords to do consonants to limit use of alt layer
 
 + for consonants chords (to reduce need to use alt multiple times in a row)
   : auto-generate (w. a pgrm) (or in pqLayouts !!? dont think so)

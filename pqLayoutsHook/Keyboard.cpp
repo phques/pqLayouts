@@ -45,20 +45,21 @@ VeeKeeSet Keyboard::extended = {
 //----------
 
 Keyboard::Keyboard(DWORD injectedFromMeValue) : 
-    injectedFromMeValue(injectedFromMeValue), 
-    hMainWindow(NULL),
-    mainWndMsg(0),
+    chordingSuspended(false),
     suspended(false), 
+    hMainWindow(nullptr),
+    mainWndMsg(0),
     makeSticky(0),
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
-    chordingSuspended(false)
+    state(State::Idle),
+    injectedFromMeValue(injectedFromMeValue)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
     {
-        SHORT vk = VkKeyScanA(c);
+        const SHORT vk = VkKeyScanA(c);
         isprint.insert(vk);
     }
 
@@ -303,7 +304,7 @@ bool Keyboard::InitChordingKeys(const ChordingKeys& chordingKeys)
     return true;
 }
 
-bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
+bool Keyboard::CheckForSuspendOrQuit(const KbdHookEvent& event)
 {
     // is it the suspend key ?
     if (event.vkCode == suspendKey)
@@ -313,7 +314,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
             Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
             ToggleSuspend();
         }
-        return true; // 'edat' this key
+        return true; // 'eat' this key
     }
 
     // is it the quit key ?
@@ -327,17 +328,11 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
         return true; // 'eat' this key
     }
 
-     // let keys through keys while suspended
-    if (suspended)
-        return false;
+    return false;
+}
 
-    // save time tick of last key press
-    if (event.Down())
-        this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
-
-
-    //-------------
-
+bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event)
+{
     // is this key currently down (mapped) ?
     // if so use that action
     IKeyAction* action = MappedKeyDown(event.vkCode);
@@ -348,75 +343,175 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
     {
         // do we have a mapped key for this input key?
         action = GetMappingValue(event);
+
+        // if none, crate a one-to-one mapping and get it
+        if (action == nullptr)
+        {
+            CreateOneToOneMapping(event);
+            action = GetMappingValue(event);
+        }
+    }
+
+    // sanity check
+    if (action == nullptr)
+    {
+        Printf("**warning OnKeyEvent, action == null **\n");
+        return false;
     }
 
 
+#if 0
     // handle possible chording
-    // do it here so we track non mapped keys to to be able to replay them for failed chord 
-    bool isLayerAccess = (action != nullptr ? action->IsLayerAccess() : false);
+// do it here so we track non mapped keys to to be able to replay them for failed chord 
+    bool isLayerAccess = action->IsLayerAccess();
 
     if (!isLayerAccess && !chordingSuspended && CurrentLayer()->HasChords())
     {
         // restrict chording to only chording keys, since we loose auto-repeat on the chordable keys
         //pq-todo might need to have a 'repeat' key
-        //if (MyIsPrint(event.vkCode))
         if (chording.GetChordingKeyFromQwerty(event.vkCode) != nullptr)
         {
             HandleChording(event, injectedFromMeValue);
             return true;
         }
     }
+#endif // 0
 
     // we have something to act on..
-    if (action != nullptr)
+
+    // eat ALL key down repeats
+    //##pq-todo possibly have a special 'repeat' key
+    //if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
+    if (wasDown &&  event.Down())
+        return true;
+
+    // make sticky by eating key up event
+#if 0
+    if (makeSticky != 0)
     {
-        // eat key down repeats
-        if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
-            return true;
+        // eat keys Up, making them sticky
+        const bool isStickyMaker = (makeSticky == event.vkCode);
 
-        // make sticky by eating key up event
-        if (makeSticky != 0)
+        if (!isStickyMaker && !event.Down())
         {
-            // eat keys Up, making them sticky
-            const bool isStickyMaker = (makeSticky == event.vkCode);
+            Printf("sticky, skip 0x%02X\n", event.vkCode);
+            return true;
+        }
+    }
+#endif // 0
 
-            if (!isStickyMaker && !event.Down())
+
+    // set time of initial down key press
+    if (!wasDown && event.Down())
+        action->downTimeTick = event.time;
+
+    // set time of the key release
+    if (wasDown && !event.Down())
+        action->upTimeTick = event.time;
+    
+    // register up/down input keys (don't re-register key already down)
+    if (!(wasDown && event.Down()))
+        TrackMappedKeyDown(event.vkCode, action, event.Down());
+
+    //---------------
+    
+    // do the action for the key
+    const bool isTap(action->downTimeTick == this->lastKeypressTick);
+
+    bool ret = false;
+    if (event.Down())
+        ret = action->OnKeyDown(this);
+    else
+        ret = action->OnKeyUp(this, isTap);
+
+    return ret;
+}
+
+void Keyboard::replayGatheredEvents()
+{
+    for (auto& event : savedEvents)
+    {
+        ProcessKeyEvent(event);
+    }
+}
+
+bool Keyboard::OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue)
+{
+    // ##pq-todo if going into suspended mode while gathering keys, should clean up / clear the list
+    if (CheckForSuspendOrQuit(event)) 
+        return true;
+
+    // let keys through keys while suspended
+    if (suspended)
+        return false;
+
+    // save time tick of last key press
+    if (event.Down())
+        this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
+
+    //-------------
+
+    // -- events gathering logic --
+
+    if (state == State::Idle)
+    {
+        if (event.Down())
+        {
+            Printf("** start gathering events\n");
+            state = State::Gathering;
+        }
+        else
+        {
+            // should not get UP event when Idle, just process it
+            return ProcessKeyEvent(event);
+        }
+    }
+
+    // nb: state might have changed to Gathering just above
+    bool ret = true; // normal case is to 'eat' the key
+    if (state == State::Gathering)
+    {
+        if (event.Down())
+        {
+            // skip all key repeats
+            if (gatheredVkDown.find(event.vkCode) == gatheredVkDown.end())
             {
-                Printf("sticky, skip 0x%02X\n", event.vkCode);
-                return true;
+                // save key event / key down
+                savedEvents.push_back(event);
+                gatheredVkDown.insert(event.vkCode);
             }
         }
-
-        // set time of initial down key press
-        if (!wasDown && event.Down())
-            action->downTimeTick = event.time;
-
-        // set time of the key release
-        if (wasDown && !event.Down())
-            action->upTimeTick = event.time;
-        
-        // register up/down input keys (don't re-register key already down)
-        if (!(wasDown && event.Down()))
-            TrackMappedKeyDown(event.vkCode, action, event.Down());
-
-        // do the action for the key
-        const bool isTap(action->downTimeTick == this->lastKeypressTick);
-
-        bool ret = false;
-        if (event.Down())
-            ret = action->OnKeyDown(this);
         else
-            ret = action->OnKeyUp(this, isTap);
+        {
+            // sanity check, not expecting this
+            if (gatheredVkDown.find(event.vkCode) == gatheredVkDown.end())
+            {
+                Printf("** let through UP un-gathered event VK %02X\n", static_cast<WORD>(event.vkCode));
+                ret = false; // let it through (?) in case
+            }
+            else
+            {
+                // save key event
+                savedEvents.push_back(event);
 
-        return ret;
-    }
-    else
-    {
-        // keep track of pressed modifiers for non mapped keys
-        TrackModifiers(event.vkCode, event.Down());
+                // remove down key
+                gatheredVkDown.erase(event.vkCode);
+
+                if (gatheredVkDown.empty())
+                {
+                    Printf("** all keys are up, replay gathered events\n");
+
+                    // all keys down have been released, replay them
+                    replayGatheredEvents();
+
+                    state = State::Idle;
+                    savedEvents.clear();
+                }
+            }
+        }
     }
 
-    return false; // let key through
+    return ret;
 }
 
 void Keyboard::HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue)
@@ -501,6 +596,20 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
     }
 }
 
+// create a one to one mapping for a non-mapped key
+void Keyboard::CreateOneToOneMapping(const KbdHookEvent& keyEvent)
+{
+    // non shifted
+    KeyValue kfrom(keyEvent.vkCode, 0, false);
+    KeyValue kto(keyEvent.vkCode, 0, false);
+    HookKbd::AddMapping(kfrom, kto);
+            
+    // and shifted
+    kfrom.Shift(true);
+    kto.Shift(true);
+    HookKbd::AddMapping(kfrom, kto);
+}
+
 // replays the key events accumulated in a failed chord
 void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
 {
@@ -518,16 +627,7 @@ void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
         if (action == nullptr)
         {
             Printf("replaying non mapped key %0X, creating 1-1 mapping\n", keyEvent.vkCode);
-
-            // non shifted
-            KeyValue kfrom(keyEvent.vkCode, 0, false);
-            KeyValue kto(keyEvent.vkCode, 0, false);
-            HookKbd::AddMapping(kfrom, kto);
-            
-            // and shifted
-            kfrom.Shift(true);
-            kto.Shift(true);
-            HookKbd::AddMapping(kfrom, kto);
+            CreateOneToOneMapping(keyEvent);
         }
 
         OnKeyEvent(keyEvent, injectedFromMeValue);
@@ -535,7 +635,6 @@ void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
 
     ResumeChording();
 }
-
 
 
 void Keyboard::TrackModifiers(VeeKee vk, bool pressed)

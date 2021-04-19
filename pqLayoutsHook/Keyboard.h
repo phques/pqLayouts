@@ -17,6 +17,7 @@
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cassert>
+
 #include "util.h"
 #include "layout.h"
 #include "Notification.h"
@@ -28,6 +29,12 @@ class KbdHook; // fwd
 
 class Keyboard
 {
+    enum class State
+    {
+        Idle,
+        Gathering
+    };
+
 public:
     Keyboard(DWORD injectedFromMeValue);
     void SetMainWnd(HWND hMainWindow);
@@ -47,7 +54,10 @@ public:
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
     bool InitChordingKeys(const ChordingKeys& chordingKeys);
+    bool CheckForSuspendOrQuit(const KbdHookEvent& event);
+    bool ProcessKeyEvent(const KbdHookEvent& event);
 
+    void replayGatheredEvents();
     bool OnKeyEvent(const KbdHookEvent & event, DWORD injectedFromMeValue);
     // dbg
     void OutNbKeysDn();
@@ -89,6 +99,7 @@ protected:
 
     void HandleChording(const KbdHookEvent& event, const DWORD& injectedFromMeValue);
     void OnCompletedChord(const DWORD& injectedFromMeValue);
+    void CreateOneToOneMapping(const KbdHookEvent& keyEvent);
     void ResumeChording();
     void SuspendChording();
     void ReplayCancelledChord(Kord&, DWORD injectedFromMeValue);
@@ -100,6 +111,10 @@ protected:
 private:
     // first=pressed *physical* key, second=what we do on that key(ie mapped value)
     std::map<VeeKee, KeyActions::IKeyAction*> downMappedKeys;
+
+    State state;
+    std::list<KbdHookEvent> savedEvents;
+    std::unordered_set<VeeKee> gatheredVkDown;
 
     // at a logical level, whatever the source
     VeeKeeSet downModifiers;
