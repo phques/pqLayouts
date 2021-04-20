@@ -51,6 +51,6 @@ steaks
  KPH-S      ^s      
  KPH-Z      ^z      
  KPH*Z      ^y      !! pq
-!! KPHA*      ^a      !! not on Sculpt
+ KPHA*      ^a      !! not as one stroke on Sculpt
 
 endsteaks

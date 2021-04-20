@@ -1,0 +1,130 @@
+my chords, sort by stroke
+
+ A*E        '       !! {'^} (open single quote)
+ A-E        '       !! {^'} (close single quote)
+ AERB       \      !! SPWHRAERB
+ H*B        -       !! 
+ H-B        -       !! {^-^}
+ HAERB      #      !! #{^}
+ KH-FG      `
+ KPH*BG     ^k      
+ KPH*F      ^v      
+ KPH*T      ^w      
+ KPH*Z      ^y      !! pq
+ KPH-B      ^end    
+ KPH-BG     ^c      
+ KPH-P      ^home   
+ KPH-S      ^s      
+ KPH-Z      ^z      
+ KPR-BG     >      !! A*EPBG
+ KPR-RB     <      !! AEPBG
+ KPR-RBS    <<
+ KPR-BGS    >>
+ KPR-RBG    ->
+ KR-GS      "       !! close
+ KR-RT      ^      !! {^}^{^}
+ KW-BG      ,       
+ KW-GS      "       !! open
+ KW-L       =      !! 
+ KW-LS      ==     
+ KW-PL      ?       
+ KWR-BG     )      !! PR*EPB (KWR-BG = ',')
+ KWR-RB     (      !! PREPB
+ KWR-RBG    _       !! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
+ KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
+ OEU        /      
+ OEU-S      //     !! TedM
+ P*ERS      %      !! {&%}
+ P*FP      ^bs      !! pq PW*FP, used here as ctrl-BS
+ P-FP       bs      !! PW-FP
+ P-P        .        !! {^.^}
+ PRUS       +      !! PHR*US
+ R-R        cr       
+ SKP*       &      !! {&&}
+ SP-B      down    
+ SP-BG     ^right  
+ SP-F      home    
+ SP-G      right   
+ SP-L      end     
+ SP-P      up      
+ SP-R      left    
+ SP-RB     ^left   
+ SPH-B     +down   
+ SPH-BG    +^right 
+ SPH-F     +home    
+ SPH-G     +right  
+ SPH-L     +end  
+ SPH-P     +up     
+ SPH-R     +left   
+ SPH-RB    +^left  
+ STPH-FP    :      !! STPH-FPLT Sculpt: use lower S (A)
+ STR-BG     *      
+ T*LD       ~      !! {^~}
+ TA*B       tab      
+ TH-FL      ;        
+ TK-PL      $      !! ${^}
+ TKEL       del     !! TK*EL
+ TP-BG      !       
+ TP-PL      .        
+ TPEFBG     esc      
+ TPR-BG     }      !! TPR*BGT ("FRC" ??)
+ TPR-RB     {      !! TPR-BGT ("FRC" ??)
+ TWR-BG     ]      !! PWR-BGS
+ TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
+ TWR-RB     [      !! PWR-BG 
+
+
+***** my chords, by output
+
+ TH-FL      ;        
+ TP-BG      !       
+ KW-PL      ?       
+ KW-GS      "       !! open
+ KR-GS      "       !! close
+ A*E        '       !! {'^} (open single quote)
+ A-E        '       !! {^'} (close single quote)
+!! SKW-T      '       !! {'^} (open single quote)
+!! SKW*T      '       !! {^'} (close single quote)
+
+ H-B        -       !! {^-^}
+ H*B        -       !! 
+ KWR-RT	return	    !! pq
+ KWR-RBG    _       !! mine, in the line of SKWR-RGBS '...' and KW-BG KW-GS
+ KWR-RB     (      !! PREPB
+ KWR-BG     )      !! PR*EPB (KWR-BG = ',')
+ TPR-RB     {      !! TPR-BGT ("FRC" ??)
+ TPR-BG     }      !! TPR*BGT ("FRC" ??)
+ TWR-RB     [      !! PWR-BG 
+ TWR-BG     ]      !! PWR-BGS
+ KPR-RB     <      !! AEPBG
+ KPR-BG     >      !! A*EPBG
+ KPR-RBS    <<
+ KPR-BGS    >>
+ KPR-RBG    ->
+ KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
+ TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
+ STPH-FP    :      !! STPH-FPLT Sculpt: use lower S (A)
+ KW-L       =      !! 
+ KW-LS      ==     
+ PRUS       +      !! PHR*US
+ STR-BG     *      
+ SKP*       &      !! {&&}
+ OEU        /      
+ OEU-S      //     !! TedM
+ AERB       \      !! SPWHRAERB
+ HAERB      #      !! #{^}
+ P*ERS      %      !! {&%}
+ TK-PL      $      !! ${^}
+ T*LD       ~      !! {^~}
+ KR-RT      ^      !! {^}^{^}
+ KH-FG      `
+
+ TKEL       del     !! TK*EL
+ TA*B       tab      
+ TPEFBG     esc      
+
+ KPH-P      ^home   
+ KPH-B      ^end    
+ KPHA*      ^a      !! not on Sculpt
+
+endsteaks

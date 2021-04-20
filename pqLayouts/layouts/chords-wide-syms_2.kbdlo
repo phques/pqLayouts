@@ -12,8 +12,8 @@ steaks
  KR-GS      "       !! close
  A*E        '       !! {'^} (open single quote)
  A-E        '       !! {^'} (close single quote)
- SKW-T      '       !! {'^} (open single quote)
- SKW*T      '       !! {^'} (close single quote)
+!! SKW-T      '       !! {'^} (open single quote)
+!! SKW*T      '       !! {^'} (close single quote)
 
  H-B        -       !! {^-^}
  H*B        -       !! 
@@ -46,6 +46,9 @@ steaks
  TWR-BG     ]      !! PWR-BGS
  KPR-RB     <      !! AEPBG
  KPR-BG     >      !! A*EPBG
+ KPR-RBS    <<
+ KPR-BGS    >>
+ KPR-RBG    ->
  KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
  TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
  STPH-FP    :      !! STPH-FPLT Sculpt: use lower S (A)
@@ -65,9 +68,6 @@ steaks
  KH-FG      `
 
 endsteaks
-
-! ideas / to add etc
-! == KW-LS
 
 !! TedM video
 ! // OEU-S
