@@ -67,8 +67,10 @@ public:
 
             // dbg output
             // comment out the IF to see debug output for injected kbd inputs
-            //if (!SelfInjected(event))
-                KbdProcDebugOut(event, wParam, SelfInjected(event));
+#ifdef _DEBUG
+           //if (!SelfInjected(event))
+            KbdProcDebugOut(event, wParam, SelfInjected(event));
+#endif // !_DEBUG
 
             // process this key
             if (!SelfInjected(event))

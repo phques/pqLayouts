@@ -87,13 +87,13 @@ protected:
 
     KeyActions::IKeyAction* GetMappingValue(const KbdHookEvent & event);
 
-    void SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue);
+    void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
     bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
-    void OnCompletedChord(const DWORD& injectedFromMeValue);
+    void OnCompletedChord();
     void ResumeChording();
     void SuspendChording();
-    void ReplayCancelledChord(Kord&, DWORD injectedFromMeValue);
+    void ReplayCancelledChord(Kord&);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);

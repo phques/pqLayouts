@@ -100,6 +100,20 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   /this is some text/
   /, / could be used to have auto space after ','
 
++ consonants cluster main/alt layer chords ..
+  maybe find other keys combo (left hand) to avoid conflicts with normal typing ?
+  might need to use 2keys min ? but then I probably will have conflicts with
+  other stuff
+  e.g. mtgapPLLT9.4gg-b.kbdlo:
+    "ste"(er)
+    "tha"(t)
+    "the"
+  +? possibly use order of what was typed:
+    - left hand indicates which layer/same key/vert
+    - right hand types/chords the keys IN ORDER (1st, 2nd)
+      which indicates 'from/to' layers
+    ?? how to handle in code ?
+
 
 [--- usage ideas
 
@@ -114,7 +128,7 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   (set temp 'need xyz' flag in found action key?)
 
 + see about how Plover handles kbd hook & text output,
-  possibility of using its lib ?
+  possibility of using its lib ? (not a lib, and all Python)
   -> this could let me have a Mac version of pqLayouts !?
 
 + add support for 'alt' prefix on char, 
@@ -122,3 +136,8 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   -> alt-shift-click (notepad++, column selection)
 
 + help image: support multiple monitors
+
++ support for French layouts !!
+  -> need to use SendInput as Unicode
+   .. so need to read Unicode file !
+   .. and be able to know when a char needs to be unicode (how does plover do it?)

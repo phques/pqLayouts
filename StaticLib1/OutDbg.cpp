@@ -31,6 +31,7 @@ namespace Dbg
             // get displayable ascii character from vk
             static BYTE keystates[256] = {0};
             WORD asciiChars[16] = {0};
+            //pq-bug 2021-04, calling ToAscii here breaks French layouts' use of dead keys !! (e.g. ` for à)
             ToAscii(event.vkCode, event.scanCode, keystates, asciiChars, 0);
 
             char asciiChar = ' ';

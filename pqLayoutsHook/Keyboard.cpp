@@ -456,14 +456,14 @@ bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chor
     {
     case Kord::State::Cancelled:
     {
-        ReplayCancelledChord(chord, injectedFromMeValue);
+        ReplayCancelledChord(chord);
         chord.Reset();
         break;
     }
 
     case Kord::State::Completed:
     {
-        OnCompletedChord(injectedFromMeValue);
+        OnCompletedChord();
         chord.Reset();
         break;
     }
@@ -473,7 +473,7 @@ bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chor
     return true;
 }
 
-void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
+void Keyboard::OnCompletedChord()
 {
     // lookup chord and output its value if found
     // else output original key (cancelled chord)
@@ -510,12 +510,12 @@ void Keyboard::OnCompletedChord(const DWORD& injectedFromMeValue)
         //not a known chord, cancel it and replay cumulated keys sequence
         //Printf("chord not found, cancelling / replaying keys\n");
 
-        ReplayCancelledChord(chord, injectedFromMeValue);
+        ReplayCancelledChord(chord);
     }
 }
 
 // replays the key events accumulated in a failed chord
-void Keyboard::ReplayCancelledChord(Kord& chord, DWORD injectedFromMeValue)
+void Keyboard::ReplayCancelledChord(Kord& chord)
 {
     Printf("ReplayCancelledChord chord [%s]\n", chording.ToString(chord).c_str());
 
@@ -577,19 +577,19 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
             if (needsShift && !(lshiftDown || rshiftDown))
             {
                 // send a Shift down before our key
-                SetupInputKey(inputs[idx++], VK_LSHIFT, true, injectedFromMeValue);
+                SetupInputKey(inputs[idx++], VK_LSHIFT, true);
             }
             else if (!needsShift)
             {
                 // send a LShift up before our key
                 if (lshiftDown)
                 {
-                    SetupInputKey(inputs[idx++], VK_LSHIFT, false, injectedFromMeValue);
+                    SetupInputKey(inputs[idx++], VK_LSHIFT, false);
                 }
                 // send a RShift up before our key
                 if (rshiftDown)
                 {
-                    SetupInputKey(inputs[idx++], VK_RSHIFT, false, injectedFromMeValue);
+                    SetupInputKey(inputs[idx++], VK_RSHIFT, false);
                 }
             }
         }
@@ -599,7 +599,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
     if (key.Control() && !(ModifierDown(VK_LCONTROL) || ModifierDown(VK_RCONTROL)))
     {
         // send a control down before our key
-        SetupInputKey(inputs[idx++], VK_LCONTROL, true, injectedFromMeValue);
+        SetupInputKey(inputs[idx++], VK_LCONTROL, true);
     }
 
     // how many prefix shift/ctrl key we need to revert
@@ -607,7 +607,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
 
     // add the mapped key
     {
-        SetupInputKey(inputs[idx++], key.Vk(), pressed, injectedFromMeValue);
+        SetupInputKey(inputs[idx++], key.Vk(), pressed);
     }
 
     // finaly, undo any shift/control exta events we added above
@@ -637,7 +637,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
     return true;
 }
 
-void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool pressed, DWORD injectedFromMeValue)
+void Keyboard::SetupInputKey(INPUT& input, VeeKee vk, bool pressed)
 {
     //UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
