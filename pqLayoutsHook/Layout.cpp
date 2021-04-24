@@ -86,6 +86,16 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, boo
     return true;
 }
 
+bool Layout::GetLayerIndex(const Layer::Id_t& layerId, Layer::Idx_t& layerIdx)
+{
+    auto foundit = layersById.find(layerId);
+    if (foundit == layersById.end())
+        return false;
+
+    layerIdx = foundit->second->LayerIdx();
+    return true;
+}
+
 
 bool Layout::GotoLayer(Layer* layer)
 {
@@ -128,6 +138,14 @@ const CaseMapping* Layout::Mapping(VeeKee vk) const
         return nullptr;
 
     return currentLayer->Mapping(vk);
+}
+
+const CaseMapping* Layout::Mapping(Layer::Idx_t layerIdx, VeeKee vk) const
+{
+    if (layerIdx >= layers.size()  || layers[layerIdx] == nullptr)
+        return nullptr;
+
+    return layers[layerIdx]->Mapping(vk);
 }
 
 bool Layout::AddMapping(KeyValue from, KeyValue to)

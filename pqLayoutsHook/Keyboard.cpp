@@ -46,14 +46,16 @@ VeeKeeSet Keyboard::extended = {
 
 Keyboard::Keyboard(DWORD injectedFromMeValue) : 
     injectedFromMeValue(injectedFromMeValue), 
-    hMainWindow(NULL),
+    hMainWindow(nullptr),
     mainWndMsg(0),
     suspended(false), 
     makeSticky(0),
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
-    chordingSuspended(false)
+    chordingSuspended(false),
+    lpsteaksLayer1(0),
+    lpsteaksLayer2(0)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -61,8 +63,6 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
         SHORT vk = VkKeyScanA(c);
         isprint.insert(vk);
     }
-
-    star = VkKeyScanA('*') & 0xFF;
 }
 
 void Keyboard::SetMainWnd(HWND hMainWindow)
@@ -282,25 +282,41 @@ bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>&
 
 //------
 
-IKeyAction* Keyboard::GetMappingValue(const KbdHookEvent & event)
+IKeyAction* Keyboard::GetMappingValue(VeeKee vk) const
 {
-    const CaseMapping* caseMapping = layout.Mapping(event.vkCode);
-
+    const CaseMapping* caseMapping = layout.Mapping(vk);
     if (caseMapping == nullptr) 
        return nullptr;
 
     // drill down to out mapping
     const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
-    IKeyAction* valueOut = mapping.Mapping();
-
-    return valueOut;
+    return mapping.Mapping();
 }
 
+IKeyAction* Keyboard::GetMappingValue(VeeKee vk, Layer::Idx_t layerIdx) const 
+{
+    const CaseMapping* caseMapping = layout.Mapping(layerIdx, vk);
+    if (caseMapping == nullptr) 
+       return nullptr;
+
+    // drill down to out mapping
+    const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
+    return mapping.Mapping();
+}
 
 bool Keyboard::InitChordingKeys(const ChordingKeys& chordingKeys)
 {
     chording.Init(chordingKeys);
     return true;
+}
+
+void Keyboard::SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2,
+    std::string lpsteaksPrefix1, std::string lpsteaksPrefix2)
+{
+    this->lpsteaksLayerName1 = lpsteaksLayerName1;
+    this->lpsteaksLayerName2 = lpsteaksLayerName2;
+    this->lpsteaksPrefix1 = lpsteaksPrefix1;
+    this->lpsteaksPrefix2 = lpsteaksPrefix2;
 }
 
 bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
@@ -414,7 +430,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
     if (!wasDown)
     {
         // do we have a mapped key for this input key?
-        action = GetMappingValue(event);
+        action = GetMappingValue(event.vkCode);
     }
 
     // we have something to act on..
@@ -456,7 +472,7 @@ bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chor
     {
     case Kord::State::Cancelled:
     {
-        ReplayCancelledChord(chord);
+        ReplayCancelledChord();
         chord.Reset();
         break;
     }
@@ -470,6 +486,100 @@ bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chor
     }
 
     // we always eat the passed key event
+    return true;
+}
+
+bool Keyboard::CheckLpChordsLayers()
+{
+    // if we have layer names for left hand prefixed chords but no corresponding layer indexes, find the indexes
+    if (!lpsteaksLayerName1.empty() && !lpsteaksLayerName2.empty() &&
+        lpsteaksLayer1 == 0 && lpsteaksLayer2 == 0)
+    {
+        if (!layout.GetLayerIndex(lpsteaksLayerName1, lpsteaksLayer1) ||
+            !layout.GetLayerIndex(lpsteaksLayerName2, lpsteaksLayer2))
+        {
+            return false;
+        }
+    }
+
+    // return true if we have left hand prefixed chord layers
+    return (lpsteaksLayer1 != 0 || lpsteaksLayer2 != 0);
+}
+
+//prefixed, order-dependent main/alt chords
+bool Keyboard::OnPo2LayersChord()
+{
+    if (!CheckLpChordsLayers())
+        return false;
+
+    Layer::Idx_t layerIdx1 = 0;
+    Layer::Idx_t layerIdx2 = 0;
+
+    // -- if has correct prefix e.g. "PH-" / "WR-" main->alt / alt->main
+    // then this should be a left hand prefixed chord
+    const auto txtChord = chording.ToString(chord);
+    std::string::size_type prefixLen = 0;
+
+    if (txtChord.substr(0, lpsteaksPrefix1.size()) == lpsteaksPrefix1)
+    {
+        // layer1 -> layer2
+        prefixLen = lpsteaksPrefix1.size();
+        layerIdx1 = lpsteaksLayer1;
+        layerIdx2 = lpsteaksLayer2;
+    }
+    else if (txtChord.substr(0, lpsteaksPrefix2.size()) == lpsteaksPrefix2)
+    {
+        // layer2 -> layer1
+        prefixLen = lpsteaksPrefix2.size();
+        layerIdx1 = lpsteaksLayer2;
+        layerIdx2 = lpsteaksLayer1;
+    }
+    else
+    {
+        return false;
+    }
+
+    // -- get right hand 1-2keys (Steno key names), that follow left hand prefix
+    const auto rightHandKeys = txtChord.substr(prefixLen);
+    if (rightHandKeys.size() != 1 && rightHandKeys.size() != 2)
+        return false;
+
+    auto vk1 = chording.AdjustForRightHand(rightHandKeys[0]);
+    auto vk2 = chording.AdjustForRightHand(rightHandKeys.size() == 2 ? rightHandKeys[1] : rightHandKeys[0]);
+    const auto* chordingKey1 = chording.GetChordingKeyFromSteno(vk1);
+    const auto* chordingKey2 = chording.GetChordingKeyFromSteno(vk2);
+
+    if (chordingKey1 == nullptr || chordingKey2 == nullptr)
+        return false;
+
+    // -- find which chord right hand qwerty key was pressed 1st 
+    for (const auto& event : chord.KeysSequence())
+    {
+        // key1 was 1st pressed: not reversed
+        if (event.Down() && event.vkCode == chordingKey1->qwerty)
+        {
+            break;
+        }
+        // key2 was 1st pressed: reversed
+        if (event.Down() && event.vkCode == chordingKey2->qwerty)
+        {
+            std::swap(chordingKey1, chordingKey2);
+            break;
+        }
+    }
+
+    // -- map 2 qwerties to IAction from appropriate layers
+    auto* keyAction1 = GetMappingValue(chordingKey1->qwerty, layerIdx1);
+    auto* keyAction2 = GetMappingValue(chordingKey2->qwerty, layerIdx2);
+    if (keyAction1 == nullptr || keyAction2 == nullptr)
+        return false;
+
+    // -- play the 2 actions in order found in 5-
+    keyAction1->OnKeyDown(this);
+    keyAction1->OnKeyUp(this, false);
+    keyAction2->OnKeyDown(this);
+    keyAction2->OnKeyUp(this, false);
+
     return true;
 }
 
@@ -507,15 +617,19 @@ void Keyboard::OnCompletedChord()
     }
     else
     {
-        //not a known chord, cancel it and replay cumulated keys sequence
-        //Printf("chord not found, cancelling / replaying keys\n");
+        if (!OnPo2LayersChord())
+        {
+            //not a known chord, cancel it and replay cumulated keys sequence
+    //Printf("chord not found, cancelling / replaying keys\n");
 
-        ReplayCancelledChord(chord);
+            ReplayCancelledChord();
+
+        }
     }
 }
 
 // replays the key events accumulated in a failed chord
-void Keyboard::ReplayCancelledChord(Kord& chord)
+void Keyboard::ReplayCancelledChord()
 {
     Printf("ReplayCancelledChord chord [%s]\n", chording.ToString(chord).c_str());
 
@@ -524,13 +638,13 @@ void Keyboard::ReplayCancelledChord(Kord& chord)
     for (auto& keyEvent : chord.KeysSequence())
     {
         // check that this key is mapped
-        IKeyAction* action = GetMappingValue(keyEvent);
+        IKeyAction* action = GetMappingValue(keyEvent.vkCode);
         
         // we NEED an action for a key to do something when replaying from here ..
         // so create a one to one action key if it is not mapped
         if (action == nullptr)
         {
-            Printf("replaying non mapped key %0X, creating 1-1 mapping\n", keyEvent.vkCode);
+            Printf("replaying non mapped key %0X, creating 1-1 mapping\n", static_cast<WORD>(keyEvent.vkCode));
 
             // non shifted
             KeyValue kfrom(keyEvent.vkCode, 0, false);

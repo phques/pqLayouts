@@ -68,6 +68,17 @@ StringTokener::StringTokener(File& f) : StringTokener(f.line, f.lineNo)
 {
 }
 
+bool StringTokener::ReadParam(const char* paramName, std::string& param)
+{
+    if (eof()) {
+        std::cerr << paramName << ", line " << LineNo() << std::endl;
+        return false;
+    }
+
+    *this >> param;
+    return true;
+}
+
 
 //--------------
 
@@ -326,6 +337,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         else if (cmd == "steaks")
         {
             if (!doSteaks(kbdfile))
+                return false;
+        }
+        else if (cmd == "lpsteaks")
+        {
+            if (!doLpSteaks(stringTokener))
                 return false;
         }
         //else if (cmd == "kord")
@@ -624,6 +640,22 @@ bool LoLevelKbdFile::doSteaks(File& file)
     }
 
 }
+
+bool LoLevelKbdFile::doLpSteaks(StringTokener& tokener)
+{
+    std::string layerName1, layerName2, prefix1, prefix2;
+    if (!tokener.ReadParam("layerName1", layerName1) ||
+        !tokener.ReadParam("layerName2", layerName2) ||
+        !tokener.ReadParam("left hand prefix1", prefix1) ||
+        !tokener.ReadParam("left hand prefix2", prefix2))
+    {
+        return false;
+    }
+
+    HookKbd::SetLeftHandPrefix(layerName1, layerName2, prefix1, prefix2);
+    return true;
+}
+
 
 void LoLevelKbdFile::SetChordKeyActionPair(const KeyValue& outKey, KeyActions::KeyActionPair& actionPair)
 {

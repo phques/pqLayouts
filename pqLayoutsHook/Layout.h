@@ -34,9 +34,11 @@ public:
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
+    bool GetLayerIndex(const Layer::Id_t& layerId, Layer::Idx_t& layerIdx);
     const Layer* CurrentLayer() const { return currentLayer; }
 
     const CaseMapping* Mapping(VeeKee) const;
+    const CaseMapping* Mapping(Layer::Idx_t layerIdx, VeeKee vk) const;
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddStickyMapping(KeyValue vk);
 

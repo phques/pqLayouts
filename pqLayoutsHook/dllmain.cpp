@@ -172,6 +172,13 @@ PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys)
     return theKbd.InitChordingKeys(chordingKeys);
 }
 
+PQHOOK_API void SetLeftHandPrefix(
+    Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, 
+    std::string lpsteaksPrefix1, std::string lpsteaksPrefix2)
+{
+    theKbd.SetLeftHandPrefix(lpsteaksLayerName1, lpsteaksLayerName2, lpsteaksPrefix1, lpsteaksPrefix2);
+}
+
 PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)
 {
     return theKbd.AddLayer(layerId, newLayerIdx);

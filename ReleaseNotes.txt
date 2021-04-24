@@ -1,4 +1,21 @@
 
+2021-04-23
+Chording
+- added 'left-hand-prefixed right hand ordered chords'
+  ex: lpsteaks main alt WR- PH-
+  This lets you use a chord to enter two consecutive right hand keys from two layers.
+  (the use-case is for a layout with consonants cluster in the right hand on two layers)
+  The chord uses a left hand (textual) prefix, e.g. "WR-",
+  followed by one or two keys on the right hand.
+  There are two layers / two prefixes, so in the example:
+  WR- indicates layer main->alt, so the 1st pressed right key is on main, 2nd is on alt
+  PH- indicates layer alt->main
+  If a single key is pressed on the right -> output the same key for each layer.
+
+2021-04-19
+- bug fix: only start chording for valid chording keys DOWN
+  (was getting stuck (lost shift up) shift)
+
 2021-04-19
 Chording
 - start new chording only for valid chording keys
@@ -8,6 +25,3 @@ Chording
   note: still a compromise, it can happen that a quick 'roll' is fast
   enough to be detected as a chord (specially woth 2keys roll)
 
-2021-04-19
-- bug fix: only start chording for valid chording keys DOWN
-  (was getting stuck (lost shift up) shift)

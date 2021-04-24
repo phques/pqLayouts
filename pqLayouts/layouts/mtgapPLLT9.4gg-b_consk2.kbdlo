@@ -39,7 +39,7 @@ steaks
  K-RT tq  
  KR-R tp  
  K-RB tm  
- K-RG tw  
+!! K-RG tw  !! disable a/e - th combos !
  K-RS tk  
  R-BF sg  
  K*-B sl  
@@ -122,7 +122,7 @@ steaks
  W-GP wn  
  S*-G wr  
  S-GT wj  
- W-GR wt  
+!! W-GR wt  !! disable a/e - th combos !
  W-GB ws  
  SW-G wh  
  S-GS wc  

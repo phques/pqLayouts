@@ -38,25 +38,31 @@ steaks
 !! kpr
 !!  KPR-RB  KPR-BG
 
+ KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
  KWR-RB     (      !! PREPB
  KWR-BG     )      !! PR*EPB (KWR-BG = ',')
  TPR-RB     {      !! TPR-BGT ("FRC" ??)
  TPR-BG     }      !! TPR*BGT ("FRC" ??)
  TWR-RB     [      !! PWR-BG 
  TWR-BG     ]      !! PWR-BGS
+!! TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
+ PO*P 		|		!! pq (PAO*EUP)
+ PO*PS		||
  KPR-RB     <      !! AEPBG
  KPR-BG     >      !! A*EPBG
  KPR-RBS    <<
  KPR-BGS    >>
  KPR-RBG    ->
- KWR-T      @      !! KWRAT (KWRT = "why the", or KWR/T)
- TWR-GS     |      !! newpq based on my TWR-BG [ (real= PAO*EUP)
  STPH-FP    :      !! STPH-FPLT Sculpt: use lower S (A)
+ STPH-FPS	::	   !! ditto
  KW-L       =      !! 
- KW-LS      ==     
+ KW-LS      ==     !! Sculpt: KW-L .. S
+ KW*L		!=		!! pq
+!! TPHAULS	!=		!! plover
  PRUS       +      !! PHR*US
  STR-BG     *      
  SKP*       &      !! {&&}
+ SKP*S      &&
  OEU        /      
  OEU-S      //     !! TedM
  AERB       \      !! SPWHRAERB

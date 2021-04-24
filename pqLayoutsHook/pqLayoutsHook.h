@@ -35,6 +35,8 @@ namespace HookKbd
 
     PQHOOK_API bool AddChord(Kord&, const std::list<KeyActions::KeyActionPair>& keyActions);
     PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys);
+    PQHOOK_API void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2,
+                                      std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
 
     PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
     PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle);

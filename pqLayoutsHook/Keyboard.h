@@ -47,6 +47,8 @@ public:
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
     bool InitChordingKeys(const ChordingKeys& chordingKeys);
+    void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
+
     bool CheckForSuspendKey(const KbdHookEvent& event);
     bool ProcessKeyEvent(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
@@ -85,15 +87,18 @@ protected:
 
     bool ShiftDown() const;
 
-    KeyActions::IKeyAction* GetMappingValue(const KbdHookEvent & event);
+    KeyActions::IKeyAction* GetMappingValue(VeeKee vk) const;
+    KeyActions::IKeyAction* GetMappingValue(VeeKee vk, Layer::Idx_t layerIdx) const;
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
     bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
+    bool CheckLpChordsLayers();
+    bool OnPo2LayersChord();
     void OnCompletedChord();
     void ResumeChording();
     void SuspendChording();
-    void ReplayCancelledChord(Kord&);
+    void ReplayCancelledChord();
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -109,8 +114,14 @@ private:
     Kord chord;             // current chord being built / cumulated as keys are pressed
     bool chordingSuspended;
     Chording chording;
-    VeeKeeSet chordStars;
-    VeeKee star;
+
+    // lpsteaks (left hand prefixed chords, right hand is order dependent)
+    Layer::Idx_t lpsteaksLayer1;
+    Layer::Idx_t lpsteaksLayer2;
+    Layer::Id_t lpsteaksLayerName1;
+    Layer::Id_t lpsteaksLayerName2;
+    std::string lpsteaksPrefix1;        // prefix for layer1 -> layer2
+    std::string lpsteaksPrefix2;        // prefix for layer2 -> layer1
 
     DWORD lastKeypressTick; // time tick of the last key press event
 

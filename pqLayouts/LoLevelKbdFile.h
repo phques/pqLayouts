@@ -50,6 +50,7 @@ public:
     StringTokener(File&);
 
     int LineNo() const { return lineNo; }
+    bool ReadParam(const char* paramName, std::string& param);
 
 private:
     int lineNo;
@@ -102,6 +103,7 @@ private:
     bool doSteakPower(File&);
     //bool doKord(StringTokener& tokener);
     bool doSteaks(File& file);
+    bool doLpSteaks(StringTokener& tokener);
     void SetChordKeyActionPair(const KeyValue& outKey, KeyActions::KeyActionPair& actionPair);
     bool readKeysList(File& kbdfile, const char* paramName, std::list<KeyValue>& stenoKeys, std::vector<char>& stenoChars);
     bool parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
