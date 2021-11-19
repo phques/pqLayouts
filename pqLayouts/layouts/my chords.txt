@@ -40,7 +40,8 @@ my chords, sort by stroke
  P-FP       bs      
  P-P        .        
  PRUS       +      
- R-R        cr       
+ R-R        cr 
+ SK-P       escape      
  SKP*       &      
  SKP*S      &&
  SP-B      down    
@@ -103,7 +104,7 @@ my chords, sort by stroke
 
  TKEL       del   SRAR      var 
  TA*B       tab   ELS       else 
- TPEFBG     esc   KWR-RT    return 
+ SK-P       esc   KWR-RT    return 
  KPHA*      ^a    TPREFP    foreach
  KPH*T      ^w    KWR-RT    return  
  S-TD       std:: KWR-PT    nullptr

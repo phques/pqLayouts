@@ -1,0 +1,12 @@
+! steno keys on Georgi qwerty-steno / fallback mode
+
+! Q W E R t   y U I O P [
+! A S D F g   h J K L ; ,
+!     1 C V   N M 1
+! order is important, left hand, left vowels, stars, right vowelsm right hand
+! stars separate left / right hand !
+
+steakpower 
+ SSTKPWHR AO ** ** EU FRPBLGTS D Z
+ QAWSEDRF CV TG YH NM UJIKOLP; [ ,
+

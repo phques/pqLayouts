@@ -20,21 +20,25 @@ y a e   x  f t s h c
 
 
 
-  i o u      d n r j
-y a e   x  f t s h c
   i o u      g l b q
 y a e   z  v p m w k
+  i o u      d n r j
+y a e   x  f t s h c
 
-  i o u      d n r j
-y a e   x  f t s h c
   i o u      g l b q
 y a e   z  v p m w k
+  i o u      d n r j
+y a e   x  f t s h c
 
 * 1 2 .      , 6 7 /  
 + 3 4 5      8 9 0 - =
 
   i o u      d n r j
 y a e   x  f t s h c
+
+@ < > [ %    ] & | #
++ ( ) = \    ! { } -
+~ ` / *      
 
 
 

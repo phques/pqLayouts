@@ -7,7 +7,7 @@ steaks
  P*FP      ^bs      !! pq PW*FP, used here as ctrl-BS
  TKEL       del     !! TK*EL
  TA*B       tab      
- TPEFBG     esc      
+ TPEFBG     esc      !! "SKWREPB": EFBG 
  SK-P       esc      !! PQ
 !! W-FP        bs     !! PW-FP
 !! W*FP       ^bs     !! pqnew PW*FP, used here as ctrl-BS
