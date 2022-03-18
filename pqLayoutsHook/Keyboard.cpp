@@ -53,6 +53,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
+    lastVkCodeDown(0),
     chordingSuspended(false),
     lpsteaksLayer1(0),
     lpsteaksLayer2(0)
@@ -377,7 +378,8 @@ bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, co
         TrackMappedKeyDown(event.vkCode, action, event.Down());
 
     // do the action for the key
-    const bool isTap(action->downTimeTick == this->lastKeypressTick);
+    //const bool isTap(action->downTimeTick == this->lastKeypressTick);
+    const bool isTap(this->lastVkCodeDown == event.vkCode);
 
     bool ret = false;
     if (event.Down())
@@ -399,8 +401,10 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
 
     // save time tick of last key press
     if (event.Down())
+    {
         this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
-
+        this->lastVkCodeDown = event.vkCode;
+    }
 
     // handle possible chording
     // do it here so we track non mapped keys to to be able to replay them for failed chord 

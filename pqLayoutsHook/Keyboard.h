@@ -124,6 +124,7 @@ private:
     std::string lpsteaksPrefix2;        // prefix for layer2 -> layer1
 
     DWORD lastKeypressTick; // time tick of the last key press event
+    DWORD lastVkCodeDown;
 
     Layout layout;
     bool suspended;

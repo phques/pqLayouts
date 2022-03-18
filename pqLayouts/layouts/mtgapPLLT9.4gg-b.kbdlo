@@ -57,7 +57,10 @@ K2K c bs del
 k2k v ^c
 
 k2k t ^x
+k2k y ^w
 K2K u ^z ^y
+
+K2K h ^k ^+k
 
 k2k m ^v
 K2K , cr +cr
@@ -81,9 +84,10 @@ lpsteaks main alt WR- PH-
 ! other chords, specific to this layout
 steaks
  KR-FP		ing		!! add 'ing' on ng keys
- SKW*P  	philippe
- SKW*BG 	quesnel
+! SKW*P  	philippe
+! SKW*BG 	quesnel
  SKW*EU     integration\
+ SKW*P      philippe.quesnel
 
 !! programming ('harder ones' w. alt layer)
  SRAR		var		!! plover
@@ -95,6 +99,8 @@ steaks
 
 ! these are not checked against Plover
  TP-LS      false   !! pq (TPALS)
+ *GRP       grouping
+ SR-SR      server
 endsteaks
 
 
@@ -236,9 +242,10 @@ K2K ,  ^c ^c
 K2K .  ^x ^x 
 K2K /  ^v ^v
 
-! repeat these two from main layer
+! repeat these from main layer
 k2k t ^x
 K2K u ^z ^y
+K2K q tab +tab
 
 ! and add ^z on Z 
 K2K z ^z ^y
