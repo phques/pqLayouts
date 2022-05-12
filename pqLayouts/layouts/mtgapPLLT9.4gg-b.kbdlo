@@ -52,9 +52,9 @@ K2K ]       esc +esc
 
 !! these are also 'thumb keys' for the steno/chords !
 K2K z ^f +^f
-k2k x F3
+k2k x ^c
 K2K c bs del
-k2k v ^c
+k2k v ^v
 
 k2k t ^x
 k2k y ^w
@@ -62,8 +62,9 @@ K2K u ^z ^y
 
 K2K h ^k ^+k
 
-k2k m ^v
+K2K m F3 +F3
 K2K , cr +cr
+k2k . ^a
 
 
 !! --- chords  ---
@@ -83,24 +84,35 @@ lpsteaks main alt WR- PH-
 
 ! other chords, specific to this layout
 steaks
+
  KR-FP		ing		!! add 'ing' on ng keys
-! SKW*P  	philippe
-! SKW*BG 	quesnel
+
+!- adding some words ;-)
+ W*T        with    !! pq WiTh
+ W*BG       which   !! pq WhiCh
+! *T        the     !! pq DOES NOT WORK
+! T*        the     !! pq DOES NOT WORK
+ T-T        the     !! pq
+ TH-S       this     !! pq
+ TH-T       that    !! pq
+ TH-P       then    !! pq TH-PB (pb=n)
+
+ *RPG       grouping !! pq for 'grp'
+ SR-RS      server  !! pq
+
  SKW*EU     integration\
  SKW*P      philippe.quesnel
 
-!! programming ('harder ones' w. alt layer)
+!- programming 
  SRAR		var		!! plover
  ELS		else	!! plover
- TPREFP		foreach	!! pq
  KWR-RT		return	!! pq
  KWR-PT		nullptr	!! pq
  S-TD		std::	!! pq (Plover= "is theed")
 
-! these are not checked against Plover
- TP-LS      false   !! pq (TPALS)
- *GRP       grouping
- SR-SR      server
+ TP-LS      false       !! pq (TPALS)
+ S*F        select*from !! pq, cant have spaces :(
+
 endsteaks
 
 
