@@ -1,0 +1,10 @@
+
+CAPS a s d f g h j k l ; ' CR
+LSH  z x c v b n m , . / RSH
+
+
+ -     i  h  e  a  ,     d  s  t  n  r  w  z
+ /      j k  LSH  .  ;    f  g  m  b  RSH =
+
+ _     I  H  E  A  <     D  S  T  N  R  W  Z
+ ?      J  K LSH  >  :     F  G  M  B  RSH +

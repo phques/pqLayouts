@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TextToKbdlo": {
+      "commandName": "Project",
+      "commandLineArgs": "E:\\Sources\\kwez\\pqLayouts\\pqLayouts\\layouts\\full-maks-minimo.txt"
+    }
+  }
+}
