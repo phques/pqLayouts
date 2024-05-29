@@ -27,6 +27,7 @@ MakeStickyAction::MakeStickyAction(VeeKee vk) : vk(vk)
 {
 }
 
+#if 1
 bool MakeStickyAction::OnKeyDown(Keyboard* kbd)
 {
     kbd->MakeSticky(vk);
@@ -42,6 +43,25 @@ bool MakeStickyAction::OnKeyUp(Keyboard* kbd, bool isTap)
     kbd->MakeSticky(0);
     return true;
 }
+
+#else
+bool MakeStickyAction::OnKeyDown(Keyboard* kbd)
+{
+    kbd->MakeSticky(vk);
+
+    // take note of down original input / mapped keys 
+    kbd->TrackMappedKeyDown(vk, this, true);
+
+    return true;
+}
+
+bool MakeStickyAction::OnKeyUp(Keyboard* kbd, bool isTap)
+{
+    kbd->MakeSticky(0);
+    return true;
+}
+
+#endif // 1
 
 
 }

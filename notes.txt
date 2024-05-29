@@ -126,6 +126,7 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
 
 + one-shot modifier, layer (?)
   (set temp 'need xyz' flag in found action key?)
++ also, sticky keys (nb: 'stickyer' was used for layers .. not needed, re-use / change code?)
 
 + see about how Plover handles kbd hook & text output,
   possibility of using its lib ? (not a lib, and all Python)

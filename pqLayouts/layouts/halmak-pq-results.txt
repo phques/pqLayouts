@@ -1,0 +1,177 @@
+QWERTY reached to: 6254429 , effort/symbol: 6.40 , distance/symbol: 7.465 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  q w e r t y u i o p [ ] \
+  a s d f g h j k l ; ' \n
+   z x c v b n m , . /
+8 8 16 23 19 9 13 5 ,  54 | 46
+Symmetry: 44 Evenness: 70
+Overheads: F:31%, H:16%, S:1%
+
+
+
+Dvorak reached to: 9281077 , effort/symbol: 4.31 , distance/symbol: 4.358 
+
+` 1 2 3 4 5 6 7 8 9 0 [ ]
+  ' , . p y f g c r l / = \
+  a o e u i d h t n s - \n
+   ; q j k x b m w v z
+8 9 13 13 18 13 13 13 ,  44 | 56
+Symmetry: 54 Evenness: 84
+Overheads: F:30%, H:14%, S:2%
+
+
+
+Colemak reached to: 10240622 , effort/symbol: 3.91 , distance/symbol: 4.087 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  q w f p g j l u y ; [ ] \
+  a r s t d h n e i o ' \n
+   z x c v b k m , . /
+8 8 8 21 20 16 9 11 ,  44 | 56
+Symmetry: 63 Evenness: 72
+Overheads: F:19%, H:24%, S:3%
+
+
+
+Workman reached to: 11482430 , effort/symbol: 3.48 , distance/symbol: 4.068 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  q d r w b j f u p ; [ ] \
+  a s h t g y n e o i ' \n
+   z x m c v k l , . /
+8 10 11 20 16 16 10 10 ,  49 | 51
+Symmetry: 57 Evenness: 82
+Overheads: F:29%, H:20%, S:2%
+
+
+
+Halmak22 reached to: 14180759 , effort/symbol: 2.82 , distance/symbol: 4.026 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  w l r b z ; q u d j [ ] \
+  s h n t , . a e o i ' \n
+   f m v c ? g p x k y
+8 12 14 15 13 14 12 11 ,  50 | 50
+Symmetry: 59 Evenness: 88
+Overheads: F:28%, H:16%, S:4%
+
+
+
+Halmak21 reached to: 14278085 , effort/symbol: 2.80 , distance/symbol: 4.028 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  c l r b z ; q u d j [ ] \
+  s h n t , . a e o i ' \n
+   f m v w ? y g x k p
+8 12 14 15 13 14 12 11 ,  50 | 50
+Symmetry: 58 Evenness: 88
+Overheads: F:28%, H:16%, S:4%
+
+
+
+HalmakPQ7 reached to: 14884999 , effort/symbol: 2.69 , distance/symbol: 4.033 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  b l r w j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v f c / p g x k y
+7 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 88
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ5 reached to: 14891261 , effort/symbol: 2.69 , distance/symbol: 4.038 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r p v ; q u d j [ ] \
+  s h n t , . a e o i ' \n
+   m b w c / x g z k y
+8 12 13 17 11 14 12 11 ,  51 | 49
+Symmetry: 53 Evenness: 88
+Overheads: F:25%, H:16%, S:4%
+
+
+
+HalmakPQ8 reached to: 14891726 , effort/symbol: 2.69 , distance/symbol: 4.038 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  b l r p j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v w c / g f x k y
+7 12 13 17 13 14 12 11 ,  49 | 51
+Symmetry: 57 Evenness: 87
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ8b reached to: 15000621 , effort/symbol: 2.67 , distance/symbol: 4.038 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  b l r p j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v c w / g f x k y
+7 12 13 17 13 14 12 11 ,  49 | 51
+Symmetry: 57 Evenness: 87
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ3 reached to: 15042442 , effort/symbol: 2.66 , distance/symbol: 4.032 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r b j ; q u d x [ ] \
+  s h n t , . a e o i ' \n
+   m v w c / p g z k y
+8 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 89
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ6 reached to: 15042442 , effort/symbol: 2.66 , distance/symbol: 4.032 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r b j ; q u d x [ ] \
+  s h n t , . a e o i ' \n
+   m v w c / p g z k y
+8 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 89
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ4 reached to: 15062489 , effort/symbol: 2.66 , distance/symbol: 4.033 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r b j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v w c / p g x k y
+8 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 89
+Overheads: F:26%, H:17%, S:4%
+
+
+
+HalmakPQ4c reached to: 15107662 , effort/symbol: 2.65 , distance/symbol: 4.032 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r b j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v c w / g p x k y
+8 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 89
+Overheads: F:25%, H:17%, S:4%
+
+
+
+HalmakPQ4b reached to: 15141423 , effort/symbol: 2.64 , distance/symbol: 4.032 
+
+` 1 2 3 4 5 6 7 8 9 0 - =
+  f l r b j ; z u d q [ ] \
+  s h n t , . a e o i ' \n
+   m v c w / p g x k y
+8 12 13 17 12 14 12 11 ,  50 | 50
+Symmetry: 56 Evenness: 89
+Overheads: F:25%, H:17%, S:4%

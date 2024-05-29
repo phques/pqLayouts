@@ -353,17 +353,21 @@ bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, co
         return true;
 
     // make sticky by eating key up event
+#if 0
     if (makeSticky != 0)
     {
         // eat keys Up, making them sticky
         const bool isStickyMaker = (makeSticky == event.vkCode);
+        Printf("makeSticky != 0, event.vkCode=0x%ld, makeSticky=%ld, isStickyMaker=%d\n", event.vkCode, makeSticky, isStickyMaker);
 
-        if (!isStickyMaker && !event.Down())
+        if (isStickyMaker && !event.Down())
         {
-            Printf("sticky, skip 0x%02X\n", static_cast<WORD>(event.vkCode));
+            Printf("sticky, skip 0x%02X up\n", static_cast<WORD>(event.vkCode));
             return true;
         }
     }
+#endif // 0
+
 
     // set time of initial down key press
     if (!wasDown && event.Down())

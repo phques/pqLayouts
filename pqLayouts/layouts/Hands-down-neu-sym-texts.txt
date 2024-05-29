@@ -1,0 +1,21 @@
+
+cap 9315762048[]
+x   wfmpv (./"'=-z
+tab rsntb ,aeihj
+    cldgq )uoyk
+    
+cap \`~%@_|#&!?^
+X   WFMPV {:*<>$+Z
+TAB RSNTB ;AEIHJ
+    CLDGQ }UOYK
+
+ cap 1 2 3 4 5 6 7 8 9 0 [ ]    
+ x   w f m p v ( . / " ' = - z
+ tab r s n t b , a e i h j    
+      c l d g q ) u o y k      
+                               
+ cap \ ` ~ % @ _ | # & ! ? ^    
+ X   W F M P V { : * < > $ + Z
+ TAB R S N T B ; A E I H J    
+      C L D G Q } U O Y K      
+

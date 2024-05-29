@@ -18,7 +18,7 @@ K2K q tab +tab
 K2K w  i  I
 K2K e  o  O
 K2K r  u  U
-K2K t  esc +esc
+!!K2K t  esc +esc
 K2K i  d  D
 K2K o  n  N
 K2K p  r  R
@@ -44,6 +44,7 @@ K2K enter	rshift caps
 K2K rshift	rctrl +rctrl
 
 K2K ]       esc +esc
+k2k \       ^s
 
 ! swap Win / Apps
 ! k2k lwin apps
@@ -51,20 +52,21 @@ K2K ]       esc +esc
 
 
 !! these are also 'thumb keys' for the steno/chords !
-K2K z ^f +^f
-k2k x ^c
-K2K c bs del
-k2k v ^v
-
-k2k t ^x
-k2k y ^w
-K2K u ^z ^y
-
-K2K h ^k ^+k
-
-K2K m F3 +F3
-K2K , cr +cr
-k2k . ^a
+K2K z  ^f +^f
+k2k x  ^c
+K2K c  bs del
+k2k v  ^v
+       
+k2k t  ^x
+k2k y  ^w
+K2K u  ^z ^y
+       
+K2K h  ^k ^+k
+       
+!K2K m  F3 +F3
+k2k m  ^l
+K2K ,  cr +cr
+k2k `  ^a
 
 
 !! --- chords  ---
@@ -90,8 +92,6 @@ steaks
 !- adding some words ;-)
  W*T        with    !! pq WiTh
  W*BG       which   !! pq WhiCh
-! *T        the     !! pq DOES NOT WORK
-! T*        the     !! pq DOES NOT WORK
  T-T        the     !! pq
  TH-S       this     !! pq
  TH-T       that    !! pq
@@ -99,7 +99,8 @@ steaks
 
  *RPG       grouping !! pq for 'grp'
  SR-RS      server  !! pq
-
+ SR*D       device  !! pq VD -> 'DV' 
+ 
  SKW*EU     integration\
  SKW*P      philippe.quesnel
 
@@ -112,6 +113,7 @@ steaks
 
  TP-LS      false       !! pq (TPALS)
  S*F        select*from !! pq, cant have spaces :(
+
 
 endsteaks
 

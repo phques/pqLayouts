@@ -17,6 +17,9 @@
 
 #include "stdafx.h"
 #include "LoLevelKbdFile.h"
+
+#include <algorithm>
+
 #include "pqLayoutsHook.h"
 #include "../StaticLib1/util.h"
 #include "KeyOutAction.h"
@@ -24,31 +27,31 @@
 
 
 std::map<std::string, WORD> LoLevelKbdFile::keyNames = {
-    {"caps", VK_CAPITAL},
-    {"esc", VK_ESCAPE},
-    {"tab", VK_TAB},
-    {"space", VK_SPACE},            {"sp", VK_SPACE},
-    {"enter", VK_RETURN},           {"cr", VK_RETURN},
-    {"backspace", VK_BACK},         {"bs", VK_BACK},
-    {"del", VK_DELETE},
-    {"lshift", VK_LSHIFT},          {"lsh", VK_LSHIFT},
-    {"rshift", VK_RSHIFT},          {"rsh", VK_RSHIFT},
-    {"lcontrol", VK_LCONTROL},      {"lctrl", VK_LCONTROL},
-    {"rcontrol", VK_RCONTROL},      {"rctrl", VK_RCONTROL},
-    {"lalt", VK_LMENU},
-    {"ralt", VK_RMENU},
-    {"lwin", VK_LWIN},
-    {"rwin", VK_RWIN},
-    {"left", VK_LEFT},
-    {"right", VK_RIGHT},
-    {"up", VK_UP},
-    {"down", VK_DOWN},
-    {"home", VK_HOME},
-    {"end", VK_END},
-    {"pgup", VK_PRIOR},
-    {"pgdn", VK_NEXT},
-    {"ins", VK_INSERT},
-    {"apps", VK_APPS},
+    {"CAPS", VK_CAPITAL},
+    {"ESC", VK_ESCAPE},
+    {"TAB", VK_TAB},
+    {"SPACE", VK_SPACE},            {"SP", VK_SPACE},
+    {"ENTER", VK_RETURN},           {"CR", VK_RETURN},
+    {"BACKSPACE", VK_BACK},         {"BS", VK_BACK},
+    {"DEL", VK_DELETE},
+    {"LSHIFT", VK_LSHIFT},          {"LSH", VK_LSHIFT},
+    {"RSHIFT", VK_RSHIFT},          {"RSH", VK_RSHIFT},
+    {"LCONTROL", VK_LCONTROL},      {"LCTRL", VK_LCONTROL},
+    {"RCONTROL", VK_RCONTROL},      {"RCTRL", VK_RCONTROL},
+    {"LALT", VK_LMENU},
+    {"RALT", VK_RMENU},
+    {"LWIN", VK_LWIN},
+    {"RWIN", VK_RWIN},
+    {"LEFT", VK_LEFT},
+    {"RIGHT", VK_RIGHT},
+    {"UP", VK_UP},
+    {"DOWN", VK_DOWN},
+    {"HOME", VK_HOME},
+    {"END", VK_END},
+    {"PGUP", VK_PRIOR},
+    {"PGDN", VK_NEXT},
+    {"INS", VK_INSERT},
+    {"APPS", VK_APPS},
     {"F1", VK_F1},  {"F2", VK_F2},  {"F3", VK_F3},  {"F4", VK_F4},  {"F5", VK_F5}, {"F6", VK_F6},
     {"F7", VK_F7},  {"F8", VK_F8},  {"F9", VK_F9},  {"F10", VK_F10},  {"F11", VK_F11}, {"F12", VK_F12},
 
@@ -200,8 +203,13 @@ bool KeyParser::ParseKey(bool showError)
     // keyname ?
     if (strlen(keytext) > 1)
     {
-        auto foundit = LoLevelKbdFile::KeyNames().find(keytext);
-        if (foundit == LoLevelKbdFile::KeyNames().end())
+        // create a lowercase string version
+        std::string keyStr(keytext);
+        std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(),
+            [](const unsigned char c) { return std::toupper(c); });
+
+        const auto foundIt = LoLevelKbdFile::KeyNames().find(keyStr);
+        if (foundIt == LoLevelKbdFile::KeyNames().end())
         {
             if (showError)
             {
@@ -209,7 +217,7 @@ bool KeyParser::ParseKey(bool showError)
             }
             return false;
         }
-        vk = foundit->second;
+        vk = foundIt->second;
     }
     else
     {
