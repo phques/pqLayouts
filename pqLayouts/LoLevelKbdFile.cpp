@@ -140,11 +140,11 @@ bool KeyParser::GetKeys(std::list<KeyValue> & keys, std::vector<char>& stenoChar
 bool KeyParser::GetKeysFromToken(std::list<KeyValue>& keyValues, std::vector<char>& stenoChars)
 {
     // could be a known key name
-    auto foundit = LoLevelKbdFile::KeyNames().find(token);
-    if (foundit != LoLevelKbdFile::KeyNames().end())
+    const auto vk = LoLevelKbdFile::LookupKeyName(token);
+    if (vk != 0)
     {
         // key name, save key's VK
-        keyValues.push_back(KeyValue(foundit->second, 0));
+        keyValues.push_back(KeyValue(vk, 0));
         stenoChars.push_back('?'); // unknown char
     }
     else
@@ -175,6 +175,7 @@ KeyValue KeyParser::ToKeyValue() const
     return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix);
 }
 
+
 bool KeyParser::ParseKey(bool showError)
 {
     // check for prefix '+' for shifted key
@@ -204,12 +205,8 @@ bool KeyParser::ParseKey(bool showError)
     if (strlen(keytext) > 1)
     {
         // create a lowercase string version
-        std::string keyStr(keytext);
-        std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(),
-            [](const unsigned char c) { return std::toupper(c); });
-
-        const auto foundIt = LoLevelKbdFile::KeyNames().find(keyStr);
-        if (foundIt == LoLevelKbdFile::KeyNames().end())
+        vk = LoLevelKbdFile::LookupKeyName(keytext);
+        if (vk == 0)
         {
             if (showError)
             {
@@ -217,7 +214,6 @@ bool KeyParser::ParseKey(bool showError)
             }
             return false;
         }
-        vk = foundIt->second;
     }
     else
     {
@@ -939,4 +935,17 @@ bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char * pcScriptFile
 
     // recursively call ReadKeyboardFile!
     return ReadKeyboardFile(nstring);
+}
+
+ WORD LoLevelKbdFile::LookupKeyName(const std::string& keyText) 
+{
+    // make uppercase versino of the string
+    std::string keyStr(keyText);
+    std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(),
+                   [](const unsigned char c) { return std::toupper(c); });
+
+    // lookup in key names
+    const auto foundIt = keyNames.find(keyStr);
+
+    return foundIt == keyNames.end() ? 0 : foundIt->second;
 }

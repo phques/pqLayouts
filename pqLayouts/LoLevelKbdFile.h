@@ -89,11 +89,15 @@ private:
 class LoLevelKbdFile
 {
 public:
+    typedef std::map<std::string, WORD> KeyNamesMap;
+
+public:
     LoLevelKbdFile();
 
     bool ReadKeyboardFile(const char* filename);
 
-    static const std::map<std::string, WORD>& KeyNames() { return keyNames; }
+    static const KeyNamesMap& KeyNames() { return keyNames; }
+    static WORD LookupKeyName(const std::string& keyText);
 
 private:
     bool doK2kCmd(StringTokener& tokener);
@@ -115,7 +119,7 @@ private:
     bool doInclude(StringTokener& tokener, const char * scriptFilename);
 
 private:
-    static std::map<std::string, WORD> keyNames;
+    static KeyNamesMap keyNames;
     
     Chording chording;
     WORD hyphenVk;
