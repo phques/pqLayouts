@@ -184,9 +184,9 @@ PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx)
     return theKbd.AddLayer(layerId, newLayerIdx);
 }
 
-PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef keydef, bool canTap)
+PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef keydef, bool canTap, KeyValue keyOnTap)
 {
-    return theKbd.SetLayerAccessKey(layerId, keydef, canTap);
+    return theKbd.SetLayerAccessKey(layerId, keydef, canTap, keyOnTap);
 }
 
 

@@ -29,7 +29,7 @@ public:
     ~Layout();
 
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle);
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
 
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);

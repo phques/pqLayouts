@@ -1,0 +1,1059 @@
+
+layouts created w. modified MTGAP, 
+based on BEAKL PLLT (pinky less, less thumb)
+
+
+punx from allCharsStd (balanced text + pgm)
+,.-"_')(;=:/*!?$>{}[]\+|&<%@#^`~
+
+
+40 1st chars (excluding 0 1 tab)
+etaoi nsrhldcumfgpyw\nb,.vk-"_'x)(;jq=:/*
+
+------------
+
+2021-03-09
+
+4.1
+
+try do crate something by starting with minimum 'easy block' keys
+7x2 -> 14keys
+with a layer: x2 -> 28 keys
+
+select chars based 28 1st entries in allChars.txt of MTGAP
+missing: xqjz
+includes: SP \n , . - "
+
+etaoi nsrhldcumfgpyw\nb,.vk-"
+
+01100 00110
+11110 01111
+00010 01000
+
+low shift costs
+
+setksize beakpq
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 3
+
+Hands: 56% 43%
+Fingers: 2.0% 14% 18% 21% 0.00% 0.00% 14% 14% 11% 5.0%
+
+    . \n               f  b
+ "  ,  y  p         c  m  w  k
+          -         v
+
+    o  i               r  l
+ g  a  e SP         t  n  s  h
+          u         d
+
+Fitness:       57978113
+Distance:      23670195
+Finger work:   770983
+Inward rolls:  5.54%
+Outward rolls: 3.27%
+Same hand:     34.49%
+Same finger:   6.18%
+Row change:    12.19%
+Home jump:     1.32%
+Ring jump:     1.05%
+To center:     0.00%
+
+
+4.2
+
+normal shift costs
+
+setksize beakpq
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+!set doubleShiftCost 150
+!set shiftCost 100
+
+Hands: 56% 43%
+Fingers: 3.0% 14% 18% 21% 0.00% 0.00% 13% 14% 11% 5.0%
+
+    . \n               f  b
+ "  ,  y  p         g  m  w  k
+          -         v
+
+    o  i               r  l
+ c  a  e SP         t  n  s  h
+          u         d
+
+Fitness:       64514443
+Distance:      24389130
+Finger work:   770983
+Inward rolls:  6.19%
+Outward rolls: 3.45%
+Same hand:     35.58%
+Same finger:   5.94%
+Row change:    12.75%
+Home jump:     1.32%
+Ring jump:     1.61%
+To center:     0.00%
+
+
+4.3
+
+higher double same finger
+normal shift costs
+
+setksize beakpq
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+!set doubleShiftCost 150
+!set shiftCost 100
+
+Hands: 57% 42%
+Fingers: 5.0% 14% 18% 21% 0.00% 0.00% 13% 14% 12% 3.0%
+
+    "  .               p  w
+ k  y  , \n         g  f  m  v
+          -         b
+
+    i  o               s  l
+ h  a  e SP         t  n  r  c
+          u         d
+
+Fitness:       65557716
+Distance:      24946095
+Finger work:   715016
+Inward rolls:  7.06%
+Outward rolls: 1.79%
+Same hand:     34.02%
+Same finger:   5.37%
+Row change:    13.19%
+Home jump:     1.36%
+Ring jump:     2.93%
+To center:     0.00%
+
+
+4.4
+
+charset: keep all letters and SP CR
+(hmm, seems like waisting good key spots on low use chars)
+
+etaoi nsrhldcumfgpyw\nb,.vk-"
+etaoi nsrhldcumfgpyw\nbvkxjqz
+
+
+setksize beakpq
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nbvkxjqz
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+!set doubleShiftCost 150
+!set shiftCost 100
+
+Hands: 55% 44%
+Fingers: 3.0% 14% 18% 21% 0.00% 0.00% 13% 14% 13% 4.0%
+
+    q  j               w  b
+ z  g  y \n         p  m  f  k
+          x         v
+
+    o  i               r  h
+ c  a  e SP         t  s  n  l
+          u         d
+
+Fitness:       59819115
+Distance:      22772035
+Finger work:   1092628
+Inward rolls:  6.42%
+Outward rolls: 2.79%
+Same hand:     34.17%
+Same finger:   5.37%
+Row change:    14.89%
+Home jump:     1.25%
+Ring jump:     1.73%
+To center:     0.00%
+
+
+4.5
+
+(base= 3.2) even higher double same finger
+normal shift costs
+
+setksize beakpq
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 60
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+Hands: 57% 42%
+Fingers: 4.0% 14% 18% 21% 0.00% 0.00% 13% 14% 12% 3.0%
+
+    k  .               f  w
+ "  ,  y \n         p  g  m  v
+          -         b
+
+    o  i               r  l
+ h  a  e SP         t  s  n  c
+          u         d
+
+Fitness:       66517001
+Distance:      24616775
+Finger work:   908546
+Inward rolls:  6.89%
+Outward rolls: 2.61%
+Same hand:     34.02%
+Same finger:   5.44%
+Row change:    12.97%
+Home jump:     1.51%
+Ring jump:     2.82%
+To center:     0.00%
+
+
+--------------------------
+
+4.6
+
+add 2 extra 'good key' VM 
+8x2 -> 16keys
+with a layer: x2 -> 32 keys
+
+select chars based 32 1st entries in allChars.txt of MTGAP
+
+etaoi nsrhldcumfgpyw\nb,.vk-"_'x)
+
+missing: qjz
+includes: SP \n ,.-"_')
+
+01100 00110
+11110 01111
+00011 11000
+
+
+higher double same finger
+normal shift costs
+
+setksize beakpq
+setmask 011000011011110011110001111000
+use etaoi nsrhldcumfgpyw\nb,.vk-"_'x)
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+!set doubleShiftCost 150
+!set shiftCost 100
+
+
+Hands: 57% 42%
+Fingers: 4.0% 14% 18% 22% 0.00% 0.00% 15% 13% 12% 3.0%
+
+    -  .               b  p
+ '  y  , \n         f  g  w  "
+          x  _   )  v
+
+    i  o               r  l
+ h  a  e SP         t  s  n  c
+          u  k   m  d
+
+Fitness:       65681324
+Distance:      26595245
+Finger work:   728840
+Inward rolls:  7.22%
+Outward rolls: 1.90%
+Same hand:     33.95%
+Same finger:   5.79%
+Row change:    13.32%
+Home jump:     1.91%
+Ring jump:     2.56%
+To center:     1.53%
+
+----------
+
+These look good candiadates for LaSalle
+
+			999, 0 ,  0 , 100, 999,  999, 100, 0  , 0 ,  999,
+			105, 50,  50 , 0 ,  90,   90, 0 ,  50 , 50,  105,
+			180, 220, 220, 80, 120,  120, 80,  220, 220, 180
+
+etaoi nsrhldcumfgpyw\nb,.vk-"_'x)
+
+missing: qjz
+includes: SP \n ,.-"_')
+
+01100 00110
+11110 01111
+00011 11000
+
+4.7Ls
+
+higher double same finger
+normal shift costs
+
+setksize beaklasalle
+setmask 011000011011110011110001111000
+use etaoi nsrhldcumfgpyw\nb,.vk-"_'x)
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+!set doubleShiftCost 150
+!set shiftCost 100
+
+Hands: 55% 44%
+Fingers: 3.0% 13% 18% 21% 0.00% 0.00% 15% 13% 12% 4.0%
+
+    .  y               g  p
+ )  '  , \n         f  w  b  k
+          x  -   "  v
+
+    a  e               r  n
+ c  o  i SP         t  s  h  l
+          u  _   m  d
+
+Fitness:       66652102
+Distance:      26311940
+Finger work:   732590
+Inward rolls:  3.70%
+Outward rolls: 3.53%
+Same hand:     34.33%
+Same finger:   5.22%
+Row change:    17.45%
+Home jump:     1.99%
+Ring jump:     1.62%
+To center:     0.93%
+
+
+4.8Ls
+(4.7 was pretty nice, but the bottom mid row key are a bit tough)
+(lets try without them just to see)
+(loose _'x) )
+higher double same finger
+normal shift costs
+
+setksize beaklasalle
+setmask 011000011011110011110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+Hands: 55% 44%
+Fingers: 3.0% 14% 18% 21% 0.00% 0.00% 14% 13% 13% 4.0%
+
+    .  y               g  f
+ "  k  , \n         m  w  p  v
+          -         b
+
+    a  e               s  n
+ c  o  i SP         t  r  h  l
+          u         d
+
+Fitness:       66389323
+Distance:      24030710
+Finger work:   1017506
+Inward rolls:  3.84%
+Outward rolls: 3.38%
+Same hand:     34.95%
+Same finger:   5.37%
+Row change:    17.74%
+Home jump:     1.33%
+Ring jump:     1.57%
+To center:     0.00%
+
+
+4.9Ls
+4.8 was pretty nice, but really a lot of missing stuff !
+not enough keys.
+
+So lets try to add back a few, but high weights,
+hoping to have more or less the same results / not changing whats good
+(seems they are still not high enough?)
+
+01110 01110
+11111 11111
+00010 01000
+
+			999, 0 ,  0 , 185, 999,  999, 185, 0  , 0 ,  999,
+			105, 50,  50 , 0 , 190,  190, 0 ,  50 , 50,  105,
+			180, 220, 220, 90, 180,  180, 90,  220, 220, 180
+
+
+setksize beaklasalle
+setmask 011100111011111111110001001000
+use etaoi nsrhldcumfgpyw\nb,.vk-"_'x)(;jq
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+
+Hands: 56% 43%
+Fingers: 3.0% 13% 18% 22% 0.00% 0.00% 15% 14% 11% 4.0%
+
+    .  y  x         j  f  m
+ (  '  , \n  )   q  p  b  k  "
+          -         ;
+
+    a  e  v         g  n  r
+ c  o  i SP  _   w  t  s  h  l
+          u         d
+
+Fitness:       69335281
+Distance:      30710185
+Finger work:   519759
+Inward rolls:  4.03%
+Outward rolls: 3.66%
+Same hand:     35.70%
+Same finger:   5.45%
+Row change:    17.24%
+Home jump:     1.40%
+Ring jump:     1.66%
+To center:     0.87%
+
+
+2021-03-13
+5.0Ls
+
+same 4.9 but no Enter
+
+missing
+z:/*!?$>{}[]\+|&<%@#^`~
+
+
+setksize beaklasalle
+setmask 011100111011111111110001001000
+use etaoi nsrhldcumfgpywb,.vk-"_'x)(;jq=
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 40
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+sethandbias 5
+set numThreads 3
+
+
+Hands: 55% 44%
+Fingers: 3.0% 13% 18% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+    '  y  x         q  f  m
+ (  "  ,  .  ;   =  p  b  k  )
+          -         j
+
+    a  e  v         g  n  r
+ c  o  i SP  _   w  t  s  h  l
+          u         d
+
+Fitness:       66309842
+Distance:      30551570
+Finger work:   353242
+Inward rolls:  4.09%
+Outward rolls: 3.54%
+Same hand:     35.32%
+Same finger:   5.49%
+Row change:    16.75%
+Home jump:     1.40%
+Ring jump:     1.70%
+To center:     0.78%
+
+--------
+
+trying to do something for a Georgi steno kbd 
+to use as an hybrid
+
+Of course this will require 1-2 symbols/prog layer(s) !
+
+2 rows of 6 cols x 2hands
++ 3thumbs x 2hands
+
+keep 1 'outside' column for modifiers (shift , control)
+leaves 5 columns (4 home + 1 mid)
+
+For a total of 16 keys in this case:
+
+.01110 01110.
+.11111 11111.
+
+00000 00000
+
+]] 5.1gg
+
+no singleKeySameFinger
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 17% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+    ;  -  x         j  b  w
+ '  .  ,  y  z   v  c  p  f  q
+
+    i  o  u         d  n  l
+ g  a  e SP  k   m  t  s  r  h
+
+Fitness:       54066969
+Distance:      25698445
+Finger work:   534804
+Inward rolls:  7.44%
+Outward rolls: 2.20%
+Same hand:     33.08%
+Same finger:   1.76%
+Row change:    9.49%
+Home jump:     0.00%
+Ring jump:     0.93%
+To center:     1.60%
+
+
+]] 5.2gg
+
+w. singleKeySameFinger
+(swaps m-f, between main/alt! I think it trie to avoid FR singleKeySameFinger)
+
+setksize beakpq
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 17% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+    ;  -  x         j  b  w
+ '  .  ,  y  z   v  c  p  m  q
+
+    i  o  u         d  n  l
+ g  a  e SP  k   f  t  s  r  h
+
+Fitness:       55166071
+Distance:      25491980
+Finger work:   607674
+Inward rolls:  7.62%
+Outward rolls: 2.25%
+Same hand:     33.08%
+Same finger:   6.12%
+Row change:    9.49%
+Home jump:     0.00%
+Ring jump:     0.93%
+To center:     1.47%
+
+
+]] 5.3ggls
+
+try LaSalle on 2 rows (same fingers)
+no singleKeySameFinger
+(tried singleKeySameFinger, doesnt change anything !)
+
+01110 01110
+11111 11111
+00000 00000
+
+
+setksize beaklasalle
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 18% 21% 0.00% 0.00% 14% 15% 13% 4.0%
+
+    y  .  x         q  d  f
+ -  ;  ,  u  z   j  l  b  p  w
+
+    a  e  k         m  s  n
+ g  i  o SP  '   v  t  r  h  c
+
+Fitness:       60296099
+Distance:      25045425
+Finger work:   1061184
+Inward rolls:  5.83%
+Outward rolls: 2.59%
+Same hand:     33.08%
+Same finger:   1.65%
+Row change:    14.57%
+Home jump:     0.00%
+Ring jump:     1.07%
+To center:     0.47%
+
+
+]] 5.4ggls
+
+5.3 was  bit weird, 
+try higher shift costs (def vals 100, 150)
+
+setksize beaklasalle
+setmask 011100111011111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-';
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 18% 20% 0.00% 0.00% 15% 14% 12% 4.0%
+
+    .  y  x         j  f  b
+ ;  -  ,  g  z   q  c  p  w  k
+
+    a  e  v         d  n  r
+ u  o  i SP  '   m  t  s  h  l
+
+Fitness:       66921244
+Distance:      29868080
+Finger work:   619674
+Inward rolls:  3.97%
+Outward rolls: 4.44%
+Same hand:     34.16%
+Same finger:   1.44%
+Row change:    14.18%
+Home jump:     0.00%
+Ring jump:     0.87%
+To center:     0.86%
+
+
+]] 5.5ggls
+
+try with more fingers, ie 2x4 x 2
+
+.11111 11111.
+.11111 11111.
+
+00000 00000
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beaklasalle
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 150
+set shiftCost 100
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 3.0% 14% 18% 20% 0.00% 0.00% 16% 14% 12% 4.0%
+
+ :  .  y  x  /   =  "  f  b  *
+ -  '  ,  g  ;   )  c  p  w  k
+
+ (  a  e  v  z   q  d  n  r  j
+ u  o  i SP  _   m  t  s  h  l
+
+Fitness:       76920665
+Distance:      38174332
+Finger work:   537828
+Inward rolls:  3.92%
+Outward rolls: 4.40%
+Same hand:     34.20%
+Same finger:   1.55%
+Row change:    14.35%
+Home jump:     0.00%
+Ring jump:     0.95%
+To center:     1.06%
+
+
+]] 5.6ggls
+
+5.5 + back to lower shiftCost (try to bing back more important keys back on main)
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beaklasalle
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 14% 18% 21% 0.00% 0.00% 15% 14% 13% 3.0%
+
+ :  y  .  x  /   q  )  d  f  *
+ (  -  ,  u  '   "  l  b  p  v
+
+
+ ;  a  e  k  z   =  m  s  n  j
+ g  i  o SP  _   w  t  r  h  c
+
+
+Fitness:       70050404
+Distance:      33696041
+Finger work:   1002948
+Inward rolls:  5.49%
+Outward rolls: 2.56%
+Same hand:     33.14%
+Same finger:   1.81%
+Row change:    14.66%
+Home jump:     0.00%
+Ring jump:     1.05%
+To center:     1.10%
+
+
+
+]] 5.7ggls
+
+5.5/56.6 + back to HIGHER shiftCost (try to bing back vowels on main)
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beaklasalle
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 0
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 56% 43%
+Fingers: 3.0% 14% 18% 21% 0.00% 0.00% 15% 14% 11% 4.0%
+
+ :  .  p  x  /   =  )  g  f  *
+ -  '  ,  y  ;   "  w  b  v  k
+
+ (  a  e  u  z   q  d  n  r  j
+ c  o  i SP  _   m  t  s  h  l
+
+Fitness:       82920411
+Distance:      40132967
+Finger work:   528099
+Inward rolls:  3.91%
+Outward rolls: 3.55%
+Same hand:     35.13%
+Same finger:   1.82%
+Row change:    15.15%
+Home jump:     0.00%
+Ring jump:     1.89%
+To center:     0.97%
+
+
+]] 5.8ggls
+
+5.7 + singleKeySameFinger
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beaklasalle
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 56% 43%
+Fingers: 3.0% 14% 18% 22% 0.00% 0.00% 14% 13% 12% 4.0%
+
+ :  .  y  x  /   =  "  w  m  *
+ -  '  ,  g  ;   )  p  b  v  k
+
+
+ (  a  e  u  z   q  d  n  r  j
+ c  o  i SP  _   f  t  s  h  l
+
+
+Fitness:       83982445
+Distance:      39668032
+Finger work:   580878
+Inward rolls:  4.13%
+Outward rolls: 3.20%
+Same hand:     34.69%
+Same finger:   5.84%
+Row change:    16.15%
+Home jump:     0.00%
+Ring jump:     1.88%
+To center:     0.94%
+
+
+
+]] 5.9gg
+
+5.8, not LaSalle !
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beakpq
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 175
+set shiftCost 125
+sethandbias 5
+set numThreads 2
+
+
+Hands: 57% 42%
+Fingers: 5.0% 14% 17% 22% 0.00% 0.00% 15% 13% 12% 3.0%
+
+ :  )  ;  '  /   =  k  v  b  *
+ -  y  ,  .  _   "  f  g  w  x
+
+ (  i  o  u  z   q  d  r  l  j
+ h  a  e SP  p   m  t  s  n  c
+
+Fitness:       75633051
+Distance:      34462497
+Finger work:   703982
+Inward rolls:  8.03%
+Outward rolls: 1.81%
+Same hand:     34.38%
+Same finger:   6.38%
+Row change:    10.84%
+Home jump:     0.00%
+Ring jump:     2.57%
+To center:     2.95%
+
+
+]] 6.0gg
+
+lower shift cost
+
+missing
+!?$>{}[]\+|&<%@#^`~
+
+setksize beakpq
+setmask 111111111111111111110000000000
+use abc defghijklmnopqrstuvwxyz,.-"_')(;=:/* 
+setkeeppairschars:
+set keepShiftPairs 0
+set keepBrackets 0
+set singleKeySameFinger 20
+set sameHand 30
+set toCenter 60
+set sameFingerP 180
+set sameFingerR 170
+set sameFingerM 150
+set sameFingerI 140
+set doubleShiftCost 125
+set shiftCost 75
+sethandbias 5
+set numThreads 2
+
+
+Hands: 54% 45%
+Fingers: 2.0% 13% 17% 22% 0.00% 0.00% 16% 14% 12% 4.0%
+
+ :  -  '  x  /   =  )  b  w  *
+ (  .  ,  y  _   v  c  p  m  "
+
+ ;  i  o  u  z   j  d  n  l  q
+ g  a  e SP  k   f  t  s  r  h
+
+Fitness:       64550876
+Distance:      33384371
+Finger work:   549438
+Inward rolls:  7.49%
+Outward rolls: 2.20%
+Same hand:     33.14%
+Same finger:   6.19%
+Row change:    9.71%
+Home jump:     0.00%
+Ring jump:     0.97%
+To center:     1.65%

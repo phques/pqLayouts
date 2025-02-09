@@ -141,7 +141,8 @@ namespace
         if (HookKbd::AddLayer("alt", layerIdx))
         {
             KeyDef accessKey(VK_SPACE,0);
-            HookKbd::SetLayerAccessKey("alt", accessKey, false);
+            KeyValue tapKey(0, 0);
+            HookKbd::SetLayerAccessKey("alt", accessKey, false, tapKey);
 
             HookKbd::GotoLayer(layerIdx);
                 addMapping('a', '?');
@@ -257,7 +258,8 @@ namespace
         // will set layerIdx
         if (HookKbd::AddLayer("alt", layerIdx))
         {
-            HookKbd::SetLayerAccessKey("alt", KeyDef(VK_SPACE,0), false);
+            KeyValue tapKey(0, 0);
+            HookKbd::SetLayerAccessKey("alt", KeyDef(VK_SPACE,0), false, tapKey);
 
             HookKbd::GotoLayer(layerIdx);
             {

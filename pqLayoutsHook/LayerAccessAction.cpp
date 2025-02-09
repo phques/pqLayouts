@@ -22,11 +22,12 @@
 namespace KeyActions
 {
 
-LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx, bool toggleOnTap) :
+LayerAccessAction::LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx, bool toggleOnTap, KeyValue keyOnTap) :
     keydef(keydef),
     layerIdx(layerIdx),
     layerIdxOnKeypress(0),
-    toggleOnTap(toggleOnTap)
+    toggleOnTap(toggleOnTap),
+    keyOnTap(keyOnTap)
 {
 }
 
@@ -56,6 +57,15 @@ bool LayerAccessAction::OnKeyUp(Keyboard* kbd, bool isTap)
             kbd->GotoMainLayer();
         else
             kbd->GotoLayer(layerIdx);
+    }
+    else if (keyOnTap.Vk() != 0 && isTap)
+    {
+        // return to main layer
+        kbd->GotoMainLayer();
+
+        // send the key
+        kbd->SendVk(keyOnTap, true);
+        kbd->SendVk(keyOnTap, false);
     }
     else
     {

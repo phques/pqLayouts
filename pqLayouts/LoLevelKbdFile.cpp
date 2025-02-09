@@ -309,12 +309,17 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
         }
         else if (cmd == "addlayer")
         {
-            if (!addLayer(stringTokener, false))
+            if (!addLayer(stringTokener, false, false))
                 return false;
         }
         else if (cmd == "addlayertap")
         {
-            if (!addLayer(stringTokener, true))
+            if (!addLayer(stringTokener, true, false))
+                return false;
+        }
+        else if (cmd == "addlayerKeyOnTap")
+        {
+            if (!addLayer(stringTokener, false, true))
                 return false;
         }
         else if (cmd == "stickyer")
@@ -715,7 +720,7 @@ bool LoLevelKbdFile::parseChordValue(StringTokener& tokener, KeyParser& chordOut
     return true;
 }
 
-bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)
+bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap, bool outputKeyOnTap)
 {
     // read layer name
     if (tokener.eof()) {
@@ -744,8 +749,19 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap)
     if (!accessKey())
         return false;
 
+    // read output key if is outputKeyOnTap
+    KeyValue keyOnTap(0, 0);
+    if (outputKeyOnTap)
+    {
+        KeyParser outputKey(tokener, "layer tap output key");
+        if (!outputKey())
+            return false;
+
+        keyOnTap = outputKey.ToKeyValue();
+    }
+
     // set access key
-    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0), toggleOnTap))
+    if (!HookKbd::SetLayerAccessKey(layerName.c_str(), KeyDef(accessKey.vk, 0), toggleOnTap, keyOnTap))
     {
         std::cerr << "failed to set acccess key for layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;

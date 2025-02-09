@@ -81,9 +81,9 @@ bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
     return layout.AddLayer(layerId, newLayerIdx);
 }
 
-bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool canTap)
+bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool canTap, KeyValue keyOnTap)
 {
-    return layout.SetLayerAccessKey(layerId, accessKey, canTap);
+    return layout.SetLayerAccessKey(layerId, accessKey, canTap, keyOnTap);
 }
 
 bool Keyboard::GotoMainLayer()

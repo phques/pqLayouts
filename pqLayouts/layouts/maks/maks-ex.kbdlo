@@ -1,0 +1,58 @@
+
+! https://www.keyboard-design.com/letterlayout.html?layout=maks-ex.en.ergodox
+
+! ; , u d . b f l j '
+! a o i t g w s n r h z
+!  / y p k   v c m x q
+!         e
+
+! original (partial)
+! ; ' u d  5 b  f l j 6
+! a o i t  g w  s n r h
+! ? " y p  k v  c m x q
+!               z
+!      E     SP
+
+
+! Generated from [E:\Sources\kwez\pqLayouts\pqLayouts\layouts\maks-ex.txt]
+K2K q  ; :
+K2K w  , <
+K2K e  u U
+K2K r  d D
+K2K t  . >
+K2K y  b B
+K2K u  f F
+K2K i  l L
+K2K o  j J
+K2K p  ' "
+
+K2K a  a A
+K2K s  o O
+K2K d  i I
+K2K f  t T
+K2K g  g G
+K2K h  w W
+K2K j  s S
+K2K k  n N
+K2K l  r R
+K2K ;  h H
+K2K '  z Z
+
+K2K z  / ?
+K2K x  y Y
+K2K c  p P
+K2K v  k K
+K2K n  v V
+K2K m  c C
+K2K ,  m M
+K2K .  x X
+K2K /  q Q
+
+! E on 'thumb'
+K2K b  e E
+
+!use Alt as shifts (swap shift/aly)
+k2k lsh lalt
+k2k lalt lsh
+k2k ralt rsh
+k2k rsh ralt

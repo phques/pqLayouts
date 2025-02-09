@@ -1,0 +1,214 @@
+! mtgapPLLT8.0gg, going PLLT with MTGAP, wid mode
+! for Georgi steno kbd (2 rows, fingers over middle of the rows)
+
+!    -  q  z         g  b  v
+! !  .  ,  x  ?   j  c  p  m  w
+!
+!    o  i  u         d  n  l
+! y  a  e SP  k   f  t  s  r  h
+
+imagefile mtgapPLLT8.0gg.png
+
+imageview 2 +42 54 +42
+
+
+K2K w  o  O
+K2K e  i  I
+K2K r  u  U
+
+K2K i  d  D
+K2K o  n  N
+K2K p  l  L
+
+K2K a  y  Y
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K g  k  K
+
+K2K j  f  F
+K2K k  t  T
+K2K l  s  S
+K2K ;  r  R
+K2K '  h  H
+
+
+! include chords BEFORE those below, since we need the steakpower definition
+include chords-wide_1.kbdlo
+
+!! didnt work too well
+! try using two vertical keys chord for the alt layer consonants
+! etaoinsrhldcumfgpywb,.vkxjq
+! cmgp wbv xjq
+! left hand, with the vowels!
+!!kord c HR
+! place gpm on same fingers as their alt position
+!!kord g -FR
+!!kord p -PB
+!!kord m -LG
+
+! try two horiz keys
+! better .. not certain about the c sleeping with the vowel girls though
+!!kord c KW  !! left (vowels) hand .. bad idea !?
+!!kord g -BG
+!!kord m -PL
+!!kord p -RB
+
+!! ok this is interesting.
+steaks
+ p -FP
+ g -RB
+ c -BG
+ m -PL
+
+!! other 'feels good' two keys chords:
+!! not sure .. leave 'em in but will see.
+ w -RP
+ b -PG
+
+endsteaks
+
+! special keys / 'outside keys'
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+
+
+! ------- alt layer --------
+
+addlayertap alt space
+imageview 110 +42 162 +42
+
+
+K2K w  - -
+K2K e  q Q
+K2K r  z Z
+
+K2K i  g G
+K2K o  b B
+K2K p  v V
+
+K2K a  ! !
+K2K s  . .
+K2K d  , ,
+K2K f  x X
+K2K g  ? ?
+
+K2K j  j J
+K2K k  c C
+K2K l  p P
+K2K ;  m M
+K2K '  w W
+
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+
+! ------- digits layer  --------
+
+addlayertap numpad b
+imageview  216 +42 268 +42
+
+! 3thrd version
+
+!  * 1 2 .  , 6 7 /  
+!  + 3 4 5  8 9 0 - =
+
+k2k q *
+k2k w 1
+k2k e 2
+k2k r .
+
+k2k i ,
+k2k o 6
+k2k p 7
+k2k [ /
+
+k2k a +
+k2k s 3
+k2k d 4
+k2k f 5
+
+k2k k 8
+k2k l 9
+k2k ; 0
+k2k ' -
+k2k cr =
+
+
+K2K c bs del
+K2K , cr +cr
+
+! 2nd version
+!!!  * 1 2 .  , 5 6 /
+!!!  + 3 4 0  9 7 8 - =
+
+! 1st version
+!!  * + 0 .   , 9 - /
+!!  1 2 3 4   5 6 7 8 =
+
+
+! ------- edit layer --------
+
+addlayertap edit lalt
+imageview 260 +42 260 +42
+
+
+!! stickyer rctrl
+
+K2K [ bs  del
+k2k ] del
+
+K2K  i home  +home
+K2K  o up    +up
+K2K  p end   +end
+
+K2K  m home  +home
+K2K  k left  +left
+K2K  l down  +down
+K2K  ; right +right
+K2K  ' end   +end
+
+K2K ,  ^c ^c
+K2K .  ^x ^x 
+K2K /  ^v ^v
+
+
+! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt
+! K2K e pgup +pgup
+! K2K s pgdn +pgdn
+! K2K d lctrl +lctrl
+! k2k f lshift
+K2K e pgup +pgup
+K2K s lctrl +lctrl
+K2K d pgdn +pgdn
+k2k f lshift
+
+K2CK z  z y
+K2CK `  z y
+
+!ctrl-left/right (prev/next word)
+K2CK x left +left
+K2CK c right +right
+
+K2CK v cr +cr
+
+! shift on enter
+! for use with x c above
+k2k enter rshift 
+
+

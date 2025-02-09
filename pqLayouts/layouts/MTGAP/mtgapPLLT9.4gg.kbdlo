@@ -1,0 +1,181 @@
+! mtgapPLLT9.4gg, going PLLT with MTGAP, wid mode
+! for Georgi steno kbd (2 rows, fingers over middle of the rows)
+! all consonants right hand / so can have dup vowels on alt
+
+!    I  O  U         g  f  b  q
+! Y  A  E  ~  z   v  c  p  w  k
+!
+!    i  o  u         d  n  r  j
+! y  a  e SP  x   m  t  s  h  l
+
+imagefile mtgapPLLT9.4gg.png
+
+imageview 6 +42 58 +42
+
+
+K2K w  i  I
+K2K e  o  O
+K2K r  u  U
+K2K i  d  D
+K2K o  n  N
+K2K p  r  R
+K2K [  j  J
+K2K a  y  Y
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K g  x  X
+K2K j  m  M
+K2K k  t  T
+K2K l  s  S
+K2K ;  h  H
+K2K '  l  L
+
+
+! include chords BEFORE those below
+include chords-wide_1.kbdlo
+
+
+! special keys / 'outside keys'
+
+K2K q tab +tab
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+
+
+! ------- alt layer --------
+
+addlayertap alt space
+imageview 114 +42 166 +42
+
+K2K w  i I
+K2K e  o O
+K2K r  u U
+K2K i  g G
+K2K o  f F
+K2K p  b B
+K2K [  q Q
+K2K a  y Y
+K2K s  a A
+K2K d  e E
+K2K f  ~ ~
+K2K g  z Z
+K2K j  v V
+K2K k  c C
+K2K l  p P
+K2K ;  w W
+K2K '  k K
+
+
+K2K caps	lshift caps
+K2K lshift 	lctrl +lctrl
+
+K2K enter	rshift caps
+K2K rshift	rctrl +rctrl
+
+K2K c bs del
+K2K , cr +cr
+
+
+! ------- digits layer  --------
+
+addlayertap numpad b
+imageview  220 +42 272 +42
+
+! 3thrd version
+
+!  * 1 2 .  , 6 7 /  
+!  + 3 4 5  8 9 0 - =
+
+k2k q *
+k2k w 1
+k2k e 2
+k2k r .
+
+k2k i ,
+k2k o 6
+k2k p 7
+k2k [ /
+
+k2k a +
+k2k s 3
+k2k d 4
+k2k f 5
+
+k2k k 8
+k2k l 9
+k2k ; 0
+k2k ' -
+k2k cr =
+
+
+K2K c bs del
+K2K , cr +cr
+
+! 2nd version
+!!!  * 1 2 .  , 5 6 /
+!!!  + 3 4 0  9 7 8 - =
+
+! 1st version
+!!  * + 0 .   , 9 - /
+!!  1 2 3 4   5 6 7 8 =
+
+
+! ------- edit layer --------
+
+addlayertap edit lalt
+imageview 276 +42 276 +42
+
+
+!! stickyer rctrl
+
+K2K [ bs  del
+k2k ] del
+
+K2K  i home  +home
+K2K  o up    +up
+K2K  p end   +end
+
+K2K  m home  +home
+K2K  k left  +left
+K2K  l down  +down
+K2K  ; right +right
+K2K  ' end   +end
+
+K2K ,  ^c ^c
+K2K .  ^x ^x 
+K2K /  ^v ^v
+
+
+! chordng space+d+k for ctrl-left does not work on my Microsoft Sculpt
+! K2K e pgup +pgup
+! K2K s pgdn +pgdn
+! K2K d lctrl +lctrl
+! k2k f lshift
+K2K e pgup +pgup
+K2K s lctrl +lctrl
+K2K d pgdn +pgdn
+k2k f lshift
+
+K2CK z  z y
+K2CK `  z y
+
+!ctrl-left/right (prev/next word)
+K2CK x left +left
+K2CK c right +right
+
+K2CK v cr +cr
+
+! shift on enter
+! for use with x c above
+k2k enter rshift 
+
+

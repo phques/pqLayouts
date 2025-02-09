@@ -59,7 +59,7 @@ bool Layout::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 }
 
 
-bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool toggleOnTap)
+bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool toggleOnTap, KeyValue keyOnTap)
 {
     // find layer
     auto foundLayer = layersById.find(layerId);
@@ -71,7 +71,7 @@ bool Layout::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, boo
     // create key action object
     KeyValue accessKeyValue(accessKey.Vk(), accessKey.Scancode());
     IKeyAction* actionTo;
-    actionTo = new LayerAccessAction(accessKey, layer->LayerIdx(), toggleOnTap);
+    actionTo = new LayerAccessAction(accessKey, layer->LayerIdx(), toggleOnTap, keyOnTap);
 
     // and register mapping on main layer
     // AND on the layer itself, so we can return on access key UP

@@ -1,0 +1,199 @@
+! mtgapPLLT9.4gg-bgg, going PLLT with MTGAP, *non-wide* mode, 
+! for Georgi qwerty-steno/fallback mode
+! all consonants right hand / so can have dup vowels on alt
+
+!    i  o  u         g  l  b  q
+! y  a  e  sp z   v  p  m  w  k
+!
+!    i  o  u         d  n  r  j
+! y  a  e SP  x   f  t  s  h  c
+
+!imagefile mtgapPLLT9.4gg-b.png
+imagefile mtgapPLLT9.4gg-b2.png
+
+imageview 6 +84 4 +84
+
+!k2k q à
+
+K2K w  i  I
+K2K e  o  O
+K2K r  u  U
+K2K u  d  D
+K2K i  n  N
+K2K o  r  R
+K2K p  j  J
+K2K a  y  Y
+K2K s  a  A
+K2K d  e  E
+K2K f  sp @
+K2K g  x  X
+K2K h  f  F
+K2K j  t  T
+K2K k  s  S
+K2K l  h  H
+K2K ;  c  C
+
+
+! --- special keys / 'outside keys' ---
+
+K2K q tab +tab
+
+
+!! Georgi qwerty-steno mode / fallback thumb keys
+!  1 C V    N M 1
+K2K c bs del
+
+K2K m lshift lshift
+!K2K m cr +cr
+
+
+!! --- chords  ---
+
+include chords-steaks_2.kbdlo
+
+include chords-wide-syms_2.kbdlo
+include chords-wide-nav_2.kbdlo
+
+! Consonants cluster helper chords main<->alt
+
+! enable left hand prefixed with order dependent right hand layer<->layer chords.
+! these let us enter two consecutive consonants that are on main/alt layer w. a chord
+! nb: the left hand prefixes indicated here are textual / string prefixes, careful!
+lpsteaks main alt WR- PH-
+
+
+! other chords, specific to this layout
+steaks
+ KR-FP		ing		!! add 'ing' on ng keys
+ SKW*P  	philippe
+ SKW*BG 	quesnel
+
+!! programming ('harder ones' w. alt layer)
+ SRAR		var		!! plover
+ ELS		else	!! plover
+ TPREFP		foreach	!! pq
+ KWR-RT		return	!! pq
+ KWR-PT		nullptr	!! pq
+ S-TD		std::	!! pq (Plover= "is theed")
+endsteaks
+
+
+
+
+! ------- alt layer --------
+
+addlayertap alt n
+
+imageview 96 +84 96 +84
+
+
+K2K w  i I
+K2K e  o O
+K2K r  u U
+K2K u  g G
+K2K i  l L
+K2K o  b B
+K2K p  q Q
+K2K a  y Y
+K2K s  a A
+K2K d  e E
+K2K f  sp @
+K2K g  z Z
+K2K h  v V
+K2K j  p P
+K2K k  m M
+K2K l  w W
+K2K ;  k K
+
+
+K2K c bs del
+k2k m lshift lshift
+
+!! chords
+
+! repeat nav/edit chords on this layer too
+include chords-wide-nav_2.kbdlo
+
+
+! ------- digits layer  --------
+
+addlayertap numpad 1
+
+imageview  182 +52 182 +52
+
+! 3thd version
+
+!  * 1 2 .    , 6 7 /  
+!  + 3 4 5  : 8 9 0 - =
+
+k2k q *
+k2k w 1
+k2k e 2
+k2k r .
+
+k2k u ,
+k2k i 6
+k2k o 7
+k2k p /
+
+k2k a +
+k2k s 3
+k2k d 4
+k2k f 5
+
+k2k h :  ! 15:30
+k2k j 8
+k2k k 9
+k2k l 0
+k2k ; -
+k2k , =
+
+
+K2K c bs del
+k2k m lshift lshift
+
+
+! repeat nav/edit chords on this layer too
+include chords-wide-nav_2.kbdlo
+
+
+! 2nd version
+!!!  * 1 2 .  , 5 6 /
+!!!  + 3 4 0  9 7 8 - =
+
+! 1st version
+!!  * + 0 .   , 9 - /
+!!  1 2 3 4   5 6 7 8 =
+
+
+! ------- edit layer --------
+
+addlayertap edit v
+
+imageview 238 +52 238 +52
+
+
+K2K e pgup +pgup
+K2K a lalt +lalt
+K2K s lctrl +lctrl
+K2K d pgdn +pgdn
+k2k f lshift
+
+! Georgi !?
+!K2CK z  z y
+!K2CK `  z y
+
+
+K2K u home  +home
+K2K i up    +up
+K2K o end   +end
+
+K2K j left  +left
+K2K k down  +down
+K2K l right +right
+
+! Georgi !?
+!K2K ,  ^c ^c
+!K2K .  ^x ^x 
+!K2K /  ^v ^v
+

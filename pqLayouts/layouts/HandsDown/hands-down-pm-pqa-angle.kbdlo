@@ -1,0 +1,78 @@
+! hands-down PM, adapted 'pqa'
+! see hands-down-pm-pqa-angle.txt
+
+!      1 2 3 4 5     6 7 8 9 0 Caps 
+!      z w g m j     # . / " ' ( ) Esc
+!    v s n t h k     , a e i c q 
+!	 f p d l x  LSh - u o y b
+!         r
+
+!      ! @ \ ? %     ^ & | < > _
+!      Z W G M J     $ : * [ ] { } Esc
+!    V S N T H K     ; A E I C Q 
+!	 F P D L X  Lsh + U O Y B
+!         R
+
+imagefile hands-down-pm-pqa-img1f.png
+
+imageview 6 +84 102 +84
+
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\HandsDown\hands-down-pm-pqa-angle.txt]
+K2K 1  1 !
+K2K 2  2 @
+K2K 3  3 \
+K2K 4  4 ?
+K2K 5  5 %
+K2K 6  6 ^
+K2K 7  7 &
+K2K 8  8 |
+K2K 9  9 (
+K2K 0  0 )
+K2K -  Caps _
+
+K2K q  z Z
+K2K w  w W
+K2K e  g G
+K2K r  m M
+K2K t  j J
+K2K y  # $
+K2K u  . :
+K2K i  / *
+K2K o  " [
+K2K p  ' ]
+K2K [  { <
+K2K ]  } >
+K2K \  Esc Esc
+
+K2K caps  v V
+K2K a  s S
+K2K s  n N
+K2K d  t T
+K2K f  h H
+K2K g  k K
+K2K h  , ;
+K2K j  a A
+K2K k  e E
+K2K l  i I
+K2K ;  c C
+K2K '  q Q
+
+K2K lsh  f F
+K2K z  p P
+K2K x  d D
+K2K c  l L
+K2K v  x X
+K2K b  LSh Lsh
+K2K n  - +
+K2K m  u U
+K2K ,  o O
+K2K .  y Y
+K2K /  b B
+
+K2K lalt  r R
+! ------- edit layer --------
+
+!include ../edit-layer-lalt.kbdlo
+include ../edit-layer-space.kbdlo
+
+imageview 201 +84 201 +84

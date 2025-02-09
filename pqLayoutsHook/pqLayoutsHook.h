@@ -39,7 +39,7 @@ namespace HookKbd
                                       std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
 
     PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
-    PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle);
+    PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle, KeyValue keyOnTap);
 
     PQHOOK_API bool GotoLayer(const char* layerId);
     PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);

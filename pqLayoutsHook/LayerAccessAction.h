@@ -25,7 +25,7 @@ namespace KeyActions
 class LayerAccessAction : public IKeyAction
 {
 public:
-    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx, bool toggleOnTap);
+    LayerAccessAction(KeyDef keydef, Layer::Idx_t layerIdx, bool toggleOnTap, KeyValue keyOnTap);
     virtual bool OnKeyDown(Keyboard*);
     virtual bool OnKeyUp(Keyboard*, bool isTap);
     virtual bool SkipDownRepeats(Keyboard*) const { return true; }
@@ -36,6 +36,7 @@ protected:
     Layer::Idx_t layerIdx;
     Layer::Idx_t layerIdxOnKeypress; // the active layer when the key was pressed
     bool toggleOnTap;
+    KeyValue keyOnTap;  // output this key when access is tapped
 };
 
 }

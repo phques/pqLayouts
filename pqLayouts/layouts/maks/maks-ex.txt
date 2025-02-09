@@ -1,0 +1,25 @@
+
+
+ q w e r t y u i o p
+ a s d f g h j k l ; '
+ z x c v   n m , . /
+         b
+
+ ; , u d . b f l j '
+ a o i t g w s n r h z
+  / y p k   v c m x q
+         e
+
+ : < U D > B F L J "
+ A O I T G W S N R H Z
+  ? Y P K   V C M X Q
+         E
+
+
+https://www.keyboard-design.com/letterlayout.html?layout=maks-ex.en.ergodox
+original (partial)
+; ' u d  5 b  f l j 6
+a o i t  g w  s n r h
+? " y p  k v  c m x q
+              z
+     E     SP
