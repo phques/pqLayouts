@@ -510,13 +510,13 @@ INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
     return FALSE;
 }
 
-void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd)
+void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd, int screen1Scale, int screen2Scale)
 {
     const auto* pcImageFilename = HookKbd::GetImageFilename();
     if (pcImageFilename != nullptr)
     {
         // Create a 'kbd image' window
-        helpWnd = new KbdDisplayWnd(hInstance);
+        helpWnd = new KbdDisplayWnd(hInstance, screen1Scale, screen2Scale);
 
         // create a wide string from imageFilename
         //std::string basicString(pcImageFilename);
@@ -526,6 +526,9 @@ void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd)
 
         helpWnd->SetImageFile(pcImageFilename);
         helpWnd->SetImageView(HookKbd::GetImageView());
+
+        helpWnd->DisplayWindow(true);
+
     }
 }
 
@@ -554,11 +557,24 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
     //createPLLTx1dMapping();
 
     // read kbd def file
+    int scale1=100, scale2=100;
     if (commandLine != nullptr && strlen(commandLine) != 0)
     {
-        // strip prefix/siffix double quotes ! (when called with "Open With" from Windows)
         char* cmdline = commandLine;
-        if (commandLine[0] == '"')
+
+        //##big patch, 1st param can be something like "-100x125" to read in the scaling factor of screens one and two
+        if (sscanf_s(commandLine, "-%dx%d", &scale1, &scale2) == 2)
+        {
+            printf("scale1 %d scale2 %d\n", scale1, scale2);
+
+            //skip param, then any space between the two params
+            while (!isspace(*cmdline) && *cmdline != '\0')
+                ++cmdline;
+            while (isspace(*cmdline) && *cmdline != '\0')
+                ++cmdline;
+        }
+        // strip prefix/siffix double quotes ! (when called with "Open With" from Windows)
+        if (cmdline[0] == '"')
         {
             cmdline[strlen(cmdline)-1] = 0;
             ++cmdline;
@@ -582,7 +598,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
         SetIcon(hDlg, !HookKbd::Suspended());
 
         // show the kbd help image if we have one
-        CreateKbdImageWindow(hInstance, helpWnd);
+        CreateKbdImageWindow(hInstance, helpWnd, scale1, scale2);
 
         // pause to suspend key mapping
         // ctrl-pause (VK_CANCEL) to stop/close the app
@@ -619,6 +635,21 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 // call WinMain
 int main(int argc, char* argv[])
 {
-    WinMain(GetModuleHandle(0), 0, (argc == 2) ? argv[1] : LPSTR(""), SW_SHOW);
+    std::string cmdline;
+
+    for (int i = 1; i < argc; ++i)
+    {
+        cmdline += argv[i];
+        if (i + 1 < argc )
+            cmdline += " ";
+    }
+
+    const size_t len = cmdline.length()+1;
+    char* buff = new char[len];
+    strcpy_s(buff, len, cmdline.c_str());
+
+    WinMain(GetModuleHandle(nullptr), 0, buff, SW_SHOW);
+
+    delete [] buff;
     return 0;
 }

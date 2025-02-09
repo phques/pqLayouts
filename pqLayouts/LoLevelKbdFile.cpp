@@ -204,7 +204,6 @@ bool KeyParser::ParseKey(bool showError)
     // keyname ?
     if (strlen(keytext) > 1)
     {
-        // create a lowercase string version
         vk = LoLevelKbdFile::LookupKeyName(keytext);
         if (vk == 0)
         {

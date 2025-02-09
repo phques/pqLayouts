@@ -22,7 +22,7 @@
 class KbdDisplayWnd
 {
 public:
-    KbdDisplayWnd(HINSTANCE hInstance);
+    KbdDisplayWnd(HINSTANCE hInstance, int screen1Scale, int screen2Scale);
     // window destruction vs object destruction is NOT handled !!
     // for now we expect the window to exist as long as the app is running
     ~KbdDisplayWnd();
@@ -52,6 +52,10 @@ private:
     Gdiplus::Bitmap* image = nullptr;
     Layer::ImageView imageView;
     bool displayAtTop = false;
+    bool isVisible = false;
+    UINT_PTR  timerID = NULL;
+    int screen1Scale;
+    int screen2Scale;
 
     bool clientPadIsCalculated = false;
     int clientPadWidth = 0;

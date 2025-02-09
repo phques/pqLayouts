@@ -2,20 +2,32 @@ addlayertap edit lalt
 
 ! imageview 191 +88 191 +88
 
+K2K q esc +esc
+K2K w ^left  ^+left
+K2K e ^right ^+right
 
-! chording space+d+k for ctrl-left does not work on my Microsoft Sculpt
-K2K e pgup +pgup
-K2K a lalt +lalt
-K2K s lctrl +lctrl
-K2K d pgdn +pgdn
+! NB: chording space+d+k for ctrl-left does not work on my Microsoft Sculpt
+! K2K a lalt +lalt
+! K2K s lctrl +lctrl
+! k2k f lshift
+
+! GACS
+!K2K a win +win
+K2K s lalt +lalt
+K2K d lctrl +lctrl
 k2k f lshift
 
+
+K2K y pgup +pgup
+K2K h pgdn +pgdn
 
 K2K u home  +home
 K2K i up    +up
 K2K o end   +end
-! K2K p bs    del
-! K2K [ del   del
+K2K p tab   +tab
+K2K [ ^a    ^+a
+K2K ] ^s    ^+s
+
 
 K2K j left  +left
 K2K k down  +down
@@ -23,9 +35,15 @@ K2K l right +right
 K2K ; bs    del
 K2K ' del   del
 
+k2k z  ^tab
+k2k x  ^pgup
+k2k c  ^pgdn
+
+K2K n  ^f +^f
 K2K m  ^c ^c
-K2K ,  ^x ^x 
-K2K .  ^v ^v
+K2K ,  ^v ^v
+K2K .  ^x ^x t
+K2K /  ^z ^y
 
 K2K 1   F1  +F1 
 K2K 2   F2  +F2 

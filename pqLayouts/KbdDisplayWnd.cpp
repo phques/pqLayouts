@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 #include "KbdDisplayWnd.h"
-
+#include <shellscalingapi.h>
 #include "../StaticLib1/util.h"
 
 
@@ -31,7 +31,8 @@ namespace
 ATOM KbdDisplayWnd::classAtom = NULL;
 
 
-KbdDisplayWnd::KbdDisplayWnd(const HINSTANCE hInstance)
+KbdDisplayWnd::KbdDisplayWnd(const HINSTANCE hInstance, int screen1Scale, int screen2Scale)
+: screen1Scale(screen1Scale), screen2Scale(screen2Scale)
 {
     RegisterMyClass(hInstance);
     CreateMyWindow(hInstance);
@@ -92,7 +93,10 @@ bool KbdDisplayWnd::CreateMyWindow(HINSTANCE hInstance)
     // save 'this' in the window's user data (used by static wndProc to dispatch to KbdDisplayWnd)
     SetWindowLongPtrA(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
+    timerID = SetTimer(hWnd, 0xBABA, 1000, NULL);
+
     // 'show' window, hidden at 1st
+    isVisible = false;
     ShowWindow(hWnd, SW_HIDE);
     return true;
 }
@@ -124,6 +128,19 @@ LRESULT CALLBACK KbdDisplayWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 {
     switch(msg)
     {
+    case WM_TIMER:
+    {
+        //##debug
+        //Printf("wm_timer,myid = %d wp %d lp %d\n", static_cast<int>(timerID), wParam, lParam);
+
+        if (wParam == timerID)
+        {
+            // places the window, so if the current active window has changed we will
+            // be centered on its monitor's center
+            PlaceWindow();
+        }
+    }
+
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
@@ -138,6 +155,8 @@ LRESULT CALLBACK KbdDisplayWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
         break;
 
     case WM_CLOSE:
+        KillTimer(hWnd, timerID);
+        timerID = NULL;
         DestroyWindow(hWnd);
         break;
 
@@ -175,6 +194,7 @@ void KbdDisplayWnd::OnPaint(HDC hDc, PAINTSTRUCT& ps) const
 
 void KbdDisplayWnd::DisplayWindow(bool visible)
 {
+    isVisible = visible;
     if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
     {
         ShowWindow(hWnd, visible ? SW_SHOWNORMAL : SW_HIDE); 
@@ -209,32 +229,82 @@ void KbdDisplayWnd::CalculateClientPadding()
 /// </summary>
 void KbdDisplayWnd::PlaceWindow() const
 {
-    //PQ-TODO support multiple monitors (center window in monitor of current active window)
-    //const auto screenCx = GetSystemMetrics(SM_CXSCREEN); 
-    //const auto screenCy = GetSystemMetrics(SM_CYSCREEN);
+    if (image == nullptr || image->GetWidth() < 0 || image->GetHeight() <= 0)
+    {
+        return;
+    }
 
-    if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
+    int screenCx = 0;
+    int screenCy = 0;
+    int screenLeft = 0;
+
+    // GetForegroundWindow
+    bool haveMonitorInfo = false;
+    HWND hForegroundWnd = GetForegroundWindow();
+    HMONITOR foregroundMonitor = MonitorFromWindow(hForegroundWnd, MONITOR_DEFAULTTONEAREST);
+    if (foregroundMonitor != NULL)
+    {
+        MONITORINFO info = { 0 };
+        info.cbSize = sizeof(MONITORINFO);
+        if (GetMonitorInfo(foregroundMonitor, &info))
+        {
+            screenLeft = info.rcMonitor.left;
+            screenCx = info.rcMonitor.right - info.rcMonitor.left;
+            screenCy = info.rcMonitor.bottom - info.rcMonitor.top;
+
+            //if (screenLeft < 0)
+            //{
+            //    screenLeft = -screenLeft;
+            //    Printf("screenLeft = -screenLeft;\n");
+            //}
+            Printf("l %05d r %05d t %05d b %05d cx %d cy %d\n", 
+                info.rcMonitor.left, info.rcMonitor.right,
+                info.rcMonitor.top, info.rcMonitor.bottom,
+                screenCx, screenCy);
+        }
+
+        //## big patch, apply screen scaling factor (supports two screen .. besides each other too!)
+        //## assuming that left screen has its LEFT==0 and the right screen LEFT == screen1.RIGHT
+        if (screenLeft == 0 && screen1Scale != 100)
+        {
+            Printf("scaling screen1 by %d%%\n", screen1Scale);
+            screenCx = (screenCx * screen1Scale) / 100;
+            screenCy = (screenCy * screen1Scale) / 100;
+        }
+        else if (screenLeft != 0 && screen2Scale != 100)
+        {
+            Printf("scaling screen2 by %d%%\n", screen2Scale);
+            screenCx = (screenCx * screen2Scale) / 100;
+            screenCy = (screenCy * screen2Scale) / 100;
+        }
+    }
+
+    if (screenCx == 0)
     {
         RECT desktopRect;
         SystemParametersInfoA(SPI_GETWORKAREA, 0, &desktopRect, FALSE);
-        const int screenCx = desktopRect.right - desktopRect.left;
-        const int screenCy = desktopRect.bottom - desktopRect.top;
-
-        RECT windowRect;
-        GetWindowRect(hWnd, &windowRect);
-        const int windowWidth  = windowRect.right - windowRect.left;
-        const int windowHeight = windowRect.bottom - windowRect.top;
-
-        // center window in X
-        const int x = screenCx / 2 - windowWidth / 2;
-
-        // place window near top or bottom in Y
-        const int y = displayAtTop ? 5 : (screenCy - windowHeight - 5);
-
-        // move window, setting it TOPMOST, then show it (is created hidden)
-        SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE);
-        ShowWindow(hWnd, SW_SHOWNORMAL); 
+        screenLeft = desktopRect.left; //nb: expecting 0 here
+        screenCx = desktopRect.right - desktopRect.left;
+        screenCy = desktopRect.bottom - desktopRect.top;
     }
+
+    RECT windowRect;
+    GetWindowRect(hWnd, &windowRect);
+    const int windowWidth = windowRect.right - windowRect.left;
+    const int windowHeight = windowRect.bottom - windowRect.top;
+
+    // center window in X
+    const int x = screenLeft + (screenCx / 2 - windowWidth / 2);
+
+    // place window near top or bottom in Y
+    const int y = displayAtTop ? 5 : (screenCy - windowHeight - 5);
+
+    Printf("x %d y %d\n", x, y);
+
+    // move window, setting it TOPMOST, then show it (is created hidden)
+    SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE);
+    ShowWindow(hWnd, isVisible ? SW_SHOWNORMAL : SW_HIDE);
+
 }
 
 void KbdDisplayWnd::ResizeWindow()

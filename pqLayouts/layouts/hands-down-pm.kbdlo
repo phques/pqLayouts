@@ -1,0 +1,42 @@
+
+! Generated from [E:\Sources\kwez\pqLayouts\pqLayouts\layouts\hands-down-pm.txt]
+K2K q  v V
+K2K w  w W
+K2K e  g G
+K2K r  m M
+K2K t  j J
+K2K y  # $
+K2K u  . :
+K2K i  / *
+K2K o  " [
+K2K p  ' ]
+
+K2K caps  lsh LSH
+K2K a  s S
+K2K s  n N
+K2K d  t T
+K2K f  h H
+K2K g  k K
+K2K h  , ,
+K2K j  a A
+K2K k  e E
+K2K l  i I
+K2K ;  c C
+K2K '  rsh RSH
+
+K2K lsh  f F
+K2K z  p P
+K2K x  d D
+K2K c  l L
+K2K v  x X
+K2K n  - -
+K2K m  u U
+K2K ,  o O
+K2K .  y Y
+K2K /  b B
+
+K2K b  r R
+
+! ------- edit layer --------
+
+include edit-layer-lalt.kbdlo
