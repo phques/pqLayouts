@@ -1,0 +1,61 @@
+ 
+! This is a version adjusted to use with Engrammer kbd layout installed in Windows.
+! (keys are not qwerty !)
+
+! imageview 191 +88 191 +88
+
+K2K b esc +esc
+K2K y ^left  ^+left
+K2K o ^right ^+right
+! to replace e (qwerty D) which doesn't work for chording with Space onlctrl +lctrly Microsoft Sculpt
+K2K u lctrl +lctrl
+
+! GACS
+!K2K a win +win
+K2K i lalt +lalt
+! doesn't work for chording with Space onlctrl +lctrly Microsoft Sculpt
+K2K e lctrl +lctrl
+k2k a lshift
+
+
+K2K ; pgup +pgup
+K2K . pgdn +pgdn
+
+K2K l home  +home
+K2K d up    +up
+K2K w end   +end
+K2K v tab   +tab
+K2K z ^a    ^+a
+K2K = ^s    ^+s
+
+
+K2K h left  +left
+K2K t down  +down
+K2K s right +right
+K2K n bs    del
+K2K q del   del
+
+k2k g  ^tab
+k2k x  ^pgup
+k2k j  ^pgdn
+! this is for when we want to repeat SP
+k2k k  space 
+
+K2K /  ^f +^f
+K2K r  ^c ^c
+K2K m  ^v ^v
+K2K f  ^x ^x t
+K2K p  ^z ^y
+
+K2K 1   F1  +F1 
+K2K 2   F2  +F2 
+K2K 3   F3  +F3 
+K2K 4   F4  +F4 
+K2K 5   F5  +F5 
+K2K 6   F6  +F6 
+K2K 7   F7  +F7 
+K2K 8   F8  +F8 
+K2K 9   F9  +F9 
+K2K 0   F10 +F10
+K2K [   F11 +F11
+K2K ]   F12 +F12

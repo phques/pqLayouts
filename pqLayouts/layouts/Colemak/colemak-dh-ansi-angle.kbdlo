@@ -1,0 +1,43 @@
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Colemak\colemak-dh-ansi-angle.txt]
+
+! q w f p  b  j l u y ;
+! a r s t  g  m n e i o
+!  x c d v z  k h , . / 
+!
+! Q W F P  B  J L U Y :
+! A R S T  G  M N E I O
+!  X C D V Z  K H < > ? 
+
+K2K q  q Q
+K2K w  w W
+K2K e  f F
+K2K r  p P
+K2K t  b B
+K2K y  j J
+K2K u  l L
+K2K i  u U
+K2K o  y Y
+K2K p  ; :
+
+K2K a  a A
+K2K s  r R
+K2K d  s S
+K2K f  t T
+K2K g  g G
+K2K h  m M
+K2K j  n N
+K2K k  e E
+K2K l  i I
+K2K ;  o O
+
+K2K z  x X
+K2K x  c C
+K2K c  d D
+K2K v  v V
+K2K b  z Z
+K2K n  k K
+K2K m  h H
+K2K ,  , <
+K2K .  . >
+K2K /  / ?
+
