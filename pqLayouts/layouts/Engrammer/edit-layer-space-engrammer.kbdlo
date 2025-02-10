@@ -1,9 +1,12 @@
-imagefile engrammer.png
 
-imageview 2 216 2 216
+imagefile capture.png
+
+! imageview 2 +214 2 +214
+imageview 0 +116 0 +116
 
 addlayerKeyOnTap edit space space
 
 include edit-layer-engrammer.kbdlo
 
-imageview 2 216 2 216
+imageview 0 +116 0 +116
+
