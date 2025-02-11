@@ -1,9 +1,21 @@
 ! Really? layout, with angle mod left bottom
-! Generated from [E:\Sources\kwez\pqLayouts\pqLayouts\layouts\Really-angle.txt]
+! Generated from [E:\Sources\kwez\pqLayouts\pqLayouts\layouts\Really\Really-angle.txt]
 
-!  y u o l z  q c h g w k
+!                      [ ]
+!  y u o l z  q c h g w k = \
 !  i e a r x  v s n t d '
 !   / , . ; - j f p m b 
+!                      { }
+!  Y U O L Z  Q C H G W K + |
+!  I E A R X  V S N T D "
+!   ? < > : _ J F P M B 
+
+imagefile Screenshot.png
+
+imageview 2 +58 74 +58
+
+K2K -  [ {
+K2K =  ] }
 
 K2K q  y Y
 K2K w  u U
@@ -16,6 +28,8 @@ K2K i  h H
 K2K o  g G
 K2K p  w W
 K2K [  k K
+K2K ]  = +
+K2K \  \ |
 
 K2K a  i I
 K2K s  e E
@@ -39,8 +53,10 @@ K2K m  f F
 K2K ,  p P
 K2K .  m M
 K2K /  b B
-
 ! ------- edit layer --------
 
-include edit-layer-lalt.kbdlo
+include ../edit-layer-lalt.kbdlo
+!include ../edit-layer-space.kbdlo
 
+!imageview 140 +58 140 +58
+imageview 146 +58 146 +58
