@@ -1,4 +1,9 @@
 ! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbyne-v0-PQangle-c.txt]
+
+imagefile carbyne-c.png
+
+imageview 0 +62 70 +62
+
 K2K -  [ {
 K2K =  ] }
 
@@ -39,3 +44,5 @@ K2K .  y Y
 K2K /  g G
 
 include ../edit-layer-lalt.kbdlo
+
+imageview 144 +62 144 +62
