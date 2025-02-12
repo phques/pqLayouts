@@ -1,0 +1,47 @@
+
+                   - = 
+ q w e r t y u i o p [ ] 
+ a s d f g h j k l ; ' 
+ z x c v b n m , . / 
+
+                     [ ] 
+ b f h m z q o u y w j = 
+ s n r t k - a e i c x 
+ p l d v / ; , ' . g 
+ 
+                     { }
+ B F H M Z Q O U Y W J + 
+ S N R T K _ A E I C X 
+ P L D V ? : < " > G 
+
+'old' carbyne,
+modified by me for angle mod
+
+according to tests i did on https://klanext.keyboard-design.com/#/results
+
++ this one is better (mainly lower SFB):
+'OLD' Carbyne, as seen on original thread 
+https://www.reddit.com/r/KeyboardLayouts/comments/18ils2y/a_new_layout/
+
+ b f h m z q o u y w j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+ 
++ vs the current one on his layouts comparo page:
+https://cyanophage.github.io/index.html#carbyne
+
+ f w h m z q o u y b j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+
+-----
+
+vert mirror of vowels, v0 / old
+??
+ b f h m z  q  o u y  w j 
+ s n r t k  -  a e i  c x 
+ v p l d /  ;  , ' .  g  
+
+ b f h m z  q  , ' .  w j 
+ s n r t k  -  a e i  c x 
+ v p l d /  ;  o u y  g  

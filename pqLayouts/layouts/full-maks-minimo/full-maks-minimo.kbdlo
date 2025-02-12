@@ -70,5 +70,5 @@ K2K RSH  = +
 
 ! ------- edit layer --------
 
-include edit-layer-lalt.kbdlo
+include ../edit-layer-lalt.kbdlo
 imageview 181 +83 181 +83
