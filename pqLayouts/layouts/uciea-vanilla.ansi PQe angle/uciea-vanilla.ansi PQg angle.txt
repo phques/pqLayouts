@@ -1,0 +1,26 @@
+
+                    - = 
+ q w e r t  y u i o p [ ] 
+ a s d f g  h j k l ; ' 
+  z x c v b n m , . / 
+
+                      [ ] 
+ p y u o -  k m h b x q = 
+ c i e a .  w t n s r v 
+  ' / , ; z g d l f j 
+
+                      { }
+ P Y U O _  K M H B X Q + 
+ C I E A >  W T N S R V 
+  " ? < : Z G D L F J 
+
+
+https://keyboard-design.com/letterlayout.html?layout=uciea-vanilla.en.ansi
+
+PQ mods
+
+- angle mod + re-aranged ,./';
+- swapped right hand fingers (partial top/bottom row swap, + adjust mid column):
+  - index: 			DM bottom / top rows
+  - index mid col:  GW bottom / mid rows
+  - pinky: 			FB

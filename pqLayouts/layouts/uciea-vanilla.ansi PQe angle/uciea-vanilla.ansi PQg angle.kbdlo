@@ -1,0 +1,53 @@
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\uciea-vanilla.ansi PQe angle\uciea-vanilla.ansi PQg angle.txt]
+
+!                      [ ] 
+! p y u o -  k m h b x q = 
+! c i e a .  w t n s r v 
+!  ' / , ; z g d l f j 
+!
+!                      { }
+! P Y U O _  K M H B X Q + 
+! C I E A >  W T N S R V 
+!  " ? < : Z G D L F J 
+
+
+K2K -  [ {
+K2K =  ] }
+
+K2K q  p P
+K2K w  y Y
+K2K e  u U
+K2K r  o O
+K2K t  - _
+K2K y  k K
+K2K u  m M
+K2K i  h H
+K2K o  b B
+K2K p  x X
+K2K [  q Q
+K2K ]  = +
+
+K2K a  c C
+K2K s  i I
+K2K d  e E
+K2K f  a A
+K2K g  . >
+K2K h  w W
+K2K j  t T
+K2K k  n N
+K2K l  s S
+K2K ;  r R
+K2K '  v V
+
+K2K z  ' "
+K2K x  / ?
+K2K c  , <
+K2K v  ; :
+K2K b  z Z
+K2K n  g G
+K2K m  d D
+K2K ,  l L
+K2K .  f F
+K2K /  j J
+
+include ../edit-layer-lalt.kbdlo

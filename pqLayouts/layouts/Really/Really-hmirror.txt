@@ -1,0 +1,37 @@
+
+                      - =
+  q w e r t  y u i o p [ ] 
+  a s d f g  h j k l ; '
+  z x c v b  n m , . / 
+
+                      [ ]
+  w g h c q  z . , / - '
+  d t n s v  x r a e i k =
+  b m p f j  ; l o u y
+
+                      { }
+  W G H C Q  Z > < ? _ "
+  D T N S V  X R A E I K +
+  B M P F J  : L O U Y
+
+-----
+Orig:
+ y u o l z  q c h g w k
+ i e a r x  v s n t d '
+ - / , . ;  j f p m b 
+
+horiz mirror
+ k w g h c q z l o u y
+ ' d t n s v x r a e i
+   b m p f j ; . , / -
+
+horiz mirror
+swap top/bott vowels (4 keys)
+ k w g h c q z . , / -
+ ' d t n s v x r a e i
+   b m p f j ; l o u y
+
+but move 'K back to the right
+ w g h c q z . , / - '
+ d t n s v x r a e i k
+ b m p f j ; l o u y

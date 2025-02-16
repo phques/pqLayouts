@@ -17,6 +17,8 @@ Caps a s d f g h j k l ; '
 
 -----
 ** does not seem to be able to remap Caps to Lsh !!?? (Win11 under VMWare on MacOS) ***
+===> This is caused by Windows Sticky Keys !! seems I can't use both at the same time
+  -=> ahhh, grrr it was working, now it doesn't work again, even with no sticky keys !!!!?!????
 
 Trying vert mirror of vowels, v0 / old
 make right hand bottom heavy, also now more similar to Hands-Down PM

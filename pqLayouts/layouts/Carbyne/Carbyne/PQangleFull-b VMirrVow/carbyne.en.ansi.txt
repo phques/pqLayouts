@@ -1,0 +1,33 @@
+
+                       - = 
+     q w e r t y u i o p [ ] 
+     a s d f g h j k l ; ' 
+ lsh z x c v b n m , . / 
+
+                       [ ] 
+ f w h m z q   , ' . b j =
+ s n r t k -   a e i c x 
+ v p l d / lsh ; o u y g 
+
+                       { } 
+ F W H M Z Q   < " > B J +
+ S N R T K _   A E I C X 
+ V P L D ? lsh : O U Y G 
+
+
+-----
+
+Mods:
+angle mod, 'full', V on left shift
+
+Trying vert mirror of vowels, (keep GB in place, more common g on bottom)
+make right hand bottom heavy, also now more similar to Hands-Down PM
+(though they have B on bottm, but punct. on top)
+
+the current one on his layouts comparo page:
+https://cyanophage.github.io/index.html#carbyne
+
+ f w h m z q o u y b j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+

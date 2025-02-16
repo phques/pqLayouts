@@ -1,14 +1,12 @@
-! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbyne-v0-PQangle-c.txt]
+! https://cyanophage.github.io/index.html#carbyne
+! mods: angleMod, vertical mirror of vowels block (make bottom heavy / more similar to hands-down promethium)
 
-imagefile carbyne-c.png
-
-imageview 0 +62 70 +62
-
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbone\carbyne.en.ansi New PQangle-b VMirrVow.txt]
 K2K -  [ {
 K2K =  ] }
 
-K2K q  b B
-K2K w  f F
+K2K q  f F
+K2K w  w W
 K2K e  h H
 K2K r  m M
 K2K t  z Z
@@ -16,7 +14,7 @@ K2K y  q Q
 K2K u  , <
 K2K i  ' "
 K2K o  . >
-K2K p  w W
+K2K p  b B
 K2K [  j J
 K2K ]  = +
 
@@ -43,6 +41,5 @@ K2K ,  u U
 K2K .  y Y
 K2K /  g G
 
-include ../edit-layer-lalt.kbdlo
+include ../../../edit-layer-lalt.kbdlo
 
-imageview 144 +62 144 +62

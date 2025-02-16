@@ -1,0 +1,55 @@
+! https://cyanophage.github.io/index.html#carbyne
+! mods: vertical mirror of vowels block (make bottom heavy / more similar to hands-down promethium)
+
+!                     [ ] 
+! f w h m z q , ' . b j =
+! s n r t k - a e i c x 
+! v p l d / ; o u y g 
+!
+!                     { } 
+! F W H M Z Q < " > B J +
+! S N R T K _ A E I C X 
+! V P L D ? : O U Y G 
+
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbone\carbyne.en.ansi New PQb VMirrVow.txt]
+K2K -  [ {
+K2K =  ] }
+
+K2K q  f F
+K2K w  w W
+K2K e  h H
+K2K r  m M
+K2K t  z Z
+K2K y  q Q
+K2K u  , <
+K2K i  ' "
+K2K o  . >
+K2K p  b B
+K2K [  j J
+K2K ]  = +
+
+K2K a  s S
+K2K s  n N
+K2K d  r R
+K2K f  t T
+K2K g  k K
+K2K h  - _
+K2K j  a A
+K2K k  e E
+K2K l  i I
+K2K ;  c C
+K2K '  x X
+
+K2K z  v V
+K2K x  p P
+K2K c  l L
+K2K v  d D
+K2K b  / ?
+K2K n  ; :
+K2K m  o O
+K2K ,  u U
+K2K .  y Y
+K2K /  g G
+
+include ../../../edit-layer-lalt.kbdlo
+

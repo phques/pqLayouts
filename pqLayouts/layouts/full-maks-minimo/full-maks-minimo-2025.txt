@@ -1,0 +1,41 @@
+
+
+   ` 1 2 3 4 5 6 7 8 9 0 - = BS
+TAB  q w e r t y u i o p [ ] \
+CAPS a s d f g h j k l ; ' CR
+LSH  z x c v b n m , . / RSH
+
+
+`    5  6  7  8  9  [   ]  0  1  2  3  4  BS
+TAB   q  y  u  o  ' CR  c  l  p  v  x  \  CAPS
+ -     i  h  e  a  .   g  s  t  n  r  w  z
+      j  k LSH  ,  ;  /  f  d  m  b  RSH =
+ 
+~    %  ^  &  *  (  {   }  )  !  @  #  $  +BS
++TAB   Q  Y  U  O  " +CR C  L  P  V  X  |  +CAPS
+ _     I  H  E  A  >   G  S  T  N  R  W  Z
+      J  K LSH  <  :  ?  F  D  M  B  RSH +
+
+
+pq mods: 
+ - angle mod / curl
+ - swapped G D
+ 
+From https://www.keyboard-design.com/letterlayout.html?layout=full-maks-minimo.en.ansi
+Note: 
+- has shifts on X and /
+- uses shifts has J and =
+- has CR on Y, uses CR as Z
+
+ 
+
+ ` 5 6 7 8 9 [ ] 0 1 2 3 4
+   q y u o ' ↓ c l p v x \ ↑↑
+ - i h e a .  g s t n r w z
+ j  k ↑ , ; /  f d m b ↑ =
+ 
+ ~ % ^ & * ( { } ) ! @ # $ 
+   Q Y U O " ↓ C L P V X | ↑
+ _ I H E A >  G S T N R W Z
+ J  K ↑ < : ?  F D M B ↑ +
+
