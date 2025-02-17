@@ -5,7 +5,7 @@
  z x c v b n m , . / 
 
                      [ ] 
- f w h m z q , ' . b j =
+ f w h m z q . ' , b j =
  s n r t k - a e i c x 
  p l d v / ; u o y g 
 
@@ -27,6 +27,12 @@ make right hand bottom heavy, also now more similar to Hands-Down PM
 also swap O U, as is done in hands-down
 A E    A E
 O U => U O
+
+swap ,. putting the more common ',' on a finger easier for me
+(almost no diff in klanext analyzer)
+note that to keep it easy, I'm keeping <> in the same original order .. 
+so they are reversed vs ,. now but more logically placed
+
 
 the current one on his layouts comparo page:
 https://cyanophage.github.io/index.html#carbyne

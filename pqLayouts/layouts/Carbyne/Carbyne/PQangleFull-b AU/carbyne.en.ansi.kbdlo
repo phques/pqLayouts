@@ -1,8 +1,8 @@
 ! https://cyanophage.github.io/index.html#carbyne
-! mods: angleMod, vertical mirror of vowels block (make bottom heavy / more similar to hands-down promethium)
+! mods: angleMod Full using shift
 ! swap UO
 
-! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbone\carbyne.en.ansi New PQangle-b VMirrVow.txt]
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbyne\PQangleFull-b AU\carbyne.en.ansi.txt]
 K2K -  [ {
 K2K =  ] }
 
@@ -12,9 +12,9 @@ K2K e  h H
 K2K r  m M
 K2K t  z Z
 K2K y  q Q
-K2K u  . <
-K2K i  ' "
-K2K o  , >
+K2K u  u U
+K2K i  o O
+K2K o  y Y
 K2K p  b B
 K2K [  j J
 K2K ]  = +
@@ -31,15 +31,16 @@ K2K l  i I
 K2K ;  c C
 K2K '  x X
 
+K2K lsh  v V
 K2K z  p P
 K2K x  l L
 K2K c  d D
-K2K v  v V
-K2K b  / ?
+K2K v  / ?
+K2K b  lsh lsh
 K2K n  ; :
-K2K m  u U
-K2K ,  o O
-K2K .  y Y
+K2K m  , <
+K2K ,  ' "
+K2K .  . >
 K2K /  g G
 
 include ../../../edit-layer-lalt.kbdlo

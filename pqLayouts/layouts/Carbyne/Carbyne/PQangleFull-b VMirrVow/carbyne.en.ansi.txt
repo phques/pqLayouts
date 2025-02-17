@@ -24,6 +24,11 @@ Trying vert mirror of vowels, (keep GB in place, more common g on bottom)
 make right hand bottom heavy, also now more similar to Hands-Down PM
 (though they have B on bottm, but punct. on top)
 
+swap ,. putting the more common ',' on a finger easier for me
+(almost no diff in klanext analyzer)
+note that to keep it easy, I'm keeping <> in the same original order .. 
+so they are reversed vs ,. now but more logically placed
+
 the current one on his layouts comparo page:
 https://cyanophage.github.io/index.html#carbyne
 

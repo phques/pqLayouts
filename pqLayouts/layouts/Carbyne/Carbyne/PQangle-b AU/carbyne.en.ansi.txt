@@ -1,0 +1,34 @@
+
+                   - = 
+ q w e r t y u i o p [ ] 
+ a s d f g h j k l ; ' 
+ z x c v b n m , . / 
+
+                     [ ] 
+ f w h m z q u o y b j =
+ s n r t k - a e i c x 
+ p l d v / ; , ' . g 
+
+                     { } 
+ F W H M Z Q U O Y B J +
+ S N R T K _ A E I C X 
+ P L D V ? : < " > G 
+
+
+-----
+
+Mods:
+angle mod
+
+also swap O U, as is done in hands-down
+A E    A E
+O U => U O
+
+
+the current one on his layouts comparo page:
+https://cyanophage.github.io/index.html#carbyne
+
+ f w h m z q o u y b j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+
