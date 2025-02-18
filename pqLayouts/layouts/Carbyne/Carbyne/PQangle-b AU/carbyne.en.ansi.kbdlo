@@ -1,6 +1,13 @@
 ! https://cyanophage.github.io/index.html#carbyne
 ! mods: angleMod, swap UO
 
+!imagefile carbyne.png
+!imageview 2 +84  98 +84
+
+imagefile carbyneSM.png
+imageview 2 +62  74 +62
+
+
 ! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Carbyne\Carbyne\PQangle-b AU\carbyne.en.ansi.txt]
 K2K -  [ {
 K2K =  ] }
@@ -43,3 +50,4 @@ K2K /  g G
 
 include ../../../edit-layer-lalt.kbdlo
 
+imageview 130 +62  130 +62
