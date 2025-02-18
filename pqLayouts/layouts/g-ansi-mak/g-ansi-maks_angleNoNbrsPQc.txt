@@ -1,0 +1,22 @@
+
+                   - = 
+ q w e r t y u i o p [ ] 
+ a s d f g h j k l ; ' 
+ z x c v b n m , . / 
+
+                     [ ] 
+ w y O U - z c r p k q /
+ g i e a ; f s n t h v 
+ j ' , . = m d l b x
+
+                     { } 
+ W Y O U _ Z C R P K Q ?
+ G I E A : F S N T H V 
+ J " < > + M D L B X
+
+
+Original, angleMod:
+                     [ ] 
+ z y u , - w c r p k q /
+ g i e a o d s n t h v 
+ j ' . = ; m f l b x

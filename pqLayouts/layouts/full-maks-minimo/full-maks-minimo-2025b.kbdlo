@@ -1,0 +1,73 @@
+! Full maks minimo
+! seen on https://www.keyboard-design.com/letterlayout.html?layout=full-maks-minimo.en.ansi
+
+
+imagefile full-maks-minimo-img1c.png
+
+
+! main layer
+
+imageview 2 +85 96 +85
+
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\full-maks-minimo\full-maks-minimo-2025.txt]
+K2K `  ` ~
+K2K 1  5 %
+K2K 2  6 ^
+K2K 3  7 &
+K2K 4  8 *
+K2K 5  9 (
+K2K 6  [ {
+K2K 7  ] }
+K2K 8  0 )
+K2K 9  1 !
+K2K 0  2 @
+K2K -  3 #
+K2K =  4 $
+K2K BS  BS +BS
+
+K2K TAB  TAB +TAB
+K2K q  q Q
+K2K w  y Y
+K2K e  o O
+K2K r  u U
+K2K t  ' "
+K2K y  CR +CR
+K2K u  c C
+K2K i  l L
+K2K o  p P
+K2K p  v V
+K2K [  x X
+K2K ]  \ |
+K2K \  CAPS +CAPS
+
+K2K CAPS  - _
+K2K a  i I
+K2K s  h H
+K2K d  e E
+K2K f  a A
+K2K g  . >
+K2K h  g G
+K2K j  s S
+K2K k  t T
+K2K l  n N
+K2K ;  r R
+K2K '  w W
+K2K CR  z Z
+
+K2K LSH  j J
+K2K z  k K
+K2K x  LSH LSH
+K2K c  , <
+K2K v  ; :
+K2K b  / ?
+K2K n  f F
+K2K m  d D
+K2K ,  m M
+K2K .  b B
+K2K /  RSH RSH
+K2K RSH  = +
+
+! ------- edit layer --------
+
+include ../edit-layer-lalt.kbdlo
+imageview 181 +83 181 +83

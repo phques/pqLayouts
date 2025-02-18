@@ -1,0 +1,43 @@
+
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\g-ansi-mak\g-ansi-maks_angleNoNbrs.txt]
+K2K -  [ {
+K2K =  ] }
+
+K2K q  z Z
+K2K w  y Y
+K2K e  u U
+K2K r  , <
+K2K t  - _
+K2K y  w W
+K2K u  c C
+K2K i  r R
+K2K o  p P
+K2K p  k K
+K2K [  q Q
+K2K ]  / ?
+
+K2K a  g G
+K2K s  i I
+K2K d  e E
+K2K f  a A
+K2K g  o O
+K2K h  d D
+K2K j  s S
+K2K k  n N
+K2K l  t T
+K2K ;  h H
+K2K '  v V
+
+K2K z  j J
+K2K x  ' "
+K2K c  . >
+K2K v  = +
+K2K b  ; :
+K2K n  m M
+K2K m  f F
+K2K ,  l L
+K2K .  b B
+K2K /  x X
+
+
+include ../edit-layer-lalt.kbdlo
