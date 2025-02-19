@@ -29,7 +29,7 @@ swap ,. putting the more common ',' on a finger easier for me
 note that to keep it easy, I'm keeping <> in the same original order .. 
 so they are reversed vs ,. now but more logically placed
 
-swap / Q brings Q nearer to UE (and on a different hand)
+swap '/'-'Q', brings Q nearer to UE (and on a different hand)
 
 the current one on his layouts comparo page:
 https://cyanophage.github.io/index.html#carbyne
