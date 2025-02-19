@@ -1,0 +1,41 @@
+! Generated from [C:\sources\pqLayouts\pqLayouts\layouts\Really\Really-hmirror.txt]
+K2K -  [ {
+K2K =  ] }
+
+K2K q  w W
+K2K w  g G
+K2K e  h H
+K2K r  c C
+K2K t  q Q
+K2K y  z Z
+K2K u  . >
+K2K i  , <
+K2K o  / ?
+K2K p  - _
+K2K [  ' "
+K2K ]  = +
+
+K2K a  d D
+K2K s  t T
+K2K d  n N
+K2K f  s S
+K2K g  v V
+K2K h  x X
+K2K j  r R
+K2K k  a A
+K2K l  e E
+K2K ;  i I
+K2K '  k K
+
+K2K z  b B
+K2K x  m M
+K2K c  p P
+K2K v  f F
+K2K b  j J
+K2K n  ; :
+K2K m  l L
+K2K ,  o O
+K2K .  u U
+K2K /  y Y
+
+include ../edit-layer-lalt.kbdlo
