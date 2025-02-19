@@ -1,0 +1,40 @@
+
+                   - = 
+ q w e r t y u i o p [ ] 
+ a s d f g h j k l ; ' 
+ z x c v b n m , . / 
+
+                     [ ] 
+ f w h m z / . ' , b j =
+ s n r t k - a e i c x 
+ p l d v q ; o u y g 
+
+                     { } 
+ F W H M Z ? < " > B J +
+ S N R T K _ A E I C X 
+ P L D V Q : O U Y G 
+
+
+-----
+
+Mods:
+angle mod
+
+Trying vert mirror of vowels, (keep GB in place, more common g on bottom)
+make right hand bottom heavy, also now more similar to Hands-Down PM
+(though they have B on bottm, but punct. on top)
+
+swap ,. putting the more common ',' on a finger easier for me
+(almost no diff in klanext analyzer)
+note that to keep it easy, I'm keeping <> in the same original order .. 
+so they are reversed vs ,. now but more logically placed
+
+swap / Q brings Q nearer to UE (and on a different hand)
+
+the current one on his layouts comparo page:
+https://cyanophage.github.io/index.html#carbyne
+
+ f w h m z q o u y b j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+

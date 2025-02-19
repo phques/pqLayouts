@@ -5,14 +5,14 @@
   z x c v b n m , . / 
 
                       [ ] 
- p y u o -  k m h b x q = 
+ p y u o -  j m h b x q = 
  c i e a .  w t n s r v 
-  ' / , ; z g d l f j 
+  ' / , ; z g d l f k 
 
                       { }
- P Y U O _  K M H B X Q + 
+ P Y U O _  J M H B X Q + 
  C I E A >  W T N S R V 
-  " ? < : Z G D L F J 
+  " ? < : Z G D L F K 
 
 
 https://keyboard-design.com/letterlayout.html?layout=uciea-vanilla.en.ansi
@@ -25,3 +25,6 @@ PQ mods
   - index: 			DM bottom / top rows
   - index mid col:  GW bottom / mid rows
   - ring: 			FB
+- swap K J to bring K from mid far top (qwerty Y) to bottom right pinky
+  does raise SFB because of the K on the pinky,
+  e.g. RK, ouf, but I actually prefer that same finger to the reach to that far qwerty Y
