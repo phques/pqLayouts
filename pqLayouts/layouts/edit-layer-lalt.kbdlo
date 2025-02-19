@@ -1,6 +1,8 @@
 addlayertap edit lalt
 
-! imageview 191 +88 191 +88
+! q w e   y u i o p [ 
+! a s d f h j k l ; '
+! z x c   n m , . /
 
 K2K q esc +esc
 K2K w ^left  ^+left
@@ -10,6 +12,9 @@ K2K e ^right ^+right
 ! K2K a lalt +lalt
 ! K2K s lctrl +lctrl
 ! k2k f lshift
+
+k2k a ^a
+k2k a ^a
 
 ! GACS
 !K2K a win +win
@@ -25,8 +30,7 @@ K2K u home  +home
 K2K i up    +up
 K2K o end   +end
 K2K p tab   +tab
-K2K [ ^a    ^+a
-K2K ] ^s    ^+s
+K2K [ ^s    ^+s
 
 
 K2K j left  +left
@@ -35,14 +39,14 @@ K2K l right +right
 K2K ; bs    del
 K2K ' del   del
 
-k2k z  ^tab
+K2K z  ^tab ^+tab
 k2k x  ^pgup
 k2k c  ^pgdn
 
 K2K n  ^f +^f
 K2K m  ^c ^c
 K2K ,  ^v ^v
-K2K .  ^x ^x t
+K2K .  ^x ^x 
 K2K /  ^z ^y
 
 K2K 1   F1  +F1 
