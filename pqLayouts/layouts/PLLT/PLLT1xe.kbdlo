@@ -21,6 +21,9 @@
 !  < < _ > -    ~ [ $ ] %   
 !    ^   \      Z K X B     
 
+imagefile PLLTx1e.png
+
+imageview 2 +64 2 +64
 
 K2K w   i  I
 K2K e   u  U
@@ -62,12 +65,12 @@ K2K =   F12 +F12
 ! special keys
 
 ! shift on caps & enter
-K2K caps  lshift caps
-K2K enter rshift caps
+! K2K caps  lshift caps
+! K2K enter rshift caps
 
 ! ctrl on shift
-K2K lshift  lctrl +lctrl
-K2K rshift  rctrl +rctrl
+! K2K lshift  lctrl +lctrl
+! K2K rshift  rctrl +rctrl
 
 K2K v   cr +cr
 K2K tab esc +esc
@@ -93,6 +96,8 @@ K2CK  `  z y
 ! ------- alt layer --------
 
 addlayer alt space
+
+imageview 76 +64 136 +64
 
 K2K w   q  Q
 K2K e   '  `
@@ -136,12 +141,12 @@ k2k =   =
 ! special keys
 
 ! shift on caps & enter
-K2K caps  lshift caps
-K2K enter rshift caps
+! K2K caps  lshift caps
+! K2K enter rshift caps
 
 ! ctrl on shift
-K2K lshift  lctrl +lctrl
-K2K rshift  rctrl +rctrl
+! K2K lshift  lctrl +lctrl
+! K2K rshift  rctrl +rctrl
 
 K2K tab esc +esc
 K2K q   tab +tab

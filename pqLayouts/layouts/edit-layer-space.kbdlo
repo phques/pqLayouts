@@ -1,6 +1,8 @@
 addlayerKeyOnTap edit space space
 
-! imageview 191 +88 191 +88
+! q w e   t y u i o p [ ] \
+! a s d f g h j k l ; '
+! z x c   b n m , . /
 
 K2K q esc +esc
 K2K w ^left  ^+left
@@ -27,8 +29,10 @@ K2K u home  +home
 K2K i up    +up
 K2K o end   +end
 K2K p tab   +tab
-K2K [ ^s    ^+s
 
+k2k [ @tab
+k2k ] @esc
+K2K \ ^s  ^+s
 
 K2K j left  +left
 K2K k down  +down
@@ -36,16 +40,17 @@ K2K l right +right
 K2K ; bs    del
 K2K ' del   del
 
-k2k z  ^tab
-k2k x  ^pgup
-k2k c  ^pgdn
+k2k z  ^pgup
+k2k x  ^pgdn
+K2K c  ^tab ^+tab
+
 ! this is for when we want to repeat SP
-k2k v  space 
+k2k b  space 
 
 K2K n  ^f +^f
 K2K m  ^c ^c
 K2K ,  ^v ^v
-K2K .  ^x ^x t
+K2K .  ^x ^x
 K2K /  ^z ^y
 
 K2K 1   F1  +F1 

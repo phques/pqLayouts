@@ -1,8 +1,8 @@
 addlayertap edit lalt
 
-! q w e   y u i o p [ 
-! a s d f h j k l ; '
-! z x c   n m , . /
+! q w e   t y u i o p [ ] \
+! a s d f g h j k l ; '
+! z x c     n m , . /
 
 K2K q esc +esc
 K2K w ^left  ^+left
@@ -29,8 +29,10 @@ K2K u home  +home
 K2K i up    +up
 K2K o end   +end
 K2K p tab   +tab
-K2K [ ^s    ^+s
 
+k2k [ @tab
+k2k ] @esc
+K2K \ ^s  ^+s
 
 K2K j left  +left
 K2K k down  +down
@@ -38,9 +40,9 @@ K2K l right +right
 K2K ; bs    del
 K2K ' del   del
 
-K2K z  ^tab ^+tab
-k2k x  ^pgup
-k2k c  ^pgdn
+k2k z  ^pgup
+k2k x  ^pgdn
+K2K c  ^tab ^+tab
 
 K2K n  ^f +^f
 K2K m  ^c ^c

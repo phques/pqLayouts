@@ -86,8 +86,8 @@ bool StringTokener::ReadParam(const char* paramName, std::string& param)
 //--------------
 
 KeyParser::KeyParser(StringTokener& tokener, const char* paramName) : 
-    hasShiftPrefix(false), hasControlPrefix(false),
-    vk(0), isShifted(false),
+    hasShiftPrefix(false), hasControlPrefix(false), hasAltPrefix(false),
+    isShifted(false), vk(0),
     tokener(tokener), paramName(paramName)
 {
 }
@@ -172,7 +172,7 @@ bool KeyParser::GetKeysFromToken(std::list<KeyValue>& keyValues, std::vector<cha
 
 KeyValue KeyParser::ToKeyValue() const
 {
-    return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix);
+    return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix, hasAltPrefix);
 }
 
 
@@ -192,6 +192,10 @@ bool KeyParser::ParseKey(bool showError)
             break;
         case '^':
             hasControlPrefix = true;
+            keytext++;
+            break;
+        case '@':
+            hasAltPrefix = true;
             keytext++;
             break;
         default:

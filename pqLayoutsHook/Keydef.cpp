@@ -32,8 +32,8 @@ KeyValue::KeyValue() : shift(false), control(false)
 {
 }
 
-KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control) :  
+KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control, bool alt) :  
     KeyDef(vk, scancode), 
-    shift(shift), control(control)
+    shift(shift), control(control), alt(alt)
 {
 }

@@ -76,6 +76,7 @@ public:
 
     bool hasShiftPrefix;
     bool hasControlPrefix;
+    bool hasAltPrefix;
     bool isShifted;     // as defined by VkKeyScan()
     WORD vk;
 

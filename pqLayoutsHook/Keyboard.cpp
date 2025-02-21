@@ -724,6 +724,13 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
         SetupInputKey(inputs[idx++], VK_LCONTROL, true);
     }
 
+    // add any required down Alt
+    if (key.Alt() && !(ModifierDown(VK_LMENU) || ModifierDown(VK_RMENU)))
+    {
+        // send a Alt down before our key
+        SetupInputKey(inputs[idx++], VK_LMENU, true);
+    }
+
     // how many prefix shift/ctrl key we need to revert
     size_t nbExtras = idx;
 

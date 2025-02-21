@@ -50,15 +50,18 @@ class KeyValue : public KeyDef
 {
 public:
     KeyValue();
-    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false);
+    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false, bool alt=false);
 
     bool Shift() const { return shift; }
     bool Control() const { return control; }
+    bool Alt() const { return alt; }
     KeyValue& Shift(bool v) { shift=v; return *this; }
     KeyValue& Control(bool v) { control=v; return *this; }
+    KeyValue& Alt(bool v) { alt=v; return *this; }
 
 private:
     bool shift;
     bool control;
+    bool alt;
 };
 
