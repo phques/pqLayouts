@@ -1,0 +1,49 @@
+! https://cyanophage.github.io/index.html#carbyne
+! mods: angleMod, 
+
+!imagefile carbyne.png
+!imageview 2 +84  98 +84
+
+! Generated from [carbyne.en.ansi.txt]
+K2K -  [ {
+K2K =  ] }
+
+K2K q  v V
+K2K w  w W
+K2K e  h H
+K2K r  m M
+K2K t  / ?
+K2K y  q Q
+K2K u  o O
+K2K i  u U
+K2K o  y Y
+K2K p  b B
+K2K [  j J
+K2K ]  = +
+
+K2K a  s S
+K2K s  n N
+K2K d  r R
+K2K f  t T
+K2K g  k K
+K2K h  - _
+K2K j  a A
+K2K k  e E
+K2K l  i I
+K2K ;  c C
+K2K '  x X
+
+K2K z  p P
+K2K x  l L
+K2K c  d D
+K2K v  f V
+K2K b  z Z
+K2K n  ; :
+K2K m  , <
+K2K ,  ' "
+K2K .  . >
+K2K /  g G
+
+include ../../../edit-layer-lalt.kbdlo
+
+!imageview 130 +62  130 +62
