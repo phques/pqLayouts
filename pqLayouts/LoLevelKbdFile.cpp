@@ -316,6 +316,11 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!addLayer(stringTokener, false, false))
                 return false;
         }
+        else if (cmd == "dualmod")
+        {
+            if (!doDualModifier(stringTokener))
+                return false;
+        }
         else if (cmd == "addlayertap")
         {
             if (!addLayer(stringTokener, true, false))
@@ -377,6 +382,23 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
     }
 
     return true;
+}
+
+bool LoLevelKbdFile::doDualModifier(StringTokener& tokener)
+{
+    KeyParser fromKey(tokener, "fromKey");
+    KeyParser modifierKey(tokener, "modifierKey");
+    KeyParser tapKey(tokener, "tapKey");
+
+    if (!fromKey() || !modifierKey() || !tapKey())
+        return false;
+
+    KeyDef kfrom(fromKey.vk, 0);
+    KeyValue kmodifier(modifierKey.vk, 0);
+    KeyValue ktap = tapKey.ToKeyValue();
+
+    // call DLL hook to add a new mapping
+    return HookKbd::AddDualModeModifier(kfrom, kmodifier, ktap);
 }
 
 bool LoLevelKbdFile::doK2kCmd(StringTokener& tokener)

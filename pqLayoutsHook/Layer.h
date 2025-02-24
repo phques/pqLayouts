@@ -48,6 +48,7 @@ public:
     const CaseMapping* Mapping(VeeKee) const;
     bool AddMapping(KeyValue from, KeyActions::IKeyAction* actionTo);
     bool AddMapping(KeyValue from, KeyValue to);
+    bool AddDualModeModifier(KeyDef key, KeyValue  modifierKey, KeyValue tapKey);
     bool AddStickyMapping(KeyValue vk);
 
     bool HasChords() const { return chords.size() > 0; }

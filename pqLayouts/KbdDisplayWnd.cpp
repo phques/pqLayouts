@@ -197,7 +197,7 @@ void KbdDisplayWnd::DisplayWindow(bool visible)
     isVisible = visible;
     if (image != nullptr && image->GetWidth() > 0 && image->GetHeight() > 0)
     {
-        ShowWindow(hWnd, visible ? SW_SHOWNORMAL : SW_HIDE); 
+        ShowWindow(hWnd, visible ? SW_SHOWNOACTIVATE : SW_HIDE);
     }
 }
 
@@ -302,8 +302,8 @@ void KbdDisplayWnd::PlaceWindow() const
     Printf("x %d y %d\n", x, y);
 
     // move window, setting it TOPMOST, then show it (is created hidden)
-    SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE);
-    ShowWindow(hWnd, isVisible ? SW_SHOWNORMAL : SW_HIDE);
+    SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+    ShowWindow(hWnd, isVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
 
 }
 

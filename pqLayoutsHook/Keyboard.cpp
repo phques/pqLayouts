@@ -269,6 +269,11 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
     return layout.AddMapping(from, to);
 }
 
+bool Keyboard::AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey)
+{
+    return layout.AddDualModeModifier(key, modifierKey, tapKey);
+}
+
 bool Keyboard::AddStickyMapping(KeyValue vk)
 {
     return layout.AddStickyMapping(vk);
@@ -435,7 +440,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
     const bool wasDown = (action != nullptr);
 
     // not a mapped key currently down
-    if (!wasDown)
+    if (action == nullptr)
     {
         // do we have a mapped key for this input key?
         action = GetMappingValue(event.vkCode);

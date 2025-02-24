@@ -43,6 +43,7 @@ public:
 
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
+    bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey);
     bool AddStickyMapping(KeyValue vk);
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);

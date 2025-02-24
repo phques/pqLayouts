@@ -44,6 +44,10 @@ K2K ,  ' "
 K2K .  . >
 K2K /  g G
 
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
 include ../../../edit-layer-lalt.kbdlo
 
 !imageview 130 +62  130 +62
+

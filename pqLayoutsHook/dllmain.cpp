@@ -157,6 +157,11 @@ PQHOOK_API bool AddMapping(KeyValue from, KeyValue to)
     return theKbd.AddMapping(from, to);
 }
 
+bool HookKbd::AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey)
+{
+    return theKbd.AddDualModeModifier(key, modifierKey, tapKey);
+}
+
 PQHOOK_API bool AddStickyMapping(KeyValue vk)
 {
     return theKbd.AddStickyMapping(vk);

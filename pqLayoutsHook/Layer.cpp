@@ -19,6 +19,7 @@
 #include "Layer.h"
 #include "KeyOutAction.h"
 #include "MakeStickyAction.h"
+#include "DualModeModifierAction.h"
 #include "OutDbg.h"
 
 using namespace KeyActions;
@@ -56,6 +57,15 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
     IKeyAction* action = new KeyOutAction(from, to);
 
     return AddMapping(from, action);
+}
+
+bool Layer::AddDualModeModifier(KeyDef key, KeyValue  modifierKey, KeyValue tapKey)
+{
+    // create key action object
+    IKeyAction* action = new DualModeModifierAction(key, modifierKey, tapKey);
+    KeyValue keyValue(key.Vk(), key.Scancode());
+
+    return AddMapping(keyValue, action);
 }
 
 bool Layer::AddStickyMapping(KeyValue vk)

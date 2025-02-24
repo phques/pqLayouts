@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Chord.h" />
     <ClInclude Include="Chording.h" />
+    <ClInclude Include="DualModeModifierAction.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Keydef.h" />
     <ClInclude Include="Keyboard.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Chord.cpp" />
     <ClCompile Include="Chording.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="DualModeModifierAction.cpp" />
     <ClCompile Include="Keydef.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="KeyMapping.cpp" />

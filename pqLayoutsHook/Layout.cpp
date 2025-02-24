@@ -156,6 +156,16 @@ bool Layout::AddMapping(KeyValue from, KeyValue to)
     return currentLayer->AddMapping(from, to);
 }
 
+bool Layout::AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey)
+{
+    if (currentLayer == nullptr)
+        return false;
+
+    return currentLayer->AddDualModeModifier(key, modifierKey, tapKey);
+}
+
+
+
 bool Layout::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
     if (currentLayer == nullptr)

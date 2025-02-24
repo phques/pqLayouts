@@ -105,6 +105,7 @@ private:
     bool doK2kWithShCmd(StringTokener& tokener);
     bool doK2kcCmd(StringTokener& tokener);
     bool doK2kcWithShCmd(StringTokener& tokener);
+    bool doDualModifier(StringTokener& tokener);
     bool doSteakPower(File&);
     //bool doKord(StringTokener& tokener);
     bool doSteaks(File& file);

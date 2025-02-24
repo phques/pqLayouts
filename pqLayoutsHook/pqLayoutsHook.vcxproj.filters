@@ -63,6 +63,9 @@
     <ClInclude Include="Chording.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DualModeModifierAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -104,5 +107,11 @@
     <ClCompile Include="Chording.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DualModeModifierAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

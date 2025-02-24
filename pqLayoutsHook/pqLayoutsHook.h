@@ -31,6 +31,7 @@ namespace HookKbd
     PQHOOK_API void SetNotificationMessage(HWND hMainWindow, int mainWndMsg);
 
     PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
+    PQHOOK_API bool AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey);
     PQHOOK_API bool AddStickyMapping(KeyValue vk);
 
     PQHOOK_API bool AddChord(Kord&, const std::list<KeyActions::KeyActionPair>& keyActions);
