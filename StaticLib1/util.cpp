@@ -44,7 +44,7 @@ DWORD KbdHookEvent::TimeDiff(const KbdHookEvent& startEvent)
     return TickCountDiff(startEvent.time, this->time);
 }
 
-void KbdHookEvent::QpcDiff(const KbdHookEvent& startEvent, LARGE_INTEGER& diff)
+void KbdHookEvent::QpcDiff(const KbdHookEvent& startEvent, LARGE_INTEGER& diff) const
 {
     ::QpcDiff(startEvent.perfoCounter, this->perfoCounter, diff);
 }

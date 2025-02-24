@@ -22,7 +22,7 @@
 typedef DWORD VeeKee;
 
 typedef std::unordered_set<VeeKee> VeeKeeSet;
-typedef std::vector<VeeKee> VeeKeeArray;
+typedef std::vector<VeeKee> VeeKeeVector;
 typedef std::list<VeeKee> VeeKeeList;
 
 
@@ -50,6 +50,7 @@ class KeyValue : public KeyDef
 {
 public:
     KeyValue();
+    KeyValue(char character);
     PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false, bool alt=false);
 
     bool Shift() const { return shift; }

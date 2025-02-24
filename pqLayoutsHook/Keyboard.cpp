@@ -53,6 +53,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
+    lastDownEvent{},
     lastVkCodeDown(0),
     chordingSuspended(false),
     lpsteaksLayer1(0),
@@ -387,7 +388,6 @@ bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, co
         TrackMappedKeyDown(event.vkCode, action, event.Down());
 
     // do the action for the key
-    //const bool isTap(action->downTimeTick == this->lastKeypressTick);
     const bool isTap(this->lastVkCodeDown == event.vkCode);
 
     bool ret = false;
@@ -397,6 +397,11 @@ bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, co
         ret = action->OnKeyUp(this, isTap);
 
     return ret;
+}
+
+bool Keyboard::IsSelfInjected(const KbdHookEvent& event)
+{
+    return (event.Injected() && event.dwExtraInfo == injectedFromMeValue);
 }
 
 bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
@@ -413,6 +418,51 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
     {
         this->lastKeypressTick = event.time;  // nb: this is the same as GetTickCount()
         this->lastVkCodeDown = event.vkCode;
+    }
+
+    // adaptives, 150ms delay between each key allowed
+    //##pq todo: this will need to be by layer etc etc
+    // (just trying out the basic idea)
+    if (event.Down() && !IsSelfInjected(event) && lastDownEvent.vkCode != 0)
+    {
+        LARGE_INTEGER qpcDiff;
+        event.QpcDiff(lastDownEvent, qpcDiff);
+
+        if (qpcDiff.QuadPart > 150000) // 150ms
+        {
+            Printf("reset lastDownEvent\n");
+            lastDownEvent = KbdHookEvent{};
+        }
+        else
+        {
+            Printf("checking for adaptive\n");
+            
+            static std::map<VeeKeeVector, std::list<KeyValue>> adapts = {
+                { {'U','I'}, {KeyValue(VK_BACK,0), KeyValue('!')} },
+                { {'I','O'}, {KeyValue(VK_BACK,0), KeyValue('?')} },
+            };
+            
+            VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
+            
+            auto foundAdaptIt = adapts.find(vkeys);
+            if (foundAdaptIt != adapts.end())
+            {
+                Printf("found adaptive!\n");
+                for (auto& keyValueOut : foundAdaptIt->second)
+                {
+                    SendVk(keyValueOut, true);
+                    SendVk(keyValueOut, false);
+                }
+
+                lastDownEvent = KbdHookEvent{};
+                return true; // eat key
+            }
+        }
+
+    }
+    if (event.Down() && !IsSelfInjected(event))
+    {
+        lastDownEvent = event;
     }
 
     // handle possible chording

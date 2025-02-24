@@ -100,6 +100,7 @@ protected:
     void ResumeChording();
     void SuspendChording();
     void ReplayCancelledChord();
+    bool IsSelfInjected(const KbdHookEvent& event);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -125,6 +126,7 @@ private:
     std::string lpsteaksPrefix2;        // prefix for layer2 -> layer1
 
     DWORD lastKeypressTick; // time tick of the last key press event
+    KbdHookEvent lastDownEvent;
     DWORD lastVkCodeDown;
 
     Layout layout;

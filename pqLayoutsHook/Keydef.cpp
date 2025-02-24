@@ -17,6 +17,7 @@
 
 #include "pch.h"
 #include "Keydef.h"
+#include <util.h>
 
 KeyDef::KeyDef() : vk(0), scancode(0)
 {
@@ -28,8 +29,17 @@ KeyDef::KeyDef(VeeKee vk, UINT scancode) : vk(vk), scancode(scancode)
 
 //-------
 
-KeyValue::KeyValue() : shift(false), control(false)
+KeyValue::KeyValue() : shift(false), control(false), alt(false)
 {
+}
+
+KeyValue::KeyValue(char ch)
+{
+    WORD vkword;
+    bool isShifted;
+    VkUtil::CharToVk(ch, vkword, isShifted);
+ 
+    *this = KeyValue(vkword, 0, isShifted);
 }
 
 KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control, bool alt) :  
