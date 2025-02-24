@@ -39,20 +39,14 @@ bool DualModeModifierAction::OnKeyDown(Keyboard* kbd)
 
 bool DualModeModifierAction::OnKeyUp(Keyboard* kbd, bool isTap)
 {
+    // send the modifier up
+    kbd->SendVk(modifierKey, false);
+
     if (isTap)
     {
-        // send the modifier up
-        kbd->SendVk(modifierKey, true);
-        
         // send the onTap key
         kbd->SendVk(keyOnTap, true);
         kbd->SendVk(keyOnTap, false);
-    }
-    else
-    {
-        // coming out of the layer
-        // return to main layer
-        kbd->GotoMainLayer();
     }
 
     // eat original key

@@ -1,8 +1,8 @@
 ! https://cyanophage.github.io/index.html#carbyne
 ! mods: angleMod, swap UO
 
-!imagefile carbyne.png
-!imageview 2 +84  98 +84
+imagefile capture.png
+imageview 2 +60 74 +60
 
 ! Generated from [carbyne.en.ansi.txt]
 K2K -  [ {
@@ -49,5 +49,5 @@ dualmod sp lshift sp
 
 include ../../../edit-layer-lalt.kbdlo
 
-!imageview 130 +62  130 +62
+imageview 146 +60 146 +60
 
