@@ -4,15 +4,15 @@
  a s d f g h j k l ; ' 
  z x c v b n m , . / 
 
-                     [ ] 
- v w h m / q u o y b j =
- s n r t k - a e i c x 
- p l d f z ; , ' . g 
+                      [ ] 
+ v w h m / q  u o y b j =
+ s n r t k  - a e i c x 
+  p l d f z ; , ' . g 
 
-                     { } 
- V W H M ? Q U O Y B J +
- S N R T K _ A E I C X 
- P L D V Z : < " > G 
+                      { } 
+ V W H M ? Q  U O Y B J +
+ S N R T K  _ A E I C X 
+  P L D F Z : < " > G 
 
 
 -----
@@ -20,12 +20,37 @@
 Mods:
 angle mod
 
-also swap O U, as is done in hands-down
-A E    A E
-O U => U O
+OU swap
 
 swap VF (lower freq V on top pinky)
-swap /Z ("/?" in easier spot 'querty T')
+swap /Z ("/?" in easier spot 'querty T' for ansi)
+
+! qadapt: the 'from' characters are in qwerty, so 'physical' pos.
+! more appropriate for combos, which we might want to be the same between layouts,
+! so use the same pos, i.e physical / qwerty
+
+! ** 'adapt' is not implemented **
+! adapt: 'from' are actual chars in the layout, more 'logical'.
+! that usually makes more sense for adaptives
+
+! (these should be 'adapt')
+qadapt /jk/au/	!! ae
+qadapt /rw/mp/	!! mw
+qadapt /re/ml/	!! mh
+
+! ** combos not implemented **
+! should be combos (order not taken into account / 'simultaneous', 50ms vs 150ms threshold)
+! try as adapts for now
+qadapt /l;/I /	!! ic .. trying it out, might be bad idea!
+qadapt /yu/@/
+qadapt /ui/!/
+qadapt /io/?/
+qadapt /uo/:/
+qadapt /,./=/
+qadapt /m./_/
+qadapt /wr/qu/
+!qadapt ///
+
 
 the current one on his layouts comparo page:
 https://cyanophage.github.io/index.html#carbyne

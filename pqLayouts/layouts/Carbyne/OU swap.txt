@@ -1,0 +1,8 @@
+
+swap O U, as is done in hands-down
+
+O U Y => U O Y
+A E C    A E C
+
+1- moves more frequent O from top index to top middle
+2- makes OU a more natural roll (you, about..)

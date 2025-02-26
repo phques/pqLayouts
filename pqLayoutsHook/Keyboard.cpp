@@ -328,13 +328,28 @@ void Keyboard::SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lps
 
 bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
 {
+    //##pq debug, cant use Paause key in VMWare on MacOS !!
+    if (event.Down() && event.vkCode == VK_F1 && event.AltDown())
+    {
+        adaptivesOn = !adaptivesOn;
+        Printf("alt-suspend key pressed, adaptives now %s\n", adaptivesOn ? " ""on" : "off");
+    }
+
     // is it the suspend key ?
     if (event.vkCode == suspendKey)
     {
         if (event.Down())
         {
-            Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
-            ToggleSuspend();
+            if (event.AltDown())
+            {
+                adaptivesOn = !adaptivesOn;
+                Printf("alt-suspend key pressed, adaptives now %s\n", adaptivesOn ? " ""on" : "off");
+            }
+            else
+            {
+                Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
+                ToggleSuspend();
+            }
         }
         return true; // 'eat' this key
     }
@@ -349,6 +364,7 @@ bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
         }
         return true; // 'eat' this key
     }
+
     return false;
 }
 
@@ -423,7 +439,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
     // adaptives, 150ms delay between each key allowed
     //##pq todo: this will need to be by layer etc etc
     // (just trying out the basic idea)
-    if (event.Down() && !IsSelfInjected(event) && lastDownEvent.vkCode != 0)
+    if (event.Down() && lastDownEvent.vkCode != 0)
     {
         LARGE_INTEGER qpcDiff;
         event.QpcDiff(lastDownEvent, qpcDiff);
@@ -435,32 +451,54 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         }
         else
         {
-            Printf("checking for adaptive\n");
-            
             static std::map<VeeKeeVector, std::list<KeyValue>> adapts = {
-                { {'U','I'}, {KeyValue(VK_BACK,0), KeyValue('!')} },
-                { {'I','O'}, {KeyValue(VK_BACK,0), KeyValue('?')} },
+                { {'J','K'}, {KeyValue('a'),KeyValue('u')} }, //ae au
+                { {'R','W'}, {KeyValue('m'),KeyValue('p')} }, //mw mp
+                { {'R','E'}, {KeyValue('m'),KeyValue('l')} }, //mh ml
+                { {'L',VK_OEM_1}, {KeyValue('I'),KeyValue(VK_SPACE,0)} }, //ic "I "
+                { {'Y','U'}, {KeyValue('@')}}, 
+                { {'U','I'}, {KeyValue('!')} },
+                { {'I','O'}, {KeyValue('?')} },
+                { {'U','O'}, {KeyValue(':')} },
+                { {VK_OEM_COMMA, VK_OEM_PERIOD}, {KeyValue('=')} },
+                { {'M', VK_OEM_PERIOD}, {KeyValue('_')}},
+                { {'W', 'R'}, {KeyValue('q'), KeyValue('u')}},
             };
             
-            VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
-            
-            auto foundAdaptIt = adapts.find(vkeys);
-            if (foundAdaptIt != adapts.end())
+            if (adaptivesOn)
             {
-                Printf("found adaptive!\n");
-                for (auto& keyValueOut : foundAdaptIt->second)
-                {
-                    SendVk(keyValueOut, true);
-                    SendVk(keyValueOut, false);
-                }
+                Printf("checking for adaptive\n");
+                VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
 
-                lastDownEvent = KbdHookEvent{};
-                return true; // eat key
+                auto foundAdaptIt = adapts.find(vkeys);
+                if (foundAdaptIt != adapts.end())
+                {
+                    Printf("found adaptive!\n");
+                    // delete input chars, note that last one *has not been sent yet*
+                    KeyValue bs(VK_BACK, 0);
+                    for (int i = 0; i < foundAdaptIt->first.size() - 1; ++i)
+                    {
+                        SendVk(bs, true);
+                    }
+                    if (foundAdaptIt->first.size() > 1)
+                    {
+                        SendVk(bs, false);
+                    }
+
+                    for (auto& keyValueOut : foundAdaptIt->second)
+                    {
+                        SendVk(keyValueOut, true);
+                        SendVk(keyValueOut, false);
+                    }
+
+                    lastDownEvent = KbdHookEvent{};
+                    return true; // eat key
+                }
             }
         }
 
     }
-    if (event.Down() && !IsSelfInjected(event))
+    if (event.Down())
     {
         lastDownEvent = event;
     }

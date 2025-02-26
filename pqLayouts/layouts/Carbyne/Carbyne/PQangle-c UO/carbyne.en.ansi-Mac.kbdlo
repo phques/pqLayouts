@@ -1,0 +1,14 @@
+! https://cyanophage.github.io/index.html#carbyne
+! mods: angleMod, swap UO
+
+imagefile ScreenshotMac.png
+
+include carbyne.en.ansi.kbdlo
+
+imageview 10 +132 174 +132
+
+
+include ../../../edit-layer-lalt.kbdlo
+
+imageview 338 +132 338 +132
+

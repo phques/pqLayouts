@@ -257,10 +257,13 @@ void KbdDisplayWnd::PlaceWindow() const
             //    screenLeft = -screenLeft;
             //    Printf("screenLeft = -screenLeft;\n");
             //}
-            Printf("l %05d r %05d t %05d b %05d cx %d cy %d\n", 
+#if 0
+            Printf("l %05d r %05d t %05d b %05d cx %d cy %d\n",
                 info.rcMonitor.left, info.rcMonitor.right,
                 info.rcMonitor.top, info.rcMonitor.bottom,
                 screenCx, screenCy);
+#endif // 0
+
         }
 
         //## big patch, apply screen scaling factor (supports two screen .. besides each other too!)
@@ -299,7 +302,7 @@ void KbdDisplayWnd::PlaceWindow() const
     // place window near top or bottom in Y
     const int y = displayAtTop ? 5 : (screenCy - windowHeight - 5);
 
-    Printf("x %d y %d\n", x, y);
+    //Printf("x %d y %d\n", x, y);
 
     // move window, setting it TOPMOST, then show it (is created hidden)
     SetWindowPos(hWnd, HWND_TOPMOST, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);

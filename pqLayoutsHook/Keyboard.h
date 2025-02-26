@@ -131,6 +131,7 @@ private:
 
     Layout layout;
     bool suspended;
+    bool adaptivesOn{};
     VeeKee makeSticky;
     VeeKee suspendKey;
     VeeKee quitKey;
