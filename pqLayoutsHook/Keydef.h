@@ -59,6 +59,8 @@ public:
     KeyValue& Shift(bool v) { shift=v; return *this; }
     KeyValue& Control(bool v) { control=v; return *this; }
     KeyValue& Alt(bool v) { alt=v; return *this; }
+    
+    static std::list<KeyValue> KeyValues(const std::string& str);
 
 private:
     bool shift;

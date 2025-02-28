@@ -47,3 +47,18 @@ KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control, bool alt)
     shift(shift), control(control), alt(alt)
 {
 }
+
+std::list<KeyValue> KeyValue::KeyValues(const std::string& str)
+{
+    std::list<KeyValue> kvs;
+
+    for (auto ch : str)
+    {
+        WORD vkword;
+        bool isShifted;
+        VkUtil::CharToVk(ch, vkword, isShifted);
+        kvs.push_back(KeyValue(vkword, 0, isShifted));
+    }
+
+    return kvs;
+}

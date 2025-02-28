@@ -328,8 +328,8 @@ void Keyboard::SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lps
 
 bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
 {
-    //##pq debug, cant use Paause key in VMWare on MacOS !!
-    if (event.Down() && event.vkCode == VK_F1 && event.AltDown())
+    //##pq debug, cant use Paause key in VMWare on MacOS !! also try ScrollLock
+    if (event.Down() && (event.vkCode == VK_F1 && event.AltDown() || event.vkCode == VK_SCROLL))
     {
         adaptivesOn = !adaptivesOn;
         Printf("alt-suspend key pressed, adaptives now %s\n", adaptivesOn ? " ""on" : "off");
@@ -451,18 +451,43 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         }
         else
         {
+            //##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
             static std::map<VeeKeeVector, std::list<KeyValue>> adapts = {
+                // adaptives
                 { {'J','K'}, {KeyValue('a'),KeyValue('u')} }, //ae au
+                { {'Q','W'}, {KeyValue('w'),KeyValue('n')} }, //vw wn
                 { {'R','W'}, {KeyValue('m'),KeyValue('p')} }, //mw mp
                 { {'R','E'}, {KeyValue('m'),KeyValue('l')} }, //mh ml
+
+                // combos
                 { {'L',VK_OEM_1}, {KeyValue('I'),KeyValue(VK_SPACE,0)} }, //ic "I "
-                { {'Y','U'}, {KeyValue('@')}}, 
-                { {'U','I'}, {KeyValue('!')} },
+
+                { {'U','Y'}, {KeyValue('@')}}, 
+                { {'I','U'}, {KeyValue('!')} },
                 { {'I','O'}, {KeyValue('?')} },
-                { {'U','O'}, {KeyValue(':')} },
+                //{ {'U','O'}, {KeyValue(':')} }, not requied with Carbyne (?)
                 { {VK_OEM_COMMA, VK_OEM_PERIOD}, {KeyValue('=')} },
                 { {'M', VK_OEM_PERIOD}, {KeyValue('_')}},
                 { {'W', 'R'}, {KeyValue('q'), KeyValue('u')}},
+
+                { {'U','I'}, KeyValue::KeyValues(".com")},
+                { {'Y','U'}, KeyValue::KeyValues("gmail")},
+                { {'U','P'}, KeyValue::KeyValues("cgi")},
+
+                // These can only work as combos!
+                //{ {'X','C'}, {KeyValue('C',0, false, true)} }, //Ctrl-c copy
+                //{ {'C','V'}, {KeyValue('V',0, false, true)} }, //Ctrl-v paste
+                //{ {'Z','X'}, {KeyValue('Z',0, false, true)} }, //Ctrl-z undo
+                //{ {'Z','X','C'}, {KeyValue('Y',0, false, true)}}, //Ctrl-y redo
+
+                // use '\' as 'magic adaptive key' (cf moutis QMK HD)
+                // PQ 2025-02 unfortunately, the '\' gets injected in the output after 9chars!? :(
+                //{ {'Q',VK_OEM_5}, KeyValue::KeyValues("philippe.quesnel")},
+                //{ {'I',VK_OEM_5}, KeyValue::KeyValues("integration\\")},
+                { {'P',VK_OEM_5}, KeyValue::KeyValues("philippe")},
+                { {'Q',VK_OEM_5}, KeyValue::KeyValues("quesnel")},
+                { {'I',VK_OEM_5}, KeyValue::KeyValues("integrat")},
+
             };
             
             if (adaptivesOn)
@@ -479,11 +504,12 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
                     for (int i = 0; i < foundAdaptIt->first.size() - 1; ++i)
                     {
                         SendVk(bs, true);
-                    }
-                    if (foundAdaptIt->first.size() > 1)
-                    {
                         SendVk(bs, false);
                     }
+                    //if (foundAdaptIt->first.size() > 1)
+                    //{
+                    //    SendVk(bs, false);
+                    //}
 
                     for (auto& keyValueOut : foundAdaptIt->second)
                     {

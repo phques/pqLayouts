@@ -49,6 +49,10 @@ qadapt /uo/:/
 qadapt /,./=/
 qadapt /m./_/
 qadapt /wr/qu/
+qadapt /xc/^c/  !! copy
+qadapt /cv/^v/  !! paste
+qadapt /zx/^z/	!! undo
+qadapt /zxc/^y/	!! redo
 !qadapt ///
 
 
