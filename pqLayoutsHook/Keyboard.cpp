@@ -481,6 +481,14 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'F','G'}, "nk"}, // TK -> NK
         { {'G','F'}, "kn"}, // KT -> KN
 
+        { {'L','D'}, "ing"}, // IN -> ing
+
+        // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
+        { {'Z',VK_OEM_5}, "philippe.quesnel"},  // P
+        { {'L',VK_OEM_5}, "integration\\"},     // I
+        { {'P',VK_OEM_5}, "bug"},               // B
+        { {'A',VK_OEM_5}, "select * from "},    // S
+
         // 'combos' done as adaptives until we have actual combos
         { {'L',VK_OEM_1}, "I "}, //ic -> "I " (bad idea?)
         { {'U','Y'}, "@" },
@@ -495,10 +503,6 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'U','I'}, ".com"},
         { {'Y','U'}, "gmail"},
         { {'U','P'}, "cgi"},
-
-        // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
-        { {'P',VK_OEM_5}, "philippe.quesnel"},
-        { {'I',VK_OEM_5}, "integration\\"},
     };
 
     // (just trying out the basic idea)
