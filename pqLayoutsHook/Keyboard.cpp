@@ -481,7 +481,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'F','G'}, "nk"}, // TK -> NK
         { {'G','F'}, "kn"}, // KT -> KN
 
-        { {'L','D'}, "ing"}, // IN -> ing
+        { {'L','S'}, "ing"}, // IN -> ing
 
         // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
         { {'Z',VK_OEM_5}, "philippe.quesnel"},  // P
