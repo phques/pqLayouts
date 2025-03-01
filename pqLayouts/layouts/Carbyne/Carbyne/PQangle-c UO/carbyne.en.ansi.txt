@@ -38,17 +38,30 @@ qadapt /jk/au/	!! ae
 qadapt /rw/mp/	!! mw
 qadapt /re/ml/	!! mh
 
+hv -> lv  
+hw -> lw 
+lp -> ls 
+
+// adapted from HD PM ! 
+MK -> LK
+TK -> NK
+KT -> KN
+
+
 ! ** combos not implemented **
 ! should be combos (order not taken into account / 'simultaneous', 50ms vs 150ms threshold)
 ! try as adapts for now
 qadapt /l;/I /	!! ic .. trying it out, might be bad idea!
 qadapt /yu/@/
-qadapt /ui/!/
+qadapt /iu/!/
 qadapt /io/?/
 qadapt /uo/:/
 qadapt /,./=/
 qadapt /m./_/
+qadapt /qw/wn/
 qadapt /wr/qu/
+
+! These can only work as combosou!
 qadapt /xc/^c/  !! copy
 qadapt /cv/^v/  !! paste
 qadapt /zx/^z/	!! undo

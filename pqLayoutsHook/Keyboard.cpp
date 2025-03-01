@@ -436,9 +436,73 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         this->lastVkCodeDown = event.vkCode;
     }
 
+    //## pq test debug combos
+    static bool inComboQ = false;
+    //if (inComboQ)
+    //{
+    //    Printf("inComboQ\n");
+    //    if (event.vkCode != 'Q' || event.Up())
+    //    {
+    //        inComboQ = false;
+    //        Printf("cancel ComboQ\n");
+    //    }
+    //    else
+    //    {
+    //        Printf("repeat down Q\n");
+    //    }
+    //    return true;
+    //}
+
+    //if (event.Down())
+    //{
+    //    if (event.vkCode == 'Q')
+    //    {
+    //        inComboQ = true;
+    //        return true;
+    //    }
+    //}
+
     // adaptives, 150ms delay between each key allowed
     //##pq todo: this will need to be by layer etc etc
+    //##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
+    static std::map<VeeKeeVector, const char*> adapts = {
+        // adaptives
+        { {'J','K'}, "au"}, // ae -> au
+        { {'W','Q'}, "wn"}, // wv -> wn
+        { {'R','W'}, "mp"}, // mw -> mp
+        { {'R','E'}, "ml"}, // mh -> ml
+
+        { {'E','Q'}, "lv"}, // hv -> lv
+        { {'E','W'}, "lw"}, // hw -> lw
+        { {'X','Z'}, "ls"}, // lp -> ls (not as good a tradeOff, but still better)
+
+        // taken & adapted from HD PM !
+        { {'R','G'}, "lk"}, // MK -> LK
+        { {'F','G'}, "nk"}, // TK -> NK
+        { {'G','F'}, "kn"}, // KT -> KN
+
+        // 'combos' done as adaptives until we have actual combos
+        { {'L',VK_OEM_1}, "I "}, //ic -> "I " (bad idea?)
+        { {'U','Y'}, "@" },
+        { {'I','U'}, "!" },
+        { {'I','O'}, "?" },
+        { {'U','O'}, ":" }, //not requied with Carbyne (?)
+        { {VK_OEM_COMMA, 
+           VK_OEM_PERIOD}, "="},
+        { {VK_OEM_PERIOD, 'M'}, "_"},
+        { {'W', 'R'}, "qu"}, // ideally this would do Qu if shift is down
+
+        { {'U','I'}, ".com"},
+        { {'Y','U'}, "gmail"},
+        { {'U','P'}, "cgi"},
+
+        // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
+        { {'P',VK_OEM_5}, "philippe.quesnel"},
+        { {'I',VK_OEM_5}, "integration\\"},
+    };
+
     // (just trying out the basic idea)
+
     if (event.Down() && lastDownEvent.vkCode != 0)
     {
         LARGE_INTEGER qpcDiff;
@@ -451,71 +515,38 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         }
         else
         {
-            //##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
-            static std::map<VeeKeeVector, std::list<KeyValue>> adapts = {
-                // adaptives
-                { {'J','K'}, {KeyValue('a'),KeyValue('u')} }, //ae au
-                { {'Q','W'}, {KeyValue('w'),KeyValue('n')} }, //vw wn
-                { {'R','W'}, {KeyValue('m'),KeyValue('p')} }, //mw mp
-                { {'R','E'}, {KeyValue('m'),KeyValue('l')} }, //mh ml
-
-                // combos
-                { {'L',VK_OEM_1}, {KeyValue('I'),KeyValue(VK_SPACE,0)} }, //ic "I "
-
-                { {'U','Y'}, {KeyValue('@')}}, 
-                { {'I','U'}, {KeyValue('!')} },
-                { {'I','O'}, {KeyValue('?')} },
-                //{ {'U','O'}, {KeyValue(':')} }, not requied with Carbyne (?)
-                { {VK_OEM_COMMA, VK_OEM_PERIOD}, {KeyValue('=')} },
-                { {'M', VK_OEM_PERIOD}, {KeyValue('_')}},
-                { {'W', 'R'}, {KeyValue('q'), KeyValue('u')}},
-
-                { {'U','I'}, KeyValue::KeyValues(".com")},
-                { {'Y','U'}, KeyValue::KeyValues("gmail")},
-                { {'U','P'}, KeyValue::KeyValues("cgi")},
-
-                // These can only work as combos!
-                //{ {'X','C'}, {KeyValue('C',0, false, true)} }, //Ctrl-c copy
-                //{ {'C','V'}, {KeyValue('V',0, false, true)} }, //Ctrl-v paste
-                //{ {'Z','X'}, {KeyValue('Z',0, false, true)} }, //Ctrl-z undo
-                //{ {'Z','X','C'}, {KeyValue('Y',0, false, true)}}, //Ctrl-y redo
-
-                // use '\' as 'magic adaptive key' (cf moutis QMK HD)
-                // PQ 2025-02 unfortunately, the '\' gets injected in the output after 9chars!? :(
-                //{ {'Q',VK_OEM_5}, KeyValue::KeyValues("philippe.quesnel")},
-                //{ {'I',VK_OEM_5}, KeyValue::KeyValues("integration\\")},
-                { {'P',VK_OEM_5}, KeyValue::KeyValues("philippe")},
-                { {'Q',VK_OEM_5}, KeyValue::KeyValues("quesnel")},
-                { {'I',VK_OEM_5}, KeyValue::KeyValues("integrat")},
-
-            };
-            
             if (adaptivesOn)
             {
                 Printf("checking for adaptive\n");
-                VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
 
+                // look for prev key + curr key in the map of adaptives
+                VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
                 auto foundAdaptIt = adapts.find(vkeys);
+
                 if (foundAdaptIt != adapts.end())
                 {
                     Printf("found adaptive!\n");
-                    // delete input chars, note that last one *has not been sent yet*
-                    KeyValue bs(VK_BACK, 0);
-                    for (int i = 0; i < foundAdaptIt->first.size() - 1; ++i)
-                    {
-                        SendVk(bs, true);
-                        SendVk(bs, false);
-                    }
-                    //if (foundAdaptIt->first.size() > 1)
-                    //{
-                    //    SendVk(bs, false);
-                    //}
 
-                    for (auto& keyValueOut : foundAdaptIt->second)
+                    // delete input chars, note that last one *has not been sent yet*
+                    size_t   nbrKeys = foundAdaptIt->first.size();
+
+                    // send BS downs
+                    KeyValue bs(VK_BACK, 0);
+                    for (int i = 0; i < nbrKeys - 1; ++i)
                     {
+                        SendVk(bs, true);  // BS down
+                        SendVk(bs, false);  // BS up
+                    }
+
+                    // send output keys 
+                    for (const char* ptr = foundAdaptIt->second; *ptr; ++ptr)
+                    {
+                        KeyValue keyValueOut(*ptr);
                         SendVk(keyValueOut, true);
                         SendVk(keyValueOut, false);
                     }
+
+                    Printf("done sending adapt\n");
 
                     lastDownEvent = KbdHookEvent{};
                     return true; // eat key
@@ -872,12 +903,16 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
     // now send the keys
     SendInput(idx, inputs, sizeof(inputs[0]));
 
-    //##PQ from touchcursor##
-    // Sleep(1) seems to be necessary for mapped Escape events sent to VirtualPC & recent VMware versions.
+    //##PQ **from touchcursor** ##
+    //"Sleep(1) seems to be necessary for mapped Escape events sent to VirtualPC & recent VMware versions.
     // (Sleep(0) is no good)
     // Also for mapped modifiers with Remote Desktop Connection.
-    // Dunno why:
-    Sleep(1);
+    // Dunno why:"
+    // PQ 2025-02, indeed I can see that with a Remote Desktop session .. BUT
+    //   if I start pqLayouts AFTER the remote desktop, then it works fine.
+    // SO, since the Sleep(1) actually causes potential re-entrance in our keyboard hook function,
+    // I will NOT use this fix/patch
+//    Sleep(1);
 
     // and finally, track any modifiers up/down we sent (actual output key, not pre/suffix ones !)
     TrackModifiers(key.Vk(), pressed);
