@@ -468,6 +468,10 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
     static std::map<VeeKeeVector, const char*> adapts = {
         // adaptives
         { {'J','K'}, "au"}, // ae -> au
+        { {'O','P'}, "ig"}, // .g -> ig (for ver w BYOU on bottom / G on top)
+        { {'P','O'}, "gi"}, // g. -> gi (for ver w BYOU on bottom / G on top)
+        { {'P','I'}, "go"}, // g' -> gO (for ver w BYOU on bottom / G on top)
+
         { {'W','Q'}, "wn"}, // wv -> wn
         { {'R','W'}, "mp"}, // mw -> mp
         { {'R','E'}, "ml"}, // mh -> ml
@@ -475,6 +479,8 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'E','Q'}, "lv"}, // hv -> lv
         { {'E','W'}, "lw"}, // hw -> lw
         { {'X','Z'}, "ls"}, // lp -> ls (not as good a tradeOff, but still better)
+        { {'A','S'}, "sp"}, // sn -> sp
+        { {'X','S'}, "ps"}, // ln -> ps !! (actually parallel to each other)
 
         // taken & adapted from HD PM !
         { {'R','G'}, "lk"}, // MK -> LK
@@ -494,10 +500,11 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'U','Y'}, "@" },
         { {'I','U'}, "!" },
         { {'I','O'}, "?" },
+        { {'O','I'}, "/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
         { {'U','O'}, ":" }, //not requied with Carbyne (?)
         { {VK_OEM_COMMA, 
            VK_OEM_PERIOD}, "="},
-        { {VK_OEM_PERIOD, 'M'}, "_"},
+        { {'M', VK_OEM_PERIOD}, "_"},
         { {'W', 'R'}, "qu"}, // ideally this would do Qu if shift is down
 
         { {'U','I'}, ".com"},
@@ -551,6 +558,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
                         KeyValue keyValueOut(*ptr);
                         if (shifted && isalpha(*ptr))
                             keyValueOut.Shift(true);
+
                         SendVk(keyValueOut, true);
                         SendVk(keyValueOut, false);
                         shifted = false;
