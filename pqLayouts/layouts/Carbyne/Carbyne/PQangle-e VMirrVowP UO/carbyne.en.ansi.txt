@@ -5,20 +5,20 @@
  z x c v b n m , . / 
 
                      [ ] 
- v w h m / ; , ' . g j =
+ v w h m / q , ' . g j =
  s n r t k - a e i c x 
- p l d f z q u o y b 
+ p l d f z ; u o y b 
 
                      { } 
- V W H M ? : < " > G J +
+ V W H M ? Q < " > G J +
  S N R T K _ A E I C X 
- P L D V Z Q U O Y B 
+ P L D V Z : U O Y B 
 
 
 -----
 
 Mods:
-angle mod + right hand vert swap, including GB
+angle mod + right hand vert swap, including GB, but keep Q; the same
 this brings the G on top pinky, but let's try anyways :-p
 
 also swap O U, as is done in hands-down

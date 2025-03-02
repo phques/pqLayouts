@@ -481,9 +481,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'F','G'}, "nk"}, // TK -> NK
         { {'G','F'}, "kn"}, // KT -> KN
 
-        // need to find a better adaptive, IN is too common
-        // will be ok as a combo
-        //{ {'L','S'}, "ing"}, // IN -> ing
+        { {'S','D'}, "ng"}, // NR -> ng
 
         // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
         { {'Z',VK_OEM_5}, "philippe.quesnel"},  // P
@@ -545,11 +543,17 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
                     }
 
                     // send output keys 
+                    // 1st key is shifted if Shift is currently down
+                    //i.e. shift ae -> Au
+                    bool shifted = ShiftDown();
                     for (const char* ptr = foundAdaptIt->second; *ptr; ++ptr)
                     {
                         KeyValue keyValueOut(*ptr);
+                        if (shifted && isalpha(*ptr))
+                            keyValueOut.Shift(true);
                         SendVk(keyValueOut, true);
                         SendVk(keyValueOut, false);
+                        shifted = false;
                     }
 
                     Printf("done sending adapt\n");
