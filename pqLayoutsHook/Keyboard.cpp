@@ -420,7 +420,214 @@ bool Keyboard::IsSelfInjected(const KbdHookEvent& event)
     return (event.Injected() && event.dwExtraInfo == injectedFromMeValue);
 }
 
-bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
+
+const int TIMER_ID = 0xBEBE;
+static bool timerWentOff{};
+
+void __stdcall  TimerProc(
+  HWND unnamedParam1,
+  UINT unnamedParam2,
+  UINT_PTR unnamedParam3,
+  DWORD unnamedParam4
+)
+{
+    timerWentOff = true;
+    KillTimer(unnamedParam1, TIMER_ID);
+    Printf("timer\n");
+}
+
+void kilTimer(HWND hWnd)
+{
+    if (!timerWentOff)
+    {
+        timerWentOff = false;
+        KillTimer(hWnd, TIMER_ID);
+    }
+}
+
+struct Comboer
+{
+    bool buildingCombo{};
+    KbdHookEvent firstEvent;
+    std::vector<VeeKee> accumulatedKeys;
+    std::vector<VeeKee> sortedKeys;
+
+    bool isPotentialComboKey(const KbdHookEvent& event, const bool isAccumulatedDown)
+    {
+        //## pq test debug
+        static std::string keys = "QWASD";
+
+        return !isAccumulatedDown && 
+                event.Down() &&
+                keys.find((char*)event.vkCode) != std::string::npos;
+    }
+
+    void reset()
+    {
+        buildingCombo = false;
+        accumulatedKeys.clear();
+        sortedKeys.clear();
+        firstEvent = KbdHookEvent{};
+        
+        //##todo kill/reset timer
+    }
+
+    void replay()
+    {
+        //## todo
+    }
+
+    void addKey(const KbdHookEvent& event)
+    {
+        accumulatedKeys.push_back(event.vkCode);
+        
+        sortedKeys.push_back(event.vkCode);
+        std::sort(sortedKeys.begin(), sortedKeys.end());
+    }
+
+    // return true to 'eat' key, false to continue processing
+    bool OnKeyEvent(const KbdHookEvent& event)
+    {
+        bool isAccumulatedDown = VkUtil::Contains(accumulatedKeys, event.vkCode);
+
+        // not in combo building mode
+        if (!buildingCombo)
+        {
+            if (isPotentialComboKey(event, isAccumulatedDown))
+            {
+                // start building potential combo
+                buildingCombo = true;
+                firstEvent = event;
+                addKey(event);
+                return true;
+            }
+            return false;
+        }
+
+        // -- buildingCombo mode --
+
+        // 'other' key up, let it through
+        if (event.Up() && !isAccumulatedDown)
+        {
+            return false;
+        }
+
+        // 'other' key down, not a combo, cancel combo, replay keys as were
+        if (event.Up() && !isAccumulatedDown)
+        {
+            replay();
+            reset();
+
+            // let last key received go through
+            return false;
+        }
+
+        // another potential combo key
+        if (isPotentialComboKey(event, isAccumulatedDown))
+        {
+            addKey(event);
+            //todo lookup combos
+            // if found then exec
+            // else if foundPotential then keep building
+            // else cancel combo build
+            //  prob want to support trying again after removing 1st key,
+            //  ex: potKeys=zwgm for zw, gm;  press wgm, we want to send 'w', then see gm combo 
+            return true;
+        }
+
+        return false;
+    }
+};
+
+static Comboer comboer;
+
+
+
+bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
+{
+    //if (comboer.OnKeyEvent(event))
+    //    return true;
+
+    return OnKeyEventLevel2(event);
+}
+
+bool Keyboard::_OnKeyEvent(const KbdHookEvent& event)
+{
+    //## pq test debug combos
+    static bool inComboQ = false;
+    static bool comboQComplete = false;
+
+    if (timerWentOff && !inComboQ)
+    {
+        timerWentOff = false;
+    }
+
+    if (inComboQ)
+    {
+        Printf("inComboQ timerWentOff=%d\n", timerWentOff);
+
+        if (timerWentOff && !comboQComplete)
+        {
+            kilTimer(hMainWindow);
+            inComboQ = false;
+            timerWentOff = false;
+            Printf("cancel ComboQ on timer\n");
+            return true;
+        }
+
+        if (event.Down())
+        {
+            if (event.vkCode == 'Q')
+            {
+                Printf("skip repeat down Q\n");
+                return true;
+            }
+
+            if (event.vkCode == 'W')
+            {
+                Printf("ComboQ completed\n");
+                kilTimer(hMainWindow);
+                inComboQ = false;
+                comboQComplete = true;
+                return true;
+            }
+
+            Printf("cancel ComboQ on other key up\n");
+            kilTimer(hMainWindow);
+            inComboQ = false;
+            return true;
+
+        }
+
+        if ((event.vkCode == 'Q' || event.vkCode == 'W') && event.Up() && !comboQComplete)
+        {
+            Printf("cancel ComboQ on Q/W up\n");
+            kilTimer(hMainWindow);
+            inComboQ = false;
+            return true;
+        }
+
+        // should not get here (bug?)
+        return true;
+    }
+
+    if (event.Down())
+    {
+        if (event.vkCode == 'Q' || event.vkCode == 'W')
+        {
+            Printf("start timer on Q down\n");
+            inComboQ = true;
+            comboQComplete = false;
+
+            SetTimer(hMainWindow, TIMER_ID, 50, TimerProc);
+            return true;
+        }
+    }
+ 
+    return OnKeyEventLevel2(event);
+}
+
+bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 {
     if (CheckForSuspendKey(event)) 
         return true;
@@ -436,31 +643,6 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         this->lastVkCodeDown = event.vkCode;
     }
 
-    //## pq test debug combos
-    static bool inComboQ = false;
-    //if (inComboQ)
-    //{
-    //    Printf("inComboQ\n");
-    //    if (event.vkCode != 'Q' || event.Up())
-    //    {
-    //        inComboQ = false;
-    //        Printf("cancel ComboQ\n");
-    //    }
-    //    else
-    //    {
-    //        Printf("repeat down Q\n");
-    //    }
-    //    return true;
-    //}
-
-    //if (event.Down())
-    //{
-    //    if (event.vkCode == 'Q')
-    //    {
-    //        inComboQ = true;
-    //        return true;
-    //    }
-    //}
 
     // adaptives, 150ms delay between each key allowed
     //##pq todo: this will need to be by layer etc etc
@@ -475,6 +657,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
         { {'W','Q'}, "wn"}, // wv -> wn
         { {'R','W'}, "mp"}, // mw -> mp
         { {'R','E'}, "ml"}, // mh -> ml
+        { {'Q','E'}, "ph"}, // vh -> ph
 
         { {'E','Q'}, "lv"}, // hv -> lv
         { {'E','W'}, "lw"}, // hw -> lw
@@ -539,11 +722,11 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent & event)
                     Printf("found adaptive!\n");
 
                     // delete input chars, note that last one *has not been sent yet*
-                    size_t   nbrKeys = foundAdaptIt->first.size();
+                    size_t nbrKeys = foundAdaptIt->first.size();
 
                     // send BS downs
                     KeyValue bs(VK_BACK, 0);
-                    for (int i = 0; i < nbrKeys - 1; ++i)
+                    for (size_t i = 0; i < nbrKeys - 1; ++i)
                     {
                         SendVk(bs, true);  // BS down
                         SendVk(bs, false);  // BS up

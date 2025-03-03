@@ -103,13 +103,14 @@ bool VkUtil::CharToVk(char ch, WORD& vk, bool& isShifted)
 char VkUtil::VkToChar(WORD vk, WORD scancode)
 {
     // get displayable ascii character from vk
-    static BYTE keystates[256] = {0};
-    WORD asciiChars[16] = {0};
+    static BYTE keystates[256] = { 0 };
+    WORD asciiChars[16] = { 0 };
     ToAscii(vk, scancode, keystates, asciiChars, 0);
 
     char asciiChar = ' ';
     if (asciiChars[0] > 32 && asciiChars[0] < 127)
         asciiChar = static_cast<char>(asciiChars[0]);
 
-    return asciiChar ;
+    return asciiChar;
 }
+

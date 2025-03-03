@@ -54,6 +54,7 @@ public:
     bool ProcessKeyEvent(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
     bool OnKeyEvent(const KbdHookEvent & event);
+
     // dbg
     void OutNbKeysDn();
 
@@ -101,6 +102,9 @@ protected:
     void SuspendChording();
     void ReplayCancelledChord();
     bool IsSelfInjected(const KbdHookEvent& event);
+
+    bool _OnKeyEvent(const KbdHookEvent& event);
+    bool OnKeyEventLevel2(const KbdHookEvent& event);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
