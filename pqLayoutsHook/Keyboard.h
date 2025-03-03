@@ -54,6 +54,8 @@ public:
     bool ProcessKeyEvent(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
     bool OnKeyEvent(const KbdHookEvent & event);
+    bool OnKeyEventLevel2(const KbdHookEvent & event);
+
     // dbg
     void OutNbKeysDn();
 
