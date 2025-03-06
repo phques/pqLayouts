@@ -54,6 +54,7 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     quitKey(0),
     lastKeypressTick(0),
     lastDownEvent{},
+    prevlastDownEvent{},
     lastVkCodeDown(0),
     chordingSuspended(false),
     lpsteaksLayer1(0),
@@ -493,15 +494,14 @@ struct Comboer
         // not in combo building mode
         if (!buildingCombo)
         {
-            if (isPotentialComboKey(event, isAccumulatedDown))
-            {
-                // start building potential combo
-                buildingCombo = true;
-                firstEvent = event;
-                addKey(event);
-                return true;
-            }
-            return false;
+            if (!isPotentialComboKey(event, isAccumulatedDown))
+                return false;
+         
+            // start building potential combo
+            buildingCombo = true;
+            firstEvent = event;
+            addKey(event);
+            return true;
         }
 
         // -- buildingCombo mode --
@@ -509,16 +509,6 @@ struct Comboer
         // 'other' key up, let it through
         if (event.Up() && !isAccumulatedDown)
         {
-            return false;
-        }
-
-        // 'other' key down, not a combo, cancel combo, replay keys as were
-        if (event.Up() && !isAccumulatedDown)
-        {
-            replay();
-            reset();
-
-            // let last key received go through
             return false;
         }
 
@@ -535,6 +525,15 @@ struct Comboer
             return true;
         }
 
+        // 'other' key down, not a combo, cancel combo, replay keys as were
+        if (event.Down() && !isAccumulatedDown)
+        {
+            replay();
+            reset();
+
+            // let last key received go through
+            return false;
+        }
         return false;
     }
 };
@@ -548,7 +547,31 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     //if (comboer.OnKeyEvent(event))
     //    return true;
 
+    static std::vector<KbdHookEvent > events;
+    static std::string keys = "QWASD";
+
+    //if (keys.find((char)event.vkCode) == std::string::npos)
+    
+    //if ((char)event.vkCode == 'Q')
+    //{
+    //    if (events.size() == 0 && event.Down())
+    //    {
+    //        SetTimer(hMainWindow, TIMER_ID, 50, TimerProc);
+
+    //        events.push_back(event);
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        if (event.Up())
+    //        {
+    //            events.clear();
+    //        }
+    //    }
+    //}
+  
     return OnKeyEventLevel2(event);
+
 }
 
 bool Keyboard::_OnKeyEvent(const KbdHookEvent& event)
@@ -644,23 +667,36 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     }
 
 
-    // adaptives, 150ms delay between each key allowed
-    //##pq todo: this will need to be by layer etc etc
+    // adaptives, delay between each key allowed
+    //##pq todo: this will need to be by layer / read from kbd file etc etc
     //##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
-    static std::map<VeeKeeVector, const char*> adapts = {
-        // adaptives
-        { {'J','K'}, "au"}, // ae -> au
-        { {'O','P'}, "ig"}, // .g -> ig (for ver w BYOU on bottom / G on top)
-        { {'P','O'}, "gi"}, // g. -> gi (for ver w BYOU on bottom / G on top)
-        { {'P','I'}, "go"}, // g' -> gO (for ver w BYOU on bottom / G on top)
 
-        { {'W','Q'}, "wn"}, // wv -> wn
-        { {'R','W'}, "mp"}, // mw -> mp
-        { {'R','E'}, "ml"}, // mh -> ml
+    static std::map<VeeKeeVector, const char*> adapts3 = {
+        // adaptives
+        { {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
+    };
+
+    static std::map<VeeKeeVector, const char*> adapts2 = {
+        // adaptives
+        { {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
+
+        { {'J','K'}, "au"}, // ae -> au
+
+        { {'O','P'}, "ig"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
+        { {'P','O'}, "gi"}, // g, -> gi (for ver w BYOU on bottom / G on top)
+        { {'P','I'}, "go"}, // g' -> go (for ver w BYOU on bottom / G on top)
+        { {'P',VK_OEM_4}, "gth"}, // gj -> gth (for ver w BYOU on bottom / G on top)
+
         { {'Q','E'}, "ph"}, // vh -> ph
+        { {'Q','W'}, "vs"}, // vw -> vs
+        { {'W','Q'}, "wn"}, // wv -> wn
+
+        { {'E','R'}, "lm"}, // hm -> lm
+
+        { {'R','W'}, "mp"}, // mw -> mp
 
         { {'E','Q'}, "lv"}, // hv -> lv
-        { {'E','W'}, "lw"}, // hw -> lw
+
         { {'X','Z'}, "ls"}, // lp -> ls (not as good a tradeOff, but still better)
         { {'A','S'}, "sp"}, // sn -> sp
         { {'X','S'}, "ps"}, // ln -> ps !! (actually parallel to each other)
@@ -695,32 +731,35 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
         { {'U','P'}, "cgi"},
     };
 
-    // (just trying out the basic idea)
 
-    if (event.Down() && lastDownEvent.vkCode != 0)
+    if (adaptivesOn)
     {
-        LARGE_INTEGER qpcDiff;
-        event.QpcDiff(lastDownEvent, qpcDiff);
-
-        if (qpcDiff.QuadPart > 150000) // 150ms
+        if (event.Down() && lastDownEvent.vkCode != 0)
         {
-            Printf("reset lastDownEvent\n");
-            lastDownEvent = KbdHookEvent{};
-        }
-        else
-        {
-            if (adaptivesOn)
+            if (event.time - lastDownEvent.time > 250) // ms
+            {
+                Printf("reset lastDownEvent\n");
+                prevlastDownEvent.vkCode = 0;
+                lastDownEvent.vkCode = 0;
+            }
+            else
             {
                 Printf("checking for adaptive\n");
 
-                // look for prev key + curr key in the map of adaptives
-                VeeKeeVector vkeys{ lastDownEvent.vkCode, event.vkCode };
-                auto foundAdaptIt = adapts.find(vkeys);
+                std::map<VeeKeeVector, const char*>::iterator foundAdaptIt;
 
-                if (foundAdaptIt != adapts.end())
+                // look for adaptives
+                VeeKeeVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
+                VeeKeeVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
+
+                if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
+                    (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
                 {
                     Printf("found adaptive!\n");
 
+                    //##PQ todo: the adapts<> should themselves give the required BS in output,
+                    //     this way, we can 'add' the last key when the 1st chars don't change
+                    // (actually, what about shift-we = Ph !!??)
                     // delete input chars, note that last one *has not been sent yet*
                     size_t nbrKeys = foundAdaptIt->first.size();
 
@@ -740,7 +779,9 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
                     {
                         KeyValue keyValueOut(*ptr);
                         if (shifted && isalpha(*ptr))
+                        {
                             keyValueOut.Shift(true);
+                        }
 
                         SendVk(keyValueOut, true);
                         SendVk(keyValueOut, false);
@@ -749,17 +790,21 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
                     Printf("done sending adapt\n");
 
-                    lastDownEvent = KbdHookEvent{};
+                    prevlastDownEvent = lastDownEvent;
+                    lastDownEvent = event;
                     return true; // eat key
                 }
             }
         }
 
+        if (event.Down())
+        {
+            prevlastDownEvent = lastDownEvent;
+            lastDownEvent = event;
+        }
+
     }
-    if (event.Down())
-    {
-        lastDownEvent = event;
-    }
+
 
     // handle possible chording
     // do it here so we track non mapped keys to to be able to replay them for failed chord 

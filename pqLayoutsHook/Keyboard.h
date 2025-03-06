@@ -131,6 +131,7 @@ private:
 
     DWORD lastKeypressTick; // time tick of the last key press event
     KbdHookEvent lastDownEvent;
+    KbdHookEvent prevlastDownEvent;
     DWORD lastVkCodeDown;
 
     Layout layout;
