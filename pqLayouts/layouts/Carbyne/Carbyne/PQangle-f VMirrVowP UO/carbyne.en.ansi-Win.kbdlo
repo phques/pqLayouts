@@ -1,0 +1,14 @@
+! https://cyanophage.github.io/index.html#carbyne
+! mods: angleMod + right hand vert swap, including GB, swap UO
+
+imagefile screenshot-Win.png
+imageview 1 +56  73 +56
+
+include carbyne.en.ansi-Map.kbdlo
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
+include ../../../edit-layer-lalt.kbdlo
+
+imageview 145 +56 145 +56

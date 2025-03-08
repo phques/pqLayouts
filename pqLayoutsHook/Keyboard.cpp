@@ -673,62 +673,63 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
     static std::map<VeeKeeVector, const char*> adapts3 = {
         // adaptives
-        { {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
+        { {'R','W','R'}, "\bpl"}, // mwm -> mpl (copied from HD PM)
     };
 
     static std::map<VeeKeeVector, const char*> adapts2 = {
-        // adaptives
-        { {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
+            // adaptives
+        //{ {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
 
-        { {'J','K'}, "au"}, // ae -> au
+        { {'J','K'}, "u"}, // ae -> au
 
-        { {'O','P'}, "ig"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
-        { {'P','O'}, "gi"}, // g, -> gi (for ver w BYOU on bottom / G on top)
-        { {'P','I'}, "go"}, // g' -> go (for ver w BYOU on bottom / G on top)
-        { {'P',VK_OEM_4}, "gth"}, // gj -> gth (for ver w BYOU on bottom / G on top)
+        { {'O','P'}, "\big"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
+        { {'P','O'}, "i"}, // g, -> gi (for ver w BYOU on bottom / G on top)
+        { {'P','I'}, "o"}, // g' -> go (for ver w BYOU on bottom / G on top)
+        { {'P',VK_OEM_4}, "th"}, // gj -> gth (for ver w BYOU on bottom / G on top)
 
-        { {'Q','E'}, "ph"}, // vh -> ph
-        { {'Q','W'}, "vs"}, // vw -> vs
-        { {'W','Q'}, "wn"}, // wv -> wn
+        { {'Q','E'}, "\bph"}, // vh -> ph
+        { {'Q','W'}, "s"}, // vw -> vs
+        { {'W','Q'}, "n"}, // wv -> wn 
 
-        { {'E','R'}, "lm"}, // hm -> lm
+        { {'E','R'}, "\blm"}, // hm -> lm
 
-        { {'R','W'}, "mp"}, // mw -> mp
+        { {'R','W'}, "p"}, // mw -> mp
 
-        { {'E','Q'}, "lv"}, // hv -> lv
+        { {'E','Q'}, "\blv"}, // hv -> lv
 
-        { {'X','Z'}, "ls"}, // lp -> ls (not as good a tradeOff, but still better)
-        { {'A','S'}, "sp"}, // sn -> sp
-        { {'X','S'}, "ps"}, // ln -> ps !! (actually parallel to each other)
+      //{ {'X','Z'}, "s"}, // lp -> ls (not as good a tradeOff, but still better)
+        { {'A','S'}, "p"}, // sn -> sp
+        { {'X','S'}, "\bps"}, // ln -> ps !! (actually parallel to each other)
 
         // taken & adapted from HD PM !
-        { {'R','G'}, "lk"}, // MK -> LK
-        { {'F','G'}, "nk"}, // TK -> NK
-        { {'G','F'}, "kn"}, // KT -> KN
+        { {'R','G'}, "\blk"}, // MK -> LK
+        { {'F','G'}, "\bnk"}, // TK -> NK
+        { {'G','F'}, "n"}, // KT -> KN
 
-        { {'S','D'}, "ng"}, // NR -> ng
+        { {'S','D'}, "g"}, // NR -> ng
 
-        // use '\' as 'magic adaptive key' (cf HD, moutis QMK)
-        { {'Z',VK_OEM_5}, "philippe.quesnel"},  // P
-        { {'L',VK_OEM_5}, "integration\\"},     // I
-        { {'P',VK_OEM_5}, "bug"},               // B
-        { {'A',VK_OEM_5}, "select * from "},    // S
+        // use 'q' as 'magic adaptive key' (cf HD, moutis QMK, same pos, which is #)
+        // \ = VK_OEM_5
+        { {'Z','Y'}, "\bphilippe.quesnel"},  // P
+        { {'L','Y'}, "\bintegration\\"},     // I
+        { {'P','Y'}, "\bbig"},               // G 'adaptive', b_g is hard, (big) the hardest?
+        { {'A','Y'}, "\bselect * from "},    // S
 
         // 'combos' done as adaptives until we have actual combos
-        { {'L',VK_OEM_1}, "I "}, //ic -> "I " (bad idea?)
-        { {'U','Y'}, "@" },
-        { {'I','U'}, "!" },
-        { {'I','O'}, "?" },
-        { {'O','I'}, "/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
-        { {'U','O'}, ":" }, //not requied with Carbyne (?)
+        { {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
+        { {'U','Y'}, "\b@" },
+        { {'I','U'}, "\b!" },
+        { {'I','O'}, "\b?" },
+        { {'O','I'}, "\b/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
+        { {'U','O'}, "\b:" }, //not requied with Carbyne (?)
         { {VK_OEM_COMMA, 
-           VK_OEM_PERIOD}, "="},
-        { {'M', VK_OEM_PERIOD}, "_"},
-        { {'W', 'R'}, "qu"}, // ideally this would do Qu if shift is down
+           VK_OEM_PERIOD}, "\b="},
+        { {'M', VK_OEM_PERIOD}, "\b_"},
+        { {'W', 'R'}, "\bqu"},
 
-        { {'U','I'}, ".com"},
-        { {'Y','U'}, "gmail"},
-        { {'U','P'}, "cgi"},
+        { {'U','I'}, "\b.com"},
+        { {'Y','U'}, "\bgmail"},
+        { {'U','P'}, "\bcgi"},
     };
 
 
@@ -736,7 +737,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     {
         if (event.Down() && lastDownEvent.vkCode != 0)
         {
-            if (event.time - lastDownEvent.time > 250) // ms
+            if (event.time - lastDownEvent.time > 175) // ms
             {
                 Printf("reset lastDownEvent\n");
                 prevlastDownEvent.vkCode = 0;
@@ -765,27 +766,37 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
                     // send BS downs
                     KeyValue bs(VK_BACK, 0);
-                    for (size_t i = 0; i < nbrKeys - 1; ++i)
-                    {
-                        SendVk(bs, true);  // BS down
-                        SendVk(bs, false);  // BS up
-                    }
+                    //for (size_t i = 0; i < nbrKeys - 1; ++i)
+                    //{
+                    //    SendVk(bs, true);  // BS down
+                    //    SendVk(bs, false);  // BS up
+                    //}
 
                     // send output keys 
                     // 1st key is shifted if Shift is currently down
                     //i.e. shift ae -> Au
-                    bool shifted = ShiftDown();
+                    bool shifted = false;
+                    int nbBS = 0;
                     for (const char* ptr = foundAdaptIt->second; *ptr; ++ptr)
                     {
                         KeyValue keyValueOut(*ptr);
+
                         if (shifted && isalpha(*ptr))
                         {
                             keyValueOut.Shift(true);
                         }
+                        shifted = false;
 
                         SendVk(keyValueOut, true);
                         SendVk(keyValueOut, false);
-                        shifted = false;
+
+                        if (*ptr == '\b')
+                        {
+                            if (++nbBS == nbrKeys-1)
+                            {
+                                shifted = ShiftDown();
+                            }
+                        }
                     }
 
                     Printf("done sending adapt\n");
