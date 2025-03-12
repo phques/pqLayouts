@@ -9,6 +9,6 @@ include carbyne.en.ansi-map.kbdlo
 ! Space acts as shift when held, space when tapped
 dualmod sp lshift sp
 
-include ../../../edit-layer-lalt.kbdlo
+include ../../../edit-layer-lalt2.kbdlo
 
 imageview 314 +126 314 +126

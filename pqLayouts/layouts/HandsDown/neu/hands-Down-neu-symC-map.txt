@@ -1,0 +1,50 @@
+
+ 8 9 0 - =
+ q w e r t y u i o p [ ] \
+ a s d f g h j k l ; '
+ z x c v b n m , . /
+
+               8 9 0 = _
+ w f m p v z . " , ' q ( )
+ r s n t b / a e i h j
+  c l d g x - u o y k
+ 
+               | \ ? < >
+ W F M P V Z : [ ; ] Q { }
+ R S N T B * A E I H J
+  C L D G X + U O Y K 
+
+               . . . . .
+ . . . . . . . . . . . . .
+ . . . . . . . . . . .
+ . . . . . . . . . .
+
+
+Adaptives from Alan's QMK
+(somehow some did not make any sense!? so not copied)
+
+mv -> ml
+
+pm -> pl
+fm -> fl
+wm -> lm
+mwm -> lml  calmly
+
+wp ->  lml  calmly
+vp -> vl
+
+bt -> bl
+gt -> ght
+
+yk -> yi
+--
+
+ae au
+uh ua
+eh eo
+he oe
+yh yi
+
+LH->LN
+MH->MN
+NH->NL

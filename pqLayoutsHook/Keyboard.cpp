@@ -697,7 +697,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
         { {'E','Q'}, "\blv"}, // hv -> lv
 
-      //{ {'X','Z'}, "s"}, // lp -> ls (not as good a tradeOff, but still better)
+        //{ {'X','Z'}, "s"}, // lp -> ls (not as good a tradeOff, but still better)
+        { {'F','S'}, "l"}, // tn -> tl b
         { {'A','S'}, "p"}, // sn -> sp
         { {'X','S'}, "\bps"}, // ln -> ps !! (actually parallel to each other)
 

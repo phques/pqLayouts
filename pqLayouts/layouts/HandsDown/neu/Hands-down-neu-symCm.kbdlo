@@ -1,0 +1,19 @@
+! Hands Down Neu symmetric (angle mod ansi)
+! https://sites.google.com/alanreiser.com/handsdown/home/hands-down-neu
+! This is based on the Mac version found on Alan's downloads 
+
+! I swap BG and moved /,"
+
+imagefile hd-neu-imgCm.png
+imageview 5 +160 199 +160
+
+include hands-Down-neu-symC-map.kbdlo
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
+
+! ------- edit layer --------
+
+include ../../edit-layer-lalt2.kbdlo
+imageview 401 +160 401 +160
