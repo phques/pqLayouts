@@ -36,15 +36,18 @@ vp -> vl
 bt -> bl
 gt -> ght
 
-yk -> yi
 --
+yk -> yi
 
 ae au
+
+'magic H'
+(ah -> au replaced by ae -> au)
 uh ua
 eh eo
-he oe
+oh oe
 yh yi
-
+ other magic H
 LH->LN
 MH->MN
 NH->NL
