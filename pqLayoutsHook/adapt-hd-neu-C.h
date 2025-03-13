@@ -41,10 +41,9 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
 
     // use 'z' (qwerty Y) as 'magic adaptive key' 
     // \ = VK_OEM_5
-    { {'Z','Y'}, "\bphilippe.quesnel"},  // P
+    { {'R','Y'}, "\bphilippe.quesnel"},  // P
     { {'L','Y'}, "\bintegration\\"},     // I
-    { {'P','Y'}, "\bbig"},               // G 'adaptive', b_g is hard, (big) the hardest?
-    { {'A','Y'}, "\bselect * from "},    // S
+    { {'S','Y'}, "\bselect * from "},    // S
 
     // 'combos' done as adaptives until we have actual combos
     { {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
