@@ -39,7 +39,7 @@ KbdHookEvent::KbdHookEvent()
 }
 
 
-DWORD KbdHookEvent::TimeDiff(const KbdHookEvent& startEvent)
+DWORD KbdHookEvent::TimeDiff(const KbdHookEvent& startEvent) const
 {
     return TickCountDiff(startEvent.time, this->time);
 }

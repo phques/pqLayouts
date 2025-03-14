@@ -540,38 +540,141 @@ struct Comboer
 
 static Comboer comboer;
 
+void Keyboard::ReplayEvents(const std::vector<KbdHookEvent>& events)
+{
+    for (const auto& event : events)
+    {
+        OnKeyEventLevel2(event);
+    }
+}
 
+void Keyboard::SendString(int nbrKeysIn, const char* textString)
+{
+    // send output keys 
+    // 1st key is shifted if Shift is currently down
+    //i.e. shift ae -> Au
+    bool shifted = nbrKeysIn == 0 && ShiftDown();
+    int nbBS = 0;
+    for (const char* ptr = textString; *ptr; ++ptr)
+    {
+        KeyValue keyValueOut(*ptr);
+
+        if (shifted && isalpha(*ptr))
+        {
+            keyValueOut.Shift(true);
+        }
+        shifted = false;
+
+        SendVk(keyValueOut, true);
+        SendVk(keyValueOut, false);
+
+        if (*ptr == '\b')
+        {
+            if (++nbBS == nbrKeysIn - 1)
+            {
+                shifted = ShiftDown();
+            }
+        }
+    }
+}
+bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks)
+{
+    // VeeKeeVector must be sorted!
+    // combos for HD neuC
+    //## need another format to be able to output ctrl-c & cie !!
+    static std::map<VeeKeeVector, const char*> combos = {
+        { {'R','W'}, "qu"},
+        { {'F','S'}, "z"},
+
+        { {'U','Y'}, "@"},
+        { {'I','U'}, ".com"},
+
+        { {'O','U'}, ":" },
+        { {'I','O'}, "/" },
+
+        { {'L',VK_OEM_1}, "I "}, //ih -> "I " 
+
+        { {VK_OEM_COMMA, VK_OEM_PERIOD}, "="},
+        { {'M', VK_OEM_PERIOD}, "_"},
+    };
+
+    auto foundComboIt = combos.find(vks);
+
+    if (foundComboIt != combos.end())
+    {
+        Printf("found combo!\n");
+
+        SendString(0, foundComboIt->second);
+        return true;
+    }
+
+    return false;
+}
 
 bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 {
     //if (comboer.OnKeyEvent(event))
     //    return true;
 
-    static std::vector<KbdHookEvent > events;
-    static std::string keys = "QWASD";
+    static std::vector<KbdHookEvent > eventsDown;
+    static VeeKeeVector vksDown;
+    static std::string keys = std::string("OILYSMURFSW") 
+        + (char)VK_OEM_1
+        + (char)VK_OEM_COMMA
+        + (char)VK_OEM_PERIOD
+        ;
+    static bool cumulating = false;
 
-    //if (keys.find((char)event.vkCode) == std::string::npos)
-    
-    //if ((char)event.vkCode == 'Q')
-    //{
-    //    if (events.size() == 0 && event.Down())
-    //    {
-    //        SetTimer(hMainWindow, TIMER_ID, 50, TimerProc);
+    bool isComboKey = (keys.find((char)event.vkCode) != std::string::npos);
+    bool isComboKeyDown = isComboKey && event.Down();
 
-    //        events.push_back(event);
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        if (event.Up())
-    //        {
-    //            events.clear();
-    //        }
-    //    }
-    //}
-  
+    if (!cumulating && !isComboKeyDown)
+    {
+        Printf("not cumulating, not comboKeyDown\n");
+        return OnKeyEventLevel2(event);
+    }
+
+    if (!cumulating && isComboKeyDown)
+    {
+        Printf("1st combo key\n");
+        cumulating = true;
+        eventsDown.push_back(event);
+        vksDown.push_back(event.vkCode);
+        std::sort(vksDown.begin(), vksDown.end());
+        return true;
+    }
+
+    if (cumulating)
+    {
+        bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
+
+        if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 50) //ms
+        {
+            Printf("cancel cumul\n");
+            ReplayEvents(eventsDown);
+            cumulating = false;
+            eventsDown.clear();
+            vksDown.clear();
+            return OnKeyEventLevel2(event);
+        }
+
+        eventsDown.push_back(event);
+        vksDown.push_back(event.vkCode);
+        std::sort(vksDown.begin(), vksDown.end());
+
+        if (!DoCombo(eventsDown, vksDown))
+        {
+            Printf("cancel cumul\n");
+            ReplayEvents(eventsDown);
+        }
+        cumulating = false;
+        eventsDown.clear();
+        vksDown.clear();
+        return true;
+    }
+
+
     return OnKeyEventLevel2(event);
-
 }
 
 bool Keyboard::_OnKeyEvent(const KbdHookEvent& event)
@@ -697,46 +800,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
                 {
                     Printf("found adaptive!\n");
 
-                    //##PQ todo: the adapts<> should themselves give the required BS in output,
-                    //     this way, we can 'add' the last key when the 1st chars don't change
-                    // (actually, what about shift-we = Ph !!??)
-                    // delete input chars, note that last one *has not been sent yet*
-                    size_t nbrKeys = foundAdaptIt->first.size();
-
-                    // send BS downs
-                    KeyValue bs(VK_BACK, 0);
-                    //for (size_t i = 0; i < nbrKeys - 1; ++i)
-                    //{
-                    //    SendVk(bs, true);  // BS down
-                    //    SendVk(bs, false);  // BS up
-                    //}
-
-                    // send output keys 
-                    // 1st key is shifted if Shift is currently down
-                    //i.e. shift ae -> Au
-                    bool shifted = false;
-                    int nbBS = 0;
-                    for (const char* ptr = foundAdaptIt->second; *ptr; ++ptr)
-                    {
-                        KeyValue keyValueOut(*ptr);
-
-                        if (shifted && isalpha(*ptr))
-                        {
-                            keyValueOut.Shift(true);
-                        }
-                        shifted = false;
-
-                        SendVk(keyValueOut, true);
-                        SendVk(keyValueOut, false);
-
-                        if (*ptr == '\b')
-                        {
-                            if (++nbBS == nbrKeys-1)
-                            {
-                                shifted = ShiftDown();
-                            }
-                        }
-                    }
+                    size_t nbrKeysIn = foundAdaptIt->first.size();
+                    SendString(nbrKeysIn, foundAdaptIt->second);
 
                     Printf("done sending adapt\n");
 

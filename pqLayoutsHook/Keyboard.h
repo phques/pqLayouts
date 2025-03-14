@@ -94,6 +94,9 @@ protected:
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
+    void ReplayEvents(const std::vector<KbdHookEvent>& events);
+    bool DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks);
+
     bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
     bool CheckLpChordsLayers();
     bool OnPo2LayersChord();
@@ -104,6 +107,7 @@ protected:
     bool IsSelfInjected(const KbdHookEvent& event);
 
     bool _OnKeyEvent(const KbdHookEvent& event);
+    void SendString(int nbrKeysIn, const char* textString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
     static bool IsModifier(VeeKee vk);

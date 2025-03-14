@@ -35,7 +35,7 @@ public:
     inline bool Up() const { return (flags & LLKHF_UP) != 0; }
     inline bool Down() const { return (flags & LLKHF_UP) == 0; }
 
-    DWORD TimeDiff(const KbdHookEvent& startEvent);
+    DWORD TimeDiff(const KbdHookEvent& startEvent) const;
     void QpcDiff(const KbdHookEvent& startEvent, LARGE_INTEGER& diff) const;
 
     LARGE_INTEGER perfoCounter;

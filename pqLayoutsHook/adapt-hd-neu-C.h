@@ -20,6 +20,7 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'T','R'}, "l"},      // vp -> vl
     { {'G','F'}, "l"},      // bt -> bl
     { {'V','F'}, "ht"},     // gt -> ght
+    { {'F','G'}, "\bmb"},   // tb -> mb
 
     // right/vowels hand
     { {'J','K'}, "u"},          // ae -> au
@@ -46,18 +47,18 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'S','Y'}, "\bselect * from "},    // S
 
     // 'combos' done as adaptives until we have actual combos
-    { {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
-    { {'U','Y'}, "\b@" },
+    //{ {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
+    //{ {'U','Y'}, "\b@" },
     { {'I','U'}, "\b!" },
     { {'I','O'}, "\b?" },
-    { {'O','I'}, "\b/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
-    { {'U','O'}, "\b:" }, //not requied with Carbyne (?)
-    { {VK_OEM_COMMA,
-       VK_OEM_PERIOD}, "\b="},
-    { {'M', VK_OEM_PERIOD}, "\b_"},
-    { {'W', 'R'}, "\bqu"},
+    //{ {'O','I'}, "\b/" },
+    //{ {'U','O'}, "\b:" },
+    //{ {VK_OEM_COMMA,
+    //   VK_OEM_PERIOD}, "\b="},
+    //{ {'M', VK_OEM_PERIOD}, "\b_"},
+    //{ {'W', 'R'}, "\bqu"},
 
-    { {'U','I'}, "\b.com"},
+    //{ {'U','I'}, "\b.com"},
     { {'Y','U'}, "\bgmail"},
-    { {'U','P'}, "\bcgi"},
+    { {'U','Y'}, "\bcgi"},
 };
