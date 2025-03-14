@@ -11,7 +11,7 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     // adaptives
 //{ {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
 
-{ {'J','K'}, "u"}, // ae -> au
+//{ {'J','K'}, "u"}, // ae -> au
 
 { {'O','P'}, "\big"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
 { {'P','O'}, "i"}, // g, -> gi (for ver w BYOU on bottom / G on top)
@@ -48,18 +48,18 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
 { {'A','Y'}, "\bselect * from "},    // S
 
 // 'combos' done as adaptives until we have actual combos
-{ {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
-{ {'U','Y'}, "\b@" },
+//{ {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
+//{ {'U','Y'}, "\b@" },
 { {'I','U'}, "\b!" },
 { {'I','O'}, "\b?" },
 { {'O','I'}, "\b/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
-{ {'U','O'}, "\b:" }, //not requied with Carbyne (?)
-{ {VK_OEM_COMMA,
-   VK_OEM_PERIOD}, "\b="},
-{ {'M', VK_OEM_PERIOD}, "\b_"},
-{ {'W', 'R'}, "\bqu"},
+//{ {'U','O'}, "\b:" }, //not requied with Carbyne (?)
+//{ {VK_OEM_COMMA,
+//   VK_OEM_PERIOD}, "\b="},
+//{ {'M', VK_OEM_PERIOD}, "\b_"},
+//{ {'W', 'R'}, "\bqu"},
 
-{ {'U','I'}, "\b.com"},
+//{ {'U','I'}, "\b.com"},
 { {'Y','U'}, "\bgmail"},
-{ {'U','P'}, "\bcgi"},
+{ {'U','Y'}, "\bcgi"},
 };

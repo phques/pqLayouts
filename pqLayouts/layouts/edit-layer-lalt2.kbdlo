@@ -28,8 +28,8 @@ K2K o end   +end
 K2K p tab   +tab
 
 k2k [ @tab
-k2k ] @esc
-K2K \ ^s  ^+s
+k2k ] ^s  ^+s
+k2k \ ^a
 
 K2K j left  +left
 K2K k down  +down
