@@ -613,6 +613,13 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
 
 bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 {
+    if (CheckForSuspendKey(event)) 
+        return true;
+
+    // let keys through keys while suspended
+    if (suspended)
+        return false;
+
     //if (comboer.OnKeyEvent(event))
     //    return true;
 
@@ -755,13 +762,6 @@ bool Keyboard::_OnKeyEvent(const KbdHookEvent& event)
 
 bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 {
-    if (CheckForSuspendKey(event)) 
-        return true;
-
-    // let keys through keys while suspended
-    if (suspended)
-        return false;
-
     // save time tick of last key press
     if (event.Down())
     {
@@ -772,8 +772,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
     // adaptives, delay between each key allowed
     //##pq todo: this will need to be by layer / read from kbd file etc etc
-#include "adapt-carbyne.h"
-//#include "adapt-hd-neu-C.h"
+//#include "adapt-carbyne.h"
+#include "adapt-hd-neu-C.h"
 
     if (adaptivesOn)
     {
