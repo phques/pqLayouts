@@ -68,3 +68,9 @@ private:
     bool alt;
 };
 
+// to ease creating a KeyValue for ctrl-XX
+class CtrlKeyValue : public KeyValue
+{
+public:
+    CtrlKeyValue(VeeKee vk) : KeyValue(vk, 0, false, true) {}
+};

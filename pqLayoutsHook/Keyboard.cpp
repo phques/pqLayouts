@@ -446,99 +446,6 @@ void kilTimer(HWND hWnd)
     }
 }
 
-struct Comboer
-{
-    bool buildingCombo{};
-    KbdHookEvent firstEvent;
-    std::vector<VeeKee> accumulatedKeys;
-    std::vector<VeeKee> sortedKeys;
-
-    bool isPotentialComboKey(const KbdHookEvent& event, const bool isAccumulatedDown)
-    {
-        //## pq test debug
-        static std::string keys = "QWASD";
-
-        return !isAccumulatedDown && 
-                event.Down() &&
-                keys.find((char*)event.vkCode) != std::string::npos;
-    }
-
-    void reset()
-    {
-        buildingCombo = false;
-        accumulatedKeys.clear();
-        sortedKeys.clear();
-        firstEvent = KbdHookEvent{};
-        
-        //##todo kill/reset timer
-    }
-
-    void replay()
-    {
-        //## todo
-    }
-
-    void addKey(const KbdHookEvent& event)
-    {
-        accumulatedKeys.push_back(event.vkCode);
-        
-        sortedKeys.push_back(event.vkCode);
-        std::sort(sortedKeys.begin(), sortedKeys.end());
-    }
-
-    // return true to 'eat' key, false to continue processing
-    bool OnKeyEvent(const KbdHookEvent& event)
-    {
-        bool isAccumulatedDown = VkUtil::Contains(accumulatedKeys, event.vkCode);
-
-        // not in combo building mode
-        if (!buildingCombo)
-        {
-            if (!isPotentialComboKey(event, isAccumulatedDown))
-                return false;
-         
-            // start building potential combo
-            buildingCombo = true;
-            firstEvent = event;
-            addKey(event);
-            return true;
-        }
-
-        // -- buildingCombo mode --
-
-        // 'other' key up, let it through
-        if (event.Up() && !isAccumulatedDown)
-        {
-            return false;
-        }
-
-        // another potential combo key
-        if (isPotentialComboKey(event, isAccumulatedDown))
-        {
-            addKey(event);
-            //todo lookup combos
-            // if found then exec
-            // else if foundPotential then keep building
-            // else cancel combo build
-            //  prob want to support trying again after removing 1st key,
-            //  ex: potKeys=zwgm for zw, gm;  press wgm, we want to send 'w', then see gm combo 
-            return true;
-        }
-
-        // 'other' key down, not a combo, cancel combo, replay keys as were
-        if (event.Down() && !isAccumulatedDown)
-        {
-            replay();
-            reset();
-
-            // let last key received go through
-            return false;
-        }
-        return false;
-    }
-};
-
-static Comboer comboer;
 
 void Keyboard::ReplayEvents(const std::vector<KbdHookEvent>& events)
 {
@@ -551,7 +458,7 @@ void Keyboard::ReplayEvents(const std::vector<KbdHookEvent>& events)
 void Keyboard::SendString(int nbrKeysIn, const char* textString)
 {
     // send output keys 
-    // 1st key is shifted if Shift is currently down
+    // 1st key is shifted if alpha && Shift is currently down
     //i.e. shift ae -> Au
     bool shifted = nbrKeysIn == 0 && ShiftDown();
     int nbBS = 0;
@@ -577,11 +484,12 @@ void Keyboard::SendString(int nbrKeysIn, const char* textString)
         }
     }
 }
+
 bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks)
 {
-    // VeeKeeVector must be sorted!
     // combos for HD neuC
-    //## need another format to be able to output ctrl-c & cie !!
+    // VeeKeeVector must be sorted!
+    // These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
     static std::map<VeeKeeVector, const char*> combos = {
         { {'R','W'}, "qu"},
         { {'F','S'}, "z"},
@@ -592,22 +500,80 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'O','U'}, ":" },
         { {'I','O'}, "/" },
 
-        { {'L',VK_OEM_1}, "I "}, //ih -> "I " 
-
         { {VK_OEM_COMMA, VK_OEM_PERIOD}, "="},
         { {'M', VK_OEM_PERIOD}, "_"},
+
+        { {'L',VK_OEM_1}, "I"},    // ih -> "I" 
+        { {'L','X'}, "I'll"},      // il -> "I'll" 
+        { {'E','L'}, "I'm"},       // im -> "I'm" 
+        { {'X',VK_OEM_PERIOD}, "you'll"},   // yl -> "you'll" 
+        { {'A',VK_OEM_PERIOD}, "you're"},   // yr -> "you're" 
+        { {'R',VK_OEM_PERIOD}, "your"},     // yp -> "your" (P for 'possessive')
+        { {'F','Q'}, "their"},              // tw -> their
+        { {'F',VK_OEM_PERIOD}, "they"},     // ty -> they
+        { {'F','W'}, "there"},      // tf -> there
+        { {'A',VK_OEM_1}, "here"},  // hr -> here
+        { {'F','P'}, "they're"},    // t' -> they're
+        { {'A','B'}, "where"},      // xr -> where
+        { {'B','X'}, "we'll"},      // xl -> we'll
+        { {'B','P'}, "we're"},      // x' -> we're
+
+        { {'D','F'}, "th" },    // 
+        { {'D','S'}, "ch" },    // 
+        { {'Q','W'}, "wh" },    // 
+        { {'A','S'}, "sh" },    // 
+        { {'E','R'}, "ph" },    // 
+        { {'B','V'}, "gh" },    // 
+        { {'A','D'}, "sch"},    // 
+        //{ {'A','D','S'}, "sch"},
     };
 
     auto foundComboIt = combos.find(vks);
-
     if (foundComboIt != combos.end())
     {
         Printf("found combo!\n");
 
         SendString(0, foundComboIt->second);
+        lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
     }
 
+    // sent directly w. SendVk, so to support, for ex, shift-(ctrl-z),
+    // we will need to add in the Shift in the KeyValue when Shift is down
+    // (nb: normal 'KeyOut' key entries will have the shift=true for entries on the shift layer !)
+    // VeeKeeVector must be sorted!
+    static std::map<VeeKeeVector, std::vector<KeyValue>> combos2 = {
+        //{ {'C','X','Z'}, {CtrlKeyValue('Y')} }, // ctrl-y redo
+        { {'X','Z'}, {CtrlKeyValue('Z')} }, // ctrl-z (use shift to do Redo)
+        { {'C','X'}, {CtrlKeyValue('C')} }, // ctrl-c
+        { {'C','V'}, {CtrlKeyValue('V')} }, // ctrl-v
+        { {'H','Y'}, {CtrlKeyValue('W')} }, // ctrl-w (close, unfortunately not std, ditto ctrl-f4)
+        { {'A','G'}, {CtrlKeyValue('F')} }, // ctrl-f (find)
+        { {'V','Z'}, {CtrlKeyValue('A')} }, // ctrl-a (select all)
+        { {'R','T'}, {KeyValue(VK_TAB, 0, false, false, true)} }, // alt-tab (next window)
+    };
+
+    auto foundComboIt2 = combos2.find(vks);
+    if (foundComboIt2 != combos2.end())
+    {
+        Printf("found combo!\n");
+
+        for (const auto& keyValue : foundComboIt2->second)
+        {
+            // make copy so we can add in Shift if required
+            KeyValue temp(keyValue);
+
+            if (ShiftDown())
+                temp.Shift(true);
+
+            SendVk(temp, true);
+            SendVk(temp, false);
+        }
+        lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
+        return true;
+    }
+
+    // no combo found
     return false;
 }
 
@@ -620,19 +586,16 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     if (suspended)
         return false;
 
-    //if (comboer.OnKeyEvent(event))
-    //    return true;
-
     static std::vector<KbdHookEvent > eventsDown;
     static VeeKeeVector vksDown;
-    static std::string keys = std::string("OILYSMURFSW") 
-        + (char)VK_OEM_1
+    static std::string comboKeys = std::string("ABCDEFGHILMOPQRSTUVWXYZ") 
+        + (char)VK_OEM_1        // ';:'
         + (char)VK_OEM_COMMA
         + (char)VK_OEM_PERIOD
         ;
     static bool cumulating = false;
 
-    bool isComboKey = (keys.find((char)event.vkCode) != std::string::npos);
+    bool isComboKey = (comboKeys.find((char)event.vkCode) != std::string::npos);
     bool isComboKeyDown = isComboKey && event.Down();
 
     if (!cumulating && !isComboKeyDown)
