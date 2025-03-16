@@ -21,7 +21,7 @@
 #include "layout.h"
 #include "Notification.h"
 #include "chord.h"
-#include "chording.h"
+#include "ChordingData.h"
 
 class KbdHook; // fwd
 
@@ -50,7 +50,7 @@ public:
     void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
 
     bool CheckForSuspendKey(const KbdHookEvent& event);
-    bool ProcessKeyEvent(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
+    bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
     bool OnKeyEvent(const KbdHookEvent & event);
 
@@ -103,7 +103,6 @@ protected:
     void ReplayCancelledChord();
     bool IsSelfInjected(const KbdHookEvent& event);
 
-    bool _OnKeyEvent(const KbdHookEvent& event);
     void SendString(int nbrKeysIn, const char* textString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
@@ -120,7 +119,7 @@ private:
 
     Kord chord;             // current chord being built / cumulated as keys are pressed
     bool chordingSuspended;
-    Chording chording;
+    ChordingData chording;
 
     // lpsteaks (left hand prefixed chords, right hand is order dependent)
     Layer::Idx_t lpsteaksLayer1;

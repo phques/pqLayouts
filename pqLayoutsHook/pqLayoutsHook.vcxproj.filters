@@ -57,7 +57,7 @@
     <ClInclude Include="Chord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Chording.h">
+    <ClInclude Include="ChordingData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DualModeModifierAction.h">
@@ -104,7 +104,7 @@
     <ClCompile Include="Chord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Chording.cpp">
+    <ClCompile Include="ChordingData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DualModeModifierAction.cpp">

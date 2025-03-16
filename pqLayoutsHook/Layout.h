@@ -52,7 +52,6 @@ private:
     bool GotoLayer(Layer* layer);
 
 private:
-    std::map<VeeKee, KeyDef> keydefs;
     std::map<Layer::Id_t, Layer*> layersById;  
     std::vector<Layer*> layers;  
     Layer* currentLayer;

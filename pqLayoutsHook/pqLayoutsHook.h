@@ -22,7 +22,7 @@
 #include "Chord.h"
 #include "KeyMapping.h"
 #include "Notification.h"
-#include "Chording.h"
+#include "ChordingData.h"
 
 namespace HookKbd
 {

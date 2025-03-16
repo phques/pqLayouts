@@ -21,7 +21,7 @@
 #include "Keydef.h"
 #include "KeyMapping.h"
 #include "Chord.h"
-#include "Chording.h"
+#include "ChordingData.h"
 
 //---------
 
@@ -122,7 +122,7 @@ private:
 private:
     static KeyNamesMap keyNames;
     
-    Chording chording;
+    ChordingData chording;
     WORD hyphenVk;
 };
 

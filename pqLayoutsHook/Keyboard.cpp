@@ -351,7 +351,7 @@ bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
     return false;
 }
 
-bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, const bool wasDown)
+bool Keyboard::ProcessKeyAction(const KbdHookEvent& event, IKeyAction* action, const bool wasDown)
 {
     // (possibly) eat key down repeats (e.g. layerAccess key)
     if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
@@ -542,6 +542,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     return false;
 }
 
+// top level entry point for key processing
 bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 {
     if (CheckForSuspendKey(event)) 
@@ -550,6 +551,9 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     // let keys through keys while suspended
     if (suspended)
         return false;
+
+
+    // --- Combos handling ---
 
     static std::vector<KbdHookEvent > eventsDown;
     static VeeKeeVector vksDown;
@@ -608,85 +612,10 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
         return true;
     }
 
-
+    // not processed by combos handling, pass on to next level
     return OnKeyEventLevel2(event);
 }
 
-bool Keyboard::_OnKeyEvent(const KbdHookEvent& event)
-{
-    //## pq test debug combos
-    static bool inComboQ = false;
-    static bool comboQComplete = false;
-
-    if (timerWentOff && !inComboQ)
-    {
-        timerWentOff = false;
-    }
-
-    if (inComboQ)
-    {
-        Printf("inComboQ timerWentOff=%d\n", timerWentOff);
-
-        if (timerWentOff && !comboQComplete)
-        {
-            kilTimer(hMainWindow);
-            inComboQ = false;
-            timerWentOff = false;
-            Printf("cancel ComboQ on timer\n");
-            return true;
-        }
-
-        if (event.Down())
-        {
-            if (event.vkCode == 'Q')
-            {
-                Printf("skip repeat down Q\n");
-                return true;
-            }
-
-            if (event.vkCode == 'W')
-            {
-                Printf("ComboQ completed\n");
-                kilTimer(hMainWindow);
-                inComboQ = false;
-                comboQComplete = true;
-                return true;
-            }
-
-            Printf("cancel ComboQ on other key up\n");
-            kilTimer(hMainWindow);
-            inComboQ = false;
-            return true;
-
-        }
-
-        if ((event.vkCode == 'Q' || event.vkCode == 'W') && event.Up() && !comboQComplete)
-        {
-            Printf("cancel ComboQ on Q/W up\n");
-            kilTimer(hMainWindow);
-            inComboQ = false;
-            return true;
-        }
-
-        // should not get here (bug?)
-        return true;
-    }
-
-    if (event.Down())
-    {
-        if (event.vkCode == 'Q' || event.vkCode == 'W')
-        {
-            Printf("start timer on Q down\n");
-            inComboQ = true;
-            comboQComplete = false;
-
-            SetTimer(hMainWindow, TIMER_ID, 50, TimerProc);
-            return true;
-        }
-    }
- 
-    return OnKeyEventLevel2(event);
-}
 
 bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 {
@@ -697,6 +626,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
         this->lastVkCodeDown = event.vkCode;
     }
 
+    // --- Process adaptives ---
 
     // adaptives, delay between each key allowed
     //##pq todo: this will need to be by layer / read from kbd file etc etc
@@ -749,7 +679,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     }
 
 
-    // handle possible chording
+    // --- handle possible chording ---
+
     // do it here so we track non mapped keys to to be able to replay them for failed chord 
     if (!chordingSuspended && CurrentLayer()->HasChords())
     {
@@ -768,6 +699,9 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
         }
     }
 
+
+    // --- handle key mappings / actions ---
+
     // is this key currently down (mapped) ?
     // if so use that action
     IKeyAction* action = MappedKeyDown(event.vkCode);
@@ -783,7 +717,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     // we have something to act on..
     if (action != nullptr)
     {
-        return ProcessKeyEvent(event, action, wasDown);
+        return ProcessKeyAction(event, action, wasDown);
     }
     else
     {
@@ -1009,7 +943,6 @@ void Keyboard::ReplayCancelledChord()
 
     ResumeChording();
 }
-
 
 
 void Keyboard::TrackModifiers(VeeKee vk, bool pressed)
