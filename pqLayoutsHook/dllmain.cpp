@@ -162,11 +162,6 @@ bool HookKbd::AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tap
     return theKbd.AddDualModeModifier(key, modifierKey, tapKey);
 }
 
-PQHOOK_API bool AddStickyMapping(KeyValue vk)
-{
-    return theKbd.AddStickyMapping(vk);
-}
-
 PQHOOK_API bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
 {
     return theKbd.AddChord(chord, keyActions);

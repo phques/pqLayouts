@@ -18,7 +18,6 @@
 #include "pch.h"
 #include "Layer.h"
 #include "KeyOutAction.h"
-#include "MakeStickyAction.h"
 #include "DualModeModifierAction.h"
 #include "OutDbg.h"
 
@@ -56,7 +55,7 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
 
     IKeyAction* action = new KeyOutAction(from, to);
 
-    return AddMapping(from, action);
+    return AddMapping(from,  action);
 }
 
 bool Layer::AddDualModeModifier(KeyDef key, KeyValue  modifierKey, KeyValue tapKey)
@@ -66,15 +65,6 @@ bool Layer::AddDualModeModifier(KeyDef key, KeyValue  modifierKey, KeyValue tapK
     KeyValue keyValue(key.Vk(), key.Scancode());
 
     return AddMapping(keyValue, action);
-}
-
-bool Layer::AddStickyMapping(KeyValue vk)
-{
-    Printf("Add sticky mapping 0x%02X\n", vk.Vk());
-
-    IKeyAction* action = new MakeStickyAction(vk.Vk());
-
-    return AddMapping(vk, action);
 }
 
 bool Layer::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)

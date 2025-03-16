@@ -49,7 +49,6 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     hMainWindow(nullptr),
     mainWndMsg(0),
     suspended(false), 
-    makeSticky(0),
     suspendKey(0), 
     quitKey(0),
     lastKeypressTick(0),
@@ -180,18 +179,6 @@ bool Keyboard::Suspended()
     return suspended;
 }
 
-void Keyboard::MakeSticky(VeeKee makeSticky)
-{
-    Printf("make sticky 0x%02X\n", makeSticky);
-    this->makeSticky = makeSticky;
-}
-
-// if != 0then make keys sticky
-VeeKee Keyboard::MakeSticky() const
-{
-    return makeSticky;
-}
-
 void Keyboard::SuspendChording()
 {
     chordingSuspended = true;
@@ -274,11 +261,6 @@ bool Keyboard::AddMapping(KeyValue from, KeyValue to)
 bool Keyboard::AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey)
 {
     return layout.AddDualModeModifier(key, modifierKey, tapKey);
-}
-
-bool Keyboard::AddStickyMapping(KeyValue vk)
-{
-    return layout.AddStickyMapping(vk);
 }
 
 bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
@@ -374,23 +356,6 @@ bool Keyboard::ProcessKeyEvent(const KbdHookEvent& event, IKeyAction* action, co
     // (possibly) eat key down repeats (e.g. layerAccess key)
     if (wasDown &&  event.Down() && action->SkipDownRepeats(this))
         return true;
-
-    // make sticky by eating key up event
-#if 0
-    if (makeSticky != 0)
-    {
-        // eat keys Up, making them sticky
-        const bool isStickyMaker = (makeSticky == event.vkCode);
-        Printf("makeSticky != 0, event.vkCode=0x%ld, makeSticky=%ld, isStickyMaker=%d\n", event.vkCode, makeSticky, isStickyMaker);
-
-        if (isStickyMaker && !event.Down())
-        {
-            Printf("sticky, skip 0x%02X up\n", static_cast<WORD>(event.vkCode));
-            return true;
-        }
-    }
-#endif // 0
-
 
     // set time of initial down key press
     if (!wasDown && event.Down())

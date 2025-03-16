@@ -114,7 +114,6 @@ private:
     bool readKeysList(File& kbdfile, const char* paramName, std::list<KeyValue>& stenoKeys, std::vector<char>& stenoChars);
     bool parseChordValue(StringTokener& tokener, KeyParser& chordOutput, Kord& chord);
     bool addLayer(StringTokener& tokener, bool toggleOnTap, bool outputKeyOnTap);
-    bool setMakeSticky(StringTokener& tokener);
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);
     bool GetRelativeFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[MAX_PATH]);
     bool setImageView(StringTokener& tokener);

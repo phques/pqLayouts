@@ -41,7 +41,6 @@ public:
     const CaseMapping* Mapping(Layer::Idx_t layerIdx, VeeKee vk) const;
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey);
-    bool AddStickyMapping(KeyValue vk);
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
     const std::list<KeyActions::KeyActionPair>* GetChordActions(const Kord& chord);

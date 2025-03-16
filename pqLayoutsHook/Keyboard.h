@@ -44,7 +44,6 @@ public:
     const KeyMapping* Mapping(VeeKee vk);
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
     bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey);
-    bool AddStickyMapping(KeyValue vk);
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
     bool InitChordingKeys(const ChordingKeys& chordingKeys);
@@ -68,8 +67,6 @@ public:
     bool Suspended();
     void SuspendKey(VeeKee);
     void QuitKey(VeeKee);
-    void MakeSticky(VeeKee);
-    VeeKee MakeSticky() const;
 
     void SetImageFilename(const WCHAR* filename);
     const std::wstring& GetImageFilename() const;
@@ -141,7 +138,6 @@ private:
     Layout layout;
     bool suspended;
     bool adaptivesOn{true};
-    VeeKee makeSticky;
     VeeKee suspendKey;
     VeeKee quitKey;
 

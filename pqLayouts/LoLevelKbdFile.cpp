@@ -331,11 +331,6 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
             if (!addLayer(stringTokener, false, true))
                 return false;
         }
-        else if (cmd == "stickyer")
-        {
-            if (!setMakeSticky(stringTokener))
-                return false;
-        }
         else if (cmd == "imagefile")
         {
             if (!setImageFile(stringTokener, filename))
@@ -801,18 +796,6 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap, bool out
     }
 
     return true;
-}
-
-bool LoLevelKbdFile::setMakeSticky(StringTokener& tokener)
-{
-    // read makeSticky key
-    KeyParser makeSticky(tokener, "make sticky key");
-    if (!makeSticky())
-        return false;
-
-    // assign it
-    KeyValue honey(makeSticky.vk, 0, false);
-    return HookKbd::AddStickyMapping(honey);
 }
 
 bool LoLevelKbdFile::setImageFile(StringTokener& tokener, const char * pcScriptFilename)

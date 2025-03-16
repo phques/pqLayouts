@@ -184,14 +184,6 @@ const std::list<KeyActions::KeyActionPair>* Layout::GetChordActions(const Kord& 
     return nullptr;
 }
 
-bool Layout::AddStickyMapping(KeyValue vk)
-{
-    if (currentLayer == nullptr)
-        return false;
-
-    return currentLayer->AddStickyMapping(vk);
-}
-
 void Layout::SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const
 {
     if (currentLayer != nullptr)
