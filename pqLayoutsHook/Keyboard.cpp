@@ -463,7 +463,8 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'I','U'}, ".com"},
 
         { {'O','U'}, ":" },
-        { {'I','O'}, "/" },
+        { {'I','O'}, ";" },
+        //{ {'I','O'}, "/" },
 
         { {VK_OEM_COMMA, VK_OEM_PERIOD}, "="},
         { {'M', VK_OEM_PERIOD}, "_"},
