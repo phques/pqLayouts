@@ -179,7 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chord.cpp" />
-    <ClCompile Include="Chording.cpp" />
+    <ClCompile Include="ChordingData.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DualModeModifierAction.cpp" />
     <ClCompile Include="Keydef.cpp" />
