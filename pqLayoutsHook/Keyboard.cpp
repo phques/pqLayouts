@@ -452,7 +452,7 @@ void Keyboard::SendString(int nbrKeysIn, const char* textString)
 
 bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks)
 {
-    // combos for HD neuC
+    // hard coded combos for HD neuC
     // VeeKeeVector must be sorted!
     // These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
     static std::map<VeeKeeVector, const char*> combos = {
@@ -518,6 +518,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'H','Y'}, {CtrlKeyValue('W')} }, // ctrl-w (close, unfortunately not std, ditto ctrl-f4)
         { {'A','G'}, {CtrlKeyValue('F')} }, // ctrl-f (find)
         { {'V','Z'}, {CtrlKeyValue('A')} }, // ctrl-a (select all)
+        { {'K','L'}, {KeyValue(VK_BACK,0)} }, // BACK SPACE
         { {'R','T'}, {KeyValue(VK_TAB, 0, false, false, true)} }, // alt-tab (next window)
     };
 
@@ -563,7 +564,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 
     static std::vector<KbdHookEvent > eventsDown;
     static VeeKeeVector vksDown;
-    static std::string comboKeys = std::string("ABCDEFGHILMOPQRSTUVWXYZ") 
+    static std::string comboKeys = std::string("ABCDEFGHIKLMOPQRSTUVWXYZ") 
         + (char)VK_OEM_1        // ';:'
         + (char)VK_OEM_COMMA
         + (char)VK_OEM_PERIOD
