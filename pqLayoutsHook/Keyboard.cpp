@@ -458,6 +458,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     static std::map<VeeKeeVector, const char*> combos = {
         { {'R','W'}, "qu"},
         { {'F','S'}, "z"},
+        { {'V','X'}, "x"},
 
         { {'U','Y'}, "@"},
         { {'I','U'}, ".com"},
@@ -510,7 +511,8 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     // VeeKeeVector must be sorted!
     static std::map<VeeKeeVector, std::vector<KeyValue>> combos2 = {
         //{ {'C','X','Z'}, {CtrlKeyValue('Y')} }, // ctrl-y redo
-        { {'X','Z'}, {CtrlKeyValue('Z')} }, // ctrl-z (use shift to do Redo)
+        { {'C','Z'}, {CtrlKeyValue('Y')} }, // ctrl-y redo
+        { {'X','Z'}, {CtrlKeyValue('Z')} }, // ctrl-z (can use shift to do Redo)
         { {'C','X'}, {CtrlKeyValue('C')} }, // ctrl-c
         { {'C','V'}, {CtrlKeyValue('V')} }, // ctrl-v
         { {'H','Y'}, {CtrlKeyValue('W')} }, // ctrl-w (close, unfortunately not std, ditto ctrl-f4)
