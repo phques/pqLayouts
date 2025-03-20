@@ -13,6 +13,7 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     // left hand
     { {'E','T'}, "l"},      // mv -> ml
     { {'R','E'}, "l"},      // pm -> pl
+    { {'R','T'}, "d"},      // pv -> pd
     { {'W','E'}, "l"},      // fm -> fl
     { {'Q','E'}, "\blm"},   // wm -> lm
     { {'Q','R'}, "\blml"},  // wp -> lml (calmly)
@@ -21,9 +22,11 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'G','F'}, "l"},      // bt -> bl
     { {'V','F'}, "ht"},     // gt -> ght
     { {'F','G'}, "\bmb"},   // tb -> mb
+    { {'C','V'}, "v"},      // dg -> dv (actually 433: dg 15746 / 501: dv 10975, but since dv is faaar)
 
     // right/vowels hand
     { {'J','K'}, "u"},          // ae -> au
+
     // 'magic H'
     { {'M',VK_OEM_1}, "a"},     // uh -> ua
     { {'K',VK_OEM_1}, "o"},     // eh -> eo

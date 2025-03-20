@@ -20,6 +20,8 @@
 #include "KeyMapping.h"
 #include "Chord.h"
 
+constexpr const char* MainLayerName = "main";
+
 
 class Layer
 {

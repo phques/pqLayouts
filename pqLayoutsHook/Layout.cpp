@@ -29,8 +29,8 @@ Layout::Layout() : currentLayer(nullptr)
 {
     // Layout always has a main layer, starts as the current layer
     Layer::Idx_t layerIdx=0;
-    AddLayer("main", layerIdx);
-    currentLayer = layersById["main"];
+    AddLayer(MainLayerName, layerIdx);
+    currentLayer = layersById[MainLayerName];
 }
 
 

@@ -555,6 +555,9 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     if (suspended)
         return false;
 
+    // quick temp fix: do combos only on main layer
+    if (layout.CurrentLayer()->Name() != MainLayerName)
+        return OnKeyEventLevel2(event);
 
     // --- Combos handling ---
 
@@ -636,7 +639,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 //#include "adapt-carbyne.h"
 #include "adapt-hd-neu-C.h"
 
-    if (adaptivesOn)
+    // quick temp fix: do adaptives only on main layer
+    if (adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)
     {
         if (event.Down() && lastDownEvent.vkCode != 0)
         {

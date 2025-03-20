@@ -751,7 +751,7 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap, bool out
 
     std::string layerName;
     tokener >> layerName;
-    if (layerName == "main")
+    if (layerName == MainLayerName)
     {
         std::cerr << "'main' is a reserved layer name, line " << tokener.LineNo() << std::endl;
         return false;
