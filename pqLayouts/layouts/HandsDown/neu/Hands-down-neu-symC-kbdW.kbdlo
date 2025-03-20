@@ -4,8 +4,9 @@
 
 ! I swap BG and moved /,"
 
-imagefile hd-neu-imgCw.png
-imageview 2 +76 90 +76
+! imagefile hd-neu-imgCw.png
+imagefile hd-neu-imgCw-sm.png
+imageview 2 +58 72 +58
 
 include hands-Down-neu-symC-map.kbdlo
 
@@ -16,4 +17,4 @@ dualmod sp lshift sp
 ! ------- edit layer --------
 
 include ../../edit-layer-lalt2.kbdlo
-imageview 182 +76 182 +76
+imageview 146 +58 148 +58
