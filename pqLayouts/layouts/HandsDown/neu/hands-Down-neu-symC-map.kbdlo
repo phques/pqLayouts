@@ -1,5 +1,4 @@
-
-! Generated from [hands-Down-neu-sym-C-map.txt]
+! Generated from [hands-Down-neu-symC-map.txt]
 K2K 8  8 |
 K2K 9  9 \
 K2K 0  0 ?
@@ -11,21 +10,21 @@ K2K w  f F
 K2K e  m M
 K2K r  p P
 K2K t  v V
-K2K y  z Z
+K2K y  / *
 K2K u  . :
 K2K i  " [
 K2K o  , ;
 K2K p  ' ]
 K2K [  q Q
-K2K ]  ( {
-K2K \  ) }
+K2K ]  x X
+K2K \  z Z
 
 K2K a  r R
 K2K s  s S
 K2K d  n N
 K2K f  t T
 K2K g  b B
-K2K h  / *
+K2K h  - +
 K2K j  a A
 K2K k  e E
 K2K l  i I
@@ -36,8 +35,8 @@ K2K z  c C
 K2K x  l L
 K2K c  d D
 K2K v  g G
-K2K b  x X
-K2K n  - +
+K2K b  ) }
+K2K n  ( {
 K2K m  u U
 K2K ,  o O
 K2K .  y Y

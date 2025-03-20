@@ -7,7 +7,7 @@
 ! imagefile hd-neu-imgCm.png
 ! imageview 5 +160 199 +160
 imagefile hd-neu-imgCm-sm.png
-imageview 6 +124 162 +124
+imageview 4 +124 200 +124
 
 include hands-Down-neu-symC-map.kbdlo
 
@@ -19,4 +19,4 @@ dualmod sp lshift sp
 
 include ../../edit-layer-lalt2.kbdlo
 ! imageview 401 +160 401 +160
-imageview 318 +124 320 +124
+imageview 358 +124 360 +124
