@@ -493,6 +493,10 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'B','V'}, "gh" },    // 
         { {'A','D'}, "sch"},    // 
         //{ {'A','D','S'}, "sch"},
+
+        { {'F','L'}, "tion"},    // it -> tion
+        { {'D','L'}, "ing"},    // in -> ing
+
     };
 
     auto foundComboIt = combos.find(vks);
