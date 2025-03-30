@@ -245,7 +245,8 @@ void OnHookNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
     {
         Printf("main, notif LayerChanged %d\n", lParam);
 
-        const auto imageView = HookKbd::GetImageView();
+        Layer::ImageView imageView{};
+        HookKbd::GetImageView(&imageView);
         helpWnd->SetImageView(imageView);
         break;
     }
@@ -304,8 +305,10 @@ void CreateKbdImageWindow(HINSTANCE hInstance, KbdDisplayWnd*& helpWnd, int scre
 
         //helpWnd->SetImageFile(wideString.c_str());
 
+        Layer::ImageView imageView{};
+        HookKbd::GetImageView(&imageView);
         helpWnd->SetImageFile(pcImageFilename);
-        helpWnd->SetImageView(HookKbd::GetImageView());
+        helpWnd->SetImageView(imageView);
 
         helpWnd->DisplayWindow(true);
 

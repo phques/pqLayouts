@@ -25,6 +25,17 @@ typedef std::unordered_set<VeeKee> VeeKeeSet;
 typedef std::vector<VeeKee> VeeKeeVector;
 typedef std::list<VeeKee> VeeKeeList;
 
+// types for interop use
+typedef int BoolP;
+
+struct KeyValueP
+{
+    VeeKee vk;
+    UINT scancode;
+    BoolP shift;
+    BoolP control;
+    BoolP alt;
+};
 
 // represents a single key (e.g. the key that holds ';' and ':' characters)
 class KeyDef

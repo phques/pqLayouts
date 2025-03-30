@@ -157,6 +157,15 @@ PQHOOK_API bool AddMapping(KeyValue from, KeyValue to)
     return theKbd.AddMapping(from, to);
 }
 
+PQHOOK_API bool AddMappingP(KeyValueP fromP, KeyValueP toP)
+{
+    //    PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false, bool alt=false);
+
+    KeyValue from(fromP.vk, fromP.scancode, fromP.shift, fromP.control, fromP.alt);
+    KeyValue to(toP.vk, toP.scancode, toP.shift, toP.control, toP.alt);
+    return theKbd.AddMapping(from, to);
+}
+
 bool HookKbd::AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey)
 {
     return theKbd.AddDualModeModifier(key, modifierKey, tapKey);
@@ -195,7 +204,7 @@ PQHOOK_API bool GotoLayer(const char* layerId)
     return theKbd.GotoLayer(layerId);
 }
 
-PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx)
+PQHOOK_API bool GotoLayerByIdx(Layer::Idx_t layerIdx)
 {
     return theKbd.GotoLayer(layerIdx);
 }
@@ -220,9 +229,9 @@ PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageV
     theKbd.SetImageView(imageView, imageViewShift);
 }
 
-PQHOOK_API Layer::ImageView GetImageView()
+void HookKbd::GetImageView(Layer::ImageView* imageView)
 {
-    return theKbd.GetImageView();
+    *imageView = theKbd.GetImageView();
 }
 
 PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey)

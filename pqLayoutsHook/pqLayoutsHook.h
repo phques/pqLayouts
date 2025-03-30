@@ -26,32 +26,36 @@
 
 namespace HookKbd
 {
-    PQHOOK_API bool HookKbdLL();
-    PQHOOK_API bool UnhookKbdLL();
-    PQHOOK_API void SetNotificationMessage(HWND hMainWindow, int mainWndMsg);
+    extern "C" {
+        PQHOOK_API bool HookKbdLL();
+        PQHOOK_API bool UnhookKbdLL();
+        PQHOOK_API void SetNotificationMessage(HWND hMainWindow, int mainWndMsg);
 
-    PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
-    PQHOOK_API bool AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey);
+        PQHOOK_API bool AddMapping(KeyValue from, KeyValue to);
+        PQHOOK_API bool AddMappingP(KeyValueP from, KeyValueP to);
 
-    PQHOOK_API bool AddChord(Kord&, const std::list<KeyActions::KeyActionPair>& keyActions);
-    PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys);
-    PQHOOK_API void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2,
-                                      std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
+        PQHOOK_API bool AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey);
 
-    PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
-    PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle, KeyValue keyOnTap);
+        PQHOOK_API bool AddChord(Kord&, const std::list<KeyActions::KeyActionPair>& keyActions);
+        PQHOOK_API bool InitChordingKeys(const ChordingKeys& chordingKeys);
+        PQHOOK_API void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2,
+            std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
 
-    PQHOOK_API bool GotoLayer(const char* layerId);
-    PQHOOK_API bool GotoLayer(Layer::Idx_t layerIdx);
-    PQHOOK_API bool GotoMainLayer();
+        PQHOOK_API bool AddLayer(const char* layerId, Layer::Idx_t& newLayerIdx);
+        PQHOOK_API bool SetLayerAccessKey(const char* layerId, KeyDef, bool isToggle, KeyValue keyOnTap);
 
-    PQHOOK_API void SetImageFilename(const WCHAR* filename);
-    PQHOOK_API const WCHAR* GetImageFilename();
+        PQHOOK_API bool GotoLayer(const char* layerId);
+        PQHOOK_API bool GotoLayerByIdx(Layer::Idx_t layerIdx);
+        PQHOOK_API bool GotoMainLayer();
 
-    PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift);
-    PQHOOK_API Layer::ImageView GetImageView();
+        PQHOOK_API void SetImageFilename(const WCHAR* filename);
+        PQHOOK_API const WCHAR* GetImageFilename();
 
-    PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
-    PQHOOK_API void ToggleSuspend();
-    PQHOOK_API bool Suspended();
+        PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift);
+        void GetImageView(Layer::ImageView* imageView);
+
+        PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
+        PQHOOK_API void ToggleSuspend();
+        PQHOOK_API bool Suspended();
+    }
 };

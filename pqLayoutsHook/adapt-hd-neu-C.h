@@ -43,7 +43,7 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
            VK_OEM_2}, "i"},     // yk -> yi
 
 
-    // use 'z' (qwerty Y) as 'magic adaptive key' 
+    // use '/' (qwerty Y) as 'magic adaptive key' 
     { {'R','Y'}, "\bphilippe.quesnel"}, // P
     { {'L','Y'}, "\bintegration\\"},    // I
     { {'S','Y'}, "\bselect * from "},   // S

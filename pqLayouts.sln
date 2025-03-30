@@ -18,10 +18,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lua", "lua", "{96CCE9D1-4AC
 		lua\objectNew.lua = lua\objectNew.lua
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestInterop", "Tests\TestInterop\TestInterop.csproj", "{17642BB5-7DFF-45BE-A19B-3792CB33B1BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{680C5F5C-3188-42DD-A81D-3464892277B6} = {680C5F5C-3188-42DD-A81D-3464892277B6}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestYaml1", "Tests\TestYaml1\TestYaml1.csproj", "{47AAF0D3-AC5B-99BC-5A88-1907112E25F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetKbdHook", "Tests\TestNetKbdHook\TestNetKbdHook.csproj", "{CA20718B-84DD-48DC-8FBF-E79AFCD27964}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection

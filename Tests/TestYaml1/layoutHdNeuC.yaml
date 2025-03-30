@@ -1,0 +1,93 @@
+
+---
+#layout:
+    name: hd neu-C
+    imageFile: hd-neu-imgCm-sm.png
+
+    layers:  
+        # main layer
+        -   name: main
+            imageView: 
+                normal:
+                    top: 4
+                    height: 124
+                shift:
+                    top: 200
+                    height: 124
+
+            from: |
+                8 9 0 - =
+                q w e r t y u i o p [ ] \
+                a s d f g h j k l ; '
+                z x c v b n m , . /
+      
+            to: |
+                8 9 0 = _
+                w f m p v / . " , ' q x z
+                r s n t b - a e i h j
+                c l d g ) ( u o y k
+      
+            shift: |
+                | \ ? < >
+                W F M P V * : [ ; ] Q X Z
+                R S N T B + A E I H J
+                C L D G } { U O Y K 
+
+            adaptives: #nb: last key has *not been sent*
+                # left hand
+                - { keys: mwm, send: "\b\blml" }    # caLMLy
+  
+                - { keys: mv, send: l }             # mv -> ml
+                - { keys: fm, send: l }             # fm -> fl
+                - { keys: wm, send: "\blm" }        # wm -> lm
+                - { keys: wp, send: "\blml" }       # wp -> lml (calmly)
+                - { keys: wf, send: s }             # wf -> ws
+                - { keys: vp, send: l }             # vp -> vl
+                - { keys: bt, send: l }             # bt -> bl
+                - { keys: gt, send: ht }            # gt -> ght
+                - { keys: tb, send: "\bmb" }        # tb -> mb
+                - { keys: dg, send: v }             # dg -> dv (actually 433: dg 15746 / 501: dv 10975)
+  
+                # right hand / vowels
+                - { keys: ae, send: u }             # ae -> au
+                # 'magic H'
+                - { keys: uh, send: a }             # uh -> ua
+                - { keys: eh, send: o }             # eh -> eo
+                - { keys: oh, send: e }             # oh -> oe
+                - { keys: yh, send: i }             # yh -> yi
+                # 'other' 'magic H'
+                - { keys: lh, send: n }             # lh -> ln
+                - { keys: mh, send: n }             # mh -> mn
+                - { keys: nh, send: l }             # nh -> nl
+  
+                - { keys: yk, send: i }             # yk -> yi
+  
+                - { keys: '".', send: "\b!" }       # ". -> !
+                - { keys: '",', send: "\b?" }       # ", -> ?
+
+                # these go along with the /. => @ combo
+                - { keys: '/.', send: "\bgmail" }
+                - { keys: './', send: "\bcgi" }
+
+                # use '/' (qwerty Y) as 'magic adaptive key' (suffix)
+                - { keys: p/, send: "\bphilippe.quesnel" }
+                - { keys: i/, send: "\bintegration\\" }
+                - { keys: s/, send: "\bselect * from " }
+                - { keys: c/, send: "\bconductor" }
+                - { keys: d/, send: "\bdevice" }
+
+            dualMods:
+                - key: sp
+                  mod: lshift
+                  tap: sp
+
+        # edit layer
+        -   name: edit
+            key: lalt
+            toggleOnTap: true
+
+        -   name: other layer
+            key: ralt
+            keyOnTap: ralt
+
+...

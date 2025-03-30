@@ -789,7 +789,7 @@ bool LoLevelKbdFile::addLayer(StringTokener& tokener, bool toggleOnTap, bool out
     }
 
     // switch to new layer
-    if (!HookKbd::GotoLayer(layerIdx))
+    if (!HookKbd::GotoLayerByIdx(layerIdx))
     {
         std::cerr << "failed to switch to new layer '" << layerName << "', line " << tokener.LineNo() << std::endl;
         return false;

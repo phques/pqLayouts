@@ -178,8 +178,12 @@
     <ClInclude Include="LayerToggleAction.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Chord.cpp" />
-    <ClCompile Include="ChordingData.cpp" />
+    <ClCompile Include="Chord.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="ChordingData.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DualModeModifierAction.cpp" />
     <ClCompile Include="Keydef.cpp" />
