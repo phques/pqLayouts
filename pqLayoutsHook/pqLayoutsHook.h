@@ -52,7 +52,7 @@ namespace HookKbd
         PQHOOK_API const WCHAR* GetImageFilename();
 
         PQHOOK_API void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift);
-        void GetImageView(Layer::ImageView* imageView);
+        PQHOOK_API void GetImageView(Layer::ImageView* imageView);
 
         PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
         PQHOOK_API void ToggleSuspend();
