@@ -381,6 +381,52 @@ bool Keyboard::ProcessKeyAction(const KbdHookEvent& event, IKeyAction* action, c
     return ret;
 }
 
+bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
+{
+    if (capsWordType == None)
+        return false;
+
+    //##PQ todo these need to be based on *mapped* output keys not the input qwerty keys!
+
+    // stop
+    if (event.vkCode == VK_LSHIFT || event.vkCode == VK_RSHIFT || event.vkCode == VK_ESCAPE)
+    {
+        if (event.Down())
+            capsWordType = None;
+        return true;
+    }
+
+    if (capsWordType == CapsWord && event.vkCode == VK_SPACE)
+    {
+        if (event.Up())
+            capsWordType = None;
+        return false;
+    }
+
+    //##pq todo we want '-' to output '_' (only for CapsWord?)
+
+    //##pq todo cancel on non alpha char
+
+    //const bool isShiftCode = event.vkCode == VK_SPACE || event.vkCode == VK_OEM_MINUS;
+    const bool isShiftCode = event.vkCode == VK_SPACE;
+
+    if (capitalizeNext && isShiftCode)
+    {
+        capitalizeNext  = false;
+        capsWordType = None;
+        return false;
+    }
+
+    if (isShiftCode)
+    {
+        if (event.Up())
+            capitalizeNext = true;
+        return true;
+    }
+
+    return false;
+}
+
 bool Keyboard::IsSelfInjected(const KbdHookEvent& event)
 {
     return (event.Injected() && event.dwExtraInfo == injectedFromMeValue);
@@ -450,6 +496,30 @@ void Keyboard::SendString(int nbrKeysIn, const char* textString)
     }
 }
 
+bool Keyboard::HandleActionCode(const char* actionString)
+{
+    if (actionString[0] != '\01')
+        return false;
+
+    const std::string actionCode(&actionString[1]);
+    if (actionCode == "a")
+    {
+        Printf("CapsWord: CamelCase\n");
+        capsWordType = CamelCase;
+        capitalizeNext = true;
+        return true;
+    }
+    else if (actionCode == "b")
+    {
+        Printf("CapsWord: CapsWord\n");
+        capsWordType = CapsWord;
+        capitalizeNext = true;
+        return true;
+    }
+
+    return false;
+}
+
 bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks)
 {
     // hard coded combos for HD neuC
@@ -497,6 +567,8 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'F','L'}, "tion"},    // it -> tion
         { {'D','L'}, "ing"},    // in -> ing
 
+        { {VK_OEM_PERIOD, VK_OEM_2 }, "\01a"},  // ./ => capsWord: camelCase
+        { {'M', VK_OEM_2}, "\01b"},             // m/ => capsWord: capsWord
     };
 
     auto foundComboIt = combos.find(vks);
@@ -504,7 +576,10 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     {
         Printf("found combo!\n");
 
-        SendString(0, foundComboIt->second);
+        if (!HandleActionCode(foundComboIt->second))
+        {
+            SendString(0, foundComboIt->second);
+        }
         lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
     }
@@ -550,38 +625,27 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     return false;
 }
 
-// top level entry point for key processing
-bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
+bool Keyboard::HandleCombos(const KbdHookEvent& event)
 {
-    if (CheckForSuspendKey(event)) 
-        return true;
-
-    // let keys through keys while suspended
-    if (suspended)
-        return false;
-
-    // quick temp fix: do combos only on main layer
-    if (layout.CurrentLayer()->Name() != MainLayerName)
-        return OnKeyEventLevel2(event);
-
     // --- Combos handling ---
 
     static std::vector<KbdHookEvent > eventsDown;
     static VeeKeeVector vksDown;
     static std::string comboKeys = std::string("ABCDEFGHIKLMOPQRSTUVWXYZ") 
-        + (char)VK_OEM_1        // ';:'
-        + (char)VK_OEM_COMMA
-        + (char)VK_OEM_PERIOD
+            + (char)VK_OEM_1        // ';:'
+            + (char)VK_OEM_2        // '/?'
+            + (char)VK_OEM_COMMA
+            + (char)VK_OEM_PERIOD
         ;
     static bool cumulating = false;
 
-    bool isComboKey = (comboKeys.find((char)event.vkCode) != std::string::npos);
-    bool isComboKeyDown = isComboKey && event.Down();
+    const bool isComboKey = (comboKeys.find((char)event.vkCode) != std::string::npos);
+    const bool isComboKeyDown = isComboKey && event.Down();
 
     if (!cumulating && !isComboKeyDown)
     {
         Printf("not cumulating, not comboKeyDown\n");
-        return OnKeyEventLevel2(event);
+        return false;
     }
 
     if (!cumulating && isComboKeyDown)
@@ -596,7 +660,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 
     if (cumulating)
     {
-        bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
+        const bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
 
         if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 50) //ms
         {
@@ -605,7 +669,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
             cumulating = false;
             eventsDown.clear();
             vksDown.clear();
-            return OnKeyEventLevel2(event);
+            return false;
         }
 
         eventsDown.push_back(event);
@@ -620,6 +684,31 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
         cumulating = false;
         eventsDown.clear();
         vksDown.clear();
+        return true;
+    }
+
+    return false;
+}
+
+// top level entry point for key processing
+bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
+{
+    if (CheckForSuspendKey(event)) 
+        return true;
+
+    // let keys through keys while suspended
+    if (suspended)
+        return false;
+
+    // 'caps word'
+    if (ProcessCapsWord(event))
+        return true;
+
+    // quick temp fix: do combos only on main layer
+    if (layout.CurrentLayer()->Name() == MainLayerName &&
+        capsWordType == None &&
+        HandleCombos(event))
+    {
         return true;
     }
 
@@ -645,7 +734,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 #include "adapt-hd-neu-C.h"
 
     // quick temp fix: do adaptives only on main layer
-    if (adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)
+    if (capsWordType == None && adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)
     {
         if (event.Down() && lastDownEvent.vkCode != 0)
         {
@@ -670,7 +759,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
                 {
                     Printf("found adaptive!\n");
 
-                    size_t nbrKeysIn = foundAdaptIt->first.size();
+                    const size_t nbrKeysIn = foundAdaptIt->first.size();
                     SendString(nbrKeysIn, foundAdaptIt->second);
 
                     Printf("done sending adapt\n");
@@ -977,9 +1066,11 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
         // don't surrounding shift up/down keys if the output key is shift or capslock
         if (!IsShift(key.Vk()) && key.Vk() != VK_CAPITAL)
         {
-            bool needsShift = key.Shift();
+            bool needsShift = key.Shift() || (capsWordType == CapsWord || capitalizeNext); //PQ should for isAlpha etc..
             bool lshiftDown = ModifierDown(VK_LSHIFT);
             bool rshiftDown = ModifierDown(VK_RSHIFT);
+            capitalizeNext = false;
+
             if (needsShift && !(lshiftDown || rshiftDown))
             {
                 // send a Shift down before our key

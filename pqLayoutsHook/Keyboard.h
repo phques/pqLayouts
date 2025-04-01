@@ -25,6 +25,12 @@
 
 class KbdHook; // fwd
 
+enum CapsWordType
+{
+    None,
+    CapsWord,
+    CamelCase,
+};
 
 class Keyboard
 {
@@ -52,6 +58,7 @@ public:
     bool CheckForSuspendKey(const KbdHookEvent& event);
     bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
 
+    bool ProcessCapsWord(const KbdHookEvent& event);
     bool OnKeyEvent(const KbdHookEvent & event);
 
     // dbg
@@ -93,6 +100,7 @@ protected:
 
     void ReplayEvents(const std::vector<KbdHookEvent>& events);
     bool DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks);
+    bool HandleCombos(const KbdHookEvent& event);
 
     bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
     bool CheckLpChordsLayers();
@@ -104,6 +112,7 @@ protected:
     bool IsSelfInjected(const KbdHookEvent& event);
 
     void SendString(int nbrKeysIn, const char* textString);
+    bool HandleActionCode(const char* actionString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
     static bool IsModifier(VeeKee vk);
@@ -139,6 +148,9 @@ private:
     bool adaptivesOn{true};
     VeeKee suspendKey;
     VeeKee quitKey;
+
+    CapsWordType capsWordType{};
+    bool capitalizeNext{};
 
     DWORD injectedFromMeValue;
     HWND hMainWindow;
