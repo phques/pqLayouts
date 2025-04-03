@@ -1,9 +1,13 @@
 ﻿using System;
 using LlKbdHookNet;
 using SendInputNET;
+using Native;
+using System.Windows.Forms;
+
 
 namespace pqLayoutsNET
 {
+
     internal class Program
     {
         private const int MyInjection = 0x130466;
@@ -33,13 +37,22 @@ namespace pqLayoutsNET
             return true;
         }
 
-
         static void Main(string[] args)
         {
             Program p = new Program();
-            KbdLLHook.SetHook(p.KeyboardHookEventHandler);
-            System.Windows.Forms.Application.Run();
-            KbdLLHook.UnHook();
+            //KbdLLHook.SetHook(p.KeyboardHookEventHandler);
+            //System.Windows.Forms.Application.Run();
+            //KbdLLHook.UnHook();
+
+            Keys keyCode = 0;
+            keyCode = VkUtil.CharToKeys('t');
+            keyCode = VkUtil.CharToKeys('T');
+            keyCode = VkUtil.CharToKeys(';');
+            keyCode = VkUtil.CharToKeys('*');
+            keyCode = VkUtil.CharToKeys('\n');
+            keyCode = VkUtil.CharToKeys('\b');
+            keyCode = VkUtil.CharToKeys('\a');
+            keyCode = 0;
         }
     }
 }

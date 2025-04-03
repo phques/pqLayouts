@@ -107,6 +107,17 @@ namespace Native
         Unicode = 0x0004
     }
 
+    // These can be used with both:
+    // - the high byte (0xFF00) of VkKeyScanA
+    // - the high word (0xFFFF0000) of a System.Windows.Forms.Keys
+    [Flags]
+    public enum KeyModifierFlags : UInt16
+    {
+        Shift = 0x0001,
+        Control = 0x0002,
+        Alt = 0x0004,
+    }
+
     #endregion
 
     #region Windows Hook
@@ -169,6 +180,10 @@ namespace Native
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
             IntPtr wParam, ref KBDLLHOOKSTRUCT lParam);
+
+        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscana
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern Int16 VkKeyScanA(char ch);
     }
 
 
