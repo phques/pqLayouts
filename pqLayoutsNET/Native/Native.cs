@@ -3,7 +3,19 @@ using System.Runtime.InteropServices;
 
 namespace Native
 {
+    // These can be used with both:
+    // - the high byte (0xFF00) of VkKeyScanA
+    // - the high word (0xFFFF0000) of a System.Windows.Forms.Keys
+    [Flags]
+    public enum KeyModifierFlags : UInt16
+    {
+        Shift = 0x0001,
+        Control = 0x0002,
+        Alt = 0x0004,
+    }
+
     #region SendInput
+
     [StructLayout(LayoutKind.Sequential)]
     public struct INPUT
     {
@@ -20,11 +32,9 @@ namespace Native
         {
             INPUT input = new INPUT(SendInputType.InputKeyboard);
             input.Union.Keyboard.vkCode = vkCode;
-            input.Union.Keyboard.flags = down ? KeyboardInputFlags.KeyDown : KeyboardInputFlags.KeyUp;
-            if (extended)
-            {
-                input.Union.Keyboard.flags |= KeyboardInputFlags.ExtendedKey;
-            }
+            input.Union.Keyboard.flags =
+                (down ? KeyboardInputFlags.KeyDown : KeyboardInputFlags.KeyUp) |
+                (extended ? KeyboardInputFlags.ExtendedKey : 0);
 
             return input;
         }
@@ -107,17 +117,6 @@ namespace Native
         Unicode = 0x0004
     }
 
-    // These can be used with both:
-    // - the high byte (0xFF00) of VkKeyScanA
-    // - the high word (0xFFFF0000) of a System.Windows.Forms.Keys
-    [Flags]
-    public enum KeyModifierFlags : UInt16
-    {
-        Shift = 0x0001,
-        Control = 0x0002,
-        Alt = 0x0004,
-    }
-
     #endregion
 
     #region Windows Hook
@@ -145,6 +144,7 @@ namespace Native
     public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, ref KBDLLHOOKSTRUCT lParam);
 
     #endregion
+
 
     public class Methods
     {

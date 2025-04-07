@@ -3,7 +3,8 @@ using LlKbdHookNet;
 using SendInputNET;
 using Native;
 using System.Windows.Forms;
-
+using System.Runtime.InteropServices;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace pqLayoutsNET
 {
@@ -12,12 +13,14 @@ namespace pqLayoutsNET
     {
         private const int MyInjection = 0x130466;
         SendInput SendInput;
+        Layer Layer;
 
         public Program()
         {
             SendInput = new SendInput(MyInjection);
         }
 
+        // Return true to pass-through the event to the next handler.
         public bool KeyboardHookEventHandler(KbdLLHookStruct e)
         {
             if (e.IsInjectedBy(MyInjection))
@@ -25,12 +28,19 @@ namespace pqLayoutsNET
                 return true;
             }
 
-            if (e.k.vkCode >= 'A' && e.k.vkCode <= 'Z')
+            // get current state of shift
+            ushort shiftKeyCode = VkUtil.KeyCode(Keys.ShiftKey);
+            short shiftState = Methods.GetAsyncKeyState(shiftKeyCode);
+            bool shift = (shiftState & 0x8000) != 0;
+
+            // get mapped key
+            VeeKee inKey = new VeeKee((ushort)e.k.vkCode, false, false, false);
+            VeeKee outKey = Layer.Mapping(inKey, shift);
+
+            // output mapped key if found
+            if (outKey.Code != 0)
             {
-                Console.WriteLine("A-Y --> B-Z");
-
-                SendInput.SendVk((ushort)(e.k.vkCode + 1), e.IsKeyDown);
-
+                SendInput.SendVk(outKey.Code, e.IsKeyDown);
                 return false;
             }
 
@@ -40,19 +50,16 @@ namespace pqLayoutsNET
         static void Main(string[] args)
         {
             Program p = new Program();
-            //KbdLLHook.SetHook(p.KeyboardHookEventHandler);
-            //System.Windows.Forms.Application.Run();
-            //KbdLLHook.UnHook();
 
-            Keys keyCode = 0;
-            keyCode = VkUtil.CharToKeys('t');
-            keyCode = VkUtil.CharToKeys('T');
-            keyCode = VkUtil.CharToKeys(';');
-            keyCode = VkUtil.CharToKeys('*');
-            keyCode = VkUtil.CharToKeys('\n');
-            keyCode = VkUtil.CharToKeys('\b');
-            keyCode = VkUtil.CharToKeys('\a');
-            keyCode = 0;
+            YamlLoader yamlLoader = new YamlLoader(args[0]);
+            p.Layer = yamlLoader.Load();
+
+
+            KbdLLHook.SetHook(p.KeyboardHookEventHandler);
+            System.Windows.Forms.Application.Run();
+
+            KbdLLHook.UnHook();
+
         }
     }
 }

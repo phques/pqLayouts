@@ -1,31 +1,59 @@
 ﻿using Native;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace pqLayoutsNET
 {
     public class VkUtil
     {
-        static public Keys CharToKeys(char c)
+        static public bool CharToVk(char c, out ushort keyCode, out ushort modifiers)
         {
+            keyCode = modifiers = 0;
+
             // Convert the character to a virtual key code
             Int16 vk = Methods.VkKeyScanA(c);
 
             // Check if the character is a valid key
             if (vk == -1)
             {
-                return Keys.None;
+                return false;
             }
 
             // Extract the high byte (modifiers) and low byte (virtual key code)
-            UInt32 modifiers = ((UInt32)vk & 0xFF00) << 8;
-            UInt32 keyCode = ((UInt32)vk & 0x00FF);
+            modifiers = (ushort)((vk & 0xFF00) >> 8);
+            keyCode = (ushort)(vk & 0x00FF);
 
-            return (System.Windows.Forms.Keys)(modifiers | keyCode);
+            return true;
+        }
+
+        static public Keys CharToKeys(char c)
+        {
+            if (!CharToVk(c, out ushort keyCode, out ushort modifiers))
+            {
+                return Keys.None;
+            }
+
+            return (System.Windows.Forms.Keys)((modifiers << 16) | keyCode);
+        }
+
+        static public bool Shift(uint modifiers)
+        {
+            return (modifiers & (uint)KeyModifierFlags.Shift) != 0;
+        }
+
+        static public bool Control(uint modifiers)
+        {
+            return (modifiers & (uint)KeyModifierFlags.Control) != 0;
+        }
+
+        static public bool Alt(uint modifiers)
+        {
+            return (modifiers & (uint)KeyModifierFlags.Alt) != 0;
+        }
+
+        static public ushort KeyCode(Keys key)
+        {
+            return (ushort)(key & Keys.KeyCode);
         }
     }
 }

@@ -55,6 +55,7 @@ namespace LlKbdHookNet
         /// <summary>
         /// Event triggered when a keystroke is intercepted by the 
         /// low-level hook.
+        /// Return true to pass-through the event to the next handler.
         /// </summary>
         private static event KeyboardHookEventHandler KeyIntercepted;
 
