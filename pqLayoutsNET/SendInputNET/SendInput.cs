@@ -12,18 +12,24 @@ namespace SendInputNET
             Injection = injection;
         }
 
-        public uint Send(List<INPUT> inputs)
+        public uint Send(List<INPUT> inputs, bool setInjection = false)
         {
-            return Methods.SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf(typeof(INPUT)));
+            var array = inputs.ToArray();
+            if (setInjection)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    array[i].Union.Keyboard.dwExtraInfo = (IntPtr)Injection;
+                }
+            }
+            return Methods.SendInput((uint)inputs.Count, array, Marshal.SizeOf(typeof(INPUT)));
         }
 
         public void SendVk(ushort vkCode, bool down, bool extended = false)
         {
             INPUT input = INPUT.NewKbdInput(vkCode, down, extended);
-            if (Injection != 0)
-            {
-                input.Union.Keyboard.dwExtraInfo = (IntPtr)Injection;
-            }
+            input.Union.Keyboard.dwExtraInfo = (IntPtr)Injection;
+
             Send(new List<INPUT> { input });
         }
 

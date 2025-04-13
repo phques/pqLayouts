@@ -26,7 +26,7 @@ namespace pqLayoutsNET
             Alt = (key & Keys.Alt) != 0;
         }
 
-        static public VeeKee CharToVeeKee(char c)
+        static private VeeKee CharToVeeKee(char c)
         {
             VeeKee vk = new VeeKee();
 
@@ -41,10 +41,22 @@ namespace pqLayoutsNET
             return vk;
         }
 
+        public bool IsExtended
+        {
+            get
+            {
+                VkUtil.VkToScanCode(Code, out _, out uint scanCodePrefix);
+                return (scanCodePrefix & 0xE0) != 0;
+            }
+        }
+
+        public bool IsAlpha => (Code >= 'A' && Code <= 'Z');
+
+
         public bool Shift;
         public bool Control;
         public bool Alt;
-        public ushort Code;   // the "code" part in a Keys
+        public ushort Code;   // the "code" part in a Keys, th vkCode
 
     }
 }

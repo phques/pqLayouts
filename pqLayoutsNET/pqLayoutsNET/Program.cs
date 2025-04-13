@@ -11,55 +11,28 @@ namespace pqLayoutsNET
 
     internal class Program
     {
-        private const int MyInjection = 0x130466;
-        SendInput SendInput;
-        Layer Layer;
-
         public Program()
         {
-            SendInput = new SendInput(MyInjection);
-        }
-
-        // Return true to pass-through the event to the next handler.
-        public bool KeyboardHookEventHandler(KbdLLHookStruct e)
-        {
-            if (e.IsInjectedBy(MyInjection))
-            {
-                return true;
-            }
-
-            // get current state of shift
-            ushort shiftKeyCode = VkUtil.KeyCode(Keys.ShiftKey);
-            short shiftState = Methods.GetAsyncKeyState(shiftKeyCode);
-            bool shift = (shiftState & 0x8000) != 0;
-
-            // get mapped key
-            VeeKee inKey = new VeeKee((ushort)e.k.vkCode, false, false, false);
-            VeeKee outKey = Layer.Mapping(inKey, shift);
-
-            // output mapped key if found
-            if (outKey.Code != 0)
-            {
-                SendInput.SendVk(outKey.Code, e.IsKeyDown);
-                return false;
-            }
-
-            return true;
         }
 
         static void Main(string[] args)
         {
+            TestKbHook(args);
+        }
+
+        private static void TestKbHook(string[] args)
+        {
             Program p = new Program();
 
             YamlLoader yamlLoader = new YamlLoader(args[0]);
-            p.Layer = yamlLoader.Load();
+            Layer layer = yamlLoader.Load();
 
+            Keyboard keyboard = new Keyboard(layer);
+            keyboard.Hook();
 
-            KbdLLHook.SetHook(p.KeyboardHookEventHandler);
             System.Windows.Forms.Application.Run();
 
-            KbdLLHook.UnHook();
-
+            keyboard.UnHook();
         }
     }
 }

@@ -101,7 +101,7 @@ namespace pqLayoutsNET
                     layer.AddMappingShifted(fromVk, shiftVk);
 
                     //##pq debug
-                    Console.WriteLine($"{fromKey} -> {toKey} / {shiftKey}");
+                    Console.WriteLine($"{fromKey} -> {toKey} {shiftKey}");
                 }
             }
 

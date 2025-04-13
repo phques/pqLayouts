@@ -33,7 +33,7 @@ namespace pqLayoutsNET
                 return Keys.None;
             }
 
-            return (System.Windows.Forms.Keys)((modifiers << 16) | keyCode);
+            return (System.Windows.Forms.Keys)(((uint)modifiers << 16) | keyCode);
         }
 
         static public bool Shift(uint modifiers)
@@ -54,6 +54,34 @@ namespace pqLayoutsNET
         static public ushort KeyCode(Keys key)
         {
             return (ushort)(key & Keys.KeyCode);
+        }
+
+        static public void VkToScanCode(uint vk, out uint scanCode, out uint scanCodePrefix)
+        {
+            uint code = Methods.MapVirtualKeyA(vk, MapVkFlags.VK_TO_VSC_EX);
+
+            scanCode = code & 0xFF;
+            scanCodePrefix = (code & 0xFF00) >> 8; // 0xE0, 0xE1 indicate extended key
+        }
+
+        static public bool IsKeyDown(ushort vkCode)
+        {
+            return (Methods.GetAsyncKeyState(vkCode) & (ushort)AsyncKeyStateFlags.Down) != 0;
+        }
+
+        static public bool IsKeyToggled(ushort vkCode)
+        {
+            return (Methods.GetAsyncKeyState(vkCode) & (ushort)AsyncKeyStateFlags.Toggled) != 0;
+        }
+
+        static public bool IsKeyDown(Keys key)
+        {
+            return IsKeyDown(KeyCode(key));
+        }
+
+        static public bool IsKeyToggled(Keys key)
+        {
+            return IsKeyToggled(KeyCode(key));
         }
     }
 }

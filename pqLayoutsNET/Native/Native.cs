@@ -14,9 +14,29 @@ namespace Native
         Alt = 0x0004,
     }
 
+    // Flags for MapVirtualKeyA
+    [Flags]
+    public enum MapVkFlags : uint
+    {
+        VK_TO_VSC = 0,
+        VSC_TO_VK,
+        VK_TO_CHAR,
+        VSC_TO_VK_EX,
+        VK_TO_VSC_EX
+    }
+
+
+    // Flags for GetAsyncKeyState
+    [Flags]
+    public enum AsyncKeyStateFlags : ushort
+    {
+        Down = 0x8000,
+        Toggled = 0x0001,
+    }
+
     #region SendInput
 
-    [StructLayout(LayoutKind.Sequential)]
+[StructLayout(LayoutKind.Sequential)]
     public struct INPUT
     {
         public SendInputType InputType;
@@ -148,42 +168,49 @@ namespace Native
 
     public class Methods
     {
+        //--
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-
+        
+        //--
         [DllImport("kernel32.dll", SetLastError = false)]
         public static extern uint GetLastError();
 
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern Int16 GetAsyncKeyState(UInt16 virtualKeyCode);
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern Int16 GetKeyState(UInt16 virtualKeyCode);
-
-
+        //--
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint SendInput(uint nInputs, [In, MarshalAs(UnmanagedType.LPArray)] INPUT[] pInputs, int cbSize);
 
-
+        //--
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
 
-
+        //--
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool UnhookWindowsHookEx(IntPtr hhk);
 
-
+        //--
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
             IntPtr wParam, ref KBDLLHOOKSTRUCT lParam);
 
+        //--
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern Int16 GetAsyncKeyState(int virtualKeyCode);
+
+        //--
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern Int16 GetKeyState(UInt16 virtualKeyCode);
+
+        //--
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscana
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         public static extern Int16 VkKeyScanA(char ch);
+
+        //-- https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapvirtualkeya
+        [DllImport("user32.dll")]
+        public static extern uint MapVirtualKeyA(uint uCode, MapVkFlags uMapType);
+
     }
 
 

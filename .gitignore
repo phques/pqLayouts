@@ -5,3 +5,5 @@ _ReSharper.Caches/
 *.aps
 .vs
 *.bak
+obj/
+old/
