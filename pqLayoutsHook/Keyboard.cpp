@@ -540,7 +540,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {VK_OEM_COMMA, VK_OEM_PERIOD}, "="},
         { {'M', VK_OEM_PERIOD}, "_"},
 
-        { {'L',VK_OEM_1}, "I"},    // ih -> "I" 
+        { {'L',VK_OEM_1}, "I "},    // ih -> "I " 
         { {'L','X'}, "I'll"},      // il -> "I'll" 
         { {'E','L'}, "I'm"},       // im -> "I'm" 
         { {'X',VK_OEM_PERIOD}, "you'll"},   // yl -> "you'll" 
@@ -551,7 +551,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
         { {'F','W'}, "there"},      // tf -> there
         { {'A',VK_OEM_1}, "here"},  // hr -> here
         { {'F','P'}, "they're"},    // t' -> they're
-        { {'A','B'}, "where"},      // xr -> where
+        { {'Q',VK_OEM_1}, "where"}, // wh -> where
         { {'B','X'}, "we'll"},      // xl -> we'll
         { {'B','P'}, "we're"},      // x' -> we're
 

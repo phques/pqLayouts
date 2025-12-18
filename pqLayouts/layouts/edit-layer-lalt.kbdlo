@@ -14,6 +14,7 @@ K2K e ^right ^+right
 ! k2k f lshift
 
 k2k a ^a
+k2k b SP
 
 ! GACS
 !K2K a win +win
@@ -31,8 +32,8 @@ K2K o end   +end
 K2K p tab   +tab
 
 k2k [ @tab
-k2k ] ^s  ^+s
-k2k \ ^a
+k2k ] ^a
+k2k \ ^s  ^+s
 
 K2K j left  +left
 K2K k down  +down
