@@ -1,0 +1,19 @@
+! Gallium Rowstag angle modded QX swap reversed
+! https://github.com/GalileoBlues/Gallium/tree/main
+! PQ note
+! Z J are part of latest changes of that ersion. Made sense to swap them when they were on top and bottom rows.
+! Since in this angle mod version they are side by side, I will keep/use J Z, since J will be easier to reach (more common than Z)
+
+imagefile img3.png
+imageview 0 +60 +72 +60
+
+include mappings.kbdlo
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
+
+! ------- edit layer --------
+
+include ../../edit-layer-lalt2.kbdlo
+! imageview 358 +124 360 +124

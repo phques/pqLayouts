@@ -1,0 +1,22 @@
+
+      q w e r t y u i o p 
+ CAPS a s d f g h j k l ; ' 
+      z x c v b n m , . / 
+                PRINTSCR
+                
+      q y o u = x l d p z
+    b c i a e - k h t n s w
+      ' , . ; / j m g f v
+                r
+
+      Q Y O U + X L D P Z
+    B C I A E _ K H T N S W
+      " < > : ? J M G F V
+                R
+
+
+Original Enthium, 'as-is'
+
+Using  right spacebar on my matias sculpt
+remapped to PRINTSCR to have a specific key to use for the layout
+right SP => R

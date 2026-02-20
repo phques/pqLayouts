@@ -731,7 +731,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     // adaptives, delay between each key allowed
     //##pq todo: this will need to be by layer / read from kbd file etc etc
 //#include "adapt-carbyne.h"
-#include "adapt-hd-neu-C.h"
+//#include "adapt-hd-neu-C.h"
+#include "adapt-empty.h"
 
     // quick temp fix: do adaptives only on main layer
     if (capsWordType == None && adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)

@@ -1,0 +1,23 @@
+
+      q w e r t y u i o p 
+ CAPS a s d f g h j k l ; ' 
+      z x c v b n m , . / 
+                PRINTSCR
+                
+      b y o u = x l d p z
+    q c i a e - k h t n s w
+      ' , . ; / j m g f v
+                r
+
+      B Y O U + X L D P Z
+    Q C I A E _ K H T N S W
+      " < > : ? J M G F V
+                R
+
+
+Original Enthium, with swapped QB
+Not a big fan of the B on the left outside pinky (CapsLock)
+
+Using  right spacebar on my matias sculpt
+remapped to PRINTSCR to have a specific key to use for the layout
+right SP => R
