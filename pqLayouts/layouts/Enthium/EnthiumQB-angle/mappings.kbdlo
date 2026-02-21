@@ -1,4 +1,7 @@
 ! Generated from [mappings.txt]
+K2K -  \ |
+K2K =  CAPS +CAPS
+
 K2K q  b B
 K2K w  y Y
 K2K e  o O
@@ -9,7 +12,8 @@ K2K u  l L
 K2K i  d D
 K2K o  p P
 K2K p  z Z
-K2K =  CAPS +CAPS
+K2K [  { [
+K2K ]  } ]
 
 K2K CAPS  q Q
 K2K a  c C
@@ -22,13 +26,12 @@ K2K j  h H
 K2K k  t T
 K2K l  n N
 K2K ;  s S
-K2K '  w W
 
-K2K z  ' "
-K2K x  , <
-K2K c  . >
-K2K v  ; :
-K2K b  / ?
+K2K z  , <
+K2K x  . >
+K2K c  ' "
+K2K v  / ?
+K2K b  ; :
 K2K n  j J
 K2K m  m M
 K2K ,  g G

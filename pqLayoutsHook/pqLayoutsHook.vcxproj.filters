@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Adaptives">
+      <UniqueIdentifier>{1d19cb19-9cfa-4c43-8304-f56ccb56b314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Combos">
+      <UniqueIdentifier>{e01ac221-a2de-4b62-b5b8-30939459f5cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -63,11 +69,26 @@
     <ClInclude Include="DualModeModifierAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="adapt-carbyne.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="adaptives\carbyne.h">
+      <Filter>Adaptives</Filter>
     </ClInclude>
-    <ClInclude Include="adapt-hd-neu-C.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="adaptives\empty.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
+    <ClInclude Include="adaptives\enthium.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
+    <ClInclude Include="adaptives\hd-neu-C.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
+    <ClInclude Include="combos\enthium.h">
+      <Filter>Combos</Filter>
+    </ClInclude>
+    <ClInclude Include="combos\hd-neu-C.h">
+      <Filter>Combos</Filter>
+    </ClInclude>
+    <ClInclude Include="combos\empty.h">
+      <Filter>Combos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,8 +131,5 @@
     <ClCompile Include="DualModeModifierAction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

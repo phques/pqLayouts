@@ -1,15 +1,15 @@
 
-      q w e r t y u i o p 
+      q w e r t y u i o p =
  CAPS a s d f g h j k l ; ' 
       z x c v b n m , . / 
                 PRINTSCR
                 
-      b y o u = x l d p z
+      b y o u = x l d p z CAPS
     q c i a e - k h t n s w
       ' , . ; / j m g f v
                 r
 
-      B Y O U + X L D P Z
+      B Y O U + X L D P Z +CAPS
     Q C I A E _ K H T N S W
       " < > : ? J M G F V
                 R

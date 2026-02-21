@@ -1,7 +1,7 @@
 ! https://github.com/sunaku/enthium
 ! With swapped Q,B
 
-imagefile img2.png
+imagefile imgs/img2.png
 imageview 0 +58 +54 +58
 !imageview 0 +71 +71 +71
 

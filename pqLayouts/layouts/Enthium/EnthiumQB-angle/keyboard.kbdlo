@@ -1,19 +1,18 @@
 ! https://github.com/sunaku/enthium
 ! With swapped Q,B
 
-imagefile imgs/img2.png
+imagefile imgs/img3b.png
 imageview 0 +58 +54 +58
 !imageview 0 +71 +71 +71
 
-!include mappings.kbdlo
-include ../../qwerty-1to1.kbdlo
-
+include mappings.kbdlo
 
 ! Space acts as shift when held, space when tapped
-!dualmod sp lshift sp
+dualmod sp lshift sp
+dualmod '  rshift w
 
 
 ! ------- edit layer --------
 
-!include ../../edit-layer-lalt2.kbdlo
+include ../../edit-layer-lalt2.kbdlo
 ! imageview 358 +124 360 +124

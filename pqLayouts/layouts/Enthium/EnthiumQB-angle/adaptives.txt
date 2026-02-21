@@ -1,0 +1,32 @@
+
+Adaptives specific to Enthium QB angle
+
+,SP  <- ,r 221
+.SP  <- .r 2902
+
+y,   <-  yb 6791
+y.   <-  yu 1545
+gl   <-  gm 4937
+o,   <-  ., 4509
+lm   <-  mg 1411
+o.   <-  ,. 128
+
+ml   <-  
+lg   <-  
+mpl  <-  mfm 
+lml  <-  mgm (cALMLy)
+
+au   <-  ae
+
+
+$ egrep '^(, |\. |o\.|o,|y\.|y,|ml|lm|lg|gl)' ./allDigraphs.txt
+,  869207
+.  449256
+y, 73250
+y. 46646
+gl 32894 gm 4937
+o, 17946
+lm 14420
+o. 11082
+ml 4167
+lg 3478

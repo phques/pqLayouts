@@ -8,13 +8,13 @@
       1 2 3 4 5     6 7 8 9 0 Caps 
       z w g m j     # . / " ' { } Esc
     v s n t h k     , a e i c q 
-	 f p d l x  LSh - u o y b
+     f p d l x  LSh - u o y b
          r
 
       ! @ \ ? %     ^ & | ( ) _
       Z W G M J     $ : * [ ] < > Esc
     V S N T H K     ; A E I C Q 
-	 F P D L X  Lsh + U O Y B
+     F P D L X  Lsh + U O Y B
          R
 
 Syms on std hd:
