@@ -1,8 +1,11 @@
 ! https://github.com/sunaku/enthium
 ! With swapped Q,B
 
-imagefile imgs/img3b.png
-imageview 0 +58 +54 +58
+imagefile imgs/img3bMac.png
+imageview 2 +118 120 +118
+
+!imagefile imgs/img3b.png
+!imageview 0 +58 +54 +58
 
 include mappings.kbdlo
 
