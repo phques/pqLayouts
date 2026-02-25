@@ -53,7 +53,7 @@ namespace pqLayoutsNET
             KbdLLHook.UnHook();
         }
 
-        private bool HandleMappedKey(VeeKee inKey, VeeKee outKey, KbdLLHookStruct e)
+        private bool OutputMappedKey(VeeKee inKey, VeeKee outKey, KbdLLHookStruct e)
         {
             List<INPUT> prefixes = new List<INPUT>();
             List<INPUT> suffixes = new List<INPUT>();
@@ -106,7 +106,7 @@ namespace pqLayoutsNET
             // output mapped key if found
             if (outKey.Code != 0)
             {
-                return HandleMappedKey(inKey, outKey, e);
+                return OutputMappedKey(inKey, outKey, e);
             }
 
             // pass-through to the next handler

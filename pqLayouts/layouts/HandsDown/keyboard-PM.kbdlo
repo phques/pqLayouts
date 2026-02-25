@@ -1,0 +1,19 @@
+! Hands Down Promethium, à la Phil
+
+! imagefile imgs/img3b.png
+! imageview 0 +58 +54 +58
+
+include hands-down-pm-pqb.kbdlo
+
+! Left shift acts as shift when held, F when tapped
+dualmod lshift lshift f
+dualmod rshift rshift z
+
+dualmod PRINTSCR lshift r
+dualmod SP rshift sp
+
+
+! ------- edit layer --------
+
+include ../edit-layer-lalt2.kbdlo
+! imageview 358 +124 360 +124

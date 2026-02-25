@@ -20,14 +20,14 @@
 #include "OutDbg.h"
 #include "pqLayoutsHook.h"
 
-#include "combos/empty.h"
+//#include "combos/empty.h"
 //#include "combos/hd-neu-C.h"
-//#include "combos/enthium.h"
+#include "combos/enthium.h"
 
-#include "adaptives/empty.h"
+//#include "adaptives/empty.h"
 //#include "adaptives/carbyne.h"
 //#include "adaptives/hd-neu-C.h"
-//#include "adaptives/enthium.h"
+#include "adaptives/enthium.h"
 
 using namespace KeyActions;
 

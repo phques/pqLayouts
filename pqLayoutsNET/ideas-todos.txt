@@ -1,0 +1,33 @@
+
+-> keynames (for modifiers & other keys)
+-> modifiers prefixes on (out) keys ("+r", "^c", "!tab")
+->? user defined keys, then used in mappings, access with "@macroName"
+   (to avoid needing to support all special keys directly in mappings?)
+
+-> "action" / special keys
+  - mod / tap
+    (this what is used in QMK for HRMs?)
+	#define TAPPING_TERM 200
+  - access layer
+  - toggle layer
+  - switch to layer
+  - output string
+  - output string, "smart shift" (for eg combo nt='th', shift-nt='Th'
+  - caps word
+    - similar to QMK (space ends mode, '-' => '_')
+    - camel case (space for 'word begin', start lower to permit "someCamelCase"?)	
+
+- combos
+- adaptives
+  - reader figures out \b to output
+    compare input to output, starting at 1st char, to know how much we need to back up
+- layers (edit layer!)
+  + access
+    - normal (modifier mode, like shift)
+    - layer / tap
+	  - to do layer/toggle, use tap= action "toggle layer"
+	  
+- ? tap dance / "multi taps"
+  - needs "timeout" / 
+  
+  
