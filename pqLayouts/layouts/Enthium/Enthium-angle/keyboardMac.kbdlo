@@ -1,0 +1,20 @@
+! https://github.com/sunaku/enthium
+! With swapped Q,B
+
+imagefile imgs/img3bMac.png
+imageview 2 +118 120 +118
+
+!imagefile imgs/img3b.png
+!imageview 0 +58 +54 +58
+
+include mappings.kbdlo
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+dualmod '  rshift w
+
+
+! ------- edit layer --------
+
+include ../../edit-layer-lalt2.kbdlo
+! imageview 358 +124 360 +124
