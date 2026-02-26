@@ -1,15 +1,16 @@
 ! Hands Down Promethium, à la Phil
 
-! imagefile imgs/img3b.png
-! imageview 0 +58 +54 +58
+imagefile hands-down-pm-pqb-img1.png
+imageview 5 +73 77 +73
 
-include hands-down-pm-pqb.kbdlo
+include hands-down-pm-pqc.kbdlo
 
+!##PQ: currently (bug?!) a dual mod key will not work on shift-tap !
 ! Left shift acts as shift when held, F when tapped
-dualmod lshift lshift f
-dualmod rshift rshift z
+! dualmod lshift lshift f
+! dualmod rshift rshift z
 
-dualmod PRINTSCR lshift r
+!dualmod PRINTSCR lshift r
 dualmod SP rshift sp
 
 

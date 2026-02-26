@@ -1,0 +1,43 @@
+
+          3 4       8
+      q w e r t  y u i o p [ ]
+ Caps a s d f g  h j k l ; '
+      z x c v b  n m , . / 
+       PRINTSCR
+       
+          3 4       8
+      v w g m j  # . / " ' { }
+    q s n t h k  , a e i c z
+       p d l f x  - u o y b 
+            r
+            
+          ? !       |
+      V W G M J  $ : * [ ] < >
+    Q S N T H K  ; A E I C Z
+       P D L F X  + U O Y B 
+            R
+
+So:
+      v w g m j  # . / " ' { }
+    q s n t h k  , a e i c z
+       p d l f x  - u o y b 
+            r        sp/rsh
+
+notes
+
++ PRINTSCR is maped to the left SP of my Sculpt!
+  => Used for R
+
++ Caps is used for Q,
+  access Caps it at its normal place through the Edit layer
+  eventually (TODO), through a combo
+
++ std 'angle mod', not using lshift or rshift for keys
+
++ modtap
+  - left  sp (=PRINTSCR): R/lsh
+  - right sp : SP/rsh
+  
++ TODO: adaptives for PM
+
+

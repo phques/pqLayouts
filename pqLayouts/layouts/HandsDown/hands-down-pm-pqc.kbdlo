@@ -1,4 +1,8 @@
-! Generated from [hands-down-pm-pqb.txt]
+! Generated from [hands-down-pm-pqc.txt]
+K2K 3  3 ?
+K2K 4  4 !
+K2K 8  8 |
+
 K2K q  v V
 K2K w  w W
 K2K e  g G
@@ -12,6 +16,7 @@ K2K p  ' ]
 K2K [  { <
 K2K ]  } >
 
+K2K Caps  q Q
 K2K a  s S
 K2K s  n N
 K2K d  t T
@@ -22,16 +27,18 @@ K2K j  a A
 K2K k  e E
 K2K l  i I
 K2K ;  c C
-K2K '  q Q
+K2K '  z Z
 
 K2K z  p P
 K2K x  d D
 K2K c  l L
-K2K v  x X
-K2K b  ? !
+K2K v  f F
+K2K b  x X
 K2K n  - +
 K2K m  u U
 K2K ,  o O
 K2K .  y Y
 K2K /  b B
+
+K2K PRINTSCR  r R
 

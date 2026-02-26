@@ -5,17 +5,17 @@
  
      v w g m j  # . / " ' { }
      s n t h k  , a e i c q
-      p d l x ( - u o y b 
+      p d l x ? - u o y b 
  
      V W G M J  $ : * [ ] < >
      S N T H K  ; A E I C Q
-      P D L X ) + U O Y B 
+      P D L X ! + U O Y B 
 
 So:
    v w g m j  # . / " ' { }
    s n t h k  , a e i c q
-  f p d l x  ( - u o y b z
-         r/lsh    sp/rsh
+  f p d l x ?  - u o y b z
+     r/lsh        sp/rsh
 
 notes
 
@@ -27,8 +27,8 @@ notes
 + rshift as rsh/z
 
 + modtap
-  - left  sp (PRINTSCR): R/lsh
-  - right sp ): SP/rsh
+  - left  sp (=PRINTSCR): R/lsh
+  - right sp : SP/rsh
   
 + missing 
  - ? : adaptative (TODO!)
