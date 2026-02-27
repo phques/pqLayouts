@@ -1,8 +1,8 @@
 ! https://github.com/sunaku/enthium
 ! angle mod
 
-imagefile imgs/img.png
-imageview 0 +92 90 +92
+imagefile imgs/img2.png
+imageview 0 +72 92 +72
 
 include mappings.kbdlo
 

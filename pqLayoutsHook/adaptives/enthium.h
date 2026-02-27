@@ -35,11 +35,11 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'O','V'}, "\bphilippe.quesnel"}, // P
     { {'K','V'}, "\bintegration\\"},    // T
     { {VK_OEM_1,'V'}, "\bselect * from "}, // S
-    { {'A','V'}, "\bcircuit "},          // C)ircuit
+    { {'A','N'}, "\bcircuit "},          // C)ircuit
     { {'I','V'}, "\bdevice "},           // D)evice
     { {'S','N'}, "\bincident "},         // I)ncident
     { {'U','V'}, "\blocation "},         // L)ocation
-    { {'F','N'}, "nergize "},            // E)nergize
+    { {'D','N'}, "nergize "},            // E)nergize
 
     { {'Y','U'}, "\bgmail"},
     { {'U','Y'}, "\bcgi"},
