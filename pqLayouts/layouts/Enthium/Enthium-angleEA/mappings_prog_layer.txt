@@ -1,0 +1,21 @@
+
+                         - =
+      q w e r t y u i o p [ ] \
+ CAPS a s d f g h j k l ; ' 
+      z x c v b n m , . / 
+                PRINTSCR 
+                
+                         \ CAPS
+      q y o u = / l d p z { } ^c
+    b c i e a - k h t n s w
+       , ; . ' x j m g f v
+                r
+
+                         | +CAPS
+      Q Y O U + ? L D P Z [ ] ^v
+    B C I E A _ K H T N S W
+       < : > " X J M G F V
+                R 
+
+Small changes to make programming easier,
+where / is much more important than when writing text

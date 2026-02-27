@@ -18,12 +18,12 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'X','Z'}, "\bo,"},    //  ., -> o, 
     { {'Z','X'}, "\bo."},    //  ,. -> o. 
 
-    // positional/qwerty, same as HD neu layout
+    // positional/QWERTY, same as HD neu layout
     { {'I','U'}, "\b!" },   // IU !
     { {'I','O'}, "\b?" },   // IO ?
 
     // vowels, special case for AU
-    { {'D','F'}, "u"},      // ae -> au
+    { {'F','D'}, "u"},      // ae -> au
 
     // vowels, 'magic C'
     { {'R','A'}, "a"},   // uc -> ua
@@ -35,11 +35,11 @@ static std::map<VeeKeeVector, const char*> adapts2 = {
     { {'O','V'}, "\bphilippe.quesnel"}, // P
     { {'K','V'}, "\bintegration\\"},    // T
     { {VK_OEM_1,'V'}, "\bselect * from "}, // S
-    { {'A','V'}, "\bcircuit"},          // C)ircuit
-    { {'I','V'}, "\bdevice"},           // D)evice
-    { {'S','N'}, "\bincident"},         // I)ncident
-    { {'U','V'}, "\blocation"},         // L)ocation
-    { {'F','N'}, "nergize"},            // E)nergize
+    { {'A','V'}, "\bcircuit "},          // C)ircuit
+    { {'I','V'}, "\bdevice "},           // D)evice
+    { {'S','N'}, "\bincident "},         // I)ncident
+    { {'U','V'}, "\blocation "},         // L)ocation
+    { {'F','N'}, "nergize "},            // E)nergize
 
     { {'Y','U'}, "\bgmail"},
     { {'U','Y'}, "\bcgi"},

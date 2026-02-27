@@ -1,0 +1,16 @@
+! https://github.com/sunaku/enthium
+! angle mod
+
+imagefile imgs/img.png
+imageview 0 +92 90 +92
+
+include mappings.kbdlo
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
+
+! ------- edit layer --------
+
+include ../../edit-layer-lalt2.kbdlo
+! imageview 358 +124 360 +124

@@ -19,24 +19,24 @@ static std::map<VeeKeeVector, const char*> combos = {
     { {'M', VK_OEM_PERIOD}, "_"},
 
     { {'A','S'}, "I "},             // ih -> "I " 
-    { {'S','U'}, "I'll"},           // il -> "I'll" 
-    { {'M','S'}, "I'm"},            // im -> "I'm" 
+    { {'S','U'}, "I'll "},           // il -> "I'll" 
+    { {'M','S'}, "I'm "},            // im -> "I'm" 
     
-    { {'U','W'}, "you'll"},         // yl -> "you'll" 
-    { {'F','W'}, "you're"},         // ye -> "you're" 
-    { {'O','W'}, "your"},           // yp -> "your" (P for 'possessive')
+    { {'U','W'}, "you'll "},         // yl -> "you'll" 
+    { {'F','W'}, "you're "},         // ye -> "you're" 
+    { {'O','W'}, "your "},           // yp -> "your" (P for 'possessive')
     
-    { {'F','J'}, "here"},           // he -> here
-    { {'K','W'}, "they"},           // ty -> they
-    { {'F','K'}, "there"},          // te -> there
-    { {'K','O'}, "their"},          // tp -> their (P for 'possessive')
-    { {'C','K'}, "they're"},        // t' -> they're
-    { {'J','K'}, "this" },          // th ->this
+    { {'F','J'}, "here "},           // he -> here
+    { {'K','W'}, "they "},           // ty -> they
+    { {'F','K'}, "there "},          // te -> there
+    { {'K','O'}, "their "},          // tp -> their (P for 'possessive')
+    { {'C','K'}, "they're "},        // t' -> they're
+    { {'J','K'}, "this " },          // th ->this
 
     // Using S instead of W
-    { {'J',VK_OEM_1}, "where"},     // sh -> where
-    { {'U',VK_OEM_1}, "we'll"},     // sl -> we'll
-    { {'C',VK_OEM_1}, "we're"},     // s' -> we're
+    { {'J',VK_OEM_1}, "where "},     // sh -> where
+    { {'U',VK_OEM_1}, "we'll "},     // sl -> we'll
+    { {'C',VK_OEM_1}, "we're "},     // s' -> we're
 
     { {'K','L'}, "ch" },    // tn (positional, samespot as in HD neu, but on consonants hand)
     //{ {VK_OEM_1,VK_OEM_7}, "wh" },    // 

@@ -1,0 +1,42 @@
+
+                         - =
+      q w e r t y u i o p [ ] \
+ CAPS a s d f g h j k l ;  
+  LSh z x c v   n m , . / 
+       b        PRINTSCR 
+                
+                         \ CAPS
+      q y o u = x l d p z { } ^c
+    b c i e a - k h t n s 
+     ' , ; . /  j m g f v
+      LSh       r
+
+                         | +CAPS
+      Q Y O U + X L D P Z [ ] ^v
+    B C I E A _ K H T N S 
+     " < : > ?   J M G F V
+      LSh       R 
+
+
+So:
+                         - CAPS
+      q y o u = x l d p z { } Copy/Paste
+    b c i a e - k h t n s w
+       , . ' / ; j m g f v
+                r 
+
+
+- Enthium, angle mod
+
+- Using  right spacebar on my matias sculpt
+  remapped to PRINTSCR to have a specific key to use for the layout
+  So right SP => R
+
+- W on ' is handled with:
+  dualmod '  rshift w
+  
+
+- Full AngleMod, using LShift for '
+  B is now free: put LSh on it.
+
+ 
