@@ -69,31 +69,31 @@
     <ClInclude Include="DualModeModifierAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="adaptives\carbyne.h">
+    <ClInclude Include="adaptives\adapt-carbyne.h">
       <Filter>Adaptives</Filter>
     </ClInclude>
-    <ClInclude Include="adaptives\empty.h">
+    <ClInclude Include="adaptives\adapt-empty.h">
       <Filter>Adaptives</Filter>
     </ClInclude>
-    <ClInclude Include="adaptives\enthium.h">
+    <ClInclude Include="adaptives\adapt-enthium.h">
       <Filter>Adaptives</Filter>
     </ClInclude>
-    <ClInclude Include="adaptives\hd-neu-C.h">
+    <ClInclude Include="adaptives\adapt-hd-neu-C.h">
       <Filter>Adaptives</Filter>
     </ClInclude>
-    <ClInclude Include="combos\enthium.h">
+    <ClInclude Include="adaptives\adapt-hd-pm.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
+    <ClInclude Include="combos\combo-empty.h">
       <Filter>Combos</Filter>
     </ClInclude>
-    <ClInclude Include="combos\hd-neu-C.h">
+    <ClInclude Include="combos\combo-enthium.h">
       <Filter>Combos</Filter>
     </ClInclude>
-    <ClInclude Include="combos\empty.h">
+    <ClInclude Include="combos\combo-hd-neu-C.h">
       <Filter>Combos</Filter>
     </ClInclude>
-    <ClInclude Include="adaptives\hd-pm.h">
-      <Filter>Adaptives</Filter>
-    </ClInclude>
-    <ClInclude Include="combos\hd-pm.h">
+    <ClInclude Include="combos\combo-hd-pm.h">
       <Filter>Combos</Filter>
     </ClInclude>
   </ItemGroup>

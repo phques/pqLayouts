@@ -20,15 +20,15 @@
 #include "OutDbg.h"
 #include "pqLayoutsHook.h"
 
-#include "combos/empty.h"
-//#include "combos/hd-neu-C.h"
-//#include "combos/enthium.h"
+#include "combos/combo-empty.h"
+//#include "combos/combo-hd-neu-C.h"
+//#include "combos/combo-enthium.h"
 
-//#include "adaptives/empty.h"
-//#include "adaptives/carbyne.h"
-//#include "adaptives/hd-neu-C.h"
-//#include "adaptives/enthium.h"
-#include "adaptives/hd-pm.h"
+//#include "adaptives/adapt-empty.h"
+//#include "adaptives/adapt-carbyne.h"
+//#include "adaptives/adapt-hd-neu-C.h"
+//#include "adaptives/adapt-enthium.h"
+#include "adaptives/adapt-hd-pm.h"
 
 using namespace KeyActions;
 
@@ -124,7 +124,10 @@ void Keyboard::ParseAdaptives()
 
     for (const auto& pair : adaptives)
     {
-        // Convert first item string to VeeKeeVector using ReverseMapping
+        // adaptives are positional by nature.
+        // they are saved with the 'physical'/qwerty key as the lookup values.
+
+        // so: Convert first item string (the 'from') into a VeeKeeVector using ReverseMapping
         VeeKeeVector vks;
         std::string keysSequence = pair.first;
 
@@ -154,6 +157,11 @@ void Keyboard::ParseAdaptives()
     }
 }
 
+const Layer* Keyboard::GetMainLayer()
+{
+    return layout.GetMainLayer();
+}
+
 bool Keyboard::GotoMainLayer()
 {
     return layout.GotoMainLayer();
@@ -161,7 +169,7 @@ bool Keyboard::GotoMainLayer()
 
 bool Keyboard::GotoLayer(Layer::Idx_t layerIdx)
 {
-   return layout.GotoLayer(layerIdx);
+    return layout.GotoLayer(layerIdx);
 }
 
 bool Keyboard::GotoLayer(const Layer::Id_t& layerId)
@@ -222,6 +230,13 @@ bool Keyboard::ShiftDown() const
     return ModifierDown(VK_LSHIFT) || 
         ModifierDown(VK_RSHIFT) || 
         ModifierDown(VK_SHIFT);
+}
+
+bool Keyboard::CtrlDown() const
+{
+    return ModifierDown(VK_LCONTROL) ||
+        ModifierDown(VK_RCONTROL) ||
+        ModifierDown(VK_CONTROL);
 }
 
 void Keyboard::TrackMappedKeyDown(VeeKee physicalVk, IKeyAction* mapped, bool pressed)
@@ -386,34 +401,39 @@ void Keyboard::SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lps
 
 bool Keyboard::CheckForSuspendKey(const KbdHookEvent& event)
 {
-    //##pq debug, cant use Paause key in VMWare on MacOS !! also try ScrollLock
-    if (event.Down() && (event.vkCode == VK_F1 && event.AltDown() || event.vkCode == VK_SCROLL))
-    {
-        adaptivesOn = !adaptivesOn;
-        Printf("alt-suspend key pressed, adaptives now %s\n", adaptivesOn ? " ""on" : "off");
-    }
+    // Toggle adaptives on/off
+    //##pq cant use Pause / ScrollLock key in VMWare on MacOS !! 
+    bool bothShiftsDown = ModifierDown(VK_LSHIFT) && ModifierDown(VK_RSHIFT);
 
-    // is it the suspend key ?
-    if (event.vkCode == suspendKey)
+    if ((event.vkCode == VK_SCROLL) ||
+        (event.AltDown() && event.vkCode == suspendKey) ||
+        (bothShiftsDown  && event.vkCode == '1'))
     {
         if (event.Down())
         {
-            if (event.AltDown())
-            {
-                adaptivesOn = !adaptivesOn;
-                Printf("alt-suspend key pressed, adaptives now %s\n", adaptivesOn ? " ""on" : "off");
-            }
-            else
-            {
-                Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
-                ToggleSuspend();
-            }
+            adaptivesOn = !adaptivesOn;
+            Printf("toggling adaptives %s\n", adaptivesOn ? " ""on" : "off");
         }
         return true; // 'eat' this key
     }
 
-    // is it the quit key ?
-    if (event.vkCode == quitKey)
+    // is it the suspend key? (usually Pause)
+    //##pq cant use Pause / ScrollLock key in VMWare on MacOS !! 
+    if ((event.vkCode == suspendKey) ||
+        (bothShiftsDown && event.vkCode == VK_OEM_3))  // `~ key
+    {
+        if (event.Down())
+        {
+            Printf("suspend key pressed, %ssuspending pqLayouts\n", (Suspended() ? "un" : ""));
+            ToggleSuspend();
+        }
+        return true; // 'eat' this key
+    }
+
+    // is it the quit key? (usually break/ctrl-pause)
+    if (event.vkCode == quitKey ||
+        (CtrlDown() && event.vkCode == suspendKey) ||
+        (bothShiftsDown && event.vkCode == VK_ESCAPE))
     {
         if (event.Down())
         {
@@ -541,33 +561,32 @@ void Keyboard::ReplayEvents(const std::vector<KbdHookEvent>& events)
     }
 }
 
-void Keyboard::SendString(int nbrKeysIn, const std::string& textString)
+void Keyboard::SendString(const std::string& textString)
 {
     // send output keys 
-    // 1st key is shifted if alpha && Shift is currently down
+    // 1st key is shifted if alpha && Shift is currently down 
+    // (but we skip \b which we use for combos/adaptives to erase chars typed by user)
     //i.e. shift ae -> Au
-    bool shifted = nbrKeysIn == 0 && ShiftDown();
-    int nbBS = 0;
+    bool got1stChar{};
     for (auto ch : textString)
     {
         KeyValue keyValueOut(ch);
 
-        if (shifted && isalpha(ch))
+        // skip initial backspaces before checking for '1st char'
+        if (!got1stChar && ch != '\b')
         {
-            keyValueOut.Shift(true);
-        }
-        shifted = false;
-
-        SendVk(keyValueOut, true);
-        SendVk(keyValueOut, false);
-
-        if (ch == '\b')
-        {
-            if (++nbBS == nbrKeysIn - 1)
+            // ok, we have our '1st char'
+            // capitalize it if shift is currently down
+            // and make sure to send the shifted version of the char
+            got1stChar = true;
+            if (isalpha(ch) && ShiftDown())
             {
-                shifted = ShiftDown();
+                keyValueOut.Shift(true);
             }
         }
+        // Send the char down,up
+        SendVk(keyValueOut, true);
+        SendVk(keyValueOut, false);
     }
 }
 
@@ -604,7 +623,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
 
         if (!HandleActionCode(foundComboIt->second))
         {
-            SendString(0, foundComboIt->second);
+            SendString(foundComboIt->second);
         }
         lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
@@ -740,9 +759,9 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     // --- Process adaptives ---
 
     // adaptives, delay between each key allowed
-    //##pq todo: this will need to be by layer / read from kbd file etc etc
+    //##pq todo: this could be by layer / read from kbd file etc etc
 
-    // quick temp fix: do adaptives only on main layer
+    // do adaptives (only on main layer at the moment)
     if (capsWordType == None && adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)
     {
         if (event.Down() && lastDownEvent.vkCode != 0)
@@ -759,23 +778,16 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 
                 std::map<VeeKeeExVector, std::string>::iterator foundAdaptIt;
 
-                // look for adaptives, make sure to have a 'complete' represntation of the key,
-                // including the shift bit
-                //VeeKeeEx vkExPrevLastDown = KeyValue::VkEx(prevlastDownEvent.vkCode, ShiftDown());
-                //VeeKeeEx vkExLastDown = KeyValue::VkEx(lastDownEvent.vkCode, ShiftDown());
-                //VeeKeeEx vkExCurrent = KeyValue::VkEx(event.vkCode, ShiftDown());
-
-                //VeeKeeExVector vkeys3{ vkExPrevLastDown, vkExLastDown, vkExCurrent };
-                //VeeKeeExVector vkeys2{ vkExLastDown, vkExCurrent };
+                // adaptives are positional by nature.
+                // they were saved with the 'physical'/qwerty key as the lookup values.
+                VeeKeeExVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
+                VeeKeeExVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
 
                 if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
                     (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
                 {
                     Printf("found adaptive!\n");
-
-                    const size_t nbrKeysIn = foundAdaptIt->first.size();
-                    SendString(nbrKeysIn, foundAdaptIt->second);
-
+                    SendString(foundAdaptIt->second);
                     Printf("done sending adapt\n");
 
                     prevlastDownEvent = lastDownEvent;

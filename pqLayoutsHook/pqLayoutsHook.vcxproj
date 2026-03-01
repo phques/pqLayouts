@@ -158,17 +158,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="adaptives\carbyne.h" />
-    <ClInclude Include="adaptives\empty.h" />
-    <ClInclude Include="adaptives\enthium.h" />
-    <ClInclude Include="adaptives\hd-neu-C.h" />
-    <ClInclude Include="adaptives\hd-pm.h" />
+    <ClInclude Include="adaptives\adapt-carbyne.h" />
+    <ClInclude Include="adaptives\adapt-empty.h" />
+    <ClInclude Include="adaptives\adapt-enthium.h" />
+    <ClInclude Include="adaptives\adapt-hd-neu-C.h" />
+    <ClInclude Include="adaptives\adapt-hd-pm.h" />
     <ClInclude Include="Chord.h" />
     <ClInclude Include="ChordingData.h" />
-    <ClInclude Include="combos\empty.h" />
-    <ClInclude Include="combos\enthium.h" />
-    <ClInclude Include="combos\hd-neu-C.h" />
-    <ClInclude Include="combos\hd-pm.h" />
+    <ClInclude Include="combos\combo-empty.h" />
+    <ClInclude Include="combos\combo-enthium.h" />
+    <ClInclude Include="combos\combo-hd-neu-C.h" />
+    <ClInclude Include="combos\combo-hd-pm.h" />
     <ClInclude Include="DualModeModifierAction.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Keydef.h" />

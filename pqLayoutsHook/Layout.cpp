@@ -97,7 +97,7 @@ bool Layout::GetLayerIndex(const Layer::Id_t& layerId, Layer::Idx_t& layerIdx)
 }
 
 
-bool Layout::GotoLayer(Layer* layer)
+bool Layout::GotoLayer(Layer * layer)
 {
     currentLayer = layer;
     Printf("switching to layer [%s](%d)\n", currentLayer->Name().c_str(), currentLayer->LayerIdx());
@@ -106,6 +106,18 @@ bool Layout::GotoLayer(Layer* layer)
     HookKbd::Notify(HookKbd::LayerChanged, currentLayer->LayerIdx());
 
     return true;
+}
+
+const Layer* Layout::GetMainLayer()
+{
+    // main layer always 1st
+    return layers[0];
+}
+
+Layer* Layout::GetMainLayerForModif()
+{
+    // main layer always 1st
+    return layers[0];
 }
 
 bool Layout::GotoMainLayer()

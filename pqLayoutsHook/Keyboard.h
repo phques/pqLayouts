@@ -44,6 +44,8 @@ public:
 
     void ParseAdaptives();
 
+    const Layer* GetMainLayer();
+
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
@@ -100,6 +102,7 @@ protected:
     bool ModifierDown(VeeKee vk) const;
 
     bool ShiftDown() const;
+    bool CtrlDown() const;
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
@@ -116,7 +119,7 @@ protected:
     void ReplayCancelledChord();
     bool IsSelfInjected(const KbdHookEvent& event);
 
-    void SendString(int nbrKeysIn, const std::string& textString);
+    void SendString(const std::string& textString);
     bool HandleActionCode(const char* actionString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 

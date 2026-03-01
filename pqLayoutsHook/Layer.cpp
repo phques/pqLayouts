@@ -72,7 +72,8 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
     //Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
 
     // Save mapping as direct VeeKeeEx to VeKeeEx
-    veeKeeMappings[from.Vk()] = to;
+    // this is needed for things like adaptives  
+    veeKeeMappings[from.VkEx()] = to;
     reverseMappingsVkEx[to.VkEx()] = from.VkEx();
 
     // Create a KeyAction mapping

@@ -31,6 +31,9 @@ public:
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
 
+    const Layer* GetMainLayer();
+    Layer* GetMainLayerForModif();
+
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
@@ -52,7 +55,7 @@ public:
     Layer::ImageView GetImageView(bool shiftDown) const;
 
 private:
-    bool GotoLayer(Layer* layer);
+    bool GotoLayer(Layer * layer);
 
 private:
     std::map<Layer::Id_t, Layer*> layersById;  

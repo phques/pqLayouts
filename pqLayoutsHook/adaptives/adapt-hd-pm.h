@@ -9,8 +9,6 @@ static std::map<VeeKeeExVector, std::string> adapts2 = {
 };
 
 static std::list<std::pair<const char*, const char*>> adaptives = {
-{ "/\"", "?" },
-
 { "pd", "nd" },
 { "pf", "ps" },
 { "kg", "kl" },
@@ -52,4 +50,14 @@ static std::list<std::pair<const char*, const char*>> adaptives = {
 { "u'", "ua" },
 { "e'", "eo" },
 { "o'", "oe" },
+
+// 'magic' adaptive trailer, on #, for "macros"
+{ "c#", "cgi" },
+{ "g#", "gmail" },
+{ "q#", "Quesnel" },
+{ "p#", "Philippe" },
+{ "q.#", "philippe.quesnel" },
+{ "d#", "device" },
+{ "i#", "integration\\" },
+{ "s#", "select * from " },
 };
