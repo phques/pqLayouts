@@ -2,12 +2,14 @@
 
 //##PQ todo hard coded as test, to go with Enthium layout. 
 
-static std::map<VeeKeeVector, const char*> adapts3 = {
+static std::list<std::pair<std::string, std::string>> adaptives;
+
+static std::map<VeeKeeVector, std::string> adapts3 = {
     // adaptives
     { {'M', VK_OEM_PERIOD, 'M'}, "\bpl"},   // mfm -> mpl
 };
 
-static std::map<VeeKeeVector, const char*> adapts2 = {
+static std::map<VeeKeeVector, std::string> adapts2 = {
 // adaptives
     { {'Z',VK_SNAPSHOT}, "\b, "},               // ,r  -> ,SP
     { {'X',VK_SNAPSHOT}, "\b. "},               // .r  -> .SP

@@ -42,13 +42,21 @@ public:
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
 
+    void ParseAdaptives();
+
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);
     bool GotoLayer(const Layer::Id_t& layerId);
     const Layer* CurrentLayer() const;
 
     const KeyMapping* Mapping(VeeKee vk);
+    KeyValue VkMapping(VeeKee vk) const;
+    VeeKeeEx ReverseMapping(VeeKeeEx vk) const;
+
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
+    KeyActions::IKeyAction* GetKeyAction(VeeKee vk) const;
+    KeyActions::IKeyAction* GetKeyAction(VeeKee vk, Layer::Idx_t layerIdx) const;
+
     bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey);
 
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
@@ -93,9 +101,6 @@ protected:
 
     bool ShiftDown() const;
 
-    KeyActions::IKeyAction* GetMappingValue(VeeKee vk) const;
-    KeyActions::IKeyAction* GetMappingValue(VeeKee vk, Layer::Idx_t layerIdx) const;
-
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
     void ReplayEvents(const std::vector<KbdHookEvent>& events);
@@ -111,13 +116,17 @@ protected:
     void ReplayCancelledChord();
     bool IsSelfInjected(const KbdHookEvent& event);
 
-    void SendString(int nbrKeysIn, const char* textString);
+    void SendString(int nbrKeysIn, const std::string& textString);
     bool HandleActionCode(const char* actionString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
+
+    bool VkExsFromString(const std::string& keyString, VeeKeeExVector & vks) const;
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
     static bool IsShift(VeeKee vk);
+
+    KeyActions::IKeyAction* GetKeyActionFromCaseMapping(const CaseMapping* caseMapping) const;
 
 private:
     // first=pressed *physical* key, second=what we do on that key(ie mapped value)

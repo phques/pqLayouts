@@ -33,7 +33,7 @@ KeyValue::KeyValue() : shift(false), control(false), alt(false)
 {
 }
 
-KeyValue::KeyValue(char ch)
+KeyValue::KeyValue(const char ch)
 {
     WORD vkword;
     bool isShifted;
@@ -43,9 +43,20 @@ KeyValue::KeyValue(char ch)
 }
 
 KeyValue::KeyValue(VeeKee vk, UINT scancode, bool shift, bool control, bool alt) :  
-    KeyDef(vk, scancode), 
+    keyDef(vk, scancode), 
     shift(shift), control(control), alt(alt)
 {
+}
+
+VeeKeeEx KeyValue::VkEx() const
+{
+    return VkEx(Vk(), Shift());
+}
+
+VeeKeeEx KeyValue::VkEx(VeeKee vk, bool shifted)
+{
+    // add shift bit to veekee if Shift is down
+    return vk | (shifted ? SHIFT_BIT : 0);
 }
 
 std::list<KeyValue> KeyValue::KeyValues(const std::string& str)

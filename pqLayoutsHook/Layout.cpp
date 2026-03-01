@@ -148,6 +148,22 @@ const CaseMapping* Layout::Mapping(Layer::Idx_t layerIdx, VeeKee vk) const
     return layers[layerIdx]->Mapping(vk);
 }
 
+KeyValue Layout::VkMapping(VeeKee vk) const
+{
+    if (currentLayer == nullptr)
+        return 0;
+
+    return currentLayer->VkMapping(vk);
+}
+
+VeeKeeEx Layout::ReverseMapping(VeeKeeEx vkEx) const
+{
+    if (currentLayer == nullptr)
+        return 0;
+
+    return currentLayer->ReverseMapping(vkEx);
+}
+
 bool Layout::AddMapping(KeyValue from, KeyValue to)
 {
     if (currentLayer == nullptr)

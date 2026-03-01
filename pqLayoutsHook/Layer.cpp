@@ -28,6 +28,24 @@ Layer::Layer(const Id_t& name, Idx_t layerIdx) : name(name), layerIdx(layerIdx)
 {
 }
 
+KeyValue Layer::VkMapping(VeeKee vk) const
+{
+    auto found = veeKeeMappings.find(vk);
+    if (found != veeKeeMappings.end())
+        return found->second;
+
+    return 0;
+}
+
+VeeKeeEx Layer::ReverseMapping(VeeKeeEx vkEx) const
+{
+    auto found = reverseMappingsVkEx.find(vkEx);
+    if (found != reverseMappingsVkEx.end())
+        return found->second;
+
+    return 0;
+}
+
 const CaseMapping* Layer::Mapping(VeeKee vk) const
 {
     const auto found = mappings.find(vk);
@@ -42,9 +60,9 @@ bool Layer::AddMapping(KeyValue from, IKeyAction* actionTo)
 {
     CaseMapping& caseMapping = mappings[from.Vk()];
     if (from.Shift())
-        caseMapping.shifted = KeyMapping(from, actionTo);
+        caseMapping.shifted = KeyMapping(from.Key(), actionTo);
     else
-        caseMapping.nonShifted = KeyMapping(from, actionTo);
+        caseMapping.nonShifted = KeyMapping(from.Key(), actionTo);
 
     return true;
 }
@@ -53,7 +71,12 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
 {
     //Printf("Add mapping from %02X, to %02X\n", from.Vk(), to.Vk());
 
-    IKeyAction* action = new KeyOutAction(from, to);
+    // Save mapping as direct VeeKeeEx to VeKeeEx
+    veeKeeMappings[from.Vk()] = to;
+    reverseMappingsVkEx[to.VkEx()] = from.VkEx();
+
+    // Create a KeyAction mapping
+    IKeyAction* action = new KeyOutAction(from.Key(), to);
 
     return AddMapping(from,  action);
 }

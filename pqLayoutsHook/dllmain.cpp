@@ -250,6 +250,11 @@ PQHOOK_API bool Suspended()
     return theKbd.Suspended();
 }
 
+PQHOOK_API void ParseAdaptives()
+{
+    theKbd.ParseAdaptives();
+}
+
 }; // namespace HookKbd
 
 

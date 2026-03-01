@@ -90,6 +90,12 @@
     <ClInclude Include="combos\empty.h">
       <Filter>Combos</Filter>
     </ClInclude>
+    <ClInclude Include="adaptives\hd-pm.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
+    <ClInclude Include="combos\hd-pm.h">
+      <Filter>Combos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

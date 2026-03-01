@@ -365,8 +365,14 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
 
         ok = lokbdrdr.ReadKeyboardFile(cmdline);
 
-        // always start on main layer
-        HookKbd::GotoMainLayer();
+        if (ok)
+        {
+            // always start on main layer
+            HookKbd::GotoMainLayer();
+
+            // parse any adaptives (text format) (on main layer)
+            HookKbd::ParseAdaptives();
+        }
     }
 
     if (ok)

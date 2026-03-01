@@ -57,5 +57,6 @@ namespace HookKbd
         PQHOOK_API void SuspendKey(VeeKee suspendKey, VeeKee quitKey);
         PQHOOK_API void ToggleSuspend();
         PQHOOK_API bool Suspended();
+        PQHOOK_API void ParseAdaptives();
     }
 };

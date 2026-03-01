@@ -2,12 +2,12 @@
 
 //##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
 
-static std::map<VeeKeeVector, const char*> adapts3 = {
+static std::map<VeeKeeVector, std::string> adapts3 = {
     // adaptives
     { {'R','W','R'}, "\bpl"}, // mwm -> mpl (copied from HD PM)
 };
 
-static std::map<VeeKeeVector, const char*> adapts2 = {
+static std::map<VeeKeeVector, std::string> adapts2 = {
     // adaptives
 //{ {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
 

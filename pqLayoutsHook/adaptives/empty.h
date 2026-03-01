@@ -1,9 +1,9 @@
 #pragma once
 
-static std::map<VeeKeeVector, const char*> adapts3 = {
+static std::map<VeeKeeVector, std::string> adapts3 = {
     // adaptives
 };
 
-static std::map<VeeKeeVector, const char*> adapts2 = {
+static std::map<VeeKeeVector, std::string> adapts2 = {
     // adaptives
 };

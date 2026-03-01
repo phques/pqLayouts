@@ -39,6 +39,9 @@ public:
 
     const CaseMapping* Mapping(VeeKee) const;
     const CaseMapping* Mapping(Layer::Idx_t layerIdx, VeeKee vk) const;
+    KeyValue VkMapping(VeeKee vk) const;
+    VeeKeeEx ReverseMapping(VeeKeeEx vk) const;
+
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddDualModeModifier(KeyDef key, KeyValue modifierKey, KeyValue tapKey);
 

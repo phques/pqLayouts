@@ -48,6 +48,9 @@ public:
     Idx_t LayerIdx() const { return layerIdx;}
 
     const CaseMapping* Mapping(VeeKee) const;
+    KeyValue VkMapping(VeeKee vk) const;
+    VeeKeeEx ReverseMapping(VeeKeeEx vk) const;
+
     bool AddMapping(KeyValue from, KeyActions::IKeyAction* actionTo);
     bool AddMapping(KeyValue from, KeyValue to);
     bool AddDualModeModifier(KeyDef key, KeyValue  modifierKey, KeyValue tapKey);
@@ -79,5 +82,8 @@ private:
     // pq-todo? might become performance prob if larger qty of chords
     std::vector<ChordActions> chords;
 
+    // keep track of simple key to key mappings
+    std::map<VeeKee, KeyValue> veeKeeMappings;        // from physical key to logical/mapped key
+    std::map<VeeKeeEx, VeeKeeEx> reverseMappingsVkEx; // from logical/mapped key to physical key
 };
 

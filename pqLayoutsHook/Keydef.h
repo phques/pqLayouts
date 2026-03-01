@@ -20,9 +20,12 @@
 #include "dllExport.h"
 
 typedef DWORD VeeKee;
+typedef DWORD VeeKeeEx;
+constexpr auto SHIFT_BIT = 0X80000000;
 
 typedef std::unordered_set<VeeKee> VeeKeeSet;
 typedef std::vector<VeeKee> VeeKeeVector;
+typedef std::vector<VeeKeeEx> VeeKeeExVector;
 typedef std::list<VeeKee> VeeKeeList;
 
 // types for interop use
@@ -57,12 +60,17 @@ protected:
 
 // represents a more specific instance of a key,
 // e.g. key ";" with shift ON => ':'
-class KeyValue : public KeyDef
+class KeyValue 
 {
 public:
     KeyValue();
-    KeyValue(char character);
+    KeyValue(const char character);
     PQHOOK_API KeyValue(VeeKee, UINT scancode, bool shift=false, bool control=false, bool alt=false);
+
+    KeyDef Key() const { return keyDef; }
+    VeeKee Vk() const { return keyDef.Vk(); }
+    VeeKeeEx VkEx() const;
+    static VeeKeeEx VkEx(VeeKee vk, bool shifted);
 
     bool Shift() const { return shift; }
     bool Control() const { return control; }
@@ -74,6 +82,7 @@ public:
     static std::list<KeyValue> KeyValues(const std::string& str);
 
 private:
+    KeyDef keyDef;
     bool shift;
     bool control;
     bool alt;

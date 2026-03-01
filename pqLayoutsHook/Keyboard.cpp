@@ -20,14 +20,15 @@
 #include "OutDbg.h"
 #include "pqLayoutsHook.h"
 
-//#include "combos/empty.h"
+#include "combos/empty.h"
 //#include "combos/hd-neu-C.h"
-#include "combos/enthium.h"
+//#include "combos/enthium.h"
 
 //#include "adaptives/empty.h"
 //#include "adaptives/carbyne.h"
 //#include "adaptives/hd-neu-C.h"
-#include "adaptives/enthium.h"
+//#include "adaptives/enthium.h"
+#include "adaptives/hd-pm.h"
 
 using namespace KeyActions;
 
@@ -94,6 +95,63 @@ bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool canTap, KeyValue keyOnTap)
 {
     return layout.SetLayerAccessKey(layerId, accessKey, canTap, keyOnTap);
+}
+
+// create a vector of VeeKeeExs from a string of characters, using Mapping to convert chars to VeeKees
+bool Keyboard::VkExsFromString(const std::string& keyString, VeeKeeExVector& vks) const
+{
+    for (char c : keyString)
+    {
+        VeeKeeEx vkEx = KeyValue(c).VkEx();
+
+        const VeeKeeEx unmappedVk = ReverseMapping(vkEx);
+
+        if (unmappedVk == 0)
+        {
+            Printf("Warning: No reverse mapping found for character '%c' (vk: %x)\n", c, vkEx);
+            return false;
+        }
+
+        vks.push_back(unmappedVk);
+    }
+
+    return true;
+}
+
+void Keyboard::ParseAdaptives()
+{
+    // Dont clear adapts2/adapts3, add to them
+
+    for (const auto& pair : adaptives)
+    {
+        // Convert first item string to VeeKeeVector using ReverseMapping
+        VeeKeeVector vks;
+        std::string keysSequence = pair.first;
+
+        if (!VkExsFromString(keysSequence, vks))
+        {
+            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", keysSequence.c_str());
+            continue;
+        }
+
+        // Insert into adapts2 or adapts3 based on vector size
+        std::string output = std::string{ pair.second };
+
+        if (vks.size() == 2)
+        {
+            // add a backspace in front to get rid of the 1st typed char
+            adapts2[vks] = "\b" + output;
+        }
+        else if (vks.size() == 3)
+        {
+            // add backspaces in front to get rid of the 1st typed char
+            adapts3[vks] = "\b\b" + output;
+        }
+        else
+        {
+            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vks.size());
+        }
+    }
 }
 
 bool Keyboard::GotoMainLayer()
@@ -262,6 +320,16 @@ const KeyMapping* Keyboard::Mapping(VeeKee vk)
     return (ShiftDown() ? &caseMapping->shifted : &caseMapping->nonShifted); 
 }
 
+KeyValue Keyboard::VkMapping(VeeKee vk) const
+{
+    return layout.VkMapping(vk);
+}
+
+VeeKeeEx Keyboard::ReverseMapping(VeeKeeEx vkEx) const
+{
+    return layout.ReverseMapping(vkEx);
+}
+
 bool Keyboard::AddMapping(KeyValue from, KeyValue to)
 {
     return layout.AddMapping(from, to);
@@ -281,26 +349,24 @@ bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>&
 
 //------
 
-IKeyAction* Keyboard::GetMappingValue(VeeKee vk) const
+// Private helper for shared mapping logic
+IKeyAction* Keyboard::GetKeyActionFromCaseMapping(const CaseMapping* caseMapping) const
 {
-    const CaseMapping* caseMapping = layout.Mapping(vk);
-    if (caseMapping == nullptr) 
-       return nullptr;
+    if (caseMapping == nullptr)
+        return nullptr;
 
-    // drill down to out mapping
     const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
     return mapping.Mapping();
 }
 
-IKeyAction* Keyboard::GetMappingValue(VeeKee vk, Layer::Idx_t layerIdx) const 
+IKeyAction* Keyboard::GetKeyAction(VeeKee vk) const
 {
-    const CaseMapping* caseMapping = layout.Mapping(layerIdx, vk);
-    if (caseMapping == nullptr) 
-       return nullptr;
+    return GetKeyActionFromCaseMapping(layout.Mapping(vk));
+}
 
-    // drill down to out mapping
-    const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
-    return mapping.Mapping();
+IKeyAction* Keyboard::GetKeyAction(VeeKee vk, Layer::Idx_t layerIdx) const
+{
+    return GetKeyActionFromCaseMapping(layout.Mapping(layerIdx, vk));
 }
 
 bool Keyboard::InitChordingKeys(const ChordingKeys& chordingKeys)
@@ -475,18 +541,18 @@ void Keyboard::ReplayEvents(const std::vector<KbdHookEvent>& events)
     }
 }
 
-void Keyboard::SendString(int nbrKeysIn, const char* textString)
+void Keyboard::SendString(int nbrKeysIn, const std::string& textString)
 {
     // send output keys 
     // 1st key is shifted if alpha && Shift is currently down
     //i.e. shift ae -> Au
     bool shifted = nbrKeysIn == 0 && ShiftDown();
     int nbBS = 0;
-    for (const char* ptr = textString; *ptr; ++ptr)
+    for (auto ch : textString)
     {
-        KeyValue keyValueOut(*ptr);
+        KeyValue keyValueOut(ch);
 
-        if (shifted && isalpha(*ptr))
+        if (shifted && isalpha(ch))
         {
             keyValueOut.Shift(true);
         }
@@ -495,7 +561,7 @@ void Keyboard::SendString(int nbrKeysIn, const char* textString)
         SendVk(keyValueOut, true);
         SendVk(keyValueOut, false);
 
-        if (*ptr == '\b')
+        if (ch == '\b')
         {
             if (++nbBS == nbrKeysIn - 1)
             {
@@ -691,11 +757,16 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
             {
                 Printf("checking for adaptive\n");
 
-                std::map<VeeKeeVector, const char*>::iterator foundAdaptIt;
+                std::map<VeeKeeExVector, std::string>::iterator foundAdaptIt;
 
-                // look for adaptives
-                VeeKeeVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
-                VeeKeeVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
+                // look for adaptives, make sure to have a 'complete' represntation of the key,
+                // including the shift bit
+                //VeeKeeEx vkExPrevLastDown = KeyValue::VkEx(prevlastDownEvent.vkCode, ShiftDown());
+                //VeeKeeEx vkExLastDown = KeyValue::VkEx(lastDownEvent.vkCode, ShiftDown());
+                //VeeKeeEx vkExCurrent = KeyValue::VkEx(event.vkCode, ShiftDown());
+
+                //VeeKeeExVector vkeys3{ vkExPrevLastDown, vkExLastDown, vkExCurrent };
+                //VeeKeeExVector vkeys2{ vkExLastDown, vkExCurrent };
 
                 if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
                     (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
@@ -755,7 +826,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     if (action == nullptr)
     {
         // do we have a mapped key for this input key?
-        action = GetMappingValue(event.vkCode);
+        action = GetKeyAction(event.vkCode);
     }
 
     // we have something to act on..
@@ -894,8 +965,8 @@ bool Keyboard::OnPo2LayersChord()
     }
 
     // -- map 2 qwerties to IAction from appropriate layers
-    auto* keyAction1 = GetMappingValue(chordingKey1->qwerty, layerIdx1);
-    auto* keyAction2 = GetMappingValue(chordingKey2->qwerty, layerIdx2);
+    auto* keyAction1 = GetKeyAction(chordingKey1->qwerty, layerIdx1);
+    auto* keyAction2 = GetKeyAction(chordingKey2->qwerty, layerIdx2);
     if (keyAction1 == nullptr || keyAction2 == nullptr)
         return false;
 
@@ -963,7 +1034,7 @@ void Keyboard::ReplayCancelledChord()
     for (auto& keyEvent : chord.KeysSequence())
     {
         // check that this key is mapped
-        IKeyAction* action = GetMappingValue(keyEvent.vkCode);
+        IKeyAction* action = GetKeyAction(keyEvent.vkCode);
         
         // we NEED an action for a key to do something when replaying from here ..
         // so create a one to one action key if it is not mapped
