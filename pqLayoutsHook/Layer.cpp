@@ -34,7 +34,7 @@ KeyValue Layer::VkMapping(VeeKee vk) const
     if (found != veeKeeMappings.end())
         return found->second;
 
-    return 0;
+    return KeyValue(vk, 0); // not mapped, return the same key
 }
 
 VeeKeeEx Layer::ReverseMapping(VeeKeeEx vkEx) const

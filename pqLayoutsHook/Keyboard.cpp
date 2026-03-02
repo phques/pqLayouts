@@ -540,44 +540,89 @@ bool Keyboard::ProcessKeyAction(const KbdHookEvent& event, IKeyAction* action, c
 bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
 {
     if (capsWordType == None)
+    {
         return false;
+    }
 
-    //##PQ todo these need to be based on *mapped* output keys not the input qwerty keys!
+    // Get mapped key from typed key
+    const KeyValue mapVk = VkMapping(event.vkCode);
+    const VeeKee vk = mapVk.Vk();
 
-    // stop
-    if (event.vkCode == VK_LSHIFT || event.vkCode == VK_RSHIFT || event.vkCode == VK_ESCAPE)
+    // convert that to a character
+    const char ch = VkUtil::VkToChar(static_cast<WORD>(vk), 0, mapVk.Shift());
+    
+    Printf("CapsWord processing vk: %02X, char: '%c'\n", vk, ch);
+
+    // space is used to shift (or end capsWord)
+    const bool isSpace = (vk == VK_SPACE);
+
+    // Explicit stop with Esc or Shift
+    if (vk == VK_LSHIFT || vk == VK_RSHIFT || vk == VK_ESCAPE)
     {
         if (event.Down())
+        {
             capsWordType = None;
+        }
         return true;
     }
 
-    if (capsWordType == CapsWord && event.vkCode == VK_SPACE)
+    // check for valid chars, stop on non valid chars
+    if (!(ch == ' ' || ch == '-' || isalpha(ch)))
     {
         if (event.Up())
+        {
+            capitalizeNext = false;
             capsWordType = None;
+        }
         return false;
     }
 
-    //##pq todo we want '-' to output '_' (only for CapsWord?)
-
-    //##pq todo cancel on non alpha char
-
-    //const bool isShiftCode = event.vkCode == VK_SPACE || event.vkCode == VK_OEM_MINUS;
-    const bool isShiftCode = event.vkCode == VK_SPACE;
-
-    if (capitalizeNext && isShiftCode)
-    {
-        capitalizeNext  = false;
-        capsWordType = None;
-        return false;
-    }
-
-    if (isShiftCode)
+    // CapsWord is terminated by single Space
+    if (capsWordType == CapsWord && isSpace)
     {
         if (event.Up())
+        {
+            capsWordType = None;
+        }
+        return false;
+    }
+
+    // CamelCase is terminated by double Space
+    if (capsWordType == CamelCase && capitalizeNext && isSpace)
+    {
+        if (event.Up())
+        {
+            capitalizeNext = false;
+            capsWordType = None;
+        }
+        return false;
+    }
+
+    // '-' is used to separate words in CapsWord (will let it do the same in CamelCase :-)
+    if (ch == '-')
+    {
+        if (event.Down())
+        {
+            TapVk(KeyValue('_'));
+        }
+        return true;
+    }
+
+    // 'shift code' (space) was hit, 
+    // capitalize the next char for CamelCase (eat the space)
+    if (capsWordType == CamelCase && isSpace)
+    {
+        if (event.Up())
+        {
             capitalizeNext = true;
+        }
         return true;
+    }
+
+    // lastly, capitalize the next char for Caps Word
+    if (capsWordType == CapsWord)
+    {
+        capitalizeNext = true;
     }
 
     return false;
@@ -646,7 +691,7 @@ void Keyboard::SendString(const std::string& textString)
             }
         }
         // Send the char down,up
-        SendVk(keyValueOut);
+        TapVk(keyValueOut);
     }
 }
 
@@ -670,8 +715,8 @@ bool Keyboard::HandleActionCode(const char* actionString)
         return true;
     case 'c':
         // select word: go to being of word, then end of word with shift on to select
-        SendVk(CtrlKeyValue(VK_LEFT));
-        SendVk(KeyValue(VK_RIGHT, 0, true, true));
+        TapVk(CtrlKeyValue(VK_LEFT));
+        TapVk(KeyValue(VK_RIGHT, 0, true, true));
         return true;
     default:
         break;
@@ -709,7 +754,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
             if (ShiftDown())
                 temp.Shift(true);
 
-            SendVk(temp);
+            TapVk(temp);
         }
         lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
@@ -1150,7 +1195,7 @@ void Keyboard::TrackModifiers(VeeKee vk, bool pressed)
 }
 
 
-bool Keyboard::SendVk(const KeyValue& key)
+bool Keyboard::TapVk(const KeyValue& key)
 {
     return SendVk(key, true) && SendVk(key, false);
 }
@@ -1168,7 +1213,7 @@ bool Keyboard::SendVk(const KeyValue& key, bool pressed)
         // don't surrounding shift up/down keys if the output key is shift or capslock
         if (!IsShift(key.Vk()) && key.Vk() != VK_CAPITAL)
         {
-            bool needsShift = key.Shift() || (capsWordType == CapsWord || capitalizeNext); //PQ should for isAlpha etc..
+            bool needsShift = key.Shift() || capitalizeNext;
             bool lshiftDown = ModifierDown(VK_LSHIFT);
             bool rshiftDown = ModifierDown(VK_RSHIFT);
             capitalizeNext = false;

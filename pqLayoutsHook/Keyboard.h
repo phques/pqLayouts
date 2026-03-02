@@ -78,7 +78,7 @@ public:
 
     bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
 
-    bool SendVk(const KeyValue& key);
+    bool TapVk(const KeyValue& key);
     bool SendVk(const KeyValue& key, bool pressed);
 
     void TrackModifiers(VeeKee vk, bool pressed);

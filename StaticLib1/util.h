@@ -87,7 +87,7 @@ struct VkUtil
 
     // converts a character to a VK and a 'isShifted' flag
     static bool CharToVk(char ch, WORD& vk, bool& isShifted);
-    static char VkToChar(WORD vk, WORD scancode);
+    static char VkToChar(WORD vk, WORD scancode, bool shifted=false);
 
     template <typename TC, typename  T>
     static bool Contains(TC container, T value)

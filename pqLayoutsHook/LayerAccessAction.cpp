@@ -64,7 +64,7 @@ bool LayerAccessAction::OnKeyUp(Keyboard* kbd, bool isTap)
         kbd->GotoMainLayer();
 
         // send the key
-        kbd->SendVk(keyOnTap);
+        kbd->TapVk(keyOnTap);
     }
     else
     {
