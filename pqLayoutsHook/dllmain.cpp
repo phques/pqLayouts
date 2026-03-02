@@ -255,6 +255,11 @@ PQHOOK_API void ParseAdaptives()
     theKbd.ParseAdaptives();
 }
 
+PQHOOK_API void PrepareCombos()
+{
+    theKbd.PrepareCombos();
+}
+
 }; // namespace HookKbd
 
 

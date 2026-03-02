@@ -1,6 +1,6 @@
 #pragma once
 
-// hard coded combos for Enthium
+// hard coded combos
 // VeeKeeVector must be sorted!
 // These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
 static std::map<VeeKeeVector, const char*> combos = {

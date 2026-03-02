@@ -20,9 +20,10 @@
 #include "OutDbg.h"
 #include "pqLayoutsHook.h"
 
-#include "combos/combo-empty.h"
+//#include "combos/combo-empty.h"
 //#include "combos/combo-hd-neu-C.h"
 //#include "combos/combo-enthium.h"
+#include "combos/combo-hd-pm.h"
 
 //#include "adaptives/adapt-empty.h"
 //#include "adaptives/adapt-carbyne.h"
@@ -35,6 +36,8 @@ using namespace KeyActions;
 
 //----------
 
+// all keys used for combos
+static std::set<VeeKee> comboKeys;
 
 VeeKeeSet Keyboard::modifiers = {
     VK_LSHIFT, VK_RSHIFT, VK_SHIFT,
@@ -98,13 +101,17 @@ bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, b
 }
 
 // create a vector of VeeKeeExs from a string of characters, using Mapping to convert chars to VeeKees
-bool Keyboard::VkExsFromString(const std::string& keyString, VeeKeeExVector& vks) const
+bool Keyboard::VkExsFromString(const std::string& keyString, VeeKeeExVector& vks, bool reverseMap) const
 {
     for (char c : keyString)
     {
         VeeKeeEx vkEx = KeyValue(c).VkEx();
 
-        const VeeKeeEx unmappedVk = ReverseMapping(vkEx);
+        VeeKeeEx unmappedVk{ vkEx };
+        if (reverseMap)
+        {
+            unmappedVk = ReverseMapping(vkEx);
+        }
 
         if (unmappedVk == 0)
         {
@@ -122,16 +129,16 @@ void Keyboard::ParseAdaptives()
 {
     // Dont clear adapts2/adapts3, add to them
 
-    for (const auto& pair : adaptives)
+    for (const auto& pair : txtAdaptives)
     {
         // adaptives are positional by nature.
         // they are saved with the 'physical'/qwerty key as the lookup values.
 
         // so: Convert first item string (the 'from') into a VeeKeeVector using ReverseMapping
-        VeeKeeVector vks;
-        std::string keysSequence = pair.first;
+        VeeKeeExVector vkExs;
+        const std::string& keysSequence = pair.first;
 
-        if (!VkExsFromString(keysSequence, vks))
+        if (!VkExsFromString(keysSequence, vkExs, true))
         {
             Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", keysSequence.c_str());
             continue;
@@ -140,19 +147,73 @@ void Keyboard::ParseAdaptives()
         // Insert into adapts2 or adapts3 based on vector size
         std::string output = std::string{ pair.second };
 
-        if (vks.size() == 2)
+        if (vkExs.size() == 2)
         {
             // add a backspace in front to get rid of the 1st typed char
-            adapts2[vks] = "\b" + output;
+            adapts2[vkExs] = "\b" + output;
         }
-        else if (vks.size() == 3)
+        else if (vkExs.size() == 3)
         {
             // add backspaces in front to get rid of the 1st typed char
-            adapts3[vks] = "\b\b" + output;
+            adapts3[vkExs] = "\b\b" + output;
         }
         else
         {
-            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vks.size());
+            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vkExs.size());
+        }
+    }
+}
+
+void Keyboard::ParseCombos(const std::list<std::pair<std::string, std::string>>& inputTextCombos, bool reverseMap)
+{
+    // Dont clear combos, add to them
+
+    for (const auto& pair : inputTextCombos)
+    {
+        // saved with the 'physical'/qwerty key as the lookup values.
+
+        // so: Convert first item string (the 'from') into a VeeKeeVector 
+        VeeKeeVector vks;
+        const std::string keysSequence = pair.first;
+
+        if (!VkExsFromString(keysSequence, vks, reverseMap))
+        {
+            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", keysSequence.c_str());
+            continue;
+        }
+
+        // vks need to be sorted for combos
+        std::sort(vks.begin(), vks.end());
+
+        // Insert into combos
+        if (vks.size() == 2)
+        {
+            combos[vks] = pair.second;
+        }
+        else 
+        {
+            Printf("Warning: Combo for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vks.size());
+        }
+    }
+}
+
+void Keyboard::PrepareCombos()
+{
+    ParseCombos(txtCombos, true);
+    ParseCombos(txtCombosQwerty, false);
+
+    for (const auto& combo : combos)
+    {
+        for (const auto& vk : combo.first)
+        {
+            comboKeys.insert(vk);
+        }
+    }
+    for (const auto& combo : combos2)
+    {
+        for (const auto& vk : combo.first)
+        {
+            comboKeys.insert(vk);
         }
     }
 }
@@ -585,8 +646,7 @@ void Keyboard::SendString(const std::string& textString)
             }
         }
         // Send the char down,up
-        SendVk(keyValueOut, true);
-        SendVk(keyValueOut, false);
+        SendVk(keyValueOut);
     }
 }
 
@@ -596,19 +656,25 @@ bool Keyboard::HandleActionCode(const char* actionString)
         return false;
 
     const std::string actionCode(&actionString[1]);
-    if (actionCode == "a")
+    switch (actionCode[0])
     {
+    case 'a':
         Printf("CapsWord: CamelCase\n");
         capsWordType = CamelCase;
         capitalizeNext = true;
         return true;
-    }
-    else if (actionCode == "b")
-    {
+    case 'b':
         Printf("CapsWord: CapsWord\n");
         capsWordType = CapsWord;
         capitalizeNext = true;
         return true;
+    case 'c':
+        // select word: go to being of word, then end of word with shift on to select
+        SendVk(CtrlKeyValue(VK_LEFT));
+        SendVk(KeyValue(VK_RIGHT, 0, true, true));
+        return true;
+    default:
+        break;
     }
 
     return false;
@@ -621,7 +687,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     {
         Printf("found combo!\n");
 
-        if (!HandleActionCode(foundComboIt->second))
+        if (!HandleActionCode(foundComboIt->second.c_str()))
         {
             SendString(foundComboIt->second);
         }
@@ -643,8 +709,7 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
             if (ShiftDown())
                 temp.Shift(true);
 
-            SendVk(temp, true);
-            SendVk(temp, false);
+            SendVk(temp);
         }
         lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
@@ -660,16 +725,11 @@ bool Keyboard::HandleCombos(const KbdHookEvent& event)
 
     static std::vector<KbdHookEvent > eventsDown;
     static VeeKeeVector vksDown;
-    static std::string comboKeys = std::string("ABCDEFGHIJKLMOPQRSTUVWXYZ") 
-            + (char)VK_OEM_1        // ';:'
-            + (char)VK_OEM_2        // '/?'
-            + (char)VK_OEM_COMMA
-            + (char)VK_OEM_PERIOD
-            + (char)VK_OEM_7        // '"
-        ;
     static bool cumulating = false;
 
-    const bool isComboKey = (comboKeys.find((char)event.vkCode) != std::string::npos);
+    // ##NB: it is important that we let non combo keys through here,
+    //       because some might not be mapped, and ReplayEvents() will have no effects for those!!
+    const bool isComboKey = (comboKeys.find(event.vkCode) != comboKeys.end());
     const bool isComboKeyDown = isComboKey && event.Down();
 
     if (!cumulating && !isComboKeyDown)
@@ -692,7 +752,7 @@ bool Keyboard::HandleCombos(const KbdHookEvent& event)
     {
         const bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
 
-        if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 50) //ms
+        if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 90) //ms (old=50,75)
         {
             Printf("cancel cumul\n");
             ReplayEvents(eventsDown);
@@ -734,7 +794,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     if (ProcessCapsWord(event))
         return true;
 
-    // quick temp fix: do combos only on main layer
+    // do combos only on main layer, and only if we are not in caps word mode
     if (layout.CurrentLayer()->Name() == MainLayerName &&
         capsWordType == None &&
         HandleCombos(event))
@@ -756,55 +816,16 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
         this->lastVkCodeDown = event.vkCode;
     }
 
-    // --- Process adaptives ---
-
-    // adaptives, delay between each key allowed
-    //##pq todo: this could be by layer / read from kbd file etc etc
-
-    // do adaptives (only on main layer at the moment)
-    if (capsWordType == None && adaptivesOn && layout.CurrentLayer()->Name() == MainLayerName)
+    // Adaptives must be handled here, this method is called by combocode to handle pending events
+    // do adaptives if ON, only on main layer, and only if we are not in caps word mode
+    if (adaptivesOn &&
+        capsWordType == None && 
+        layout.CurrentLayer()->Name() == MainLayerName &&
+        ProcessAdaptives(event))
     {
-        if (event.Down() && lastDownEvent.vkCode != 0)
-        {
-            if (event.time - lastDownEvent.time > 175) // ms
-            {
-                Printf("reset lastDownEvent\n");
-                prevlastDownEvent.vkCode = 0;
-                lastDownEvent.vkCode = 0;
-            }
-            else
-            {
-                Printf("checking for adaptive\n");
-
-                std::map<VeeKeeExVector, std::string>::iterator foundAdaptIt;
-
-                // adaptives are positional by nature.
-                // they were saved with the 'physical'/qwerty key as the lookup values.
-                VeeKeeExVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
-                VeeKeeExVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
-
-                if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
-                    (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
-                {
-                    Printf("found adaptive!\n");
-                    SendString(foundAdaptIt->second);
-                    Printf("done sending adapt\n");
-
-                    prevlastDownEvent = lastDownEvent;
-                    lastDownEvent = event;
-                    return true; // eat key
-                }
-            }
-        }
-
-        if (event.Down())
-        {
-            prevlastDownEvent = lastDownEvent;
-            lastDownEvent = event;
-        }
-
+        Printf("adaptive processed\n");
+        return true;
     }
-
 
     // --- handle possible chording ---
 
@@ -853,6 +874,56 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     }
 
     return false; // let key through
+}
+
+bool Keyboard::ProcessAdaptives(const KbdHookEvent& event)
+{
+
+    // adaptives, delay between each key allowed
+    //##pq todo: this could be by layer / read from kbd file etc etc
+
+    // do adaptives (only on main layer at the moment)
+    if (event.Down() && lastDownEvent.vkCode != 0)
+    {
+        if (event.time - lastDownEvent.time > 175) // ms
+        {
+            Printf("reset lastDownEvent\n");
+            prevlastDownEvent.vkCode = 0;
+            lastDownEvent.vkCode = 0;
+        }
+        else
+        {
+            Printf("checking for adaptive\n");
+
+            std::map<VeeKeeExVector, std::string>::iterator foundAdaptIt;
+
+            // adaptives are positional by nature.
+            // they were saved with the 'physical'/qwerty key as the lookup values.
+            VeeKeeExVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
+            VeeKeeExVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
+
+            if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
+                (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
+            {
+                Printf("found adaptive!\n");
+                SendString(foundAdaptIt->second);
+                Printf("done sending adapt\n");
+
+                prevlastDownEvent = lastDownEvent;
+                lastDownEvent = event;
+                return true; // eat key
+            }
+        }
+    }
+
+    if (event.Down())
+    {
+        prevlastDownEvent = lastDownEvent;
+        lastDownEvent = event;
+    }
+
+
+    return false;
 }
 
 bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey)
@@ -1078,6 +1149,11 @@ void Keyboard::TrackModifiers(VeeKee vk, bool pressed)
         ModifierDown(vk, pressed);
 }
 
+
+bool Keyboard::SendVk(const KeyValue& key)
+{
+    return SendVk(key, true) && SendVk(key, false);
+}
 
 bool Keyboard::SendVk(const KeyValue& key, bool pressed)
 {

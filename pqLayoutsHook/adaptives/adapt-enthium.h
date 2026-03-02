@@ -2,7 +2,7 @@
 
 //##PQ todo hard coded as test, to go with Enthium layout. 
 
-static std::list<std::pair<std::string, std::string>> adaptives;
+static std::list<std::pair<std::string, std::string>> txtAdaptives;
 
 static std::map<VeeKeeVector, std::string> adapts3 = {
     // adaptives

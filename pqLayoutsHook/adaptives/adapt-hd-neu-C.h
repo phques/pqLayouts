@@ -2,12 +2,14 @@
 
 //##PQ todo hard coded as test, to go with HD neu-C layout. 
 
-static std::map<VeeKeeVector, const char*> adapts3 = {
+static std::list<std::pair<std::string, std::string>> txtAdaptives;
+
+static std::map<VeeKeeVector, std::string> adapts3 = {
     // adaptives
     { {'E','Q','E'}, "\b\blml"},   // mwm -> lml (calmly)
 };
 
-static std::map<VeeKeeVector, const char*> adapts2 = {
+static std::map<VeeKeeVector, std::string> adapts2 = {
 // adaptives
 
     // left hand

@@ -18,5 +18,6 @@
 #include <string>
 #include <algorithm>
 #include <map>
+#include <set>
 
 #endif //PCH_H

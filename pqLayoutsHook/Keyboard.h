@@ -43,6 +43,8 @@ public:
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
 
     void ParseAdaptives();
+    void ParseCombos(const std::list<std::pair<std::string, std::string>>& inputTextCombos, bool reverseMap);
+    void PrepareCombos();
 
     const Layer* GetMainLayer();
 
@@ -76,7 +78,9 @@ public:
 
     bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
 
+    bool SendVk(const KeyValue& key);
     bool SendVk(const KeyValue& key, bool pressed);
+
     void TrackModifiers(VeeKee vk, bool pressed);
     void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);
 
@@ -123,7 +127,9 @@ protected:
     bool HandleActionCode(const char* actionString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
-    bool VkExsFromString(const std::string& keyString, VeeKeeExVector & vks) const;
+    bool ProcessAdaptives(const KbdHookEvent& event);
+
+    bool VkExsFromString(const std::string& keyString, VeeKeeExVector & vks, bool reverseMap) const;
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);

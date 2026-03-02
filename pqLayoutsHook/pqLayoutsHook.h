@@ -58,5 +58,6 @@ namespace HookKbd
         PQHOOK_API void ToggleSuspend();
         PQHOOK_API bool Suspended();
         PQHOOK_API void ParseAdaptives();
+        PQHOOK_API void PrepareCombos();
     }
 };
