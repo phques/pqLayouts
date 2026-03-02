@@ -18,7 +18,7 @@
 #include "stdafx.h"
 #include "KbdDisplayWnd.h"
 #include <shellscalingapi.h>
-#include "../StaticLib1/util.h"
+#include "util.h"
 
 
 namespace

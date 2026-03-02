@@ -19,9 +19,9 @@
 #include "LoLevelKbdFile.h"
 
 #include "pqLayoutsHook.h"
-#include "../StaticLib1/util.h"
-#include "../StaticLib1/File.h"
-#include "../StaticLib1/KeyParser.h"
+#include "util.h"
+#include "File.h"
+#include "KeyParser.h"
 #include "KeyOutAction.h"
 #include "Chord.h"
 

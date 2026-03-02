@@ -22,7 +22,7 @@
 #include "KeyMapping.h"
 #include "Chord.h"
 #include "ChordingData.h"
-#include "../StaticLib1/KeyParser.h"
+#include "KeyParser.h"
 
 //---------
 

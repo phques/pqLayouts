@@ -21,7 +21,7 @@
 #include "LoLevelKbdFile.h"
 #include "KbdDisplayWnd.h"
 #include "resource.h"
-#include "../StaticLib1/util.h"
+#include "util.h"
 
 // we need commctrl v6 for LoadIconMetric()
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")

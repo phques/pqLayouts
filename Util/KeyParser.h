@@ -21,7 +21,7 @@
 
 #include "pch.h"
 #include "StringTokener.h"
-#include "../pqLayoutsHook/Keydef.h"
+#include "Keydef.h"
 
 class KeyParser
 {

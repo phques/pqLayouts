@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;PQLAYOUTSHOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../StaticLib1;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Util;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;PQLAYOUTSHOOK_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../StaticLib1;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Util;$(LUA_ROOT)\include;$(LUA_ROOT)\include\LuaBridge</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -211,7 +211,7 @@
     <ClCompile Include="LayerToggleAction.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StaticLib1\StaticLib1.vcxproj">
+    <ProjectReference Include="..\Util\Util.vcxproj">
       <Project>{33a9af49-f3f0-46eb-a648-c4b520c34cfd}</Project>
     </ProjectReference>
   </ItemGroup>

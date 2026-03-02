@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pqLayouts", "pqLayouts\pqLayouts.vcxproj", "{6CB22487-708C-407A-8ACF-70D233642E44}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pqLayoutsHook", "PqLayoutsHook\PqLayoutsHook.vcxproj", "{680C5F5C-3188-42DD-A81D-3464892277B6}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StaticLib1", "StaticLib1\StaticLib1.vcxproj", "{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testbed", "testbed\testbed.vcxproj", "{EAB6C559-71BF-4C36-975B-AFE4A32B9C29}"
 EndProject
@@ -28,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestYaml1", "Tests\TestYaml1\TestYaml1.csproj", "{47AAF0D3-AC5B-99BC-5A88-1907112E25F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetKbdHook", "Tests\TestNetKbdHook\TestNetKbdHook.csproj", "{CA20718B-84DD-48DC-8FBF-E79AFCD27964}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "Util\Util.vcxproj", "{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,18 +63,6 @@ Global
 		{680C5F5C-3188-42DD-A81D-3464892277B6}.Release|x64.Build.0 = Release|x64
 		{680C5F5C-3188-42DD-A81D-3464892277B6}.Release|x86.ActiveCfg = Release|Win32
 		{680C5F5C-3188-42DD-A81D-3464892277B6}.Release|x86.Build.0 = Release|Win32
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|Any CPU.Build.0 = Debug|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x64.ActiveCfg = Debug|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x64.Build.0 = Debug|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x86.ActiveCfg = Debug|Win32
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x86.Build.0 = Debug|Win32
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|Any CPU.ActiveCfg = Release|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|Any CPU.Build.0 = Release|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x64.ActiveCfg = Release|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x64.Build.0 = Release|x64
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x86.ActiveCfg = Release|Win32
-		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x86.Build.0 = Release|Win32
 		{EAB6C559-71BF-4C36-975B-AFE4A32B9C29}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{EAB6C559-71BF-4C36-975B-AFE4A32B9C29}.Debug|Any CPU.Build.0 = Debug|x64
 		{EAB6C559-71BF-4C36-975B-AFE4A32B9C29}.Debug|x64.ActiveCfg = Debug|x64
@@ -121,6 +109,18 @@ Global
 		{CA20718B-84DD-48DC-8FBF-E79AFCD27964}.Release|x64.Build.0 = Release|Any CPU
 		{CA20718B-84DD-48DC-8FBF-E79AFCD27964}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA20718B-84DD-48DC-8FBF-E79AFCD27964}.Release|x86.Build.0 = Release|Any CPU
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|Any CPU.Build.0 = Debug|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x64.ActiveCfg = Debug|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x64.Build.0 = Debug|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x86.ActiveCfg = Debug|Win32
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Debug|x86.Build.0 = Debug|Win32
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|Any CPU.ActiveCfg = Release|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|Any CPU.Build.0 = Release|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x64.ActiveCfg = Release|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x64.Build.0 = Release|x64
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x86.ActiveCfg = Release|Win32
+		{33A9AF49-F3F0-46EB-A648-C4B520C34CFD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
