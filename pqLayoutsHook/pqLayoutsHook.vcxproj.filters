@@ -96,6 +96,9 @@
     <ClInclude Include="combos\combo-hd-pm.h">
       <Filter>Combos</Filter>
     </ClInclude>
+    <ClInclude Include="combos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -135,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DualModeModifierAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="combos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

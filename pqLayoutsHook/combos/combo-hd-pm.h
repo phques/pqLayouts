@@ -1,22 +1,15 @@
 #pragma once
 
-// hard coded combos for HD PM
-// VeeKeeVector must be sorted!
-// These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
-static std::map<VeeKeeExVector, std::string> combos = {
 
-    //(positional)
-    { {'M', VK_OEM_2}, "\01a"},             // ./ => capsWord: capsWord
-    { {VK_OEM_PERIOD, VK_OEM_2 }, "\01b"},  // m/ => capsWord: camelCase
-    { {'B', 'Z'}, "\01c"},                  // zb => select word HD_LB4, HD_LB0
-};
+// Combos definitions for HD PM
+
 
 //(positional)
 // sent directly w. SendVk, so to support, for ex, shift-(ctrl-z),
 // we will need to add in the Shift in the KeyValue when Shift is down
 // (nb: normal 'KeyOut' key entries will have the shift=true for entries on the shift layer !)
 // VeeKeeVector must be sorted!
-static std::map<VeeKeeExVector, std::vector<KeyValue>> combos2 = {
+static std::map<VeeKeeVector, std::vector<KeyValue>> charsCombos = {
     // HD_LB0, HD_LM0   new -- Since cmd/ctrl is on middle
     // HD_RB0, HD_RM0   open -- these must be 2 handed, so combo
     // HD_RT0, HD_RM0   close -- not strictly necessary?
@@ -32,10 +25,10 @@ static std::map<VeeKeeExVector, std::vector<KeyValue>> combos2 = {
     { {'B','G'}, {CtrlKeyValue('N')} }, // ctrl-n HD_LB0, HD_LM0   new 
     { {'H','N'}, {CtrlKeyValue('O')} }, // ctrl-o HD_RB0, HD_RM0   open
     //{ {'C','X','Z'}, {CtrlKeyValue('Y')} }, // ctrl-y HD_LB4, HD_LB3, HD_LB2   redo
-    { {'C','Z'}, {CtrlKeyValue('Y')} }, // ctrl-y redo
-    { {'X','Z'}, {CtrlKeyValue('Z')} }, // ctrl-z (can use shift to do Redo)
-    { {'C','X'}, {CtrlKeyValue('C')} }, // ctrl-c
-    { {'C','V'}, {CtrlKeyValue('V')} }, // ctrl-v
+    { {'V','X'}, {CtrlKeyValue('Y')} }, // ctrl-y redo
+    { {'X','Z'}, {CtrlKeyValue('Z')} }, // ctrl-z undo (can use shift to do Redo)
+    { {'C','X'}, {CtrlKeyValue('C')} }, // ctrl-c copy
+    { {'C','V'}, {CtrlKeyValue('V')} }, // ctrl-v paste
     { {'H','Y'}, {CtrlKeyValue('W')} }, // ctrl-w (close, unfortunately not std, ditto ctrl-f4)
     { {'A','G'}, {CtrlKeyValue('F')} }, // ctrl-f (find)
     { {'V','Z'}, {CtrlKeyValue('A')} }, // ctrl-a (select all)
@@ -89,6 +82,10 @@ static std::list<std::pair<std::string, std::string>> txtCombos = {
 // these will be parsed to populate combos above, 
 // the trigger keys are positional / qwerty, no remapping done
 static std::list<std::pair<std::string, std::string>> txtCombosQwerty = {
+    { "./", "\01a"},    // ./ => capsWord: capsWord
+    { "m/", "\01b"},    // m/ => capsWord: camelCase
+    { "zb", "\01c"},    // zb => select word HD_LB4, HD_LB0
+
     {"n.", "~"}, // HD_RB0, HD_RB3  ~ tilde (not the deadkey for eñye)
     {"m.", "_"}, // HD_RB1, HD_RB3  _ underscore
     {",.", "="}, // HD_RB2, HD_RB3  = equal (hold for %)HD_RM0, HD_RM1 // ; semicolon
@@ -102,9 +99,9 @@ static std::list<std::pair<std::string, std::string>> txtCombosQwerty = {
     {"wr", "qu"}, // HD_LT3, HD_LT1  TYPE "q" (Qu & Linger deletes u)
 };
 
-//## PQ TODO
-// these will be parsed to populate combos2 above, 
+//## PQ TODO (need to be able to parse "^C", etc)
+// these will be parsed to populate charsCombos above, 
 // the trigger keys are 'physical' / qwerty, no remapping done
-static std::list<std::pair<const char*, const char*>> txtCombosQwertySendKey = {
+static std::list< std::pair<std::string, std::string>> txtCharsCombos = {
 
 };

@@ -77,8 +77,11 @@ struct WmKeyLPARAM {
 
 //--------
 
-struct VkUtil
+class VkUtil
 {
+public:
+    typedef std::map<std::string, WORD> KeyNamesMap;
+
     // checks bit 0 of hibyte of ret val from VkKeyScanA
     static bool HasShiftBit(SHORT scanExVal) 
     { 
@@ -94,6 +97,13 @@ struct VkUtil
     { 
         return find(container.begin(), container.end(), value) != container.end();
     }
+
+    static const KeyNamesMap& KeyNames() { return keyNames; }
+    static WORD LookupKeyName(const std::string& keyText);
+
+private:
+    static KeyNamesMap keyNames;
+
 };
 
 

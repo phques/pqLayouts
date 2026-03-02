@@ -165,6 +165,7 @@
     <ClInclude Include="adaptives\adapt-hd-pm.h" />
     <ClInclude Include="Chord.h" />
     <ClInclude Include="ChordingData.h" />
+    <ClInclude Include="combos.h" />
     <ClInclude Include="combos\combo-empty.h" />
     <ClInclude Include="combos\combo-enthium.h" />
     <ClInclude Include="combos\combo-hd-neu-C.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="ChordingData.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="combos.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DualModeModifierAction.cpp" />
     <ClCompile Include="Keydef.cpp" />

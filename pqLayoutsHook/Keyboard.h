@@ -22,6 +22,7 @@
 #include "Notification.h"
 #include "chord.h"
 #include "ChordingData.h"
+#include "combos.h"
 
 class KbdHook; // fwd
 
@@ -176,6 +177,11 @@ private:
     VeeKeeSet isprint;
 
     std::wstring imageFilename;
+
+    // VeeKeeVector must be sorted!
+    // These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
+    std::map<VeeKeeVector, StringCombo> comboz;
+    std::map<VeeKeeVector, std::string> combos;
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

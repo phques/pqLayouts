@@ -22,83 +22,16 @@
 #include "KeyMapping.h"
 #include "Chord.h"
 #include "ChordingData.h"
-
-//---------
-
-
-class File
-{
-public:
-    File(std::ifstream& f) : lineNo(0), f(f)
-    {}
-
-    void GetLine();
-
-    int lineNo;
-    std::string line;
-    std::ifstream& f;
-};
-
-
-//-------------
-
-
-class StringTokener : public std::istringstream
-{
-public:
-    StringTokener(const std::string& line, int lineNo);
-    StringTokener(File&);
-
-    int LineNo() const { return lineNo; }
-    bool ReadParam(const char* paramName, std::string& param);
-
-private:
-    int lineNo;
-};
-
-//---------
-
-class KeyParser
-{
-public:
-    KeyParser(StringTokener& tokener, const char* paramName);
-
-    bool operator ()();
-    bool ReadFromTokener();
-    bool ParseKey(bool showError);
-
-    bool GetKeys(std::list<KeyValue> & keys, std::vector<char>& stenoChars);
-    bool GetKeysFromToken(std::list<KeyValue>& keys, std::vector<char>& stenoChars);
-    KeyValue ToKeyValue() const;
-
-public:
-    std::string token;  // this is the text value read from file for the key
-
-    bool hasShiftPrefix;
-    bool hasControlPrefix;
-    bool hasAltPrefix;
-    bool isShifted;     // as defined by VkKeyScan()
-    WORD vk;
-
-private:
-    StringTokener& tokener;
-    const char* paramName;
-};
+#include "../StaticLib1/KeyParser.h"
 
 //---------
 
 class LoLevelKbdFile
 {
 public:
-    typedef std::map<std::string, WORD> KeyNamesMap;
-
-public:
     LoLevelKbdFile();
 
     bool ReadKeyboardFile(const char* filename);
-
-    static const KeyNamesMap& KeyNames() { return keyNames; }
-    static WORD LookupKeyName(const std::string& keyText);
 
 private:
     bool doK2kCmd(StringTokener& tokener);
@@ -120,8 +53,7 @@ private:
     bool doInclude(StringTokener& tokener, const char * scriptFilename);
 
 private:
-    static KeyNamesMap keyNames;
-    
+
     ChordingData chording;
     WORD hyphenVk;
 };

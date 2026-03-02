@@ -10,5 +10,5 @@ static std::map<VeeKeeVector, const char*> combos = {
 // we will need to add in the Shift in the KeyValue when Shift is down
 // (nb: normal 'KeyOut' key entries will have the shift=true for entries on the shift layer !)
 // VeeKeeVector must be sorted!
-static std::map<VeeKeeVector, std::vector<KeyValue>> combos2 = {
+static std::map<VeeKeeVector, std::vector<KeyValue>> charsCombos = {
 };

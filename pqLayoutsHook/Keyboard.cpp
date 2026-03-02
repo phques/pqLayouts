@@ -209,7 +209,7 @@ void Keyboard::PrepareCombos()
             comboKeys.insert(vk);
         }
     }
-    for (const auto& combo : combos2)
+    for (const auto& combo : charsCombos)
     {
         for (const auto& vk : combo.first)
         {
@@ -704,13 +704,13 @@ bool Keyboard::HandleActionCode(const char* actionString)
     switch (actionCode[0])
     {
     case 'a':
-        Printf("CapsWord: CamelCase\n");
-        capsWordType = CamelCase;
+        Printf("CapsWord: CapsWord\n");
+        capsWordType = CapsWord;
         capitalizeNext = true;
         return true;
     case 'b':
-        Printf("CapsWord: CapsWord\n");
-        capsWordType = CapsWord;
+        Printf("CapsWord: CamelCase\n");
+        capsWordType = CamelCase;
         capitalizeNext = true;
         return true;
     case 'c':
@@ -741,8 +741,8 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     }
 
 
-    auto foundComboIt2 = combos2.find(vks);
-    if (foundComboIt2 != combos2.end())
+    auto foundComboIt2 = charsCombos.find(vks);
+    if (foundComboIt2 != charsCombos.end())
     {
         Printf("found combo!\n");
 

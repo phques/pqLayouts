@@ -10,7 +10,14 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
+#include <sstream>
+#include <iostream>
+#include <algorithm>
 #include <string>
 #include <bitset>
+#include <map>
+#include <list>
+#include <vector>
+#include <unordered_set>
 
 #endif //PCH_H

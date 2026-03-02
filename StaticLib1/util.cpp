@@ -19,6 +19,39 @@
 #include "util.h"
 
 
+std::map<std::string, WORD> VkUtil::keyNames = {
+    {"CAPS", VK_CAPITAL},
+    {"ESC", VK_ESCAPE},
+    {"TAB", VK_TAB},
+    {"SPACE", VK_SPACE},            {"SP", VK_SPACE},
+    {"ENTER", VK_RETURN},           {"CR", VK_RETURN},
+    {"BACKSPACE", VK_BACK},         {"BS", VK_BACK},
+    {"DEL", VK_DELETE},
+    {"LSHIFT", VK_LSHIFT},          {"LSH", VK_LSHIFT},
+    {"RSHIFT", VK_RSHIFT},          {"RSH", VK_RSHIFT},
+    {"LCONTROL", VK_LCONTROL},      {"LCTRL", VK_LCONTROL},
+    {"RCONTROL", VK_RCONTROL},      {"RCTRL", VK_RCONTROL},
+    {"LALT", VK_LMENU},
+    {"RALT", VK_RMENU},
+    {"LWIN", VK_LWIN},
+    {"RWIN", VK_RWIN},
+    {"LEFT", VK_LEFT},
+    {"RIGHT", VK_RIGHT},
+    {"UP", VK_UP},
+    {"DOWN", VK_DOWN},
+    {"HOME", VK_HOME},
+    {"END", VK_END},
+    {"PGUP", VK_PRIOR},
+    {"PGDN", VK_NEXT},
+    {"INS", VK_INSERT},
+    {"APPS", VK_APPS},
+    {"PRINTSCR", VK_SNAPSHOT},
+    {"F1", VK_F1},  {"F2", VK_F2},  {"F3", VK_F3},  {"F4", VK_F4},  {"F5", VK_F5}, {"F6", VK_F6},
+    {"F7", VK_F7},  {"F8", VK_F8},  {"F9", VK_F9},  {"F10", VK_F10},  {"F11", VK_F11}, {"F12", VK_F12},
+
+};
+
+
 // Init KbdHookEvent from the recvd LPARAM of LowLevelKeyboardProc
 // ## lParam is cast to KBDLLHOOKSTRUCT*, MUST be from LowLevelKeyboardProc ##
 KbdHookEvent::KbdHookEvent(LPARAM lParam)
@@ -120,3 +153,15 @@ char VkUtil::VkToChar(WORD vk, WORD scancode, bool shifted)
     return asciiChar;
 }
 
+WORD VkUtil::LookupKeyName(const std::string& keyText)
+{
+    // make uppercase versino of the string
+    std::string keyStr(keyText);
+    std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(),
+        [](const unsigned char c) { return std::toupper(c); });
+
+    // lookup in key names
+    const auto foundIt = VkUtil::KeyNames().find(keyStr);
+
+    return foundIt == VkUtil::KeyNames().end() ? 0 : foundIt->second;
+}

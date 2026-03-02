@@ -16,7 +16,7 @@ K2K o  m M
 K2K p  b B
 K2K [  k K
 
-K2K CAPS  lsh lsh
+!!K2K CAPS  lsh lsh
 K2K a  i I
 K2K s  e E
 K2K d  a A
@@ -34,13 +34,17 @@ K2K z  u U
 K2K x  o O
 K2K c  l L
 K2K v  z Z
-K2K b  CAPS CAPS
+!!K2K b  CAPS CAPS
 K2K n  q Q
 K2K m  c C
 K2K ,  h H
 K2K .  g G
 K2K /  w W
+
+
+dualmod SP rshift sp
+
 ! ------- edit layer --------
 
-include edit-layer-lalt.kbdlo
+include ../edit-layer-lalt.kbdlo
 

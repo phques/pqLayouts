@@ -54,6 +54,9 @@ K2K ,  p P
 K2K .  m M
 K2K /  b B
 
+dualmod SP rshift sp
+
+
 ! ------- edit layer --------
 
 include ../edit-layer-lalt.kbdlo

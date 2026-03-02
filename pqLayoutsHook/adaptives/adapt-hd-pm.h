@@ -8,8 +8,8 @@ static std::map<VeeKeeExVector, std::string> adapts2 = {
     // adaptives
 };
 
-static std::list<std::pair<std::string, std::string>> txtAdaptives = {
-{ "pd", "nd" },
+static std::list<std::pair<const char*, const char*>> txtAdaptives = {
+{ "pd", "pwd" },
 { "pf", "ps" },
 { "kg", "kl" },
 { "mg", "lg" },
@@ -34,7 +34,7 @@ static std::list<std::pair<std::string, std::string>> txtAdaptives = {
 { "wm", "lm" },
 { "mwm", "mpl" },
 { "fp", "sp" },
-{ "pp", "pg" },
+{ "dp", "pg" },
 { "gv", "gt" },
 { "mv", "lv" },
 { "gw", "gd" },
