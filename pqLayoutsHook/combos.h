@@ -22,13 +22,17 @@
 #include "keydef.h"
 
 
+class Keyboard;
+
 class ICombo
 {
 public:
-    const virtual VeeKeeVector& TriggerVks() const = 0;
-    void virtual Fire() = 0;
+    virtual const VeeKeeVector& GetTriggerVks() const = 0;
+    virtual void Fire(Keyboard & kbd) = 0;
+    virtual ICombo* New(const VeeKeeVector& triggers, const std::string& output) const = 0;
 };
 
+//----
 
 enum class ComboState
 {
@@ -46,6 +50,7 @@ private:
     ICombo* combo{};
 };
 
+//--------
 
 class ComboBase : public ICombo
 {
@@ -53,7 +58,8 @@ public:
     ComboBase(const VeeKeeVector& triggers) : triggers(triggers)
     {
     }
-    const virtual VeeKeeVector& TriggerVks() const
+
+    virtual const VeeKeeVector& GetTriggerVks() const
     {
         return triggers;
     }
@@ -62,28 +68,50 @@ private:
     VeeKeeVector triggers;
 };
 
+//---------
+
 // for string output
 // this can also start with '\01' signaling a command, 
 // identified by a single '\0' prefix: "\01a", "\01b"
 class StringCombo : public ComboBase
 {
 public:
-    StringCombo(const VeeKeeVector& triggers, const std::string& output) : ComboBase(triggers), output(output)
-    {
-    }
+    StringCombo(const VeeKeeVector& triggers, const std::string& output);
 
-    void virtual Fire();
+    virtual void Fire(Keyboard & kbd);
+    virtual ICombo* New(const VeeKeeVector& triggers, const std::string& output) const;
+
 
 private:
     std::string output;
 };
 
+//------
+
 // for special characters output e.g. ctrl-c
-class CharCombo : public ICombo
+class KeysCombo : public ComboBase
 {
 public:
-    void virtual Fire();
+    KeysCombo(const VeeKeeVector& triggers, const std::vector<KeyValue>& outKeys);
+
+    virtual void Fire(Keyboard & kbd);
+    virtual ICombo * New(const VeeKeeVector& triggers, const std::string& output) const;
 
 private:
-    std::vector<KeyValue> output;
+    std::vector<KeyValue> outKeys;
+};
+
+//------
+
+// for commands, like CapsWord
+class CommandCombo : public ComboBase
+{
+public:
+    CommandCombo(const VeeKeeVector& triggers, Actions action);
+
+    virtual void Fire(Keyboard& kbd);
+    virtual ICombo* New(const VeeKeeVector& triggers, const std::string& command) const;
+
+private:
+    Actions action;
 };

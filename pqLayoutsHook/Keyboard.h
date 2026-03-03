@@ -1,5 +1,4 @@
-#pragma once
-// Copyright 2020 Philippe Quesnel  
+// Copyright 2026 Philippe Quesnel  
 //
 // This file is part of pqLayouts.
 //
@@ -15,8 +14,10 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
+#pragma once
 
 #include <cassert>
+#include "CommonTypes.h"
 #include "util.h"
 #include "layout.h"
 #include "Notification.h"
@@ -26,12 +27,6 @@
 
 class KbdHook; // fwd
 
-enum CapsWordType
-{
-    None,
-    CapsWord,
-    CamelCase,
-};
 
 class Keyboard
 {
@@ -44,7 +39,6 @@ public:
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
 
     void ParseAdaptives();
-    void ParseCombos(const std::list<std::pair<std::string, std::string>>& inputTextCombos, bool reverseMap);
     void PrepareCombos();
 
     const Layer* GetMainLayer();
@@ -81,6 +75,8 @@ public:
 
     bool TapVk(const KeyValue& key);
     bool SendVk(const KeyValue& key, bool pressed);
+    void SendString(const std::string& textString);
+    bool HandleActionCode(Actions action);
 
     void TrackModifiers(VeeKee vk, bool pressed);
     void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);
@@ -124,13 +120,12 @@ protected:
     void ReplayCancelledChord();
     bool IsSelfInjected(const KbdHookEvent& event);
 
-    void SendString(const std::string& textString);
-    bool HandleActionCode(const char* actionString);
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
     bool ProcessAdaptives(const KbdHookEvent& event);
+    void ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap);
 
-    bool VkExsFromString(const std::string& keyString, VeeKeeExVector & vks, bool reverseMap) const;
+    bool VksFromString(const std::string& keyString, const Layer* layer, VeeKeeVector & vks, bool reverseMap) const;
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -178,10 +173,7 @@ private:
 
     std::wstring imageFilename;
 
-    // VeeKeeVector must be sorted!
-    // These are sent with our SendString, which will capitalize the 1st char if alpha & Shift is down 
-    std::map<VeeKeeVector, StringCombo> comboz;
-    std::map<VeeKeeVector, std::string> combos;
+    std::map<VeeKeeVector, ICombo*> combos;
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;

@@ -31,6 +31,7 @@ public:
     bool operator ()();
     bool ReadFromTokener();
     bool ParseKey(bool showError);
+    bool ParseKeys(std::vector<KeyValue>& keys);
 
     bool GetKeys(std::list<KeyValue>& keys, std::vector<char>& stenoChars);
     bool GetKeysFromToken(std::list<KeyValue>& keys, std::vector<char>& stenoChars);

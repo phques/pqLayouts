@@ -18,8 +18,14 @@
 #include "pch.h"
 #include "util.h"
 
+static std::map<std::string, Actions> actionNames = {
+    {"None", Actions::None},
+    {"CamelCase", Actions::CamelCaseWord},
+    {"CapsWord", Actions::CapsWord},
+    {"SelectWord", Actions::SelectWord}
+};
 
-std::map<std::string, WORD> VkUtil::keyNames = {
+VkUtil::KeyNamesMap VkUtil::keyNames = {
     {"CAPS", VK_CAPITAL},
     {"ESC", VK_ESCAPE},
     {"TAB", VK_TAB},
@@ -51,6 +57,7 @@ std::map<std::string, WORD> VkUtil::keyNames = {
 
 };
 
+//-----------
 
 // Init KbdHookEvent from the recvd LPARAM of LowLevelKeyboardProc
 // ## lParam is cast to KBDLLHOOKSTRUCT*, MUST be from LowLevelKeyboardProc ##
@@ -155,7 +162,7 @@ char VkUtil::VkToChar(WORD vk, WORD scancode, bool shifted)
 
 WORD VkUtil::LookupKeyName(const std::string& keyText)
 {
-    // make uppercase versino of the string
+    // make uppercase version of the string
     std::string keyStr(keyText);
     std::transform(keyStr.begin(), keyStr.end(), keyStr.begin(),
         [](const unsigned char c) { return std::toupper(c); });
@@ -164,4 +171,16 @@ WORD VkUtil::LookupKeyName(const std::string& keyText)
     const auto foundIt = VkUtil::KeyNames().find(keyStr);
 
     return foundIt == VkUtil::KeyNames().end() ? 0 : foundIt->second;
+}
+
+//---------
+
+Actions LookupActionName(const std::string& actionName)
+{
+    auto it = actionNames.find(actionName);
+    if (it != actionNames.end())
+        return it->second;
+
+    Printf("LookupActionName, error, unknown actionword [%s]\n", actionName.c_str());
+    return Actions::None;
 }

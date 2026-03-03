@@ -33,6 +33,7 @@ public:
 
     const Layer* GetMainLayer();
     Layer* GetMainLayerForModif();
+    bool IsOnMainLayer() const;
 
     bool GotoMainLayer();
     bool GotoLayer(Layer::Idx_t layerIdx);

@@ -49,7 +49,7 @@ public:
 
     const CaseMapping* Mapping(VeeKee) const;
     KeyValue VkMapping(VeeKee vk) const;
-    VeeKeeEx ReverseMapping(VeeKeeEx vk) const;
+    VeeKee ReverseMapping(VeeKeeEx vk) const;
 
     bool AddMapping(KeyValue from, KeyActions::IKeyAction* actionTo);
     bool AddMapping(KeyValue from, KeyValue to);
@@ -84,6 +84,6 @@ private:
 
     // keep track of simple key to key mappings
     std::map<VeeKee, KeyValue> veeKeeMappings;        // from physical key to logical/mapped key
-    std::map<VeeKeeEx, VeeKeeEx> reverseMappingsVkEx; // from logical/mapped key to physical key
+    std::map<VeeKeeEx, VeeKee> reverseVksMappings; // from logical/mapped key to physical key
 };
 

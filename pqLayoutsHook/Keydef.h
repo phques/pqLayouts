@@ -21,7 +21,7 @@
 
 typedef DWORD VeeKee;
 typedef DWORD VeeKeeEx;
-constexpr auto SHIFT_BIT = 0X80000000;
+constexpr auto SHIFT_BIT = 0X80000000; //shiftBit for VeeKeeEx
 
 typedef std::unordered_set<VeeKee> VeeKeeSet;
 typedef std::vector<VeeKee> VeeKeeVector;
@@ -71,6 +71,8 @@ public:
     VeeKee Vk() const { return keyDef.Vk(); }
     VeeKeeEx VkEx() const;
     static VeeKeeEx VkEx(VeeKee vk, bool shifted);
+
+    static bool IsVkExShifted(VeeKeeEx vkEx);
 
     bool Shift() const { return shift; }
     bool Control() const { return control; }

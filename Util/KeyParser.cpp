@@ -170,3 +170,23 @@ bool KeyParser::ParseKey(bool showError)
 
     return true;
 }
+
+bool KeyParser::ParseKeys(std::vector<KeyValue>& keys)
+{
+    while (!tokener.eof())
+    {
+        token.clear();
+        tokener >> token;
+
+        // rest of line is comment 
+        if (token == "!!")
+            break;
+
+        if (!ParseKey(true))
+            return false;
+
+        keys.push_back(ToKeyValue());
+    }
+
+    return true;
+}

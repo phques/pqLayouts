@@ -37,10 +37,10 @@ KeyValue Layer::VkMapping(VeeKee vk) const
     return KeyValue(vk, 0); // not mapped, return the same key
 }
 
-VeeKeeEx Layer::ReverseMapping(VeeKeeEx vkEx) const
+VeeKee Layer::ReverseMapping(VeeKeeEx vkEx) const
 {
-    auto found = reverseMappingsVkEx.find(vkEx);
-    if (found != reverseMappingsVkEx.end())
+    auto found = reverseVksMappings.find(vkEx);
+    if (found != reverseVksMappings.end())
         return found->second;
 
     return 0;
@@ -74,7 +74,7 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
     // Save mapping as direct VeeKeeEx to VeKeeEx
     // this is needed for things like adaptives  
     veeKeeMappings[from.VkEx()] = to;
-    reverseMappingsVkEx[to.VkEx()] = from.VkEx();
+    reverseVksMappings[to.VkEx()] = from.VkEx();
 
     // Create a KeyAction mapping
     IKeyAction* action = new KeyOutAction(from.Key(), to);

@@ -120,6 +120,11 @@ Layer* Layout::GetMainLayerForModif()
     return layers[0];
 }
 
+bool Layout::IsOnMainLayer() const
+{
+    return currentLayer != nullptr && currentLayer->Name() == MainLayerName;
+}
+
 bool Layout::GotoMainLayer()
 {
     // main layer always 1st

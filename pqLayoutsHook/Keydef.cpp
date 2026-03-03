@@ -59,6 +59,11 @@ VeeKeeEx KeyValue::VkEx(VeeKee vk, bool shifted)
     return vk | (shifted ? SHIFT_BIT : 0);
 }
 
+bool KeyValue::IsVkExShifted(VeeKeeEx vkEx)
+{
+    return (vkEx & SHIFT_BIT) != 0;
+}
+
 std::list<KeyValue> KeyValue::KeyValues(const std::string& str)
 {
     std::list<KeyValue> kvs;

@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "CommonTypes.h"
 
 //--------
 
@@ -122,7 +123,8 @@ private:
 
 //---
 
-typedef const std::string conststr;
-
 DWORD TickCountDiff(DWORD start, DWORD end);
 void QpcDiff(const LARGE_INTEGER& start, const LARGE_INTEGER& end, LARGE_INTEGER& diff);
+
+Actions LookupActionName(const std::string& actionName);
+

@@ -19,6 +19,7 @@
 #include "Keyboard.h"
 #include "OutDbg.h"
 #include "pqLayoutsHook.h"
+#include "combos.h"
 
 //#include "combos/combo-empty.h"
 //#include "combos/combo-hd-neu-C.h"
@@ -36,7 +37,7 @@ using namespace KeyActions;
 
 //----------
 
-// all keys used for combos
+// all keys used for combos, populate from combos
 static std::set<VeeKee> comboKeys;
 
 VeeKeeSet Keyboard::modifiers = {
@@ -100,23 +101,32 @@ bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, b
     return layout.SetLayerAccessKey(layerId, accessKey, canTap, keyOnTap);
 }
 
-// create a vector of VeeKeeExs from a string of characters, using Mapping to convert chars to VeeKees
-bool Keyboard::VkExsFromString(const std::string& keyString, VeeKeeExVector& vks, bool reverseMap) const
+// create a vector of VeeKees from a string of characters, 
+// possibly using reverse mapping to convert chars to VeeKees
+bool Keyboard::VksFromString(const std::string& keyString, const Layer* layer, VeeKeeVector& vks, bool reverseMap) const
 {
     for (char c : keyString)
     {
         VeeKeeEx vkEx = KeyValue(c).VkEx();
 
-        VeeKeeEx unmappedVk{ vkEx };
+        VeeKee unmappedVk{};
         if (reverseMap)
         {
-            unmappedVk = ReverseMapping(vkEx);
+            unmappedVk = layer->ReverseMapping(vkEx);
+            if (unmappedVk == 0)
+            {
+                Printf("Error: No reverse mapping found for character '%c' (vk: %x)\n", c, vkEx);
+                return false;
+            }
         }
-
-        if (unmappedVk == 0)
+        else
         {
-            Printf("Warning: No reverse mapping found for character '%c' (vk: %x)\n", c, vkEx);
-            return false;
+            unmappedVk = vkEx;
+            if (KeyValue::IsVkExShifted(vkEx))
+            {
+                Printf("Error: VK of character '%c' (vk: %x) is a shifted key.\n", c, vkEx);
+                return false;
+            }
         }
 
         vks.push_back(unmappedVk);
@@ -127,7 +137,8 @@ bool Keyboard::VkExsFromString(const std::string& keyString, VeeKeeExVector& vks
 
 void Keyboard::ParseAdaptives()
 {
-    // Dont clear adapts2/adapts3, add to them
+    // nb: we Dont clear adapts2/adapts3, we *add* to them
+    const Layer* mainLayer = GetMainLayer();
 
     for (const auto& pair : txtAdaptives)
     {
@@ -135,37 +146,41 @@ void Keyboard::ParseAdaptives()
         // they are saved with the 'physical'/qwerty key as the lookup values.
 
         // so: Convert first item string (the 'from') into a VeeKeeVector using ReverseMapping
-        VeeKeeExVector vkExs;
-        const std::string& keysSequence = pair.first;
+        VeeKeeVector triggerVks;
+        const std::string& triggerChars = pair.first;
 
-        if (!VkExsFromString(keysSequence, vkExs, true))
+        if (!VksFromString(triggerChars, mainLayer, triggerVks, true))
         {
-            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", keysSequence.c_str());
+            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", 
+                triggerChars.c_str());
             continue;
         }
 
         // Insert into adapts2 or adapts3 based on vector size
         std::string output = std::string{ pair.second };
 
-        if (vkExs.size() == 2)
+        if (triggerVks.size() == 2)
         {
             // add a backspace in front to get rid of the 1st typed char
-            adapts2[vkExs] = "\b" + output;
+            adapts2[triggerVks] = "\b" + output;
         }
-        else if (vkExs.size() == 3)
+        else if (triggerVks.size() == 3)
         {
             // add backspaces in front to get rid of the 1st typed char
-            adapts3[vkExs] = "\b\b" + output;
+            adapts3[triggerVks] = "\b\b" + output;
         }
         else
         {
-            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vkExs.size());
+            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", 
+                triggerChars.c_str(), triggerVks.size());
         }
     }
 }
 
-void Keyboard::ParseCombos(const std::list<std::pair<std::string, std::string>>& inputTextCombos, bool reverseMap)
+void Keyboard::ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap)
 {
+    const Layer* mainLayer = GetMainLayer();
+
     // Dont clear combos, add to them
 
     for (const auto& pair : inputTextCombos)
@@ -173,35 +188,40 @@ void Keyboard::ParseCombos(const std::list<std::pair<std::string, std::string>>&
         // saved with the 'physical'/qwerty key as the lookup values.
 
         // so: Convert first item string (the 'from') into a VeeKeeVector 
-        VeeKeeVector vks;
-        const std::string keysSequence = pair.first;
+        VeeKeeVector triggerVks;
+        const std::string triggerChars = pair.first;
 
-        if (!VkExsFromString(keysSequence, vks, reverseMap))
+        if (!VksFromString(triggerChars, mainLayer, triggerVks, reverseMap))
         {
-            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", keysSequence.c_str());
+            Printf("Skipping combo for keys sequence '%s' due to unmapped character.\n", triggerChars.c_str());
             continue;
         }
 
         // vks need to be sorted for combos
-        std::sort(vks.begin(), vks.end());
+        std::sort(triggerVks.begin(), triggerVks.end());
 
-        // Insert into combos
-        if (vks.size() == 2)
+        // Create newcombo and save
+        ICombo* newCombo = refCombo.New(triggerVks, pair.second);
+        if (newCombo != nullptr)
         {
-            combos[vks] = pair.second;
-        }
-        else 
-        {
-            Printf("Warning: Combo for key string '%s' has unsupported size (%zu), skipping.\n", keysSequence.c_str(), vks.size());
+            combos[triggerVks] = newCombo;
         }
     }
 }
 
 void Keyboard::PrepareCombos()
 {
-    ParseCombos(txtCombos, true);
-    ParseCombos(txtCombosQwerty, false);
+    StringCombo stringCombo({}, ""); // dummy, we just need it to call New() to create new combos
+    ParseCombos(txtCombos, stringCombo, true);
+    ParseCombos(txtCombosQwerty, stringCombo, false);
 
+    CommandCombo cmdCombo({}, Actions::None); // dummy, we just need it to call New() to create new combos
+    ParseCombos(txtCmdCombosQwerty, cmdCombo, false);
+
+    KeysCombo keysCombo({}, {}); // dummy, we just need it to call New() to create new combos
+    ParseCombos(txtKeysCombosQwerty, keysCombo, false);
+
+    // Save all combo trigger keys
     for (const auto& combo : combos)
     {
         for (const auto& vk : combo.first)
@@ -209,13 +229,7 @@ void Keyboard::PrepareCombos()
             comboKeys.insert(vk);
         }
     }
-    for (const auto& combo : charsCombos)
-    {
-        for (const auto& vk : combo.first)
-        {
-            comboKeys.insert(vk);
-        }
-    }
+
 }
 
 const Layer* Keyboard::GetMainLayer()
@@ -539,7 +553,7 @@ bool Keyboard::ProcessKeyAction(const KbdHookEvent& event, IKeyAction* action, c
 
 bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
 {
-    if (capsWordType == None)
+    if (capsWordType == CapsWordType::None)
     {
         return false;
     }
@@ -561,7 +575,7 @@ bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
     {
         if (event.Down())
         {
-            capsWordType = None;
+            capsWordType = CapsWordType::None;
         }
         return true;
     }
@@ -572,28 +586,28 @@ bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
         if (event.Up())
         {
             capitalizeNext = false;
-            capsWordType = None;
+            capsWordType = CapsWordType::None;
         }
         return false;
     }
 
     // CapsWord is terminated by single Space
-    if (capsWordType == CapsWord && isSpace)
+    if (capsWordType == CapsWordType::CapsWord && isSpace)
     {
         if (event.Up())
         {
-            capsWordType = None;
+            capsWordType = CapsWordType::None;
         }
         return false;
     }
 
     // CamelCase is terminated by double Space
-    if (capsWordType == CamelCase && capitalizeNext && isSpace)
+    if (capsWordType == CapsWordType::CamelCase && capitalizeNext && isSpace)
     {
         if (event.Up())
         {
             capitalizeNext = false;
-            capsWordType = None;
+            capsWordType = CapsWordType::None;
         }
         return false;
     }
@@ -610,7 +624,7 @@ bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
 
     // 'shift code' (space) was hit, 
     // capitalize the next char for CamelCase (eat the space)
-    if (capsWordType == CamelCase && isSpace)
+    if (capsWordType == CapsWordType::CamelCase && isSpace)
     {
         if (event.Up())
         {
@@ -620,7 +634,7 @@ bool Keyboard::ProcessCapsWord(const KbdHookEvent& event)
     }
 
     // lastly, capitalize the next char for Caps Word
-    if (capsWordType == CapsWord)
+    if (capsWordType == CapsWordType::CapsWord)
     {
         capitalizeNext = true;
     }
@@ -695,29 +709,28 @@ void Keyboard::SendString(const std::string& textString)
     }
 }
 
-bool Keyboard::HandleActionCode(const char* actionString)
+bool Keyboard::HandleActionCode(Actions action)
 {
-    if (actionString[0] != '\01')
-        return false;
-
-    const std::string actionCode(&actionString[1]);
-    switch (actionCode[0])
+    switch (action)
     {
-    case 'a':
+    case Actions::CapsWord:
         Printf("CapsWord: CapsWord\n");
-        capsWordType = CapsWord;
+        capsWordType = CapsWordType::CapsWord;
         capitalizeNext = true;
         return true;
-    case 'b':
+
+    case Actions::CamelCaseWord:
         Printf("CapsWord: CamelCase\n");
-        capsWordType = CamelCase;
+        capsWordType = CapsWordType::CamelCase;
         capitalizeNext = true;
         return true;
-    case 'c':
-        // select word: go to being of word, then end of word with shift on to select
+
+    case Actions::SelectWord:
+        // select word: go to beginning of word, then end of word with shift ON to select
         TapVk(CtrlKeyValue(VK_LEFT));
         TapVk(KeyValue(VK_RIGHT, 0, true, true));
         return true;
+
     default:
         break;
     }
@@ -732,30 +745,8 @@ bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVect
     {
         Printf("found combo!\n");
 
-        if (!HandleActionCode(foundComboIt->second.c_str()))
-        {
-            SendString(foundComboIt->second);
-        }
-        lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
-        return true;
-    }
+        foundComboIt->second->Fire(*this);
 
-
-    auto foundComboIt2 = charsCombos.find(vks);
-    if (foundComboIt2 != charsCombos.end())
-    {
-        Printf("found combo!\n");
-
-        for (const auto& keyValue : foundComboIt2->second)
-        {
-            // make copy so we can add in Shift if required
-            KeyValue temp(keyValue);
-
-            if (ShiftDown())
-                temp.Shift(true);
-
-            TapVk(temp);
-        }
         lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
         return true;
     }
@@ -840,8 +831,8 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
         return true;
 
     // do combos only on main layer, and only if we are not in caps word mode
-    if (layout.CurrentLayer()->Name() == MainLayerName &&
-        capsWordType == None &&
+    if (layout.IsOnMainLayer() &&
+        capsWordType == CapsWordType::None &&
         HandleCombos(event))
     {
         return true;
@@ -864,8 +855,8 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     // Adaptives must be handled here, this method is called by combocode to handle pending events
     // do adaptives if ON, only on main layer, and only if we are not in caps word mode
     if (adaptivesOn &&
-        capsWordType == None && 
-        layout.CurrentLayer()->Name() == MainLayerName &&
+        capsWordType == CapsWordType::None &&
+        layout.IsOnMainLayer() &&
         ProcessAdaptives(event))
     {
         Printf("adaptive processed\n");
