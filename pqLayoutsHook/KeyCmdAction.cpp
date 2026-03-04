@@ -1,4 +1,4 @@
-// Copyright 2026 Philippe Quesnel  
+// Copyright 2020 Philippe Quesnel  
 //
 // This file is part of pqLayouts.
 //
@@ -14,22 +14,26 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
-#pragma once
 
-typedef std::list< std::pair<std::string, std::string> > StringPairList;
+#include "pch.h"
+#include "KeyCmdAction.h"
+#include "Keyboard.h"
 
-
-enum class Commands
+namespace KeyActions
 {
-    None,
-    CamelCaseWord,
-    CapsWord,
-    SelectWord
-};
 
-enum class CapsWordType
+KeyCmdAction::KeyCmdAction(KeyDef inKey, Commands command) : command(command), inKey(inKey)
 {
-    None,
-    CapsWord,
-    CamelCase,
-};
+}
+
+bool KeyCmdAction::OnKeyDown(Keyboard* kbd)
+{
+    return kbd->HandleCommandCode(command);
+}
+
+bool KeyCmdAction::OnKeyUp(Keyboard* kbd, bool isTap)
+{
+    return true;
+}
+
+}

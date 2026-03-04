@@ -108,8 +108,8 @@ bool Keyboard::VksFromString(const std::string& keyString, const Layer* layer, V
     for (char c : keyString)
     {
         VeeKeeEx vkEx = KeyValue(c).VkEx();
-
         VeeKee unmappedVk{};
+
         if (reverseMap)
         {
             unmappedVk = layer->ReverseMapping(vkEx);
@@ -215,7 +215,7 @@ void Keyboard::PrepareCombos()
     ParseCombos(txtCombos, stringCombo, true);
     ParseCombos(txtCombosQwerty, stringCombo, false);
 
-    CommandCombo cmdCombo({}, Actions::None); // dummy, we just need it to call New() to create new combos
+    CommandCombo cmdCombo({}, Commands::None); // dummy, we just need it to call New() to create new combos
     ParseCombos(txtCmdCombosQwerty, cmdCombo, false);
 
     KeysCombo keysCombo({}, {}); // dummy, we just need it to call New() to create new combos
@@ -709,23 +709,23 @@ void Keyboard::SendString(const std::string& textString)
     }
 }
 
-bool Keyboard::HandleActionCode(Actions action)
+bool Keyboard::HandleCommandCode(Commands command)
 {
-    switch (action)
+    switch (command)
     {
-    case Actions::CapsWord:
+    case Commands::CapsWord:
         Printf("CapsWord: CapsWord\n");
         capsWordType = CapsWordType::CapsWord;
         capitalizeNext = true;
         return true;
 
-    case Actions::CamelCaseWord:
+    case Commands::CamelCaseWord:
         Printf("CapsWord: CamelCase\n");
         capsWordType = CapsWordType::CamelCase;
         capitalizeNext = true;
         return true;
 
-    case Actions::SelectWord:
+    case Commands::SelectWord:
         // select word: go to beginning of word, then end of word with shift ON to select
         TapVk(CtrlKeyValue(VK_LEFT));
         TapVk(KeyValue(VK_RIGHT, 0, true, true));
@@ -817,6 +817,7 @@ bool Keyboard::HandleCombos(const KbdHookEvent& event)
 }
 
 // top level entry point for key processing
+// returns true if event was processed and should be 'eaten', false to let it through
 bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
 {
     if (CheckForSuspendKey(event)) 
@@ -842,7 +843,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     return OnKeyEventLevel2(event);
 }
 
-
+// returns true if event was processed and should be 'eaten', false to let it through
 bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
 {
     // save time tick of last key press

@@ -22,7 +22,7 @@
 namespace KeyActions
 {
 
-DualModeModifierAction::DualModeModifierAction(KeyDef keydef, KeyValue modifierKey, KeyValue keyOnTap) :
+    DualModeModifierAction::DualModeModifierAction(KeyDef keydef, KeyValue modifierKey, KeyValue keyOnTap) :
         modifierKey(modifierKey),
         keyOnTap(keyOnTap)
 {

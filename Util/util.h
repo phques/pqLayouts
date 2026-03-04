@@ -126,5 +126,5 @@ private:
 DWORD TickCountDiff(DWORD start, DWORD end);
 void QpcDiff(const LARGE_INTEGER& start, const LARGE_INTEGER& end, LARGE_INTEGER& diff);
 
-Actions LookupActionName(const std::string& actionName);
+Commands LookupCommandName(const std::string & commandName);
 

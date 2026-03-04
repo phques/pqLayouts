@@ -18,6 +18,7 @@
 #include "pch.h"
 #include "Layer.h"
 #include "KeyOutAction.h"
+#include "KeyCmdAction.h"
 #include "DualModeModifierAction.h"
 #include "OutDbg.h"
 
@@ -77,7 +78,11 @@ bool Layer::AddMapping(KeyValue from, KeyValue to)
     reverseVksMappings[to.VkEx()] = from.VkEx();
 
     // Create a KeyAction mapping
-    IKeyAction* action = new KeyOutAction(from.Key(), to);
+    IKeyAction* action{};
+    if (to.IsCommand())
+        action = new KeyCmdAction(from.Key(), to.Command());
+    else
+        action = new KeyOutAction(from.Key(), to);
 
     return AddMapping(from,  action);
 }

@@ -107,14 +107,15 @@ static StringPairList txtKeysCombosQwerty = {
     {"gb", "^n"},   // HD_LB0, HD_LM0   new 
     {"hn", "^o"},   // HD_RB0, HD_RM0   open
     {"yh", "^w"},   // HD_RT0, HD_RM0   close
+    {"tg", "@F4"},  // HD_LT0, HD_LM0   quit
     {"ag", "^f"},   // HD_LM4, HD_LM0   find selection
     {"zv", "^a"},   // HD_LB4, HD_LB1   select all
     {"zx", "^z"},   // HD_LB4, HD_LB3   undo
     {"zxc", "^y"},  // HD_LB4, HD_LB3, HD_LB2   redo
     {"xc", "^c"},   // HD_LB3, HD_LB2   copy (hold for cut)
     {"cv", "^v"},   // HD_LB2, HD_LB1   paste (hold for paste-match)
-    {"rt", "@Tab"}, // HD_LT1, HD_LT0 alt-tab (next window) APPMENU 
-    //{ {'K','L'}, {KeyValue(VK_BACK,0)} }, // BACK SPACE
+    {"rt", "@Tab"}, // HD_LT1, HD_LT0   alt-tab (next window) APPMENU 
+    {"kl", "BS"},   // HD_RM2, HD_RM3   BACK SPACE
 /*
     { {'B','G'}, {CtrlKeyValue('N')} }, // ctrl-n HD_LB0, HD_LM0   new
     { {'H','N'}, {CtrlKeyValue('O')} }, // ctrl-o HD_RB0, HD_RM0   open

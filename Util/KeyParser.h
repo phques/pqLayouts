@@ -40,11 +40,13 @@ public:
 public:
     std::string token;  // this is the text value read from file for the key
 
-    bool hasShiftPrefix;
-    bool hasControlPrefix;
-    bool hasAltPrefix;
-    bool isShifted;     // as defined by VkKeyScan()
-    WORD vk;
+    bool hasShiftPrefix{};
+    bool hasControlPrefix{};
+    bool hasAltPrefix{};
+    bool isCommand{};     // e.g. "#SelectWord"
+    bool isShifted{};     // as defined by VkKeyScan()
+    Commands cmd{};
+    WORD vk{};
 
 private:
     StringTokener& tokener;

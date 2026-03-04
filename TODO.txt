@@ -1,0 +1,7 @@
+
+pqLayout TODO
+- new combos logic
+  - includes possibility for 'hold'
+  - e.g. th -> tion
+- dualMod: should cancel if a key is already down, vs 'adding' shift tothe down key
+- read adapt / combos in kbdlo

@@ -32,23 +32,6 @@ public:
     virtual ICombo* New(const VeeKeeVector& triggers, const std::string& output) const = 0;
 };
 
-//----
-
-enum class ComboState
-{
-    Idle, Constructing, Complete, Fired
-};
-
-// tracking of a combo's construction's as keys are typed
-class ComboStateInfo
-{
-private:
-    ComboState comboState{};
-    VeeKeeVector pressedVks;
-    VeeKeeVector releasedVks;
-    DWORD firstDownTick{}; // time of 1st pressed key of the combo
-    ICombo* combo{};
-};
 
 //--------
 
@@ -107,11 +90,46 @@ private:
 class CommandCombo : public ComboBase
 {
 public:
-    CommandCombo(const VeeKeeVector& triggers, Actions action);
+    CommandCombo(const VeeKeeVector& triggers, Commands command);
 
     virtual void Fire(Keyboard& kbd);
     virtual ICombo* New(const VeeKeeVector& triggers, const std::string& command) const;
 
 private:
-    Actions action;
+    Commands command;
+};
+
+//------
+
+
+enum class ComboState
+{
+    Idle, Constructing, Complete, Holding, Fired, Releasing = Fired
+};
+
+// tracking of a combo's construction's as keys are typed
+class ComboStateInfo
+{
+public:
+    ComboStateInfo(ICombo* combo);
+
+private:
+    ComboState comboState{};
+    VeeKeeVector pressedVks;
+    VeeKeeVector releasedVks;
+    DWORD firstDownTick{}; // time of 1st pressed key of the combo
+    ICombo* combo{};
+};
+
+
+class CombosTracking
+{
+public:
+    CombosTracking(const std::map<VeeKeeVector, ICombo*>& combos);
+
+private:
+    void InitializeCombos(const std::map<VeeKeeVector, ICombo*>& combos);
+
+private:
+    std::list<ComboStateInfo> trackedCombos;
 };

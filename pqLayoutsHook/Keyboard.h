@@ -76,7 +76,7 @@ public:
     bool TapVk(const KeyValue& key);
     bool SendVk(const KeyValue& key, bool pressed);
     void SendString(const std::string& textString);
-    bool HandleActionCode(Actions action);
+    bool HandleCommandCode(Commands command);
 
     void TrackModifiers(VeeKee vk, bool pressed);
     void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);

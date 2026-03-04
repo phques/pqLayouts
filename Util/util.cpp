@@ -18,13 +18,15 @@
 #include "pch.h"
 #include "util.h"
 
-static std::map<std::string, Actions> actionNames = {
-    {"None", Actions::None},
-    {"CamelCase", Actions::CamelCaseWord},
-    {"CapsWord", Actions::CapsWord},
-    {"SelectWord", Actions::SelectWord}
+// Maps command name to enum value
+static std::map<std::string, Commands> commanNames = {
+    {"None", Commands::None},
+    {"CamelCase", Commands::CamelCaseWord},
+    {"CapsWord", Commands::CapsWord},
+    {"SelectWord", Commands::SelectWord}
 };
 
+// Maps key name to VK_ value
 VkUtil::KeyNamesMap VkUtil::keyNames = {
     {"CAPS", VK_CAPITAL},
     {"ESC", VK_ESCAPE},
@@ -175,12 +177,12 @@ WORD VkUtil::LookupKeyName(const std::string& keyText)
 
 //---------
 
-Actions LookupActionName(const std::string& actionName)
+Commands LookupCommandName(const std::string& commandName)
 {
-    auto it = actionNames.find(actionName);
-    if (it != actionNames.end())
+    auto it = commanNames.find(commandName);
+    if (it != commanNames.end())
         return it->second;
 
-    Printf("LookupActionName, error, unknown actionword [%s]\n", actionName.c_str());
-    return Actions::None;
+    Printf("LookupActionName, error, unknown actionword [%s]\n", commandName.c_str());
+    return Commands::None;
 }

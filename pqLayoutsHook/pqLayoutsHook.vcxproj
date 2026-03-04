@@ -172,9 +172,8 @@
     <ClInclude Include="combos\combo-hd-pm.h" />
     <ClInclude Include="DualModeModifierAction.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Keydef.h" />
+    <ClInclude Include="KeyCmdAction.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="KeyMapping.h" />
     <ClInclude Include="KeyOutAction.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="LayerAccessAction.h" />
@@ -195,9 +194,8 @@
     <ClCompile Include="combos.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="DualModeModifierAction.cpp" />
-    <ClCompile Include="Keydef.cpp" />
+    <ClCompile Include="KeyCmdAction.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="KeyMapping.cpp" />
     <ClCompile Include="KeyOutAction.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="LayerAccessAction.cpp" />

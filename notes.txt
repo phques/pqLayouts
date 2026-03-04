@@ -132,12 +132,6 @@ UINT scancode = MapVirtualKeyExA(vk, MAPVK_VK_TO_VSC_EX, NULL);
   possibility of using its lib ? (not a lib, and all Python)
   -> this could let me have a Mac version of pqLayouts !?
 
-+ add support for 'alt' prefix on char, 
-  -> alt-tab !!
-  -> alt-shift-click (notepad++, column selection)
-
-+ help image: support multiple monitors
-
 + support for French layouts !!
   -> need to use SendInput as Unicode
    .. so need to read Unicode file !

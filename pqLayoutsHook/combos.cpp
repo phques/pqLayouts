@@ -75,19 +75,46 @@ ICombo* KeysCombo::New(const VeeKeeVector& triggers, const std::string& output) 
 
 //------
 
-CommandCombo::CommandCombo(const VeeKeeVector& triggers, Actions action) : ComboBase(triggers), action(action)
+CommandCombo::CommandCombo(const VeeKeeVector& triggers, Commands command) : ComboBase(triggers), command(command)
 {
 }
 
 void CommandCombo::Fire(Keyboard& kbd)
 {
     Printf("firing CommandCombo\n");
-    kbd.HandleActionCode(action);
+    kbd.HandleCommandCode(command);
 }
 
-ICombo* CommandCombo::New(const VeeKeeVector& triggers, const std::string& command) const
+ICombo* CommandCombo::New(const VeeKeeVector& triggers, const std::string& commandName) const
 {
-    Actions action = LookupActionName(command);
+    Commands command = LookupCommandName(commandName);
 
-    return new CommandCombo(triggers, action);
+    return new CommandCombo(triggers, command);
+}
+
+//--------
+
+ComboStateInfo::ComboStateInfo(ICombo* combo) : combo(combo)
+{
+}
+
+//--------
+
+CombosTracking::CombosTracking(const std::map<VeeKeeVector, ICombo*>& combos)
+{
+    InitializeCombos(combos);
+}
+
+void CombosTracking::InitializeCombos(const std::map<VeeKeeVector, ICombo*>& combos)
+{
+    // Populate trackedCombos with the combos to track
+    trackedCombos.clear();
+    
+    for (const auto& pair : combos)
+    {
+        const VeeKeeVector& triggers = pair.first;
+        ICombo* combo = pair.second;
+        
+        trackedCombos.push_back(ComboStateInfo(combo));
+    }
 }

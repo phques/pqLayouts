@@ -1,0 +1,15 @@
+! Hands Down Promethium, à la Phil
+
+imagefile hands-down-pm-pqc-img1-Mac.png
+imageview 3 +130 124 +130
+
+!include hands-down-pm-pqc.kbdlo
+include ../qwerty-1to1.kbdlo
+
+!dualmod SP rshift sp
+
+
+! ------- edit layer --------
+
+!include ../edit-layer-lalt2.kbdlo
+! imageview 358 +124 360 +124

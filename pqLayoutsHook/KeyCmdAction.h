@@ -14,22 +14,28 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
+
 #pragma once
+#include "KeyMapping.h"
+#include <CommonTypes.h>
 
-typedef std::list< std::pair<std::string, std::string> > StringPairList;
-
-
-enum class Commands
+namespace KeyActions
 {
-    None,
-    CamelCaseWord,
-    CapsWord,
-    SelectWord
+
+// class that executes a 'command' for a mapped key
+class KeyCmdAction : public IKeyAction
+{
+public:
+    PQHOOK_API KeyCmdAction(KeyDef inKey, Commands command);
+
+    // returns true to 'eat' the original received key (ie do not forward to next kbd hook)
+    virtual bool OnKeyDown(Keyboard*);
+    virtual bool OnKeyUp(Keyboard*, bool isTap);
+    virtual bool SkipDownRepeats(Keyboard*) const { return true; }
+
+protected:
+    KeyDef inKey;
+    Commands command;
 };
 
-enum class CapsWordType
-{
-    None,
-    CapsWord,
-    CamelCase,
-};
+}

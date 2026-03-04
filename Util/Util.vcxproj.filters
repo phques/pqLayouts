@@ -36,6 +36,12 @@
     <ClInclude Include="KeyParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Keydef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyMapping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -51,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Keydef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyMapping.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

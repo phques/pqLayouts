@@ -1,11 +1,11 @@
 addlayertap edit lalt
 
-! q w e   t y u i o p [ ] \
+! q w e   t y u i o p
 ! a s d f g h j k l ; '
-! z x c     n m , . /
+! z x       n m , . /
 
-K2K q ^left  ^+left
-K2K w ^right ^+right
+k2k q  ^pgup
+k2k w  ^pgdn
 K2K e esc +esc
 
 ! NB: chording space+d+k for ctrl-left does not work on my Microsoft Sculpt
@@ -27,9 +27,6 @@ K2K i up    +up
 K2K o end   +end
 K2K p tab   +tab
 
-k2k [ @tab
-k2k ] ^a
-k2k \ ^s  ^+s
 
 K2K j left  +left
 K2K k down  +down
@@ -37,12 +34,13 @@ K2K l right +right
 K2K ; bs    del
 K2K ' del   del
 
-k2k z  ^pgup
-k2k x  ^pgdn
-K2K c  ^tab ^+tab
+K2K z ^left  ^+left
+K2K x ^right ^+right
+k2k c #SelectWord
+
 k2k b SP
 
-K2K n  ^f +^f
+K2K n  ^tab ^+tab
 K2K m  ^c ^c
 K2K ,  ^v ^v
 K2K .  ^x ^x 

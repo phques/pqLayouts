@@ -23,8 +23,6 @@
 #include "util.h"
 
 KeyParser::KeyParser(StringTokener& tokener, const char* paramName) :
-    hasShiftPrefix(false), hasControlPrefix(false), hasAltPrefix(false),
-    isShifted(false), vk(0),
     tokener(tokener), paramName(paramName)
 {
 }
@@ -109,6 +107,11 @@ bool KeyParser::GetKeysFromToken(std::list<KeyValue>& keyValues, std::vector<cha
 
 KeyValue KeyParser::ToKeyValue() const
 {
+    if (isCommand)
+    {
+        return KeyValue(cmd, isShifted || hasShiftPrefix, hasControlPrefix, hasAltPrefix);
+    }
+
     return KeyValue(vk, 0, isShifted || hasShiftPrefix, hasControlPrefix, hasAltPrefix);
 }
 
@@ -135,36 +138,55 @@ bool KeyParser::ParseKey(bool showError)
             hasAltPrefix = true;
             keytext++;
             break;
+        case '#':
+            isCommand  = true;
+            keytext++;
+            break;
         default:
             stop = true;
             break;
         }
     }
 
-
-    // keyname ?
-    if (strlen(keytext) > 1)
+    if (isCommand)
     {
-        vk = VkUtil::LookupKeyName(keytext);
-        if (vk == 0)
+        // command name ?
+        cmd = LookupCommandName(keytext);
+        if (cmd == Commands::None)
         {
             if (showError)
             {
-                std::cerr << "unknown key [" << token << "], line " << tokener.LineNo() << std::endl;
+                std::cerr << "unknown command [" << token << "], line " << tokener.LineNo() << std::endl;
             }
             return false;
         }
     }
     else
     {
-        // just a character representing the key 'w', '{' etc
-        if (!VkUtil::CharToVk(*keytext, vk, isShifted))
+        // keyname ?
+        if (strlen(keytext) > 1)
         {
-            if (showError)
+            vk = VkUtil::LookupKeyName(keytext);
+            if (vk == 0)
             {
-                std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
+                if (showError)
+                {
+                    std::cerr << "unknown key [" << token << "], line " << tokener.LineNo() << std::endl;
+                }
+                return false;
             }
-            return false;
+        }
+        else
+        {
+            // just a character representing the key 'w', '{' etc
+            if (!VkUtil::CharToVk(*keytext, vk, isShifted))
+            {
+                if (showError)
+                {
+                    std::cerr << "non valid key [" << token << "], line " << tokener.LineNo() << std::endl;
+                }
+                return false;
+            }
         }
     }
 

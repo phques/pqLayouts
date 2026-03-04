@@ -154,6 +154,8 @@
   <ItemGroup>
     <ClInclude Include="File.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Keydef.h" />
+    <ClInclude Include="KeyMapping.h" />
     <ClInclude Include="KeyParser.h" />
     <ClInclude Include="OutDbg.h" />
     <ClInclude Include="pch.h" />
@@ -161,6 +163,8 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Keydef.cpp" />
+    <ClCompile Include="KeyMapping.cpp" />
     <ClCompile Include="KeyParser.cpp" />
     <ClCompile Include="OutDbg.cpp" />
     <ClCompile Include="pch.cpp">

@@ -22,6 +22,7 @@ static std::list<std::pair<const char*, const char*>> txtAdaptives = {
 { "wj", "wl" },
 { "mk", "lk" },
 { "hk", "nk" },
+{ "nh", "nd" },// PQ ND is a bit difficult on stag
 
 // These will give us the opportunity to shift only the first letter when rolling
 // So shift-pl  => Pl
@@ -46,10 +47,17 @@ static std::list<std::pair<const char*, const char*>> txtAdaptives = {
 { ".\"", ".edu" },
 { "/\"", "?" },
 { ".'", ".org" },
+
+// need alternative for this, find it hard to reach '
 { "a'", "au" },
 { "u'", "ua" },
 { "e'", "eo" },
 { "o'", "oe" },
+// let's try this, even though a,u to z is ia bit of a stretch
+{ "az", "au" },
+{ "uz", "ua" },
+{ "ez", "eo" },
+{ "oz", "oe" },
 
 // 'magic' adaptive trailer, on #, for "macros"
 { "c#", "cgi" },
