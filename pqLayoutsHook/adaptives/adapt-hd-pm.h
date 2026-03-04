@@ -1,14 +1,7 @@
 #pragma once
 
-static std::map<VeeKeeExVector, std::string> adapts3 = {
-    // adaptives
-};
 
-static std::map<VeeKeeExVector, std::string> adapts2 = {
-    // adaptives
-};
-
-static std::list<std::pair<const char*, const char*>> txtAdaptives = {
+static StringPairList txtAdaptives = {
 { "pd", "pwd" },
 { "pf", "ps" },
 { "kg", "kl" },

@@ -132,3 +132,37 @@ Layer::ImageView Layer::GetImageView(bool shiftDown) const
 {
     return shiftDown ? imageViewShift : imageView;
 }
+
+// create a vector of VeeKees from a string of characters, 
+// possibly using reverse mapping to convert chars to VeeKees
+bool Layer::VksFromString(const std::string& keyString, bool reverseMap, VeeKeeVector& vks) const
+{
+    for (char c : keyString)
+    {
+        VeeKeeEx vkEx = KeyValue(c).VkEx();
+        VeeKee unmappedVk{};
+
+        if (reverseMap)
+        {
+            unmappedVk = ReverseMapping(vkEx);
+            if (unmappedVk == 0)
+            {
+                Printf("Error: No reverse mapping found for character '%c' (vk: %x)\n", c, vkEx);
+                return false;
+            }
+        }
+        else
+        {
+            unmappedVk = vkEx;
+            if (KeyValue::IsVkExShifted(vkEx))
+            {
+                Printf("Error: VK of character '%c' (vk: %x) is a shifted key.\n", c, vkEx);
+                return false;
+            }
+        }
+
+        vks.push_back(unmappedVk);
+    }
+
+    return true;
+}

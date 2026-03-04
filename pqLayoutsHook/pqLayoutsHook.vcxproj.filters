@@ -96,6 +96,12 @@
     <ClInclude Include="KeyCmdAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AdaptivesHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IKeyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -135,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyCmdAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AdaptivesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

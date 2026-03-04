@@ -24,75 +24,75 @@
 #include "chord.h"
 #include "ChordingData.h"
 #include "combos.h"
+#include "AdaptivesHandler.h"
+#include "IKeyboard.h"
 
 class KbdHook; // fwd
 
 
-class Keyboard
+class Keyboard : public IKeyboard
 {
 public:
     Keyboard(DWORD injectedFromMeValue);
-    void SetMainWnd(HWND hMainWindow);
-    void SetMainWndMsg(int mainWndMsg);
+    void SetMainWnd(HWND hMainWindow) override;
+    void SetMainWndMsg(int mainWndMsg) override;
 
-    bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx);
-    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap);
+    bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx) override;
+    bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap) override;
 
-    void ParseAdaptives();
-    void PrepareCombos();
+    void PrepareAdaptives() override;
+    void PrepareCombos() override;
 
-    const Layer* GetMainLayer();
+    const Layer* GetMainLayer() override;
 
-    bool GotoMainLayer();
-    bool GotoLayer(Layer::Idx_t layerIdx);
-    bool GotoLayer(const Layer::Id_t& layerId);
-    const Layer* CurrentLayer() const;
+    bool GotoMainLayer() override;
+    bool GotoLayer(Layer::Idx_t layerIdx) override;
+    bool GotoLayer(const Layer::Id_t& layerId) override;
+    const Layer* CurrentLayer() const override;
 
-    const KeyMapping* Mapping(VeeKee vk);
-    KeyValue VkMapping(VeeKee vk) const;
-    VeeKeeEx ReverseMapping(VeeKeeEx vk) const;
+    const KeyMapping* Mapping(VeeKee vk) override;
+    KeyValue VkMapping(VeeKee vk) const override;
+    VeeKeeEx ReverseMapping(VeeKeeEx vk) const override;
 
-    bool AddMapping(KeyValue vkFrom, KeyValue vkTo);
-    KeyActions::IKeyAction* GetKeyAction(VeeKee vk) const;
-    KeyActions::IKeyAction* GetKeyAction(VeeKee vk, Layer::Idx_t layerIdx) const;
+    bool AddMapping(KeyValue vkFrom, KeyValue vkTo) override;
+    KeyActions::IKeyAction* GetKeyAction(VeeKee vk) const override;
+    KeyActions::IKeyAction* GetKeyAction(VeeKee vk, Layer::Idx_t layerIdx) const override;
 
-    bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey);
+    bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey) override;
 
-    bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions);
-    bool InitChordingKeys(const ChordingKeys& chordingKeys);
-    void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, std::string lpsteaksPrefix1, std::string lpsteaksPrefix2);
+    bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions) override;
+    bool InitChordingKeys(const ChordingKeys& chordingKeys) override;
+    void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, std::string lpsteaksPrefix1, std::string lpsteaksPrefix2) override;
 
-    bool CheckForSuspendKey(const KbdHookEvent& event);
-    bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown);
+    bool CheckForSuspendKey(const KbdHookEvent& event) override;
+    bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown) override;
 
-    bool ProcessCapsWord(const KbdHookEvent& event);
-    bool OnKeyEvent(const KbdHookEvent & event);
+    bool ProcessCapsWord(const KbdHookEvent& event) override;
+    bool OnKeyEvent(const KbdHookEvent & event) override;
 
     // dbg
-    void OutNbKeysDn();
+    void OutNbKeysDn() override;
 
-    bool MyIsPrint(VeeKee vk) { return isprint.find(vk) != isprint.end(); }
+    bool TapVk(const KeyValue& key) override;
+    bool SendVk(const KeyValue& key, bool pressed) override;
+    void SendString(const std::string& textString) override;
+    bool HandleCommandCode(Commands command) override;
 
-    bool TapVk(const KeyValue& key);
-    bool SendVk(const KeyValue& key, bool pressed);
-    void SendString(const std::string& textString);
-    bool HandleCommandCode(Commands command);
+    void TrackModifiers(VeeKee vk, bool pressed) override;
+    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed) override;
 
-    void TrackModifiers(VeeKee vk, bool pressed);
-    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed);
+    bool ToggleSuspend() override;
+    bool Suspended() override;
+    void SuspendKey(VeeKee) override;
+    void QuitKey(VeeKee) override;
 
-    bool ToggleSuspend();
-    bool Suspended();
-    void SuspendKey(VeeKee);
-    void QuitKey(VeeKee);
+    void SetImageFilename(const WCHAR* filename) override;
+    const std::wstring& GetImageFilename() const override;
 
-    void SetImageFilename(const WCHAR* filename);
-    const std::wstring& GetImageFilename() const;
+    void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const override;
+    Layer::ImageView GetImageView() const override;
 
-    void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const;
-    Layer::ImageView GetImageView() const;
-
-    void Notify(HookKbd::Notif, LPARAM);
+    void Notify(HookKbd::Notif, LPARAM) override;
 
 protected:
 
@@ -122,10 +122,7 @@ protected:
 
     bool OnKeyEventLevel2(const KbdHookEvent& event);
 
-    bool ProcessAdaptives(const KbdHookEvent& event);
     void ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap);
-
-    bool VksFromString(const std::string& keyString, const Layer* layer, VeeKeeVector & vks, bool reverseMap) const;
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -138,43 +135,44 @@ private:
     std::map<VeeKee, KeyActions::IKeyAction*> downMappedKeys;
 
     // at a logical level, whatever the source
-    VeeKeeSet downModifiers;
+    VeeKeeSet downModifiers{};
 
-    Kord chord;             // current chord being built / cumulated as keys are pressed
-    bool chordingSuspended;
-    ChordingData chording;
+    Kord chord{};             // current chord being built / cumulated as keys are pressed
+    bool chordingSuspended{};
+    ChordingData chording{};
 
     // lpsteaks (left hand prefixed chords, right hand is order dependent)
-    Layer::Idx_t lpsteaksLayer1;
-    Layer::Idx_t lpsteaksLayer2;
-    Layer::Id_t lpsteaksLayerName1;
-    Layer::Id_t lpsteaksLayerName2;
-    std::string lpsteaksPrefix1;        // prefix for layer1 -> layer2
-    std::string lpsteaksPrefix2;        // prefix for layer2 -> layer1
+    Layer::Idx_t lpsteaksLayer1{};
+    Layer::Idx_t lpsteaksLayer2{};
+    Layer::Id_t lpsteaksLayerName1{};
+    Layer::Id_t lpsteaksLayerName2{};
+    std::string lpsteaksPrefix1{};        // prefix for layer1 -> layer2
+    std::string lpsteaksPrefix2{};        // prefix for layer2 -> layer1
 
-    DWORD lastKeypressTick; // time tick of the last key press event
-    KbdHookEvent lastDownEvent;
-    KbdHookEvent prevlastDownEvent;
-    DWORD lastVkCodeDown;
+    DWORD lastKeypressTick{}; // time tick of the last key press event
+    DWORD lastVkCodeDown{};
 
-    Layout layout;
-    bool suspended;
+    Layout layout{};
+    bool suspended{};
     bool adaptivesOn{true};
-    VeeKee suspendKey;
-    VeeKee quitKey;
+    VeeKee suspendKey{};
+    VeeKee quitKey{};
 
     CapsWordType capsWordType{};
     bool capitalizeNext{};
 
-    DWORD injectedFromMeValue;
-    HWND hMainWindow;
-    int mainWndMsg;
-    VeeKeeSet isprint;
+    DWORD injectedFromMeValue{};
+    HWND hMainWindow{};
+    int mainWndMsg{};
+    VeeKeeSet isprint{};
 
-    std::wstring imageFilename;
+    std::wstring imageFilename{};
 
-    std::map<VeeKeeVector, ICombo*> combos;
+    std::map<VeeKeeVector, ICombo*> combos{};
+    
+    AdaptivesHandler adaptivesHandler{};
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
+
 };

@@ -163,6 +163,7 @@
     <ClInclude Include="adaptives\adapt-enthium.h" />
     <ClInclude Include="adaptives\adapt-hd-neu-C.h" />
     <ClInclude Include="adaptives\adapt-hd-pm.h" />
+    <ClInclude Include="AdaptivesHandler.h" />
     <ClInclude Include="Chord.h" />
     <ClInclude Include="ChordingData.h" />
     <ClInclude Include="combos.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="combos\combo-hd-pm.h" />
     <ClInclude Include="DualModeModifierAction.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IKeyboard.h" />
     <ClInclude Include="KeyCmdAction.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="KeyOutAction.h" />
@@ -185,6 +187,7 @@
     <ClInclude Include="LayerToggleAction.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdaptivesHandler.cpp" />
     <ClCompile Include="Chord.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>

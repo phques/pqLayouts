@@ -59,19 +59,7 @@ VeeKeeSet Keyboard::extended = {
 //----------
 
 Keyboard::Keyboard(DWORD injectedFromMeValue) : 
-    injectedFromMeValue(injectedFromMeValue), 
-    hMainWindow(nullptr),
-    mainWndMsg(0),
-    suspended(false), 
-    suspendKey(0), 
-    quitKey(0),
-    lastKeypressTick(0),
-    lastDownEvent{},
-    prevlastDownEvent{},
-    lastVkCodeDown(0),
-    chordingSuspended(false),
-    lpsteaksLayer1(0),
-    lpsteaksLayer2(0)
+    injectedFromMeValue(injectedFromMeValue)
 {
     //init isprint 
     for (char c = 0x20; c <= 0x7E; c++)
@@ -101,80 +89,9 @@ bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, b
     return layout.SetLayerAccessKey(layerId, accessKey, canTap, keyOnTap);
 }
 
-// create a vector of VeeKees from a string of characters, 
-// possibly using reverse mapping to convert chars to VeeKees
-bool Keyboard::VksFromString(const std::string& keyString, const Layer* layer, VeeKeeVector& vks, bool reverseMap) const
+void Keyboard::PrepareAdaptives()
 {
-    for (char c : keyString)
-    {
-        VeeKeeEx vkEx = KeyValue(c).VkEx();
-        VeeKee unmappedVk{};
-
-        if (reverseMap)
-        {
-            unmappedVk = layer->ReverseMapping(vkEx);
-            if (unmappedVk == 0)
-            {
-                Printf("Error: No reverse mapping found for character '%c' (vk: %x)\n", c, vkEx);
-                return false;
-            }
-        }
-        else
-        {
-            unmappedVk = vkEx;
-            if (KeyValue::IsVkExShifted(vkEx))
-            {
-                Printf("Error: VK of character '%c' (vk: %x) is a shifted key.\n", c, vkEx);
-                return false;
-            }
-        }
-
-        vks.push_back(unmappedVk);
-    }
-
-    return true;
-}
-
-void Keyboard::ParseAdaptives()
-{
-    // nb: we Dont clear adapts2/adapts3, we *add* to them
-    const Layer* mainLayer = GetMainLayer();
-
-    for (const auto& pair : txtAdaptives)
-    {
-        // adaptives are positional by nature.
-        // they are saved with the 'physical'/qwerty key as the lookup values.
-
-        // so: Convert first item string (the 'from') into a VeeKeeVector using ReverseMapping
-        VeeKeeVector triggerVks;
-        const std::string& triggerChars = pair.first;
-
-        if (!VksFromString(triggerChars, mainLayer, triggerVks, true))
-        {
-            Printf("Skipping adaptive for keys sequence '%s' due to unmapped character.\n", 
-                triggerChars.c_str());
-            continue;
-        }
-
-        // Insert into adapts2 or adapts3 based on vector size
-        std::string output = std::string{ pair.second };
-
-        if (triggerVks.size() == 2)
-        {
-            // add a backspace in front to get rid of the 1st typed char
-            adapts2[triggerVks] = "\b" + output;
-        }
-        else if (triggerVks.size() == 3)
-        {
-            // add backspaces in front to get rid of the 1st typed char
-            adapts3[triggerVks] = "\b\b" + output;
-        }
-        else
-        {
-            Printf("Warning: Adaptive for key string '%s' has unsupported size (%zu), skipping.\n", 
-                triggerChars.c_str(), triggerVks.size());
-        }
-    }
+    adaptivesHandler.ParseAdaptives(txtAdaptives, GetMainLayer());
 }
 
 void Keyboard::ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap)
@@ -191,7 +108,7 @@ void Keyboard::ParseCombos(const StringPairList& inputTextCombos, ICombo& refCom
         VeeKeeVector triggerVks;
         const std::string triggerChars = pair.first;
 
-        if (!VksFromString(triggerChars, mainLayer, triggerVks, reverseMap))
+        if (!mainLayer->VksFromString(triggerChars, reverseMap, triggerVks))
         {
             Printf("Skipping combo for keys sequence '%s' due to unmapped character.\n", triggerChars.c_str());
             continue;
@@ -858,7 +775,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     if (adaptivesOn &&
         capsWordType == CapsWordType::None &&
         layout.IsOnMainLayer() &&
-        ProcessAdaptives(event))
+        adaptivesHandler.ProcessAdaptives(event, this))
     {
         Printf("adaptive processed\n");
         return true;
@@ -911,56 +828,6 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     }
 
     return false; // let key through
-}
-
-bool Keyboard::ProcessAdaptives(const KbdHookEvent& event)
-{
-
-    // adaptives, delay between each key allowed
-    //##pq todo: this could be by layer / read from kbd file etc etc
-
-    // do adaptives (only on main layer at the moment)
-    if (event.Down() && lastDownEvent.vkCode != 0)
-    {
-        if (event.time - lastDownEvent.time > 175) // ms
-        {
-            Printf("reset lastDownEvent\n");
-            prevlastDownEvent.vkCode = 0;
-            lastDownEvent.vkCode = 0;
-        }
-        else
-        {
-            Printf("checking for adaptive\n");
-
-            std::map<VeeKeeExVector, std::string>::iterator foundAdaptIt;
-
-            // adaptives are positional by nature.
-            // they were saved with the 'physical'/qwerty key as the lookup values.
-            VeeKeeExVector vkeys3{ prevlastDownEvent.vkCode, lastDownEvent.vkCode, event.vkCode };
-            VeeKeeExVector vkeys2{ lastDownEvent.vkCode, event.vkCode };
-
-            if ((foundAdaptIt = adapts3.find(vkeys3)) != adapts3.end() ||
-                (foundAdaptIt = adapts2.find(vkeys2)) != adapts2.end())
-            {
-                Printf("found adaptive!\n");
-                SendString(foundAdaptIt->second);
-                Printf("done sending adapt\n");
-
-                prevlastDownEvent = lastDownEvent;
-                lastDownEvent = event;
-                return true; // eat key
-            }
-        }
-    }
-
-    if (event.Down())
-    {
-        prevlastDownEvent = lastDownEvent;
-        lastDownEvent = event;
-    }
-
-
-    return false;
 }
 
 bool Keyboard::HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey)

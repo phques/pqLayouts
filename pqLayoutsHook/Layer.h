@@ -1,4 +1,4 @@
-// Copyright 2020 Philippe Quesnel  
+// Copyright 2026 Philippe Quesnel  
 //
 // This file is part of pqLayouts.
 //
@@ -61,6 +61,8 @@ public:
 
     void SetImageView(ImageView imageView, Layer::ImageView imageViewShift);
     ImageView GetImageView(bool shiftDown) const;
+
+    bool VksFromString(const std::string& keyString, bool reverseMap, VeeKeeVector& vks) const;
 
 private:
     Id_t name;

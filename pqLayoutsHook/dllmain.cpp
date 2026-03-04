@@ -252,7 +252,7 @@ PQHOOK_API bool Suspended()
 
 PQHOOK_API void ParseAdaptives()
 {
-    theKbd.ParseAdaptives();
+    theKbd.PrepareAdaptives();
 }
 
 PQHOOK_API void PrepareCombos()
