@@ -102,6 +102,9 @@
     <ClInclude Include="IKeyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ILayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

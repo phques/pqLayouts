@@ -67,6 +67,17 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     }
 }
 
+void Keyboard::PrepareAdaptives()
+{
+    adaptivesHandler.Prepare(txtAdaptives, GetMainLayer());
+}
+
+void Keyboard::PrepareCombos()
+{
+    TextComboDefs textComboDefs{ txtCombos, txtCombosQwerty, txtKeysCombosQwerty, txtCmdCombosQwerty };
+    combosHandler.Prepare(textComboDefs, GetMainLayer());
+}
+
 void Keyboard::SetMainWnd(HWND hMainWindow)
 {
     this->hMainWindow = hMainWindow;
@@ -77,6 +88,8 @@ void Keyboard::SetMainWndMsg(int mainWndMsg)
     this->mainWndMsg = mainWndMsg;
 }
 
+#pragma region LayoutProxy
+
 bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 {
     return layout.AddLayer(layerId, newLayerIdx);
@@ -85,17 +98,6 @@ bool Keyboard::AddLayer(const Layer::Id_t& layerId, Layer::Idx_t& newLayerIdx)
 bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool canTap, KeyValue keyOnTap)
 {
     return layout.SetLayerAccessKey(layerId, accessKey, canTap, keyOnTap);
-}
-
-void Keyboard::PrepareAdaptives()
-{
-    adaptivesHandler.Prepare(txtAdaptives, GetMainLayer());
-}
-
-void Keyboard::PrepareCombos()
-{
-    TextComboDefs textComboDefs{ txtCombos, txtCombosQwerty, txtKeysCombosQwerty, txtCmdCombosQwerty };
-    combosHandler.Prepare(textComboDefs, GetMainLayer());
 }
 
 const Layer* Keyboard::GetMainLayer()
@@ -122,6 +124,43 @@ const Layer* Keyboard::CurrentLayer() const
 {
     return layout.CurrentLayer();
 }
+
+void Keyboard::SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const
+{
+    layout.SetImageView(imageView, imageViewShift);
+}
+
+Layer::ImageView Keyboard::GetImageView() const
+{
+    const bool isShiftDown = ShiftDown();
+    return layout.GetImageView(isShiftDown);
+}
+KeyValue Keyboard::VkMapping(VeeKee vk) const
+{
+    return layout.VkMapping(vk);
+}
+
+VeeKeeEx Keyboard::ReverseMapping(VeeKeeEx vkEx) const
+{
+    return layout.ReverseMapping(vkEx);
+}
+
+bool Keyboard::AddMapping(KeyValue from, KeyValue to)
+{
+    return layout.AddMapping(from, to);
+}
+
+bool Keyboard::AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey)
+{
+    return layout.AddDualModeModifier(key, modifierKey, tapKey);
+}
+
+bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
+{
+    return layout.AddChord(chord, keyActions);
+}
+
+#pragma region // LayoutProxy
 
 bool Keyboard::IsModifier(VeeKee vk)
 {
@@ -224,17 +263,6 @@ const std::wstring& Keyboard::GetImageFilename() const
     return imageFilename;
 }
 
-void Keyboard::SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const
-{
-    layout.SetImageView(imageView, imageViewShift);
-}
-
-Layer::ImageView Keyboard::GetImageView() const
-{
-    const bool isShiftDown = ShiftDown();
-    return layout.GetImageView(isShiftDown);
-}
-
 void Keyboard::Notify(HookKbd::Notif notif, LPARAM lparam)
 {
     // notify main app window
@@ -275,33 +303,6 @@ const KeyMapping* Keyboard::Mapping(VeeKee vk)
 
     return (ShiftDown() ? &caseMapping->shifted : &caseMapping->nonShifted); 
 }
-
-KeyValue Keyboard::VkMapping(VeeKee vk) const
-{
-    return layout.VkMapping(vk);
-}
-
-VeeKeeEx Keyboard::ReverseMapping(VeeKeeEx vkEx) const
-{
-    return layout.ReverseMapping(vkEx);
-}
-
-bool Keyboard::AddMapping(KeyValue from, KeyValue to)
-{
-    return layout.AddMapping(from, to);
-}
-
-bool Keyboard::AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey)
-{
-    return layout.AddDualModeModifier(key, modifierKey, tapKey);
-}
-
-bool Keyboard::AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions)
-{
-    return layout.AddChord(chord, keyActions);
-}
-
-
 
 //------
 

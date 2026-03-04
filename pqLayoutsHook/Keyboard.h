@@ -26,73 +26,62 @@
 #include "combos.h"
 #include "AdaptivesHandler.h"
 #include "IKeyboard.h"
+#include "ILayout.h"
 
 class KbdHook; // fwd
 
 
-class Keyboard : public IKeyboard
+class Keyboard : public IKeyboard, public ILayout
 {
 public:
     Keyboard(DWORD injectedFromMeValue);
+    
+    // IKeyboard interface
     void SetMainWnd(HWND hMainWindow) override;
     void SetMainWndMsg(int mainWndMsg) override;
+    bool CheckForSuspendKey(const KbdHookEvent& event) override;
+    bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown) override;
+    bool ProcessCapsWord(const KbdHookEvent& event) override;
+    bool OnKeyEvent(const KbdHookEvent & event) override;
+    void TrackModifiers(VeeKee vk, bool pressed) override;
+    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed) override;
+    bool ToggleSuspend() override;
+    bool Suspended() override;
+    void SuspendKey(VeeKee) override;
+    void QuitKey(VeeKee) override;
+    void Notify(HookKbd::Notif, LPARAM) override;
+    void ReplayEvents(const std::vector<KbdHookEvent>& events) override;
+    void OutNbKeysDn() override;
+    void SetLastVkCodeDown(DWORD) override;
 
+    // ILayout interface
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx) override;
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap) override;
-
     void PrepareAdaptives() override;
     void PrepareCombos() override;
-
     const Layer* GetMainLayer() override;
     bool GotoMainLayer() override;
     bool GotoLayer(Layer::Idx_t layerIdx) override;
     bool GotoLayer(const Layer::Id_t& layerId) override;
     const Layer* CurrentLayer() const override;
-
     const KeyMapping* Mapping(VeeKee vk) override;
     KeyValue VkMapping(VeeKee vk) const override;
     VeeKeeEx ReverseMapping(VeeKeeEx vk) const override;
-
     bool AddMapping(KeyValue vkFrom, KeyValue vkTo) override;
     KeyActions::IKeyAction* GetKeyAction(VeeKee vk) const override;
     KeyActions::IKeyAction* GetKeyAction(VeeKee vk, Layer::Idx_t layerIdx) const override;
-
     bool AddDualModeModifier(KeyDef  key, KeyValue modifierKey, KeyValue tapKey) override;
-
     bool AddChord(Kord& chord, const std::list<KeyActions::KeyActionPair>& keyActions) override;
     bool InitChordingKeys(const ChordingKeys& chordingKeys) override;
     void SetLeftHandPrefix(Layer::Id_t lpsteaksLayerName1, Layer::Id_t lpsteaksLayerName2, std::string lpsteaksPrefix1, std::string lpsteaksPrefix2) override;
-
-    bool CheckForSuspendKey(const KbdHookEvent& event) override;
-    bool ProcessKeyAction(const KbdHookEvent& event, KeyActions::IKeyAction* action, bool wasDown) override;
-
-    bool ProcessCapsWord(const KbdHookEvent& event) override;
-    bool OnKeyEvent(const KbdHookEvent & event) override;
-
-    // dbg
-    void OutNbKeysDn() override;
-
     bool TapVk(const KeyValue& key) override;
     bool SendVk(const KeyValue& key, bool pressed) override;
     void SendString(const std::string& textString) override;
     bool HandleCommandCode(Commands command) override;
-
-    void TrackModifiers(VeeKee vk, bool pressed) override;
-    void TrackMappedKeyDown(VeeKee physicalVk, KeyActions::IKeyAction* mapped, bool pressed) override;
-
-    bool ToggleSuspend() override;
-    bool Suspended() override;
-    void SuspendKey(VeeKee) override;
-    void QuitKey(VeeKee) override;
-
     void SetImageFilename(const WCHAR* filename) override;
     const std::wstring& GetImageFilename() const override;
-
     void SetImageView(Layer::ImageView imageView, Layer::ImageView imageViewShift) const override;
     Layer::ImageView GetImageView() const override;
-
-    void Notify(HookKbd::Notif, LPARAM) override;
-    void ReplayEvents(const std::vector<KbdHookEvent>& events);
 
 protected:
 
@@ -114,9 +103,9 @@ protected:
     void ResumeChording();
     void SuspendChording();
     void ReplayCancelledChord();
-    bool IsSelfInjected(const KbdHookEvent& event);
 
     bool OnKeyEventLevel2(const KbdHookEvent& event);
+    bool IsSelfInjected(const KbdHookEvent& event);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -167,9 +156,5 @@ private:
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
-
-
-    // Inherited via IKeyboard
-    void SetLastVkCodeDown(DWORD) override;
 
 };
