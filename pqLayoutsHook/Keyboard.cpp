@@ -37,8 +37,6 @@ using namespace KeyActions;
 
 //----------
 
-// all keys used for combos, populate from combos
-static std::set<VeeKee> comboKeys;
 
 VeeKeeSet Keyboard::modifiers = {
     VK_LSHIFT, VK_RSHIFT, VK_SHIFT,
@@ -91,62 +89,13 @@ bool Keyboard::SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, b
 
 void Keyboard::PrepareAdaptives()
 {
-    adaptivesHandler.ParseAdaptives(txtAdaptives, GetMainLayer());
-}
-
-void Keyboard::ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap)
-{
-    const Layer* mainLayer = GetMainLayer();
-
-    // Dont clear combos, add to them
-
-    for (const auto& pair : inputTextCombos)
-    {
-        // saved with the 'physical'/qwerty key as the lookup values.
-
-        // so: Convert first item string (the 'from') into a VeeKeeVector 
-        VeeKeeVector triggerVks;
-        const std::string triggerChars = pair.first;
-
-        if (!mainLayer->VksFromString(triggerChars, reverseMap, triggerVks))
-        {
-            Printf("Skipping combo for keys sequence '%s' due to unmapped character.\n", triggerChars.c_str());
-            continue;
-        }
-
-        // vks need to be sorted for combos
-        std::sort(triggerVks.begin(), triggerVks.end());
-
-        // Create newcombo and save
-        ICombo* newCombo = refCombo.New(triggerVks, pair.second);
-        if (newCombo != nullptr)
-        {
-            combos[triggerVks] = newCombo;
-        }
-    }
+    adaptivesHandler.Prepare(txtAdaptives, GetMainLayer());
 }
 
 void Keyboard::PrepareCombos()
 {
-    StringCombo stringCombo({}, ""); // dummy, we just need it to call New() to create new combos
-    ParseCombos(txtCombos, stringCombo, true);
-    ParseCombos(txtCombosQwerty, stringCombo, false);
-
-    CommandCombo cmdCombo({}, Commands::None); // dummy, we just need it to call New() to create new combos
-    ParseCombos(txtCmdCombosQwerty, cmdCombo, false);
-
-    KeysCombo keysCombo({}, {}); // dummy, we just need it to call New() to create new combos
-    ParseCombos(txtKeysCombosQwerty, keysCombo, false);
-
-    // Save all combo trigger keys
-    for (const auto& combo : combos)
-    {
-        for (const auto& vk : combo.first)
-        {
-            comboKeys.insert(vk);
-        }
-    }
-
+    TextComboDefs textComboDefs{ txtCombos, txtCombosQwerty, txtKeysCombosQwerty, txtCmdCombosQwerty };
+    combosHandler.Prepare(textComboDefs, GetMainLayer());
 }
 
 const Layer* Keyboard::GetMainLayer()
@@ -364,6 +313,11 @@ IKeyAction* Keyboard::GetKeyActionFromCaseMapping(const CaseMapping* caseMapping
 
     const KeyMapping& mapping = ShiftDown() ? caseMapping->shifted : caseMapping->nonShifted;
     return mapping.Mapping();
+}
+
+void Keyboard::SetLastVkCodeDown(DWORD vkCode)
+{
+    lastVkCodeDown = vkCode;
 }
 
 IKeyAction* Keyboard::GetKeyAction(VeeKee vk) const
@@ -655,84 +609,6 @@ bool Keyboard::HandleCommandCode(Commands command)
     return false;
 }
 
-bool Keyboard::DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks)
-{
-    auto foundComboIt = combos.find(vks);
-    if (foundComboIt != combos.end())
-    {
-        Printf("found combo!\n");
-
-        foundComboIt->second->Fire(*this);
-
-        lastVkCodeDown = 0; // we simulated keys, so lastVkCodeDown is not correct anymore 
-        return true;
-    }
-
-    // no combo found
-    return false;
-}
-
-bool Keyboard::HandleCombos(const KbdHookEvent& event)
-{
-    // --- Combos handling ---
-
-    static std::vector<KbdHookEvent > eventsDown;
-    static VeeKeeVector vksDown;
-    static bool cumulating = false;
-
-    // ##NB: it is important that we let non combo keys through here,
-    //       because some might not be mapped, and ReplayEvents() will have no effects for those!!
-    const bool isComboKey = (comboKeys.find(event.vkCode) != comboKeys.end());
-    const bool isComboKeyDown = isComboKey && event.Down();
-
-    if (!cumulating && !isComboKeyDown)
-    {
-        Printf("not cumulating, not comboKeyDown\n");
-        return false;
-    }
-
-    if (!cumulating && isComboKeyDown)
-    {
-        Printf("1st combo key\n");
-        cumulating = true;
-        eventsDown.push_back(event);
-        vksDown.push_back(event.vkCode);
-        std::sort(vksDown.begin(), vksDown.end());
-        return true;
-    }
-
-    if (cumulating)
-    {
-        const bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
-
-        if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 90) //ms (old=50,75)
-        {
-            Printf("cancel cumul\n");
-            ReplayEvents(eventsDown);
-            cumulating = false;
-            eventsDown.clear();
-            vksDown.clear();
-            return false;
-        }
-
-        eventsDown.push_back(event);
-        vksDown.push_back(event.vkCode);
-        std::sort(vksDown.begin(), vksDown.end());
-
-        if (!DoCombo(eventsDown, vksDown))
-        {
-            Printf("cancel cumul\n");
-            ReplayEvents(eventsDown);
-        }
-        cumulating = false;
-        eventsDown.clear();
-        vksDown.clear();
-        return true;
-    }
-
-    return false;
-}
-
 // top level entry point for key processing
 // returns true if event was processed and should be 'eaten', false to let it through
 bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
@@ -751,7 +627,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     // do combos only on main layer, and only if we are not in caps word mode
     if (layout.IsOnMainLayer() &&
         capsWordType == CapsWordType::None &&
-        HandleCombos(event))
+        combosHandler.Handle(event, this))
     {
         return true;
     }
@@ -775,7 +651,7 @@ bool Keyboard::OnKeyEventLevel2(const KbdHookEvent & event)
     if (adaptivesOn &&
         capsWordType == CapsWordType::None &&
         layout.IsOnMainLayer() &&
-        adaptivesHandler.ProcessAdaptives(event, this))
+        adaptivesHandler.Handle(event, this))
     {
         Printf("adaptive processed\n");
         return true;

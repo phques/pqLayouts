@@ -44,7 +44,6 @@ public:
     void PrepareCombos() override;
 
     const Layer* GetMainLayer() override;
-
     bool GotoMainLayer() override;
     bool GotoLayer(Layer::Idx_t layerIdx) override;
     bool GotoLayer(const Layer::Id_t& layerId) override;
@@ -93,6 +92,7 @@ public:
     Layer::ImageView GetImageView() const override;
 
     void Notify(HookKbd::Notif, LPARAM) override;
+    void ReplayEvents(const std::vector<KbdHookEvent>& events);
 
 protected:
 
@@ -107,10 +107,6 @@ protected:
 
     void SetupInputKey(INPUT& input, VeeKee vk, bool pressed);
 
-    void ReplayEvents(const std::vector<KbdHookEvent>& events);
-    bool DoCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks);
-    bool HandleCombos(const KbdHookEvent& event);
-
     bool HandleChording(const KbdHookEvent& event, const ChordingKey* chordingKey);
     bool CheckLpChordsLayers();
     bool OnPo2LayersChord();
@@ -121,8 +117,6 @@ protected:
     bool IsSelfInjected(const KbdHookEvent& event);
 
     bool OnKeyEventLevel2(const KbdHookEvent& event);
-
-    void ParseCombos(const StringPairList& inputTextCombos, ICombo& refCombo, bool reverseMap);
 
     static bool IsModifier(VeeKee vk);
     static bool IsExtended(VeeKee vk);
@@ -168,11 +162,14 @@ private:
 
     std::wstring imageFilename{};
 
-    std::map<VeeKeeVector, ICombo*> combos{};
-    
     AdaptivesHandler adaptivesHandler{};
+    CombosHandler combosHandler{};
 
     static VeeKeeSet modifiers;
     static VeeKeeSet extended;
+
+
+    // Inherited via IKeyboard
+    void SetLastVkCodeDown(DWORD) override;
 
 };

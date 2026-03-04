@@ -24,10 +24,11 @@ class AdaptivesHandler
 {
 public:
     AdaptivesHandler();
-    bool ParseAdaptives(const StringPairList& txtAdaptives, const Layer* mainLayer);
-    bool ProcessAdaptives(const KbdHookEvent& event, IKeyboard* kbd);
+    void Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer);
+    bool Handle(const KbdHookEvent& event, IKeyboard* kbd);
 
 protected:
+    bool ParseAdaptives(const StringPairList& txtAdaptives, const Layer* mainLayer);
 
 private:
     std::map<VeeKeeExVector, std::string> adapts3;

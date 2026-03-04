@@ -21,14 +21,22 @@
 
 #include "keydef.h"
 
+class IKeyboard;
 
-class Keyboard;
+struct TextComboDefs
+{
+    StringPairList& txtCombos;
+    StringPairList& txtCombosQwerty;
+    StringPairList& txtKeysCombosQwerty;
+    StringPairList& txtCmdCombosQwerty;
+};
+
 
 class ICombo
 {
 public:
     virtual const VeeKeeVector& GetTriggerVks() const = 0;
-    virtual void Fire(Keyboard & kbd) = 0;
+    virtual void Fire(IKeyboard* kbd) = 0;
     virtual ICombo* New(const VeeKeeVector& triggers, const std::string& output) const = 0;
 };
 
@@ -61,7 +69,7 @@ class StringCombo : public ComboBase
 public:
     StringCombo(const VeeKeeVector& triggers, const std::string& output);
 
-    virtual void Fire(Keyboard & kbd);
+    virtual void Fire(IKeyboard* kbd);
     virtual ICombo* New(const VeeKeeVector& triggers, const std::string& output) const;
 
 
@@ -77,7 +85,7 @@ class KeysCombo : public ComboBase
 public:
     KeysCombo(const VeeKeeVector& triggers, const std::vector<KeyValue>& outKeys);
 
-    virtual void Fire(Keyboard & kbd);
+    virtual void Fire(IKeyboard* kbd);
     virtual ICombo * New(const VeeKeeVector& triggers, const std::string& output) const;
 
 private:
@@ -92,7 +100,7 @@ class CommandCombo : public ComboBase
 public:
     CommandCombo(const VeeKeeVector& triggers, Commands command);
 
-    virtual void Fire(Keyboard& kbd);
+    virtual void Fire(IKeyboard* kbd);
     virtual ICombo* New(const VeeKeeVector& triggers, const std::string& command) const;
 
 private:
@@ -106,6 +114,7 @@ enum class ComboState
 {
     Idle, Constructing, Complete, Holding, Fired, Releasing = Fired
 };
+
 
 // tracking of a combo's construction's as keys are typed
 class ComboStateInfo
@@ -122,14 +131,26 @@ private:
 };
 
 
-class CombosTracking
+class CombosHandler
 {
 public:
-    CombosTracking(const std::map<VeeKeeVector, ICombo*>& combos);
+    CombosHandler();
+
+    void Prepare(TextComboDefs textCombos, const Layer* mainLayer);
+    bool Handle(const KbdHookEvent& event, IKeyboard* kbd);
 
 private:
-    void InitializeCombos(const std::map<VeeKeeVector, ICombo*>& combos);
+    void ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer);
+
+    bool ExecuteCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks, IKeyboard* kbd);
 
 private:
+    std::map<VeeKeeVector, ICombo*> combos;
     std::list<ComboStateInfo> trackedCombos;
+    std::set<VeeKee> comboKeys;
+
+    std::vector<KbdHookEvent > eventsDown;
+    VeeKeeVector vksDown;
+    bool cumulating{};
 };
+

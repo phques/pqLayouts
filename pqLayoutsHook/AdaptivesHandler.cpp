@@ -23,6 +23,11 @@ AdaptivesHandler::AdaptivesHandler()
 {
 }
 
+void AdaptivesHandler::Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer)
+{
+    ParseAdaptives(txtAdaptives, mainLayer);
+}
+
 bool AdaptivesHandler::ParseAdaptives(const StringPairList& txtAdaptives, const Layer* mainLayer)
 {
     for (const auto& pair : txtAdaptives)
@@ -64,7 +69,7 @@ bool AdaptivesHandler::ParseAdaptives(const StringPairList& txtAdaptives, const 
     return false;
 }
 
-bool AdaptivesHandler::ProcessAdaptives(const KbdHookEvent& event, IKeyboard* kbd)
+bool AdaptivesHandler::Handle(const KbdHookEvent& event, IKeyboard* kbd)
 {
 
     // adaptives, delay between each key allowed

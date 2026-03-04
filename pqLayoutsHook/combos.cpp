@@ -29,10 +29,10 @@ StringCombo::StringCombo(const VeeKeeVector& triggers, const std::string& output
 {
 }
 
-void StringCombo::Fire(Keyboard & kbd)
+void StringCombo::Fire(IKeyboard* kbd)
 {
     Printf("firing StringCombo\n");
-    kbd.SendString(output);
+    kbd->SendString(output);
 }
 
 ICombo* StringCombo::New(const VeeKeeVector& triggers, const std::string& output) const
@@ -49,12 +49,12 @@ KeysCombo::KeysCombo(const VeeKeeVector& triggers, const std::vector<KeyValue>& 
 {
 }
 
-void KeysCombo::Fire(Keyboard& kbd)
+void KeysCombo::Fire(IKeyboard* kbd)
 {
     Printf("firing KeysCombo\n");
     for (const auto& key : outKeys)
     {
-        kbd.TapVk(key);
+        kbd->TapVk(key);
     }
 }
 
@@ -79,10 +79,10 @@ CommandCombo::CommandCombo(const VeeKeeVector& triggers, Commands command) : Com
 {
 }
 
-void CommandCombo::Fire(Keyboard& kbd)
+void CommandCombo::Fire(IKeyboard* kbd)
 {
     Printf("firing CommandCombo\n");
-    kbd.HandleCommandCode(command);
+    kbd->HandleCommandCode(command);
 }
 
 ICombo* CommandCombo::New(const VeeKeeVector& triggers, const std::string& commandName) const
@@ -100,21 +100,147 @@ ComboStateInfo::ComboStateInfo(ICombo* combo) : combo(combo)
 
 //--------
 
-CombosTracking::CombosTracking(const std::map<VeeKeeVector, ICombo*>& combos)
+CombosHandler::CombosHandler()
 {
-    InitializeCombos(combos);
 }
 
-void CombosTracking::InitializeCombos(const std::map<VeeKeeVector, ICombo*>& combos)
+void CombosHandler::Prepare(TextComboDefs textCombos, const Layer* mainLayer)
 {
+    StringCombo stringCombo({}, ""); // dummy, we just need it to call New() to create new combos
+    ParseCombos(textCombos.txtCombos, stringCombo, true, mainLayer);
+    ParseCombos(textCombos.txtCombosQwerty, stringCombo, false, mainLayer);
+
+    CommandCombo cmdCombo({}, Commands::None); // dummy, we just need it to call New() to create new combos
+    ParseCombos(textCombos.txtCmdCombosQwerty, cmdCombo, false, mainLayer);
+
+    KeysCombo keysCombo({}, {}); // dummy, we just need it to call New() to create new combos
+    ParseCombos(textCombos.txtKeysCombosQwerty, keysCombo, false, mainLayer);
+
+    // Save all combo trigger keys
+    for (const auto& combo : combos)
+    {
+        for (const auto& vk : combo.first)
+        {
+            comboKeys.insert(vk);
+        }
+    }
+
     // Populate trackedCombos with the combos to track
     trackedCombos.clear();
-    
+
     for (const auto& pair : combos)
     {
         const VeeKeeVector& triggers = pair.first;
         ICombo* combo = pair.second;
-        
+
         trackedCombos.push_back(ComboStateInfo(combo));
     }
+}
+
+void CombosHandler::ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer)
+{
+    // Dont clear combos, add to them
+
+    for (const auto& pair : inputTextCombos)
+    {
+        // saved with the 'physical'/qwerty key as the lookup values.
+
+        // so: Convert first item string (the 'from') into a VeeKeeVector 
+        VeeKeeVector triggerVks;
+        const std::string triggerChars = pair.first;
+
+        if (!mainLayer->VksFromString(triggerChars, reverseMap, triggerVks))
+        {
+            Printf("Skipping combo for keys sequence '%s' due to unmapped character.\n", triggerChars.c_str());
+            continue;
+        }
+
+        // vks need to be sorted for combos
+        std::sort(triggerVks.begin(), triggerVks.end());
+
+        // Create newcombo and save
+        ICombo* newCombo = refCombo.New(triggerVks, pair.second);
+        if (newCombo != nullptr)
+        {
+            combos[triggerVks] = newCombo;
+        }
+    }
+}
+
+bool CombosHandler::ExecuteCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks, IKeyboard* kbd)
+{
+    auto foundComboIt = combos.find(vks);
+    if (foundComboIt != combos.end())
+    {
+        Printf("found combo!\n");
+        foundComboIt->second->Fire(kbd);
+
+        return true;
+    }
+
+    // no combo found
+    return false;
+}
+
+bool CombosHandler::Handle(const KbdHookEvent& event, IKeyboard* kbd)
+{
+    // --- Combos handling ---
+
+    // ##NB: it is important that we let non combo keys through here,
+    //       because some might not be mapped, and ReplayEvents() will have no effects for those!!
+    const bool isComboKey = (comboKeys.find(event.vkCode) != comboKeys.end());
+    const bool isComboKeyDown = isComboKey && event.Down();
+
+    if (!cumulating && !isComboKeyDown)
+    {
+        Printf("not cumulating, not comboKeyDown\n");
+        return false;
+    }
+
+    if (!cumulating && isComboKeyDown)
+    {
+        Printf("1st combo key\n");
+        cumulating = true;
+        eventsDown.push_back(event);
+        vksDown.push_back(event.vkCode);
+        std::sort(vksDown.begin(), vksDown.end());
+        return true;
+    }
+
+    if (cumulating)
+    {
+        const bool isAlreadyDown = isComboKeyDown && VkUtil::Contains(vksDown, event.vkCode);
+
+        if (!isComboKeyDown || isAlreadyDown || event.TimeDiff(eventsDown[0]) > 90) //ms (old=50,75)
+        {
+            Printf("cancel cumul\n");
+            kbd->ReplayEvents(eventsDown);
+            cumulating = false;
+            eventsDown.clear();
+            vksDown.clear();
+            return false;
+        }
+
+        eventsDown.push_back(event);
+        vksDown.push_back(event.vkCode);
+        std::sort(vksDown.begin(), vksDown.end());
+
+        if (ExecuteCombo(eventsDown, vksDown, kbd))
+        {
+            // we simulated keys, so lastVkCodeDown is not correct anymore 
+            kbd->SetLastVkCodeDown(0); 
+        }
+        else
+        {
+            Printf("cancel cumul\n");
+            kbd->ReplayEvents(eventsDown);
+        }
+
+        cumulating = false;
+        eventsDown.clear();
+        vksDown.clear();
+        return true;
+    }
+
+    return false;
 }

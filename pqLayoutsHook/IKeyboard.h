@@ -79,7 +79,6 @@ public:
 
     virtual void OutNbKeysDn() = 0;
 
-
     virtual bool TapVk(const KeyValue& key) = 0;
     virtual bool SendVk(const KeyValue& key, bool pressed) = 0;
     virtual void SendString(const std::string& textString) = 0;
@@ -92,6 +91,7 @@ public:
     virtual bool Suspended() = 0;
     virtual void SuspendKey(VeeKee) = 0;
     virtual void QuitKey(VeeKee) = 0;
+    virtual void SetLastVkCodeDown(DWORD) = 0;
 
     virtual void SetImageFilename(const WCHAR* filename) = 0;
     virtual const std::wstring& GetImageFilename() const = 0;
@@ -100,4 +100,6 @@ public:
     virtual Layer::ImageView GetImageView() const = 0;
 
     virtual void Notify(HookKbd::Notif, LPARAM) = 0;
+    virtual void ReplayEvents(const std::vector<KbdHookEvent>& events) = 0;
+
 };
