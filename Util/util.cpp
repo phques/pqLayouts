@@ -16,6 +16,7 @@
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "pch.h"
+#include "KeyDef.h"
 #include "util.h"
 
 // Maps command name to enum value
@@ -160,6 +161,17 @@ char VkUtil::VkToChar(WORD vk, WORD scancode, bool shifted)
     }
 
     return asciiChar;
+}
+
+std::string VkUtil::VksToString(const VeeKeeVector& vks)
+{
+    std::string output;
+    for (auto vk : vks)
+    {
+        output += VkToChar((WORD)vk, 0);
+    }
+
+    return output;
 }
 
 WORD VkUtil::LookupKeyName(const std::string& keyText)

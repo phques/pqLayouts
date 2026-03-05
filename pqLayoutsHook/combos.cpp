@@ -23,6 +23,11 @@
 #include "KeyParser.h"
 #include "util.h"
 
+static std::vector<const char*> stateNames = 
+{
+    "Idle", "Constructing", "Holding", "ReadyToFire", "Holding"
+};
+
 //--------
 
 StringCombo::StringCombo(const VeeKeeVector& triggers, const std::string& output) : ComboBase(triggers), output(output)
@@ -96,6 +101,157 @@ ICombo* CommandCombo::New(const VeeKeeVector& triggers, const std::string& comma
 
 ComboStateInfo::ComboStateInfo(ICombo* combo) : combo(combo)
 {
+}
+
+std::string ComboStateInfo::ToString() const
+{
+    return VkUtil::VksToString(combo->GetTriggerVks());
+}
+
+void ComboStateInfo::SetState(ComboState newState)
+{
+    Printf("combo %s, state %s -> %s\n", 
+        ToString().c_str(), stateNames[(int)state], stateNames[(int)newState]);
+    state = newState;
+}
+
+void ComboStateInfo::Reset()
+{
+    state = ComboState::Idle;
+    pressedVks.clear();
+    releasedVks.clear();
+    firstDownTick = 0;
+}
+
+bool ComboStateInfo::OnKeyDown(const KbdHookEvent& event, IKeyboard* kbd)
+{
+    switch (state)
+    {
+    case ComboState::Idle:
+        if (VkUtil::Contains(combo->GetTriggerVks(), event.vkCode))
+        {
+            Printf("starting combo %s construction %c\n",
+                ToString().c_str(), VkUtil::VkToChar((WORD)event.vkCode));
+
+            pressedVks.push_back(event.vkCode);
+            SetState(ComboState::Constructing);
+            firstDownTick = event.time ;
+            return true;
+        }
+        return false; // ignore
+
+    case ComboState::Constructing:
+        if (!VkUtil::Contains(combo->GetTriggerVks(), event.vkCode))
+        {
+            Printf("unexpected key down %c while constructing combo %s, resetting\n",
+                VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
+
+            Reset();
+            return false; // ignore
+        }
+
+        // new combo key down
+        pressedVks.push_back(event.vkCode);
+        std::sort(pressedVks.begin(), pressedVks.end());
+
+        // got all keys?
+        if (pressedVks == combo->GetTriggerVks())
+        {
+            SetState(ComboState::Holding);
+        }
+        return true;
+
+    case ComboState::Holding:
+        if (VkUtil::Contains(releasedVks, event.vkCode) ||
+            !VkUtil::Contains(combo->GetTriggerVks(), event.vkCode))
+        {
+            Printf("unexpected key down %c while holding combo %s, resetting\n",
+                VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
+
+            Reset();
+            return false;
+        }
+        return true; // eat auto-repeat
+    }
+
+    return false;
+}
+
+bool ComboStateInfo::OnKeyUp(const KbdHookEvent& event, IKeyboard* kbd)
+{
+    switch (state)
+    {
+        case ComboState::Idle:
+            return false;
+
+        case ComboState::Constructing:
+            Printf("key up %c while constructing combo %s, resetting\n",
+                VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
+
+            Reset();
+            return false;
+
+        case ComboState::Holding:
+            // should not happen!
+            if (VkUtil::Contains(releasedVks, event.vkCode) ||
+                !VkUtil::Contains(combo->GetTriggerVks(), event.vkCode))
+            {
+                Printf("unexpected key up %c while holding combo %s, resetting\n",
+                    VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
+
+                Reset();
+                return false;
+            }
+
+            // add to released
+            Printf("key up %c while holding combo %s, adding to released\n", 
+                VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
+
+            releasedVks.push_back(event.vkCode);
+            std::sort(releasedVks.begin(), releasedVks.end());
+
+            // got all keys?
+            if (releasedVks == combo->GetTriggerVks())
+            {
+                Printf("combo ready to fire! %s\n", ToString().c_str());
+                SetState(ComboState::ReadyToFire);
+                return true;
+            }
+    }
+
+    return false;
+}
+
+bool ComboStateInfo::IsHolding() const 
+{ 
+    return state == ComboState::Holding; 
+}
+
+bool ComboStateInfo::IsConstructing() const 
+{ 
+    return state == ComboState::Constructing; 
+}
+
+bool ComboStateInfo::IsIdle() const 
+{ 
+    return state == ComboState::Idle; 
+}
+
+bool ComboStateInfo::IsTimedOut(DWORD currentTick, DWORD timeOut) const
+{
+    return TickCountDiff(currentTick, firstDownTick) > timeOut;
+}
+
+bool ComboStateInfo::ShouldFire() const
+{
+    return state == ComboState::ReadyToFire;
+}
+
+void ComboStateInfo::Fire(IKeyboard* kbd)
+{
+    Printf("Firing combo! %s\n", ToString().c_str());
+    combo->Fire(kbd);
+    SetState(ComboState::Idle);
 }
 
 //--------
@@ -182,7 +338,7 @@ bool CombosHandler::ExecuteCombo(const std::vector<KbdHookEvent>& events, const 
     return false;
 }
 
-bool CombosHandler::Handle(const KbdHookEvent& event, IKeyboard* kbd)
+bool CombosHandler::HandleOrig(const KbdHookEvent& event, IKeyboard* kbd)
 {
     // --- Combos handling ---
 
@@ -243,4 +399,103 @@ bool CombosHandler::Handle(const KbdHookEvent& event, IKeyboard* kbd)
     }
 
     return false;
+}
+
+void CombosHandler::Reset()
+{
+    eventsDown.clear();
+    vksDown.clear();
+    cumulating = false;
+
+    for (auto& comboInfo : trackedCombos)
+    {
+        comboInfo.Reset();
+    }
+}
+
+bool CombosHandler::HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd)
+{
+    //return HandleOrig(event, kbd);
+
+    bool eatKey{};
+    bool hasNonIdle{};
+    bool hadNonIdle{};
+    bool hadState[(int)ComboState::NbStates] = {};
+    bool hasState[(int)ComboState::NbStates] = {};
+
+    // check current states
+    for (auto& comboInfo : trackedCombos)
+    {
+        hadNonIdle |= comboInfo.GetState() != ComboState::Idle;
+        hadState[comboInfo.StateIndex()] = true;
+    }
+
+    for (auto& comboInfo : trackedCombos)
+    {
+        // check for timeout
+        if (comboInfo.IsConstructing() && comboInfo.IsTimedOut(event.time, 50)) //??
+        {
+            Printf("%c %s, cons combo %s timed out\n", 
+                VkUtil::VkToChar((WORD)event.vkCode), event.Down() ? "down" : "up",
+                comboInfo.ToString().c_str());
+            comboInfo.Reset();
+            continue;
+        }
+
+        // check for timeout
+        if (comboInfo.IsHolding() && comboInfo.IsTimedOut(event.time, 250)) //??
+        {
+            Printf("%c %s, rel combo %s timed out\n",
+                VkUtil::VkToChar((WORD)event.vkCode), event.Down() ? "down" : "up",
+                comboInfo.ToString().c_str());
+            comboInfo.Reset();
+            continue;
+        }
+
+        // if we had a combo in Holding state, only process Holding combos (wait for it to finish)
+        if (!comboInfo.IsHolding() && hadState[(int)ComboState::Holding])
+        {
+            continue;
+        }
+
+        if (event.Down())
+        {
+            eatKey |= comboInfo.OnKeyDown(event, kbd);
+        }
+        else
+        {
+            eatKey |= comboInfo.OnKeyUp(event, kbd);
+        }
+
+        hasNonIdle |= !comboInfo.IsIdle();
+        hasState[comboInfo.StateIndex()] = true;
+
+        if (comboInfo.ShouldFire())
+        {
+            comboInfo.Fire(kbd);
+
+            // we simulated keys, so lastVkCodeDown is not correct anymore 
+            kbd->SetLastVkCodeDown(0);
+
+            Reset();
+            return true; // eat key, we fired a combo
+        }
+    }
+
+    // should we save the current event for replaying later if combo is cancelled?
+    if (hasState[(int)ComboState::Constructing] || hasState[(int)ComboState::Holding])
+    {
+        Printf("saving event for replaying %c\n", VkUtil::VkToChar((WORD)event.vkCode));
+        eventsDown.push_back(event);
+    }
+
+    // everything cancelled?
+    if (hadNonIdle && !hasNonIdle)
+    {
+        Printf("cancel combo(s), replaying keys\n");
+        kbd->ReplayEvents(eventsDown);
+        Reset();
+    }
+
+    return eatKey;
 }

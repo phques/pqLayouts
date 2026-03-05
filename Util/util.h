@@ -17,6 +17,7 @@
 // along with pqLayouts.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "CommonTypes.h"
+#include "KeyDef.h"
 
 //--------
 
@@ -91,7 +92,9 @@ public:
 
     // converts a character to a VK and a 'isShifted' flag
     static bool CharToVk(char ch, WORD& vk, bool& isShifted);
-    static char VkToChar(WORD vk, WORD scancode, bool shifted=false);
+    static char VkToChar(WORD vk, WORD scancode=0, bool shifted=false);
+    static std::string VksToString(const VeeKeeVector& vks);
+
 
     template <typename TC, typename  T>
     static bool Contains(TC container, T value)

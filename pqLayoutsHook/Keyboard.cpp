@@ -628,7 +628,7 @@ bool Keyboard::OnKeyEvent(const KbdHookEvent& event)
     // do combos only on main layer, and only if we are not in caps word mode
     if (layout.IsOnMainLayer() &&
         capsWordType == CapsWordType::None &&
-        combosHandler.Handle(event, this))
+        combosHandler.HandleKbdEvent(event, this))
     {
         return true;
     }

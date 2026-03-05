@@ -112,7 +112,7 @@ private:
 
 enum class ComboState
 {
-    Idle, Constructing, Complete, Holding, Fired, Releasing = Fired
+    Idle, Constructing, Holding, ReadyToFire, NbStates
 };
 
 
@@ -121,12 +121,31 @@ class ComboStateInfo
 {
 public:
     ComboStateInfo(ICombo* combo);
+    std::string ToString() const;
+    ComboState GetState() const { return state; }
+    void SetState(ComboState newState);
+    int StateIndex() const { return (int)state; }
+
+    void Fire(IKeyboard* kbd);
+    void Reset();
+
+    // State machine methods
+    bool OnKeyDown(const KbdHookEvent& event, IKeyboard* kbd);
+    bool OnKeyUp(const KbdHookEvent& event, IKeyboard* kbd);
+
+    bool IsHolding() const;
+    bool IsConstructing() const;
+    bool IsIdle() const;
+    bool IsTimedOut(DWORD currentTick, DWORD timeOut) const;
+    bool ShouldFire() const;
+
+    ICombo* GetCombo() const { return combo; }
 
 private:
-    ComboState comboState{};
+    ComboState state{};
     VeeKeeVector pressedVks;
     VeeKeeVector releasedVks;
-    DWORD firstDownTick{}; // time of 1st pressed key of the combo
+    DWORD firstDownTick{};
     ICombo* combo{};
 };
 
@@ -137,19 +156,22 @@ public:
     CombosHandler();
 
     void Prepare(TextComboDefs textCombos, const Layer* mainLayer);
-    bool Handle(const KbdHookEvent& event, IKeyboard* kbd);
+    bool HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd);
 
 private:
-    void ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer);
+    void Reset();
 
+    void ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer);
     bool ExecuteCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks, IKeyboard* kbd);
+    bool HandleOrig(const KbdHookEvent& event, IKeyboard* kbd);
 
 private:
     std::map<VeeKeeVector, ICombo*> combos;
     std::list<ComboStateInfo> trackedCombos;
-    std::set<VeeKee> comboKeys;
 
     std::vector<KbdHookEvent > eventsDown;
+
+    std::set<VeeKee> comboKeys;
     VeeKeeVector vksDown;
     bool cumulating{};
 };
