@@ -25,10 +25,10 @@ AdaptivesHandler::AdaptivesHandler()
 
 void AdaptivesHandler::Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer)
 {
-    ParseAdaptives(txtAdaptives, mainLayer);
+    Parse(txtAdaptives, mainLayer);
 }
 
-bool AdaptivesHandler::ParseAdaptives(const StringPairList& txtAdaptives, const Layer* mainLayer)
+bool AdaptivesHandler::Parse(const StringPairList& txtAdaptives, const Layer* mainLayer)
 {
     for (const auto& pair : txtAdaptives)
     {

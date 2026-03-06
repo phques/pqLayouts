@@ -28,7 +28,7 @@ public:
     bool Handle(const KbdHookEvent& event, IKeyboard* kbd);
 
 protected:
-    bool ParseAdaptives(const StringPairList& txtAdaptives, const Layer* mainLayer);
+    bool Parse(const StringPairList& txtAdaptives, const Layer* mainLayer);
 
 private:
     std::map<VeeKeeExVector, std::string> adapts3;

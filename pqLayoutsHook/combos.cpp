@@ -143,7 +143,7 @@ bool ComboStateInfo::OnKeyDown(const KbdHookEvent& event, IKeyboard* kbd)
     case ComboState::Constructing:
         if (!VkUtil::Contains(combo->GetTriggerVks(), event.vkCode))
         {
-            Printf("unexpected key down %c while constructing combo %s, resetting\n",
+            Printf("unexpected key down %c while constructing combo %s, resetting combo\n",
                 VkUtil::VkToChar((WORD)event.vkCode), ToString().c_str());
 
             Reset();
@@ -263,14 +263,14 @@ CombosHandler::CombosHandler()
 void CombosHandler::Prepare(TextComboDefs textCombos, const Layer* mainLayer)
 {
     StringCombo stringCombo({}, ""); // dummy, we just need it to call New() to create new combos
-    ParseCombos(textCombos.txtCombos, stringCombo, true, mainLayer);
-    ParseCombos(textCombos.txtCombosQwerty, stringCombo, false, mainLayer);
+    Parse(textCombos.txtCombos, stringCombo, true, mainLayer);
+    Parse(textCombos.txtCombosQwerty, stringCombo, false, mainLayer);
 
     CommandCombo cmdCombo({}, Commands::None); // dummy, we just need it to call New() to create new combos
-    ParseCombos(textCombos.txtCmdCombosQwerty, cmdCombo, false, mainLayer);
+    Parse(textCombos.txtCmdCombosQwerty, cmdCombo, false, mainLayer);
 
     KeysCombo keysCombo({}, {}); // dummy, we just need it to call New() to create new combos
-    ParseCombos(textCombos.txtKeysCombosQwerty, keysCombo, false, mainLayer);
+    Parse(textCombos.txtKeysCombosQwerty, keysCombo, false, mainLayer);
 
     // Save all combo trigger keys
     for (const auto& combo : combos)
@@ -293,7 +293,7 @@ void CombosHandler::Prepare(TextComboDefs textCombos, const Layer* mainLayer)
     }
 }
 
-void CombosHandler::ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer)
+void CombosHandler::Parse(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer)
 {
     // Dont clear combos, add to them
 
@@ -452,12 +452,14 @@ bool CombosHandler::HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd)
             continue;
         }
 
-        // if we had a combo in Holding state, only process Holding combos (wait for it to finish)
-        if (!comboInfo.IsHolding() && hadState[(int)ComboState::Holding])
+        // if we had a combo in Holding state, wait for it to finish,
+        // don't start a new combo
+        if (hadState[(int)ComboState::Holding] && comboInfo.IsIdle())
         {
             continue;
         }
 
+        // process key event
         if (event.Down())
         {
             eatKey |= comboInfo.OnKeyDown(event, kbd);
@@ -469,27 +471,26 @@ bool CombosHandler::HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd)
 
         hasNonIdle |= !comboInfo.IsIdle();
         hasState[comboInfo.StateIndex()] = true;
-
-        if (comboInfo.ShouldFire())
-        {
-            comboInfo.Fire(kbd);
-
-            // we simulated keys, so lastVkCodeDown is not correct anymore 
-            kbd->SetLastVkCodeDown(0);
-
-            Reset();
-            return true; // eat key, we fired a combo
-        }
     }
 
+    bool holdingOrConstructing = hasState[(int)ComboState::Constructing] || 
+                                 hasState[(int)ComboState::Holding];
+
+    // can we fire a combo now? nb: there might be a longer one still constructing/holding
+    if (hasState[(int)ComboState::ReadyToFire] && !holdingOrConstructing)
+    {
+        if (FireReadyCombo(kbd))
+            return true; // eat key, we fired a combo
+    }
+    
     // should we save the current event for replaying later if combo is cancelled?
-    if (hasState[(int)ComboState::Constructing] || hasState[(int)ComboState::Holding])
+    if (holdingOrConstructing)
     {
         Printf("saving event for replaying %c\n", VkUtil::VkToChar((WORD)event.vkCode));
         eventsDown.push_back(event);
     }
 
-    // everything cancelled?
+    // reset if everything is cancelled
     if (hadNonIdle && !hasNonIdle)
     {
         Printf("cancel combo(s), replaying keys\n");
@@ -498,4 +499,24 @@ bool CombosHandler::HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd)
     }
 
     return eatKey;
+}
+
+bool CombosHandler::FireReadyCombo(IKeyboard* kbd)
+{
+    // find the combo to fire, there should be onlyh one
+    for (auto& comboInfo : trackedCombos)
+    {
+        if (comboInfo.ShouldFire())
+        {
+            // fire it
+            comboInfo.Fire(kbd);
+
+            // we simulated keys, so lastVkCodeDown is not correct anymore 
+            kbd->SetLastVkCodeDown(0);
+            Reset();
+            return true; // eat key, we fired a combo
+        }
+    }
+
+    return false;
 }

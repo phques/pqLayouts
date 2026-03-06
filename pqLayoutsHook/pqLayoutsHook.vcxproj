@@ -167,6 +167,7 @@
     <ClInclude Include="Chord.h" />
     <ClInclude Include="ChordingData.h" />
     <ClInclude Include="combos.h" />
+    <ClInclude Include="combos\combo-carbyne.h" />
     <ClInclude Include="combos\combo-empty.h" />
     <ClInclude Include="combos\combo-enthium.h" />
     <ClInclude Include="combos\combo-hd-neu-C.h" />

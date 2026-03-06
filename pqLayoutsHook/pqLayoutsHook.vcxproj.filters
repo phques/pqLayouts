@@ -105,6 +105,9 @@
     <ClInclude Include="ILayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="combos\combo-carbyne.h">
+      <Filter>Combos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

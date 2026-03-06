@@ -22,15 +22,16 @@
 #include "combos.h"
 
 //#include "combos/combo-empty.h"
+#include "combos/combo-carbyne.h"
 //#include "combos/combo-hd-neu-C.h"
 //#include "combos/combo-enthium.h"
-#include "combos/combo-hd-pm.h"
+//#include "combos/combo-hd-pm.h"
 
 //#include "adaptives/adapt-empty.h"
-//#include "adaptives/adapt-carbyne.h"
+#include "adaptives/adapt-carbyne.h"
 //#include "adaptives/adapt-hd-neu-C.h"
 //#include "adaptives/adapt-enthium.h"
-#include "adaptives/adapt-hd-pm.h"
+//#include "adaptives/adapt-hd-pm.h"
 
 using namespace KeyActions;
 

@@ -140,6 +140,7 @@ public:
     bool ShouldFire() const;
 
     ICombo* GetCombo() const { return combo; }
+    const VeeKeeVector& GetTriggerVks() const { return combo->GetTriggerVks(); }
 
 private:
     ComboState state{};
@@ -158,10 +159,12 @@ public:
     void Prepare(TextComboDefs textCombos, const Layer* mainLayer);
     bool HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd);
 
+    bool FireReadyCombo(IKeyboard* kbd);
+
 private:
     void Reset();
 
-    void ParseCombos(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer);
+    void Parse(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer);
     bool ExecuteCombo(const std::vector<KbdHookEvent>& events, const VeeKeeVector& vks, IKeyboard* kbd);
     bool HandleOrig(const KbdHookEvent& event, IKeyboard* kbd);
 

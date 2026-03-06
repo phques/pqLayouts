@@ -1,20 +1,21 @@
 #pragma once
 
 
-// Combos definitions for HD PM
+// Combos for Carbyne (PQangle-f VMirrVowP UO / PQortho-f VMirrVowP UO)
 
 
 // these will be parsed to populate combos 
 static StringPairList txtCombos = {
     {"th", "th"},
-    {"nt", "ch"},
-    {"wg", "wh"},
+    {"nr", "ch"},
+    {"wh", "wh"},
     {"sn", "sh"},
-    {"pl", "ph"},
-    {"gm", "gh"},
-    {"snt", "sch"},
+    {"pd", "ph"},
+    {"g.", "gh"},
+    {"snr", "sch"},
 
     {"it", "tion"},
+    {"in", "ing"},
 
     {"ic", "I "},
     {"id", "I'd "},
@@ -27,20 +28,20 @@ static StringPairList txtCombos = {
     {"yv", "you've "},
     {"yr", "your "},
 
-    {"tr", "their "},
+    {"tn", "their "},
     {"tf", "they're "},
     {"tw", "they "},
     {"tl", "they'll "},
-    {"tp", "they'd "},
+    {"td", "they'd "},
 
     {"vr", "where "},
     {"v'", "we're "},
-    {"vg", "we'd "},
-    {"vm", "we'll "},
-    {"vj", "we've "},
+    {"vm", "we'd "},
+    {"vh", "we'll "},
+    {"v/", "we've "},
 
-    {"hf", "here "},
-    {"tm", "there "},
+    {"hm", "here "},
+    {"tr", "there "},
 
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+// adaptives for HD PM
 
 static StringPairList txtAdaptives = {
 { "pd", "pwd" },
@@ -46,7 +47,7 @@ static StringPairList txtAdaptives = {
 { "u'", "ua" },
 { "e'", "eo" },
 { "o'", "oe" },
-// let's try this, even though a,u to z is ia bit of a stretch
+// let's try this, even though a,u to z is i bit of a stretch
 { "az", "au" },
 { "uz", "ua" },
 { "ez", "eo" },

@@ -1,66 +1,63 @@
 #pragma once
 
-//##PQ todo hard coded as test, to go with Carbyne layout. combos based on HandsDown
-static std::list<std::pair<const char*, const char*>> txtAdaptives;
+// adaptives for Carbyne (PQangle-f VMirrVowP UO / PQortho-f VMirrVowP UO)
 
-static std::map<VeeKeeVector, std::string> adapts3 = {
-    // adaptives
-    { {'R','W','R'}, "\bpl"}, // mwm -> mpl (copied from HD PM)
-};
+static StringPairList txtAdaptives = {
+    { "kh", "kl" },
+    { "vw", "vl" },
+    { "wv", "lv" },
+    { "w/", "wl" },
 
-static std::map<VeeKeeVector, std::string> adapts2 = {
-    // adaptives
-//{ {'R','W','R'}, "mpl"}, // mwm -> mpl (copied from HD PM)
+    { ",g", "ig"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
+    { "g,", "gi"}, // g, -> gi (for ver w BYOU on bottom / G on top)
+    { "g'", "go"}, // g' -> go (for ver w BYOU on bottom / G on top)
+    { "gj", "gth" },// gj -> gth (for ver w BYOU on bottom / G on top)
 
-//{ {'J','K'}, "u"}, // ae -> au
+    { "vm", "vs"}, // vm -> vs
+    { "wv", "wn"}, // wv -> wn 
 
-{ {'O','P'}, "\big"}, // ,g -> ig (for ver w BYOU on bottom / G on top)
-{ {'P','O'}, "i"}, // g, -> gi (for ver w BYOU on bottom / G on top)
-{ {'P','I'}, "o"}, // g' -> go (for ver w BYOU on bottom / G on top)
-{ {'P',VK_OEM_4}, "th"}, // gj -> gth (for ver w BYOU on bottom / G on top)
+    { "mwm", "mpl"}, // mwm -> mpl (copied from HD PM)
+    { "wmw", "lml" },
+    { "wm", "lm"}, // wm -> lm
+    { "mw", "mp" },
 
-{ {'Q','E'}, "\bph"}, // vh -> ph
-{ {'Q','W'}, "s"}, // vw -> vs
-{ {'W','Q'}, "n"}, // wv -> wn 
+    //{ "lp", "s"}, // lp -> ls (not as good a tradeOff, but still better)
+    { "tn", "tl"}, // tn -> tl b
+    { "fp", "sp" },
+    { "pf", "ps" },
 
-{ {'E','R'}, "\blm"}, // hm -> lm
+    // taken & adapted from HD PM !
+    { "mk", "lk" },
+    { "kt", "kn" },
+    { "tk", "nk" },
 
-{ {'R','W'}, "p"}, // mw -> mp
+    { "yb", "ib" },
 
-{ {'E','Q'}, "\blv"}, // hv -> lv
+    { "ae", "au" },
+    // let's try this, even though a,u to x is i bit of a stretch
+    { "ax", "au" },
+    { "ux", "ua" },
+    { "ex", "eo" },
+    { "ox", "oe" },
+    // not sure about these, same pos as HD PM.. let's try them iso _X
+    { "ag", "au" },
+    { "ug", "ua" },
+    { "eg", "eo" },
+    { "og", "oe" },
 
-//{ {'X','Z'}, "s"}, // lp -> ls (not as good a tradeOff, but still better)
-{ {'F','S'}, "l"}, // tn -> tl b
-{ {'A','S'}, "p"}, // sn -> sp
-{ {'X','S'}, "\bps"}, // ln -> ps !! (actually parallel to each other)
+    { ".'", ".com" },
+    { "'.", "!" },
+    { ".,", ".edu" },
+    { "',", "?" },
+    { ".g", ".org" },
 
-// taken & adapted from HD PM !
-{ {'R','G'}, "\blk"}, // MK -> LK
-{ {'F','G'}, "\bnk"}, // TK -> NK
-{ {'G','F'}, "n"}, // KT -> KN
-
-{ {'S','D'}, "g"}, // NR -> ng
-
-// use 'q' (qwerty Y) as 'magic adaptive key' 
-// \ = VK_OEM_5
-{ {'Z','Y'}, "\bphilippe.quesnel"},  // P
-{ {'L','Y'}, "\bintegration\\"},     // I
-{ {'P','Y'}, "\bbig"},               // G 'adaptive', b_g is hard, (big) the hardest?
-{ {'A','Y'}, "\bselect * from "},    // S
-
-// 'combos' done as adaptives until we have actual combos
-//{ {'L',VK_OEM_1}, "\bI "}, //ic -> "I " (bad idea?)
-//{ {'U','Y'}, "\b@" },
-{ {'I','U'}, "\b!" },
-{ {'I','O'}, "\b?" },
-{ {'O','I'}, "\b/" }, // since '/' is on qwerty T, for progming twas nice on I in HD
-//{ {'U','O'}, "\b:" }, //not requied with Carbyne (?)
-//{ {VK_OEM_COMMA,
-//   VK_OEM_PERIOD}, "\b="},
-//{ {'M', VK_OEM_PERIOD}, "\b_"},
-//{ {'W', 'R'}, "\bqu"},
-
-//{ {'U','I'}, "\b.com"},
-{ {'Y','U'}, "\bgmail"},
-{ {'U','Y'}, "\bcgi"},
+    // 'magic' adaptive trailer, on q, for "macros" (q is on qwerty spot usually used for this, like #
+    { "cq", "cgi" },
+    { "gq", "gmail" },
+    { "qq", "Quesnel" },
+    { "pq", "Philippe" },
+    { "q.q", "philippe.quesnel" },
+    { "dq", "device" },
+    { "iq", "integration\\" },
+    { "sq", "select * from " },
 };
