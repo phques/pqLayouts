@@ -23,9 +23,9 @@ AdaptivesHandler::AdaptivesHandler()
 {
 }
 
-void AdaptivesHandler::Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer)
+bool AdaptivesHandler::Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer)
 {
-    Parse(txtAdaptives, mainLayer);
+    return Parse(txtAdaptives, mainLayer);
 }
 
 bool AdaptivesHandler::Parse(const StringPairList& txtAdaptives, const Layer* mainLayer)
@@ -66,7 +66,7 @@ bool AdaptivesHandler::Parse(const StringPairList& txtAdaptives, const Layer* ma
         }
     }
 
-    return false;
+    return true;
 }
 
 bool AdaptivesHandler::Handle(const KbdHookEvent& event, IKeyboard* kbd)

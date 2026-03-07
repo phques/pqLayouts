@@ -70,4 +70,7 @@
   <ItemGroup>
     <Xml Include="pqLayouts.manifest.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

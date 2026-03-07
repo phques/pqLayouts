@@ -50,7 +50,10 @@ private:
     bool setImageFile(StringTokener& tokener, const char * scriptFilename);
     bool GetRelativeFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[MAX_PATH]);
     bool setImageView(StringTokener& tokener);
-    bool doInclude(StringTokener& tokener, const char * scriptFilename);
+    bool getIncludeFilePath(StringTokener& tokener, const char * scriptFilename, std::string& includePath);
+    bool readStringPairsFromJSONFile(const std::string& jsonFilePath, StringPairList& pairs);
+    bool doInclude(StringTokener& tokener, const char* pcScriptFilename);
+    bool doAdaptives(StringTokener& tokener, const char* scriptFilename);
 
 private:
 

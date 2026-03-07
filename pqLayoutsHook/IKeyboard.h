@@ -47,7 +47,7 @@ public:
     virtual bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx) = 0;
     virtual bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap) = 0;
 
-    virtual void PrepareAdaptives() = 0;
+    virtual bool PrepareAdaptives(const StringPairList& adaptivePairs) = 0;
     virtual void PrepareCombos() = 0;
 
     virtual const Layer* GetMainLayer() = 0;

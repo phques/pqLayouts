@@ -250,9 +250,9 @@ PQHOOK_API bool Suspended()
     return theKbd.Suspended();
 }
 
-PQHOOK_API void ParseAdaptives()
+PQHOOK_API bool HookKbd::ParseAdaptives(const StringPairList& adaptivePairs)
 {
-    theKbd.PrepareAdaptives();
+    return theKbd.PrepareAdaptives(adaptivePairs);
 }
 
 PQHOOK_API void PrepareCombos()

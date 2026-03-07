@@ -24,7 +24,7 @@ class AdaptivesHandler
 {
 public:
     AdaptivesHandler();
-    void Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer);
+    bool Prepare(const StringPairList& txtAdaptives, const Layer* mainLayer);
     bool Handle(const KbdHookEvent& event, IKeyboard* kbd);
 
 protected:

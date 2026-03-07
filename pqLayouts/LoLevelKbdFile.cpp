@@ -24,7 +24,7 @@
 #include "KeyParser.h"
 #include "KeyOutAction.h"
 #include "Chord.h"
-
+#include "nlohmann/json.hpp"
 
 //--------------------------------
 
@@ -151,7 +151,14 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
 
             std::cout << "back to file [" << filename << "]" << std::endl;
         }
-        else 
+        else if (cmd == "adaptives")
+        {
+            if (!doAdaptives(stringTokener, filename))
+                return false;
+
+            std::cout << "back to file [" << filename << "]" << std::endl;
+        }
+        else
         {
             std::cerr << "expecting a command, line " << kbdfile.lineNo << std::endl;
             return false;
@@ -706,9 +713,11 @@ bool LoLevelKbdFile::setImageView(StringTokener& tokener)
     return true;
 }
 
-// read / process from an include file
-// ## warning: no check for recursive includes, will go into infinite loop if it happens
-bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char * pcScriptFilename)
+// read the path of an include file, calculate the complete path and return it as a string
+bool LoLevelKbdFile::getIncludeFilePath(
+    StringTokener& tokener, 
+    const char* pcScriptFilename, 
+    std::string& includePath)
 {
     // read include filename
     if (tokener.eof()) {
@@ -723,7 +732,7 @@ bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char * pcScriptFile
     // image will be in same directory as this script
     WCHAR  fullIncludePath[MAX_PATH]=TEXT(""); 
 
-    if (!GetRelativeFilePath(pcScriptFilename, includeFilename, fullIncludePath)) 
+    if (!GetRelativeFilePath(pcScriptFilename, includeFilename, fullIncludePath))
     {
         std::cerr << "failed to get include file path" << std::endl;
         return false;
@@ -740,8 +749,67 @@ bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char * pcScriptFile
         *pstr++ = (char)*wptr++;
     }
 
+    includePath = nstring;
+    return true;
+}
+
+bool LoLevelKbdFile::readStringPairsFromJSONFile(const std::string& jsonFilePath, StringPairList& pairs)
+{
+    try
+    {
+        std::ifstream file(jsonFilePath);
+        if (!file.is_open())
+        {
+            Printf("Warning: Could not open JSON file: %s\n", jsonFilePath.c_str());
+            return false;
+        }
+
+        nlohmann::json json;
+        file >> json;
+
+        for (const auto& item : json)
+        {
+            std::string from = item["from"];
+            std::string to = item["to"];
+            pairs.push_back({ from, to });
+        }
+
+        Printf("Loaded %zu adaptives from %s\n", pairs.size(), jsonFilePath.c_str());
+    }
+    catch (const std::exception& e)
+    {
+        Printf("Error loading adaptives from JSON: %s\n", e.what());
+        return false;
+    }
+
+    return true;
+}
+
+// read / process from an include file
+// ## warning: no check for recursive includes, will go into infinite loop if it happens
+bool LoLevelKbdFile::doInclude(StringTokener& tokener, const char* pcScriptFilename)
+{
+    std::string includePath;
+    if (!getIncludeFilePath(tokener, pcScriptFilename, includePath))
+        return false;
+
     // recursively call ReadKeyboardFile!
-    return ReadKeyboardFile(nstring);
+    return ReadKeyboardFile(includePath.c_str());
+}
+
+
+bool LoLevelKbdFile::doAdaptives(StringTokener& tokener, const char* scriptFilename)
+{
+    std::string jsonFilePath;
+    if (!getIncludeFilePath(tokener, scriptFilename, jsonFilePath))
+        return false;
+
+    // read adaptive keys from file and set them in the hook
+    StringPairList adaptivePairs;
+    if (!readStringPairsFromJSONFile(jsonFilePath, adaptivePairs))
+        return false;
+
+    return HookKbd::ParseAdaptives(adaptivePairs);
 }
 
  

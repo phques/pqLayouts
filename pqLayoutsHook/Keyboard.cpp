@@ -69,9 +69,9 @@ Keyboard::Keyboard(DWORD injectedFromMeValue) :
     }
 }
 
-void Keyboard::PrepareAdaptives()
+bool Keyboard::PrepareAdaptives(const StringPairList& adaptivePairs)
 {
-    adaptivesHandler.Prepare(txtAdaptives, GetMainLayer());
+    return adaptivesHandler.Prepare(adaptivePairs, GetMainLayer());
 }
 
 void Keyboard::PrepareCombos()

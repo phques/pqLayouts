@@ -370,8 +370,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
             // always start on main layer
             HookKbd::GotoMainLayer();
 
-            // parse any adaptives / combos (text format) (on main layer)
-            HookKbd::ParseAdaptives();
+            // parse any combos (text format) (on main layer)
             HookKbd::PrepareCombos();
         }
     }
