@@ -1,0 +1,40 @@
+
+                   - = 
+ q w e r t y u i o p [ ] 
+ a s d f g h j k l ; ' 
+ z x c v b n m , . / 
+
+                     [ ] 
+ v w h m / q . ' , g j =
+ s n r t k - a e i c x 
+ f p l d z ; u o y b 
+
+                     { } 
+ V W H M ? Q < " > G J +
+ S N R T K _ A E I C X 
+ F P L D Z : U O Y B 
+
+
+-----
+
+Mods:
+- right hand vert swap, including GB, but keep Q; as is.
+  this brings the G on top pinky, but let's try anyways :-p
+
+- swap ., to make ',' easier than '.' (more important in code)
+  note that I keep < > in same order as before though
+
+- swap O U, as is done in hands-down
+A E    A E
+O U => U O
+
+swap VF (lower freq V on top pinky)
+swap /Z ("/?" in easier spot 'querty T')
+
+the current one on his layouts comparo page:
+https://cyanophage.github.io/index.html#carbyne
+
+ f w h m z q o u y b j 
+ s n r t k - a e i c x 
+ v p l d / ; , ' . g 
+

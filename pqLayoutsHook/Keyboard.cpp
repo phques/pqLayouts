@@ -28,7 +28,8 @@
 //#include "combos/combo-hd-pm.h"
 
 //#include "adaptives/adapt-empty.h"
-#include "adaptives/adapt-carbyne.h"
+//#include "adaptives/adapt-carbyne.h"
+#include "adaptives/adapt-carbyne-ortho.h"
 //#include "adaptives/adapt-hd-neu-C.h"
 //#include "adaptives/adapt-enthium.h"
 //#include "adaptives/adapt-hd-pm.h"

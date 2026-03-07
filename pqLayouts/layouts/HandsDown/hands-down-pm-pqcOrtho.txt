@@ -1,0 +1,36 @@
+
+      1 2 3 4       8      =
+      q w e r t  y u i o p [ ]
+ Caps a s d f g  h j k l ; '
+      z x c v b  n m , . / 
+       PRINTSCR
+       
+      1 2 3 4       8      Caps
+      v w g m j  # . / " ' { }
+    q s n t h k  , a e i c z
+      f p d l x  - u o y b 
+            r
+            
+      @ ! ? =       |      +Caps
+      V W G M J  $ : * < > [ ]
+    Q S N T H K  ; A E I C Z
+      F P D L X  + U O Y B 
+            R
+
+So:
+      v w g m j  # . / " ' { }
+    q s n t h k  , a e i c z
+      f p d l x  - u o y b 
+            r        sp/rsh
+
+notes
+
++ PRINTSCR is maped to the left SP of my Sculpt!
+  => Used for R
+
++ modtap
+  - right sp : SP/rsh
+  
++ TODO: adaptives for PM
+
+

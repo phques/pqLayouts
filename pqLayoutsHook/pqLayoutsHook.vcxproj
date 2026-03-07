@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="adaptives\adapt-carbyne-ortho.h" />
     <ClInclude Include="adaptives\adapt-carbyne.h" />
     <ClInclude Include="adaptives\adapt-empty.h" />
     <ClInclude Include="adaptives\adapt-enthium.h" />

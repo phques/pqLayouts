@@ -108,6 +108,9 @@
     <ClInclude Include="combos\combo-carbyne.h">
       <Filter>Combos</Filter>
     </ClInclude>
+    <ClInclude Include="adaptives\adapt-carbyne-ortho.h">
+      <Filter>Adaptives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
