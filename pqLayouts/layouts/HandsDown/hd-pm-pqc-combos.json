@@ -1,14 +1,13 @@
 {
   "combos": [
     ["th", "th"],
-    ["nr", "ch"],
-    ["wh", "wh"],
+    ["nt", "ch"],
+    ["wg", "wh"],
     ["sn", "sh"],
-    ["pd", "ph"],
-    ["g.", "gh"],
-    ["snr", "sch"],
+    ["pl", "ph"],
+    ["gm", "gh"],
+    ["snt", "sch"],
     ["it", "tion"],
-    ["in", "ing"],
     ["ic", "I "],
     ["id", "I'd "],
     ["il", "I'll "],
@@ -18,18 +17,18 @@
     ["yf", "you're "],
     ["yv", "you've "],
     ["yr", "your "],
-    ["tn", "their "],
+    ["tr", "their "],
     ["tf", "they're "],
     ["tw", "they "],
     ["tl", "they'll "],
-    ["td", "they'd "],
+    ["tp", "they'd "],
     ["vr", "where "],
     ["v'", "we're "],
-    ["vm", "we'd "],
-    ["vh", "we'll "],
-    ["v/", "we've "],
-    ["hm", "here "],
-    ["tr", "there "]
+    ["vg", "we'd "],
+    ["vm", "we'll "],
+    ["vj", "we've "],
+    ["hf", "here "],
+    ["tm", "there "]
   ],
   "combosQwerty": [
     ["n.", "~"],
@@ -61,8 +60,7 @@
     ["xc", "^c"],
     ["cv", "^v"],
     ["rt", "@Tab"],
-    ["kl", "BS"],
-    ["dk", "Esc"]	
+    ["kl", "BS"]
   ],
   "cmdCombosQwerty": [
     ["./", "CapsWord"],

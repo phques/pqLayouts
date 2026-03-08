@@ -1,0 +1,27 @@
+[
+    ["mfm", "mpl"],
+    ["yq", "y,"],
+    ["yy", "y."],
+    ["gm", "gl"],
+    ["mf", "mp"],
+    ["mg", "lm"],
+    ["mgm", "lml"],
+    [",.", "o."],
+    [".,", "o,"],
+    ["yc", "yi"],
+    ["ae", "au"],
+    ["uc", "ue"],
+	
+    ["ld", ".com"],
+    ["lp", ".edu"],
+    ["lz", ".org"],
+	
+    ["c/", "cgi"],
+    ["g/", "gmail"],
+    ["q/", "Quesnel"],
+    ["p/", "Philippe"],
+    ["qq/", "philippe.quesnel"],
+    ["d/", "device"],
+    ["i/", "integration\\"],
+    ["s/", "select * from "]
+]

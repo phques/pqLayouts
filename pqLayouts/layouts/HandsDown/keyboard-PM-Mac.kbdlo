@@ -1,9 +1,9 @@
 ! Hands Down Promethium, à la Phil
 
-imagefile hands-down-pm-pqc-img1-Mac.png
+imagefile hd-pm-pqc-img1-Mac.png
 imageview 3 +130 124 +130
 
-include hands-down-pm-pqc.kbdlo
+include hd-pm-pqc.kbdlo
 
 !##PQ: currently (bug?!) a dual mod key will not work on shift-tap !
 ! Left shift acts as shift when held, F when tapped

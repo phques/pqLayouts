@@ -1,14 +1,12 @@
 ! Hands Down Promethium, à la Phil
 
-imagefile hands-down-pm-pqc-img2-MacOrtho.png
+imagefile hd-pm-pqc-img2-MacOrtho.png
 imageview 7 +130 126 +130
 
-include hands-down-pm-pqcOrtho.kbdlo
+include hd-pm-pqcOrtho.kbdlo
 
-!##PQ: currently (bug?!) a dual mod key will not work on shift-tap !
-! Left shift acts as shift when held, F when tapped
-! dualmod lshift lshift f
-! dualmod rshift rshift z
+adaptives hd-pm-pqc-adapt.json
+combos hd-pm-pqc-combos.json
 
 !dualmod PRINTSCR lshift r
 dualmod SP rshift sp

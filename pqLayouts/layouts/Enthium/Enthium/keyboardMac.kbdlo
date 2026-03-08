@@ -1,0 +1,18 @@
+! https://github.com/sunaku/enthium
+
+imagefile img1-mac.png
+imageview 0 +122 118 +122
+
+include mappings.kbdlo
+
+adaptives adapt-ortho.json
+combos combo-ortho.json
+
+! Space acts as shift when held, space when tapped
+dualmod sp lshift sp
+
+
+! ------- edit layer --------
+
+include ../../edit-layer-lalt2.kbdlo
+imageview 234 +122 3234 +122
