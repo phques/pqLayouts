@@ -5,7 +5,9 @@ imagefile img1-Mac.png
 imageview 2 +126 120 +126
 
 include carbyne.en.ansi-map.kbdlo
+
 adaptives adapt-carbyne-ortho.json
+combos combo-carbyne-ortho.json
 
 ! Space acts as shift when held, space when tapped
 dualmod sp lshift sp

@@ -29,11 +29,13 @@
     { "from": "ug", "to": "ua" },
     { "from": "eg", "to": "eo" },
     { "from": "og", "to": "oe" },
+	
     { "from": ".'", "to": ".com" },
     { "from": "'.", "to": "!" },
     { "from": ".,", "to": ".edu" },
     { "from": "',", "to": "?" },
     { "from": ".g", "to": ".org" },
+	
     { "from": "cq", "to": "cgi" },
     { "from": "gq", "to": "gmail" },
     { "from": "qq", "to": "Quesnel" },
