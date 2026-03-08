@@ -22,14 +22,14 @@
 #include "combos.h"
 
 //#include "combos/combo-empty.h"
-#include "combos/combo-carbyne.h"
+//#include "combos/combo-carbyne.h"
 //#include "combos/combo-hd-neu-C.h"
 //#include "combos/combo-enthium.h"
 //#include "combos/combo-hd-pm.h"
 
 //#include "adaptives/adapt-empty.h"
 //#include "adaptives/adapt-carbyne.h"
-#include "adaptives/adapt-carbyne-ortho.h"
+//#include "adaptives/adapt-carbyne-ortho.h"
 //#include "adaptives/adapt-hd-neu-C.h"
 //#include "adaptives/adapt-enthium.h"
 //#include "adaptives/adapt-hd-pm.h"
@@ -74,10 +74,10 @@ bool Keyboard::PrepareAdaptives(const StringPairList& adaptivePairs)
     return adaptivesHandler.Prepare(adaptivePairs, GetMainLayer());
 }
 
-void Keyboard::PrepareCombos()
+bool Keyboard::PrepareCombos(TextComboDefs& textComboDefs)
 {
-    TextComboDefs textComboDefs{ txtCombos, txtCombosQwerty, txtKeysCombosQwerty, txtCmdCombosQwerty };
-    combosHandler.Prepare(textComboDefs, GetMainLayer());
+    //TextComboDefs textComboDefs{ txtCombos, txtCombosQwerty, txtKeysCombosQwerty, txtCmdCombosQwerty };
+    return combosHandler.Prepare(textComboDefs, GetMainLayer());
 }
 
 void Keyboard::SetMainWnd(HWND hMainWindow)

@@ -371,7 +371,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR comman
             HookKbd::GotoMainLayer();
 
             // parse any combos (text format) (on main layer)
-            HookKbd::PrepareCombos();
+            //HookKbd::PrepareCombos();
         }
     }
 

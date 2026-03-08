@@ -255,9 +255,9 @@ PQHOOK_API bool HookKbd::ParseAdaptives(const StringPairList& adaptivePairs)
     return theKbd.PrepareAdaptives(adaptivePairs);
 }
 
-PQHOOK_API void PrepareCombos()
+PQHOOK_API bool PrepareCombos(TextComboDefs& textComboDefs)
 {
-    theKbd.PrepareCombos();
+    return theKbd.PrepareCombos(textComboDefs);
 }
 
 }; // namespace HookKbd

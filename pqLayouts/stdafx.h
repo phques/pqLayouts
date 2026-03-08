@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <set>
 #include <list>
 #include <bitset>
 #include <vector>

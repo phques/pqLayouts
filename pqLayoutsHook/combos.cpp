@@ -260,7 +260,7 @@ CombosHandler::CombosHandler()
 {
 }
 
-void CombosHandler::Prepare(TextComboDefs textCombos, const Layer* mainLayer)
+bool CombosHandler::Prepare(TextComboDefs& textCombos, const Layer* mainLayer)
 {
     StringCombo stringCombo({}, ""); // dummy, we just need it to call New() to create new combos
     Parse(textCombos.txtCombos, stringCombo, true, mainLayer);
@@ -291,6 +291,8 @@ void CombosHandler::Prepare(TextComboDefs textCombos, const Layer* mainLayer)
 
         trackedCombos.push_back(ComboStateInfo(combo));
     }
+
+    return true;
 }
 
 void CombosHandler::Parse(const StringPairList& inputTextCombos, const ICombo& refCombo, bool reverseMap, const Layer* mainLayer)

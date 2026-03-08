@@ -24,6 +24,8 @@
 #include "Notification.h"
 #include "ChordingData.h"
 
+class TextComboDefs;
+
 namespace HookKbd
 {
     extern "C" {
@@ -58,6 +60,6 @@ namespace HookKbd
         PQHOOK_API void ToggleSuspend();
         PQHOOK_API bool Suspended();
         PQHOOK_API bool ParseAdaptives(const StringPairList& adaptivePairs);
-        PQHOOK_API void PrepareCombos();
+        PQHOOK_API bool PrepareCombos(TextComboDefs& textComboDefs);
     }
 };

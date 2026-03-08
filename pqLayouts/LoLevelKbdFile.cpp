@@ -158,6 +158,13 @@ bool LoLevelKbdFile::ReadKeyboardFile(const char* filename)
 
             std::cout << "back to file [" << filename << "]" << std::endl;
         }
+        else if (cmd == "combos")
+        {
+            if (!doCombos(stringTokener, filename))
+                return false;
+
+            std::cout << "back to file [" << filename << "]" << std::endl;
+        }
         else
         {
             std::cerr << "expecting a command, line " << kbdfile.lineNo << std::endl;
@@ -753,6 +760,21 @@ bool LoLevelKbdFile::getIncludeFilePath(
     return true;
 }
 
+
+void LoLevelKbdFile::ReadStringPairs(nlohmann::json& json, StringPairList& pairs, const std::string& jsonFilePath)
+{
+    for (const auto& item : json)
+    {
+        //std::string from = item["from"];
+        //std::string to = item["to"];
+        std::string from = item[0];
+        std::string to = item[1];
+        pairs.push_back({ from, to });
+    }
+
+    Printf("Loaded %zu pairs from %s\n", pairs.size(), jsonFilePath.c_str());
+}
+
 bool LoLevelKbdFile::readStringPairsFromJSONFile(const std::string& jsonFilePath, StringPairList& pairs)
 {
     try
@@ -767,18 +789,39 @@ bool LoLevelKbdFile::readStringPairsFromJSONFile(const std::string& jsonFilePath
         nlohmann::json json;
         file >> json;
 
-        for (const auto& item : json)
-        {
-            std::string from = item["from"];
-            std::string to = item["to"];
-            pairs.push_back({ from, to });
-        }
-
-        Printf("Loaded %zu adaptives from %s\n", pairs.size(), jsonFilePath.c_str());
+        ReadStringPairs(json, pairs, jsonFilePath);
     }
     catch (const std::exception& e)
     {
         Printf("Error loading adaptives from JSON: %s\n", e.what());
+        return false;
+    }
+
+    return true;
+}
+
+bool LoLevelKbdFile::readTextComboDefsFromJSONFile(const std::string& jsonFilePath, TextComboDefs& textComboDefs)
+{
+    try
+    {
+        std::ifstream file(jsonFilePath);
+        if (!file.is_open())
+        {
+            Printf("Warning: Could not open JSON file: %s\n", jsonFilePath.c_str());
+            return false;
+        }
+
+        nlohmann::json json;
+        file >> json;
+
+        ReadStringPairs(json["combos"], textComboDefs.txtCombos, jsonFilePath);
+        ReadStringPairs(json["combosQwerty"], textComboDefs.txtCombosQwerty, jsonFilePath);
+        ReadStringPairs(json["keysCombosQwerty"], textComboDefs.txtKeysCombosQwerty, jsonFilePath);
+        ReadStringPairs(json["cmdCombosQwerty"], textComboDefs.txtCmdCombosQwerty, jsonFilePath);
+    }
+    catch (const std::exception& e)
+    {
+        Printf("Error loading combos from JSON: %s\n", e.what());
         return false;
     }
 
@@ -812,4 +855,17 @@ bool LoLevelKbdFile::doAdaptives(StringTokener& tokener, const char* scriptFilen
     return HookKbd::ParseAdaptives(adaptivePairs);
 }
 
- 
+bool LoLevelKbdFile::doCombos(StringTokener& tokener, const char* scriptFilename)
+{
+    std::string jsonFilePath;
+    if (!getIncludeFilePath(tokener, scriptFilename, jsonFilePath))
+        return false;
+
+    // read combos keys from file and set them in the hook
+    TextComboDefs textComboDefs;
+    if (!readTextComboDefsFromJSONFile(jsonFilePath, textComboDefs))
+        return false;
+
+    return HookKbd::PrepareCombos(textComboDefs);
+}
+

@@ -22,13 +22,16 @@
 #include "keydef.h"
 
 class IKeyboard;
+class KbdHookEvent;
+class Layer;
 
-struct TextComboDefs
+class TextComboDefs
 {
-    StringPairList& txtCombos;
-    StringPairList& txtCombosQwerty;
-    StringPairList& txtKeysCombosQwerty;
-    StringPairList& txtCmdCombosQwerty;
+public:
+    StringPairList txtCombos;
+    StringPairList txtCombosQwerty;
+    StringPairList txtKeysCombosQwerty;
+    StringPairList txtCmdCombosQwerty;
 };
 
 
@@ -156,7 +159,7 @@ class CombosHandler
 public:
     CombosHandler();
 
-    void Prepare(TextComboDefs textCombos, const Layer* mainLayer);
+    bool Prepare(TextComboDefs& textCombos, const Layer* mainLayer);
     bool HandleKbdEvent(const KbdHookEvent& event, IKeyboard* kbd);
 
     bool FireReadyCombo(IKeyboard* kbd);
@@ -172,7 +175,7 @@ private:
     std::map<VeeKeeVector, ICombo*> combos;
     std::list<ComboStateInfo> trackedCombos;
 
-    std::vector<KbdHookEvent > eventsDown;
+    std::vector<KbdHookEvent> eventsDown;
 
     std::set<VeeKee> comboKeys;
     VeeKeeVector vksDown;

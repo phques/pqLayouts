@@ -30,6 +30,7 @@ class KbdHookEvent;
 class KeyMapping;
 class KeyDef;
 class Layer;
+class TextComboDefs;
 
 //namespace KeyActions {
 //    class IKeyAction;
@@ -48,7 +49,7 @@ public:
     virtual bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap) = 0;
 
     virtual bool PrepareAdaptives(const StringPairList& adaptivePairs) = 0;
-    virtual void PrepareCombos() = 0;
+    virtual bool PrepareCombos(TextComboDefs& textComboDefs) = 0;
 
     virtual const Layer* GetMainLayer() = 0;
 

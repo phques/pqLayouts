@@ -20,9 +20,11 @@
 #include <sstream>
 #include "Keydef.h"
 #include "KeyMapping.h"
+#include "combos.h"
 #include "Chord.h"
 #include "ChordingData.h"
 #include "KeyParser.h"
+#include "nlohmann/json.hpp"
 
 //---------
 
@@ -51,9 +53,12 @@ private:
     bool GetRelativeFilePath(const char* pcScriptFilename, std::string& imageFilename, WCHAR  fullImagePath[MAX_PATH]);
     bool setImageView(StringTokener& tokener);
     bool getIncludeFilePath(StringTokener& tokener, const char * scriptFilename, std::string& includePath);
+    void ReadStringPairs(nlohmann::json& json, StringPairList& pairs, const std::string& jsonFilePath);
     bool readStringPairsFromJSONFile(const std::string& jsonFilePath, StringPairList& pairs);
+    bool readTextComboDefsFromJSONFile(const std::string& jsonFilePath, TextComboDefs& textComboDefs);
     bool doInclude(StringTokener& tokener, const char* pcScriptFilename);
     bool doAdaptives(StringTokener& tokener, const char* scriptFilename);
+    bool doCombos(StringTokener& tokener, const char* scriptFilename);
 
 private:
 

@@ -58,7 +58,7 @@ public:
     bool AddLayer(const Layer::Id_t&, Layer::Idx_t& newLayerIdx) override;
     bool SetLayerAccessKey(const Layer::Id_t& layerId, KeyDef accessKey, bool isToggle, KeyValue keyOnTap) override;
     bool PrepareAdaptives(const StringPairList& adaptivePairs) override;
-    void PrepareCombos() override;
+    bool PrepareCombos(TextComboDefs& textComboDefs) override;
     const Layer* GetMainLayer() override;
     bool GotoMainLayer() override;
     bool GotoLayer(Layer::Idx_t layerIdx) override;
