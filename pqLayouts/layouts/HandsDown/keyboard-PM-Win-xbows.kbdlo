@@ -1,0 +1,19 @@
+! Hands Down Promethium, à la Phil
+
+imagefile hd-pm-pqc-img2-WinOrtho.png
+imageview 4 +56 56 +56
+
+include ../qwerty-1to1.kbdlo
+
+adaptives hd-pm-pqc-adapt.json
+!combos hd-pm-pqc-combos.json
+
+!dualmod PRINTSCR lshift r
+!dualmod SP rshift sp
+
+
+! ------- edit layer --------
+
+!include ../edit-layer-lalt2.kbdlo
+!imageview 112 +56 112 +56
+
