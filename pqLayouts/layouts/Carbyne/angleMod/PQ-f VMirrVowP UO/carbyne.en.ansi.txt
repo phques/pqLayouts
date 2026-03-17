@@ -4,12 +4,12 @@
  a s d f g h j k l ; ' 
  z x c v b n m , . / 
 
-                     [ ] 
+                     { }
  v w h m / q . ' , g j =
  s n r t k - a e i c x 
  p l d f z ; u o y b 
 
-                     { } 
+                     [ ] 
  V W H M ? Q < " > G J +
  S N R T K _ A E I C X 
  P L D F Z : U O Y B 

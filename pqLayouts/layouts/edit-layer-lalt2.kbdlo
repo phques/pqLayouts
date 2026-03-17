@@ -4,16 +4,16 @@ addlayertap edit lalt
 ! a s d f g h j k l ; '
 ! z x       n m , . /
 
+! when this layer is opened with alt, we try to hit alt-tab ..
+! so give some partial help here
+K2K tab  @tab @+tab
+
 k2k q  ^pgup
 k2k w  ^pgdn
 K2K e esc +esc
 
-! NB: chording space+d+k for ctrl-left does not work on my Microsoft Sculpt
-! K2K a lalt +lalt
-! K2K s lctrl +lctrl
-! k2k f lshift
 
-! GACS
+! [G]ACS, moved one spot to the right
 !K2K a win +win
 K2K a lalt +lalt
 K2K s lctrl +lctrl
